@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+
+    <LinearLayout
+        android:id="@+id/ll_promo"
+        android:visibility="visible"
+        android:layout_height="match_parent"
+        android:padding="15dp"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:background="@color/colorWhite"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:elevation="@dimen/margin_5"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <TextView
+            android:layout_marginLeft   ="@dimen/margin_10"
+            android:layout_marginStart  ="@dimen/margin_10"
+            android:layout_marginEnd    ="@dimen/margin_10"
+            android:layout_marginRight  ="@dimen/margin_10"
+            android:layout_marginBottom ="@dimen/margin_5"
+            android:layout_marginTop    ="@dimen/margin_15"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:textColor="@color/colorDarkestBlue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Template Name"
+            />
+
+        <EditText
+            android:id="@+id/et_template_name"
+            android:layout_margin="@dimen/margin_5"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:textColorHint="@color/colorGrey"
+            android:textColor="@color/colorBlack"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:hint=""
+            />
+
+        <LinearLayout
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+                <Button
+                    android:visibility="visible"
+                    android:textSize="14sp"
+                    android:textAllCaps="false"
+                    android:layout_gravity="center"
+                    android:id="@+id/popup_add"
+                    android:layout_width="100dp"
+                    android:layout_height="@dimen/margin_30"
+                    android:textStyle="normal"
+                    android:textColor="@color/colorWhite"
+                    android:gravity="center"
+                    android:text="Add"
+
+                    android:background="@drawable/grey_darkest_btn_gradient"/>
+
+            <Button
+                android:textSize="14sp"
+                android:textAllCaps="false"
+                android:layout_gravity="center"
+                android:id="@+id/promo_cancel"
+                android:layout_width="100dp"
+                android:layout_height="@dimen/margin_30"
+                android:textStyle="normal"
+                android:textColor="@color/colorWhite"
+                android:gravity="center"
+                android:text="Cancel"
+                android:layout_margin="@dimen/margin_10"
+                android:background="@drawable/grey_btn_gradient"/>
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    android:background="@color/colorWhite"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:orientation="vertical"
+    tools:context=".RegisterDetails">
+
+    <LinearLayout
+        android:id="@+id/ll_invite_member"
+        android:orientation="vertical"
+        android:clickable="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar_layout"
+            android:animateLayoutChanges="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.NoActionBar"
+            >
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar_invite_member"
+                app:contentInsetLeft="0dp"
+                app:contentInsetStart="0dp"
+                app:contentInsetStartWithNavigation="0dp"
+                app:layout_collapseMode="pin"
+                app:titleTextColor="@color/colorWhite"
+                app:subtitleTextColor="@color/colorWhite"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                android:padding="-48dp"
+
+
+                app:popupTheme="@style/AppThemeNOAC">
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <FrameLayout
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        >
+
+                        <ImageView
+                            android:id="@+id/btn_back_edit_profile"
+                            android:layout_margin="@dimen/margin_10"
+                            android:layout_gravity="center|start"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:src="@drawable/ic_back_button"
+                            />
+
+                        <TextView
+                            android:layout_gravity="center"
+                            android:textSize="18sp"
+                            android:textColor="@color/colorWhite"
+                            android:gravity="center"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="History/Records"
+                            android:typeface="sans"
+                            />
+
+                    </FrameLayout>
+
+
+                </FrameLayout>
+            </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:visibility="visible"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+
+            <EditText
+                android:id="@+id/medicine_searchview"
+                style="@style/MaterialSearchBarLight"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:focusable="true"
+                android:textColor="#000"
+                android:textSize="16sp"
+                android:layout_marginLeft="@dimen/margin_20"
+                android:layout_marginRight="@dimen/margin_20"
+                android:layout_marginTop="@dimen/margin_10"
+                android:layout_marginBottom="@dimen/margin_10"
+                android:paddingLeft     ="@dimen/margin_4"
+                android:paddingStart    ="@dimen/margin_4"
+                android:paddingEnd      ="@dimen/margin_4"
+                android:paddingRight    ="@dimen/margin_4"
+                android:background="@drawable/spinner_background"
+                android:focusableInTouchMode="true"
+                android:textStyle="bold" />
+
+            <com.google.android.gms.ads.AdView
+                android:visibility="gone"
+                android:layout_marginTop="10dp"
+                xmlns:ads="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/adView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                ads:adSize="BANNER"
+
+                ads:adUnitId="ca-app-pub-6756023122563497/9775804120">
+            </com.google.android.gms.ads.AdView>
+
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_template"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft   ="@dimen/margin_20"
+                android:layout_marginStart  ="@dimen/margin_20"
+                android:layout_marginEnd    ="@dimen/margin_20"
+                android:layout_marginRight  ="@dimen/margin_20"
+                android:layout_marginTop ="10dp"
+                android:background="#fff" />
+
+
+
+            <ImageView
+                android:id="@+id/iv_no_template"
+                android:layout_gravity="top|center"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:src="@drawable/hist_no"
+
+                />
+
+
+            <TextView
+                android:id="@+id/tv_no_template"
+                android:layout_marginTop="@dimen/margin_10"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginLeft="@dimen/margin_30"
+                android:layout_marginStart="@dimen/margin_30"
+                android:layout_marginRight="@dimen/margin_30"
+                android:layout_marginEnd="@dimen/margin_30"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No history / records present currently"
+                android:textColor="@color/colorBlack"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                android:typeface="sans"
+                />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <include layout="@layout/progress_bar_layout"/>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

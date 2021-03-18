@@ -1,0 +1,3352 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".RegisterDetails">
+
+    <LinearLayout
+        android:background="@color/white"
+        android:id="@+id/ll_invite_member"
+        android:orientation="vertical"
+        android:clickable="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar_layout"
+            android:animateLayoutChanges="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.NoActionBar"
+            >
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar_invite_member"
+                app:contentInsetLeft="0dp"
+                app:contentInsetStart="0dp"
+                app:contentInsetStartWithNavigation="0dp"
+                app:layout_collapseMode="pin"
+                app:titleTextColor="@color/colorWhite"
+                app:subtitleTextColor="@color/colorWhite"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                android:padding="-48dp"
+
+
+                app:popupTheme="@style/AppThemeNOAC">
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <FrameLayout
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        >
+
+                        <ImageView
+                            android:id="@+id/btn_back_edit_profile"
+                            android:layout_margin="@dimen/margin_10"
+                            android:layout_gravity="center|start"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:src="@drawable/ic_back_button"
+                            />
+
+                        <TextView
+                            android:layout_gravity="center"
+                            android:textSize="18sp"
+                            android:textColor="@color/colorWhite"
+                            android:gravity="center"
+                            android:id="@+id/header"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Create Prescription"
+                            android:typeface="sans"
+                            />
+
+                    </FrameLayout>
+
+
+                </FrameLayout>
+            </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_patients_view"
+            android:orientation="vertical"
+            android:background="#fff"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+
+            <EditText
+                android:id="@+id/patient_searchview"
+                style="@style/MaterialSearchBarLight"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:textColor="#000"
+                android:textSize="16sp"
+                android:layout_marginLeft="@dimen/margin_20"
+                android:layout_marginRight="@dimen/margin_20"
+                android:layout_marginTop="@dimen/margin_10"
+                android:layout_marginBottom="@dimen/margin_10"
+                android:paddingLeft     ="@dimen/margin_4"
+                android:paddingStart    ="@dimen/margin_4"
+                android:paddingEnd      ="@dimen/margin_4"
+                android:paddingRight    ="@dimen/margin_4"
+                android:background="@drawable/spinner_background"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:nestedScrollingEnabled="true"
+                android:id="@+id/patient_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginRight="@dimen/margin_10"
+                android:layout_marginBottom="60dp"/>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#fff"
+            android:paddingBottom="@dimen/margin_5"
+            android:id="@+id/top_view">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin_5"
+            android:id="@+id/patientdetails"
+            android:textSize="@dimen/font_14"
+            android:background="@color/colorDarkestBlue"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text=""
+            />
+
+        <LinearLayout
+            android:layout_marginTop   ="@dimen/margin_5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="0"
+            android:id="@+id/lay1"
+            android:layout_below="@+id/patientdetails"
+            android:layout_gravity="center"
+            android:gravity="center"
+            >
+
+            <LinearLayout
+                android:focusable="true"
+                android:clickable="true"
+                android:id="@+id/ll_end_note"
+                android:paddingBottom   ="@dimen/margin_8"
+                android:paddingLeft     ="@dimen/margin_10"
+                android:paddingStart    ="@dimen/margin_10"
+                android:paddingEnd      ="@dimen/margin_8"
+                android:paddingRight    ="@dimen/margin_8"
+                android:paddingTop      ="@dimen/margin_8"
+                android:background="@drawable/faint_white_round"
+                android:layout_marginLeft   ="@dimen/margin_5"
+                android:layout_marginStart  ="@dimen/margin_5"
+                android:layout_marginEnd    ="@dimen/margin_10"
+                android:layout_marginRight  ="@dimen/margin_10"
+                android:layout_marginBottom ="@dimen/margin_5"
+                android:layout_marginTop    ="@dimen/margin_5"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_40"
+                android:layout_weight="1"
+                >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_edit_note"
+                    />
+
+                <TextView
+                    android:paddingLeft="@dimen/margin_5"
+                    android:paddingStart   ="@dimen/margin_5"
+                    android:textColor="@color/colorDarkBlue2"
+                    android:textStyle="bold"
+                    android:textSize="11sp"
+                    android:text="Case History"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_medicine_product"
+                android:focusable="true"
+                android:clickable="true"
+                android:paddingBottom   ="@dimen/margin_8"
+                android:paddingLeft     ="@dimen/margin_10"
+                android:paddingStart    ="@dimen/margin_10"
+                android:paddingEnd      ="@dimen/margin_8"
+                android:paddingRight    ="@dimen/margin_8"
+                android:paddingTop      ="@dimen/margin_8"
+                android:background="@drawable/faint_white_round"
+                android:layout_marginLeft   ="@dimen/margin_10"
+                android:layout_marginStart  ="@dimen/margin_10"
+                android:layout_marginEnd    ="@dimen/margin_5"
+                android:layout_marginRight  ="@dimen/margin_5"
+                android:layout_marginBottom ="@dimen/margin_5"
+                android:layout_marginTop    ="@dimen/margin_5"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_40"
+                android:layout_weight="1"
+                >
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_medicine_product"
+                    />
+
+                <TextView
+
+                    android:paddingLeft="@dimen/margin_5"
+                    android:paddingStart   ="@dimen/margin_5"
+                    android:textColor="@color/colorDarkBlue2"
+                    android:textStyle="bold"
+                    android:textSize="11sp"
+                    android:text="Medicine/Product"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:focusable="true"
+                android:clickable="true"
+                android:id="@+id/ll_medicinal_lab"
+
+                android:paddingBottom   ="@dimen/margin_8"
+                android:paddingLeft     ="@dimen/margin_10"
+                android:paddingStart    ="@dimen/margin_10"
+                android:paddingEnd      ="@dimen/margin_8"
+                android:paddingRight    ="@dimen/margin_8"
+                android:paddingTop      ="@dimen/margin_8"
+                android:background="@drawable/faint_white_round"
+                android:layout_marginLeft   ="@dimen/margin_5"
+                android:layout_marginStart  ="@dimen/margin_5"
+                android:layout_marginEnd    ="@dimen/margin_5"
+                android:layout_marginRight  ="@dimen/margin_5"
+                android:layout_marginBottom ="@dimen/margin_5"
+                android:layout_marginTop    ="@dimen/margin_5"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_40"
+                android:layout_weight="1"
+                >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_microscope"
+                    />
+
+                <TextView
+
+                    android:paddingLeft="@dimen/margin_5"
+                    android:paddingStart   ="@dimen/margin_5"
+                    android:textColor="@color/colorDarkBlue2"
+                    android:textStyle="bold"
+                    android:textSize="11sp"
+                    android:text="Lab Test/Imaging"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
+
+
+            <LinearLayout
+
+                android:id="@+id/ll_certificate"
+                android:focusable="true"
+                android:clickable="true"
+                android:paddingBottom   ="@dimen/margin_8"
+                android:paddingLeft     ="@dimen/margin_10"
+                android:paddingStart    ="@dimen/margin_10"
+                android:paddingEnd      ="@dimen/margin_8"
+                android:paddingRight    ="@dimen/margin_8"
+                android:paddingTop      ="@dimen/margin_8"
+                android:background="@drawable/faint_white_round"
+                android:layout_marginLeft   ="@dimen/margin_10"
+                android:layout_marginStart  ="@dimen/margin_10"
+                android:layout_marginEnd    ="@dimen/margin_5"
+                android:layout_marginRight  ="@dimen/margin_5"
+                android:layout_marginBottom ="@dimen/margin_5"
+                android:layout_marginTop    ="@dimen/margin_5"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_40"
+                android:layout_weight="1"
+                >
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_medical_certificate"
+                    />
+
+                <TextView
+                    android:paddingLeft="@dimen/margin_5"
+                    android:paddingStart   ="@dimen/margin_5"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:textColor="@color/colorDarkBlue2"
+                    android:textStyle="bold"
+                    android:textSize="11sp"
+                    android:text="Medical Certificate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scrollview_edit_profile"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/lay1"
+            android:layout_above="@+id/btn_prescribe"
+            android:layout_height="match_parent"
+            >
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/ll_prescription_view"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:id="@+id/ll_35"
+                        android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="10dp"
+                        android:rotation="180"
+                        android:src="@drawable/ic_right_arrow"/>
+
+                    <TextView
+                        android:layout_marginTop   ="2dp"
+                        android:background="@color/white"
+
+                        android:id="@+id/textView3_5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center|top"
+                        android:fontFamily="sans-serif"
+                        android:includeFontPadding="false"
+                        android:gravity="center"
+                        android:text="3/5"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="10sp"
+                        android:textStyle="normal"/>
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="10dp"
+                            android:src="@drawable/ic_right_arrow"/>
+
+                    </LinearLayout>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_marginLeft="@dimen/margin_10"
+                        android:layout_marginRight="@dimen/margin_10"
+                        app:stackFromEnd="true"
+                        app:reverseLayout="true"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/added_medicines_recycler"/>
+
+
+
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_marginLeft="@dimen/margin_10"
+                        android:layout_marginRight="@dimen/margin_10"
+                        app:stackFromEnd="true"
+                        app:reverseLayout="true"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/added_lab_test_recycler"/>
+
+
+
+
+                    <!---    MEDICINE with search and details    -->
+                    <!---    MEDICINE with search and details    -->
+                    <LinearLayout
+                        android:id="@+id/ll_main_medicine_details"
+                        android:visibility="visible"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        >
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:orientation="horizontal"
+                            android:layout_marginLeft="@dimen/margin_20"
+                            android:layout_marginRight="@dimen/margin_20"
+                            android:layout_marginTop="@dimen/margin_20"
+                            android:layout_marginEnd="@dimen/margin_20"
+                            android:layout_marginStart="@dimen/margin_20"
+                            android:layout_height="wrap_content">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:orientation="vertical"
+                                android:layout_weight="1"
+                                android:layout_marginEnd="@dimen/margin_4"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Name of Medicine/Product"
+                                    android:id="@+id/textView_name"
+                                    android:layout_marginTop="@dimen/margin_2"
+                                    android:textColor="@color/colorDarkGrey"
+                                    android:textSize="11dp"
+                                    android:fontFamily="@font/poppinsmedium"
+                                    />
+
+                                <EditText
+                                    android:textSize="16sp"
+                                    android:padding="@dimen/margin_10"
+                                    android:textColor="@color/colorBlack"
+                                    android:id="@+id/medicine_searchview"
+                                    android:inputType="textCapSentences"
+                                    android:hint="type here"
+                                    android:maxLines="2"
+                                    android:layout_marginTop="@dimen/font_11"
+                                    android:textColorHint="#dcdcdc"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/margin_40"
+                                    android:background="@drawable/blue_faint_btn_gradient2"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:orientation="vertical"
+                                android:layout_weight="1"
+                                android:layout_marginStart="@dimen/margin_4"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="Total Quantity"
+                                    android:textColor="@color/colorDarkGrey"
+                                    android:textSize="12dp"
+                                    android:fontFamily="@font/poppinsmedium"
+                                    />
+
+                                <EditText
+                                    android:textSize="16sp"
+                                    android:padding="@dimen/margin_10"
+                                    android:textColor="@color/colorBlack"
+                                    android:layout_marginTop="@dimen/margin_8"
+                                    android:textColorHint="@color/colorBlack"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/margin_40"
+                                    android:background="@drawable/blue_faint_btn_gradient2"/>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_marginBottom="@dimen/margin_10"
+                        android:layout_marginLeft="@dimen/margin_10"
+                        android:layout_marginRight="@dimen/margin_10"
+                        android:visibility="gone"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/medicines_recycler"/>
+
+
+
+
+
+
+                        <LinearLayout
+                            android:layout_marginTop   ="@dimen/margin_5"
+                            android:id="@+id/ll_btn_templates"
+
+                            android:layout_width="match_parent"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:weightSum="2"
+                            android:layout_height="wrap_content">
+
+
+                            <Button
+                                android:foreground="?android:attr/selectableItemBackground"
+                                android:textStyle="normal"
+                                android:id="@+id/btn_add"
+                                android:layout_weight="2"
+                                android:layout_marginLeft="@dimen/margin_20"
+                                android:layout_marginRight="5dp"
+                                android:layout_marginBottom   ="@dimen/margin_3"
+
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintLeft_toLeftOf="parent"
+                                app:layout_constraintRight_toRightOf="parent"
+                                android:layout_width="wrap_content"
+                                android:paddingLeft="20dp"
+                                android:paddingRight="20dp"
+                                android:layout_height="@dimen/margin_35"
+                                android:layout_gravity="right"
+                                android:textSize="@dimen/font_14"
+                                android:background="@drawable/blue_round"
+                                android:text="Save and Add next"
+                                android:textAllCaps="false"
+                                android:textColor="#17263E"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                tools:layout_editor_absoluteY="27dp" />
+
+                            <Button
+                                android:layout_marginBottom   ="@dimen/margin_3"
+                                android:foreground="?android:attr/selectableItemBackground"
+                                android:textStyle="normal"
+                                android:layout_weight="1"
+                                android:id="@+id/choose"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintLeft_toLeftOf="parent"
+                                app:layout_constraintRight_toRightOf="parent"
+                                android:layout_width="wrap_content"
+                                android:paddingLeft="20dp"
+                                android:paddingRight="20dp"
+                                android:layout_height="@dimen/margin_35"
+                                android:layout_gravity="right"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginRight="@dimen/margin_20"
+                                android:textSize="@dimen/font_14"
+                                android:background="@drawable/blue_round"
+                                android:text="Choose from Template"
+                                android:textAllCaps="false"
+                                android:textColor="#17263E"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                tools:layout_editor_absoluteY="27dp" />
+
+                        </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:weightSum="6"
+                        android:orientation="horizontal">
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <!--        Org Name       -->
+                            <TextView
+                                android:id="@+id/textView_frequency"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/margin_30"
+                                android:layout_marginRight="@dimen/margin_30"
+                                android:layout_marginEnd="@dimen/margin_30"
+                                android:layout_marginStart="@dimen/margin_30"
+                                android:layout_marginTop="@dimen/margin_5"
+                                android:fontFamily="sans-serif"
+                                android:gravity="center"
+                                android:text="Frequency"
+                                android:textColor="@color/colorDarkGrey"
+                                android:textSize="14dp"
+                                android:textStyle="bold"
+                                />
+
+                            <Spinner
+                                android:paddingLeft     ="@dimen/margin_4"
+                                android:paddingStart    ="@dimen/margin_4"
+                                android:paddingEnd      ="@dimen/margin_4"
+                                android:paddingRight    ="@dimen/margin_4"
+                                android:background="@drawable/spinner_background"
+                                android:id="@+id/frequency_spinner"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/margin_35"
+                                android:layout_marginLeft="@dimen/margin_20"
+                                android:layout_marginRight="@dimen/margin_20"
+                                android:layout_marginEnd="@dimen/margin_20"
+                                android:layout_marginStart="@dimen/margin_20"
+                                android:layout_marginTop="@dimen/margin_5"
+                                android:layout_marginBottom   ="@dimen/margin_5"
+
+                                android:spinnerMode="dialog"
+                                android:textColor="#000000"
+                                android:textColorHint="#000000" />
+
+
+
+                            <EditText
+                                android:visibility="gone"
+                                android:textSize="16sp"
+                                android:inputType="text"
+                                android:padding="@dimen/margin_10"
+                                android:textColor="@color/colorBlack"
+                                android:layout_marginLeft="@dimen/margin_20"
+                                android:layout_marginRight="@dimen/margin_20"
+                                android:layout_marginEnd="@dimen/margin_20"
+                                android:layout_marginStart="@dimen/margin_20"
+                                android:layout_marginTop="@dimen/margin_10"
+                                android:textColorHint="@color/colorBlack"
+                                android:id="@+id/et_frequency"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/margin_35"
+                                android:background="@drawable/blue_faint_btn_gradient2"
+                                />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="5"
+                            android:orientation="vertical">
+                            <!--        Org Name       -->
+                            <TextView
+                                android:id="@+id/textView_Route"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+
+                                android:layout_marginLeft="@dimen/margin_30"
+                                android:layout_marginRight="@dimen/margin_30"
+                                android:layout_marginEnd="@dimen/margin_30"
+                                android:layout_marginStart="@dimen/margin_30"
+                                android:layout_marginTop="@dimen/margin_5"
+
+                                android:fontFamily="sans-serif"
+                                android:gravity="center"
+                                android:text="Route/Form"
+                                android:textColor="@color/colorDarkGrey"
+                                android:textSize="14dp"
+                                android:textStyle="bold"
+                                />
+
+                            <Spinner
+                                android:paddingLeft     ="@dimen/margin_4"
+                                android:paddingStart    ="@dimen/margin_4"
+                                android:paddingEnd      ="@dimen/margin_4"
+                                android:paddingRight    ="@dimen/margin_4"
+                                android:background="@drawable/spinner_background"
+                                android:id="@+id/route_spinner"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/margin_35"
+                                android:layout_marginLeft="@dimen/margin_20"
+                                android:layout_marginRight="@dimen/margin_20"
+                                android:layout_marginEnd="@dimen/margin_20"
+                                android:layout_marginStart="@dimen/margin_20"
+                                android:layout_marginTop="@dimen/margin_5"
+                                android:layout_marginBottom   ="@dimen/margin_5"
+
+                                android:spinnerMode="dialog"
+                                android:textColor="#000000"
+                                android:textColorHint="#000000" />
+
+                            <EditText
+                                android:visibility="gone"
+
+                                android:textSize="14sp"
+                                android:maxLines="1"
+                                android:inputType="text"
+                                android:padding="@dimen/margin_10"
+                                android:textColor="@color/colorBlack"
+                                android:layout_marginLeft="@dimen/margin_20"
+                                android:layout_marginRight="@dimen/margin_20"
+                                android:layout_marginEnd="@dimen/margin_20"
+                                android:layout_marginStart="@dimen/margin_20"
+                                android:layout_marginTop="@dimen/margin_10"
+                                android:textColorHint="@color/colorBlack"
+                                android:id="@+id/et_Route"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/margin_35"
+                                android:background="@drawable/blue_faint_btn_gradient2"
+                                />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="5"
+                            android:visibility="gone"
+                            android:orientation="vertical">
+                            <!--        Org Name       -->
+                            <TextView
+                                android:id="@+id/textView_temp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:visibility="invisible"
+                                android:layout_marginLeft="@dimen/margin_30"
+                                android:layout_marginRight="@dimen/margin_30"
+                                android:layout_marginEnd="@dimen/margin_30"
+                                android:layout_marginStart="@dimen/margin_30"
+                                android:layout_marginTop="@dimen/margin_30"
+                                android:fontFamily="sans-serif"
+                                android:gravity="center"
+                                android:text="Gender"
+                                android:textColor="@color/colorDarkGrey"
+                                android:textSize="16dp"
+                                android:textStyle="bold"
+                                />
+
+                            <Spinner
+                                android:paddingLeft     ="@dimen/margin_4"
+                                android:paddingStart    ="@dimen/margin_4"
+                                android:paddingEnd      ="@dimen/margin_4"
+                                android:paddingRight    ="@dimen/margin_4"
+                                android:background="@drawable/spinner_background"
+                                android:id="@+id/frequency2_spinner"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/margin_40"
+                                android:layout_marginLeft="@dimen/margin_20"
+                                android:layout_marginRight="@dimen/margin_20"
+                                android:layout_marginEnd="@dimen/margin_20"
+                                android:layout_marginStart="@dimen/margin_20"
+                                android:layout_marginTop="@dimen/margin_10"
+                                android:inputType="text"
+                                android:spinnerMode="dialog"
+                                android:textColor="#000000"
+                                android:textColorHint="#000000" />
+
+                            <EditText
+                                android:visibility="gone"
+                                android:layout_marginBottom   ="@dimen/margin_5"
+
+                                android:textSize="16sp"
+                                android:maxLines="1"
+                                android:inputType="text"
+                                android:imeOptions="actionNext"
+                                android:padding="@dimen/margin_10"
+                                android:textColor="@color/colorBlack"
+                                android:layout_marginLeft="@dimen/margin_20"
+                                android:layout_marginRight="@dimen/margin_20"
+                                android:layout_marginEnd="@dimen/margin_20"
+                                android:layout_marginStart="@dimen/margin_20"
+                                android:layout_marginTop="@dimen/margin_10"
+                                android:textColorHint="@color/colorBlack"
+                                android:id="@+id/et_frequency1"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/margin_40"
+                                android:background="@drawable/blue_faint_btn_gradient2"
+                                />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                        <LinearLayout
+
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:weightSum="6"
+                        android:orientation="horizontal">
+                        <LinearLayout
+
+
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <!--        Org Name       -->
+                            <TextView
+                                android:id="@+id/textView_days"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/margin_30"
+                                android:layout_marginRight="@dimen/margin_30"
+                                android:layout_marginEnd="@dimen/margin_30"
+                                android:layout_marginStart="@dimen/margin_30"
+                                android:layout_marginTop="@dimen/margin_5"
+                                android:fontFamily="sans-serif"
+                                android:gravity="center"
+                                android:text="No of days"
+                                android:textColor="@color/colorDarkGrey"
+                                android:textSize="14dp"
+                                android:textStyle="bold"
+
+                                />
+
+
+
+                            <EditText
+                                android:layout_marginBottom   ="@dimen/margin_5"
+
+                                android:textSize="14sp"
+                                android:inputType="number"
+                                android:maxLength="3"
+                                android:padding="@dimen/margin_10"
+                                android:textColor="@color/colorBlack"
+                                android:layout_marginLeft="@dimen/margin_20"
+                                android:layout_marginRight="@dimen/margin_20"
+                                android:layout_marginEnd="@dimen/margin_20"
+                                android:layout_marginStart="@dimen/margin_20"
+                                android:layout_marginTop="@dimen/margin_5"
+                                android:textColorHint="@color/colorBlack"
+                                android:id="@+id/et_days"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/margin_35"
+                                android:background="@drawable/blue_faint_btn_gradient2"
+                                />
+                        </LinearLayout>
+                        <LinearLayout
+
+
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="6"
+                            android:layout_marginRight="@dimen/margin_20"
+                            android:layout_marginEnd="@dimen/margin_20"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/textView_instruction"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/margin_30"
+                                android:layout_marginRight="@dimen/margin_30"
+                                android:layout_marginEnd="@dimen/margin_30"
+                                android:layout_marginStart="@dimen/margin_30"
+                                android:layout_marginTop="@dimen/margin_5"
+                                android:fontFamily="sans-serif"
+                                android:gravity="center"
+
+                                android:text="Instructions"
+                                android:textColor="@color/colorDarkGrey"
+                                android:textSize="14dp"
+                                android:textStyle="bold"
+                                />
+
+                            <Spinner
+                                android:paddingLeft     ="@dimen/margin_4"
+                                android:paddingStart    ="@dimen/margin_4"
+                                android:paddingEnd      ="@dimen/margin_4"
+                                android:paddingRight    ="@dimen/margin_4"
+                                android:background="@drawable/spinner_background"
+                                android:id="@+id/instructions_spinner"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/margin_35"
+                                android:layout_marginLeft="@dimen/margin_20"
+                                android:layout_marginRight="@dimen/margin_20"
+                                android:layout_marginEnd="@dimen/margin_20"
+                                android:layout_marginStart="@dimen/margin_20"
+                                android:layout_marginTop="@dimen/margin_5"
+                                android:spinnerMode="dialog"
+                                android:layout_marginBottom   ="@dimen/margin_5"
+
+                                android:textColor="#000000"
+                                android:textColorHint="#000000" />
+
+                            <EditText
+                                android:visibility="gone"
+                                android:textSize="14sp"
+                                android:layout_marginBottom   ="@dimen/margin_5"
+
+                                android:padding="@dimen/margin_10"
+                                android:inputType="text"
+                                android:textColor="@color/colorBlack"
+                                android:layout_marginLeft="@dimen/margin_20"
+                                android:layout_marginRight="@dimen/margin_20"
+                                android:layout_marginEnd="@dimen/margin_20"
+                                android:layout_marginStart="@dimen/margin_20"
+                                android:layout_marginTop="@dimen/margin_10"
+                                android:textColorHint="@color/colorBlack"
+                                android:id="@+id/et_instruction"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/margin_35"
+                                android:background="@drawable/blue_faint_btn_gradient2"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                    <!--        Name       -->
+
+
+                    <!--        Org Name       -->
+                    <TextView
+                        android:id="@+id/textView_comments"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_30"
+                        android:layout_marginRight="@dimen/margin_30"
+                        android:layout_marginEnd="@dimen/margin_30"
+                        android:layout_marginStart="@dimen/margin_30"
+                        android:layout_marginTop="@dimen/margin_5"
+                        android:fontFamily="sans-serif"
+                        android:gravity="center"
+                        android:text="Additional comments"
+                        android:textColor="@color/colorDarkGrey"
+                        android:textSize="14dp"
+
+                        android:textStyle="bold"
+                        />
+
+                    <EditText
+
+                        android:textSize="14sp"
+                        android:padding="@dimen/margin_10"
+                        android:imeOptions="actionDone"
+                        android:inputType="textCapSentences|textMultiLine"
+                        android:textColor="@color/colorBlack"
+                        android:layout_marginLeft="@dimen/margin_20"
+                        android:layout_marginRight="@dimen/margin_20"
+                        android:layout_marginEnd="@dimen/margin_20"
+                        android:layout_marginStart="@dimen/margin_20"
+                        android:lines="3"
+                        android:gravity="top"
+                        android:layout_marginTop="@dimen/margin_5"
+                        android:layout_marginBottom   ="@dimen/margin_5"
+                        android:textColorHint="@color/colorBlack"
+                        android:id="@+id/et_comments"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/blue_faint_btn_gradient2"
+                        />
+
+
+
+
+                </LinearLayout>
+
+                    <!---    LAB TEST with search and details    -->
+                    <!---    LAB TEST with search and details    -->
+                    <LinearLayout
+                        android:id="@+id/ll_main_lab_test_details"
+
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        >
+
+
+                        <TextView
+                            android:id="@+id/textView_name_labtest"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/margin_30"
+                            android:layout_marginRight="@dimen/margin_30"
+                            android:layout_marginEnd="@dimen/margin_30"
+                            android:layout_marginStart="@dimen/margin_30"
+                            android:layout_marginTop="@dimen/margin_10"
+                            android:gravity="center"
+                            android:text="Name of Lab Test/Imaging"
+                            android:textColor="@color/colorDarkGrey"
+                            android:textSize="14dp"
+                            android:textStyle="bold"
+                            />
+
+
+
+                        <EditText
+                            android:id="@+id/labtest_searchview"
+                            style="@style/MaterialSearchBarLight"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="#000"
+                            android:textSize="14dp"
+                            android:inputType="textCapSentences"
+                            android:layout_marginLeft="@dimen/margin_20"
+                            android:layout_marginRight="@dimen/margin_20"
+                            android:layout_marginTop="@dimen/margin_5"
+                            android:layout_marginBottom="@dimen/margin_5"
+                            android:paddingLeft     ="@dimen/margin_10"
+
+                            android:paddingTop="@dimen/margin_10"
+                            android:paddingBottom="@dimen/margin_10"
+                            android:paddingStart    ="@dimen/margin_10"
+                            android:paddingEnd      ="@dimen/margin_6"
+                            android:paddingRight    ="@dimen/margin_6"
+                            android:background="@drawable/spinner_background"
+                            android:textStyle="bold" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:layout_width="match_parent"
+
+                            android:layout_marginBottom="@dimen/margin_10"
+                            android:layout_marginLeft="@dimen/margin_10"
+                            android:layout_marginRight="@dimen/margin_10"
+                            android:visibility="gone"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/labtest_recycler"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:weightSum="2"
+                            >
+                            <Button
+                                android:foreground="?android:attr/selectableItemBackground"
+                                android:textStyle="normal"
+                                android:id="@+id/btn_add_labtest"
+                                android:layout_weight="2"
+                                android:layout_marginLeft="@dimen/margin_20"
+                                android:layout_marginRight="5dp"
+                                android:layout_marginBottom   ="@dimen/margin_5"
+
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintLeft_toLeftOf="parent"
+                                app:layout_constraintRight_toRightOf="parent"
+                                android:layout_width="wrap_content"
+                                android:paddingLeft="20dp"
+                                android:paddingRight="20dp"
+                                android:layout_height="@dimen/margin_35"
+                                android:layout_gravity="right"
+                                android:textSize="@dimen/font_14"
+                                android:background="@drawable/blue_round"
+                                android:text="Save and Add next"
+                                android:textAllCaps="false"
+                                android:textColor="#17263E"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                tools:layout_editor_absoluteY="27dp" />
+
+                            <Button
+                                android:layout_marginBottom   ="@dimen/margin_5"
+
+                                android:foreground="?android:attr/selectableItemBackground"
+                                android:textStyle="normal"
+                                android:layout_weight="1"
+                                android:id="@+id/choose_labtest"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintLeft_toLeftOf="parent"
+                                app:layout_constraintRight_toRightOf="parent"
+                                android:layout_width="wrap_content"
+                                android:paddingLeft="20dp"
+                                android:paddingRight="20dp"
+                                android:layout_height="@dimen/margin_35"
+                                android:layout_gravity="right"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginRight="@dimen/margin_20"
+                                android:textSize="@dimen/font_14"
+                                android:background="@drawable/blue_round"
+                                android:text="Choose from Template"
+                                android:textAllCaps="false"
+                                android:textColor="#17263E"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                tools:layout_editor_absoluteY="27dp" />
+                        </LinearLayout>
+
+
+                        <TextView
+                            android:id="@+id/textView_additional_comments_labtest"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/margin_30"
+                            android:layout_marginRight="@dimen/margin_30"
+                            android:layout_marginEnd="@dimen/margin_30"
+                            android:layout_marginStart="@dimen/margin_30"
+                            android:layout_marginTop="@dimen/margin_10"
+                            android:gravity="center"
+                            android:text="Additional Comments for Lab Test/Imaging"
+                            android:textColor="@color/colorDarkGrey"
+                            android:textSize="14dp"
+                            android:textStyle="bold"
+                            />
+
+                        <EditText
+                            android:id="@+id/labtest_additional_comments"
+                            style="@style/MaterialSearchBarLight"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="#000"
+                            android:textSize="14sp"
+                            android:lines="4"
+                            android:gravity="top"
+                            android:inputType="textCapSentences|textMultiLine"
+                            android:imeOptions="actionNext"
+                            android:hint="Type here if any"
+                            android:layout_marginLeft="@dimen/margin_20"
+                            android:layout_marginRight="@dimen/margin_20"
+                            android:layout_marginTop="@dimen/margin_5"
+                            android:layout_marginBottom="@dimen/margin_10"
+                            android:padding="@dimen/margin_10"
+                            android:background="@drawable/spinner_background"
+                            android:textStyle="bold" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_main_end_note_details"
+                        android:visibility="visible"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        >
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:orientation="horizontal"
+                            android:layout_marginLeft="@dimen/margin_20"
+                            android:layout_marginRight="@dimen/margin_20"
+                            android:layout_marginTop="@dimen/margin_15"
+                            android:layout_marginEnd="@dimen/margin_20"
+                            android:layout_marginStart="@dimen/margin_20"
+                            android:layout_height="wrap_content">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:orientation="vertical"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="Temperature"
+                                    android:textColor="@color/colorDarkGrey"
+                                    android:textSize="12dp"
+                                    android:fontFamily="@font/poppinsmedium"
+                                    />
+
+                                <EditText
+                                    android:textSize="16sp"
+                                    android:padding="@dimen/margin_10"
+                                    android:textColor="@color/colorBlack"
+                                    android:layout_marginTop="@dimen/margin_8"
+                                    android:textColorHint="@color/colorBlack"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/margin_40"
+                                    android:background="@drawable/blue_faint_btn_gradient2"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:orientation="vertical"
+                                android:layout_weight="1"
+                                android:layout_marginStart="@dimen/margin_8"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="Height"
+                                    android:textColor="@color/colorDarkGrey"
+                                    android:textSize="12dp"
+                                    android:fontFamily="@font/poppinsmedium"
+                                    />
+
+                                <EditText
+                                    android:textSize="16sp"
+                                    android:padding="@dimen/margin_10"
+                                    android:textColor="@color/colorBlack"
+                                    android:layout_marginTop="@dimen/margin_8"
+                                    android:textColorHint="@color/colorBlack"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/margin_40"
+                                    android:background="@drawable/blue_faint_btn_gradient2"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:orientation="vertical"
+                                android:layout_weight="1"
+                                android:layout_marginStart="@dimen/margin_8"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="Weight"
+                                    android:textColor="@color/colorDarkGrey"
+                                    android:textSize="12dp"
+                                    android:fontFamily="@font/poppinsmedium"
+                                    />
+
+                                <EditText
+                                    android:textSize="16sp"
+                                    android:padding="@dimen/margin_10"
+                                    android:textColor="@color/colorBlack"
+                                    android:layout_marginTop="@dimen/margin_8"
+                                    android:textColorHint="@color/colorBlack"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/margin_40"
+                                    android:background="@drawable/blue_faint_btn_gradient2"/>
+
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:orientation="horizontal"
+                            android:layout_marginLeft="@dimen/margin_20"
+                            android:layout_marginRight="@dimen/margin_20"
+                            android:layout_marginTop="@dimen/margin_20"
+                            android:layout_marginEnd="@dimen/margin_20"
+                            android:layout_marginStart="@dimen/margin_20"
+                            android:layout_height="wrap_content">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:orientation="vertical"
+                                android:layout_weight="1"
+                                android:layout_marginEnd="@dimen/margin_4"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="Pulse"
+                                    android:textColor="@color/colorDarkGrey"
+                                    android:textSize="12dp"
+                                    android:fontFamily="@font/poppinsmedium"
+                                    />
+
+                                <EditText
+                                    android:textSize="16sp"
+                                    android:padding="@dimen/margin_10"
+                                    android:textColor="@color/colorBlack"
+                                    android:layout_marginTop="@dimen/margin_8"
+                                    android:textColorHint="@color/colorBlack"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/margin_40"
+                                    android:background="@drawable/blue_faint_btn_gradient2"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:orientation="vertical"
+                                android:layout_marginStart="@dimen/margin_4"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="Blood Pressure"
+                                    android:textColor="@color/colorDarkGrey"
+                                    android:textSize="12dp"
+                                    android:fontFamily="@font/poppinsmedium"
+                                    />
+
+                                <EditText
+                                    android:textSize="16sp"
+                                    android:padding="@dimen/margin_10"
+                                    android:textColor="@color/colorBlack"
+                                    android:layout_marginTop="@dimen/margin_8"
+                                    android:textColorHint="@color/colorBlack"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/margin_40"
+                                    android:background="@drawable/blue_faint_btn_gradient2"/>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:orientation="horizontal"
+                            android:layout_marginLeft="@dimen/margin_20"
+                            android:layout_marginRight="@dimen/margin_20"
+                            android:layout_marginTop="@dimen/margin_20"
+                            android:layout_marginEnd="@dimen/margin_20"
+                            android:layout_marginStart="@dimen/margin_20"
+                            android:layout_height="wrap_content">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:orientation="vertical"
+                                android:layout_weight="1"
+                                android:layout_marginEnd="@dimen/margin_4"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="Blood Sugar"
+                                    android:textColor="@color/colorDarkGrey"
+                                    android:textSize="12dp"
+                                    android:fontFamily="@font/poppinsmedium"
+                                    />
+
+                                <EditText
+                                    android:textSize="16sp"
+                                    android:padding="@dimen/margin_10"
+                                    android:textColor="@color/colorBlack"
+                                    android:layout_marginTop="@dimen/margin_8"
+                                    android:textColorHint="@color/colorBlack"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/margin_40"
+                                    android:background="@drawable/blue_faint_btn_gradient2"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:orientation="vertical"
+                                android:layout_weight="1"
+                                android:layout_marginStart="@dimen/margin_4"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="Hemoglobin"
+                                    android:textColor="@color/colorDarkGrey"
+                                    android:textSize="12dp"
+                                    android:fontFamily="@font/poppinsmedium"
+                                    />
+
+                                <EditText
+                                    android:textSize="16sp"
+                                    android:padding="@dimen/margin_10"
+                                    android:textColor="@color/colorBlack"
+                                    android:layout_marginTop="@dimen/margin_8"
+                                    android:textColorHint="@color/colorBlack"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/margin_40"
+                                    android:background="@drawable/blue_faint_btn_gradient2"/>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:orientation="horizontal"
+                            android:layout_marginLeft="@dimen/margin_20"
+                            android:layout_marginRight="@dimen/margin_20"
+                            android:layout_marginTop="@dimen/margin_20"
+                            android:layout_marginEnd="@dimen/margin_20"
+                            android:layout_marginStart="@dimen/margin_20"
+                            android:layout_height="wrap_content">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:orientation="vertical"
+                                android:layout_weight="1"
+                                android:layout_marginEnd="@dimen/margin_4"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="Spo2"
+                                    android:textColor="@color/colorDarkGrey"
+                                    android:textSize="12dp"
+                                    android:fontFamily="@font/poppinsmedium"
+                                    />
+
+                                <EditText
+                                    android:textSize="16sp"
+                                    android:padding="@dimen/margin_10"
+                                    android:textColor="@color/colorBlack"
+                                    android:layout_marginTop="@dimen/margin_8"
+                                    android:textColorHint="@color/colorBlack"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/margin_40"
+                                    android:background="@drawable/blue_faint_btn_gradient2"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:orientation="vertical"
+                                android:layout_weight="1"
+                                android:layout_marginStart="@dimen/margin_4"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="Respiration rate"
+                                    android:textColor="@color/colorDarkGrey"
+                                    android:textSize="12dp"
+                                    android:fontFamily="@font/poppinsmedium"
+                                    />
+
+                                <EditText
+                                    android:textSize="16sp"
+                                    android:padding="@dimen/margin_10"
+                                    android:textColor="@color/colorBlack"
+                                    android:layout_marginTop="@dimen/margin_8"
+                                    android:textColorHint="@color/colorBlack"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/margin_40"
+                                    android:background="@drawable/blue_faint_btn_gradient2"/>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:orientation="horizontal"
+                            android:layout_marginLeft="@dimen/margin_20"
+                            android:layout_marginRight="@dimen/margin_20"
+                            android:layout_marginTop="@dimen/margin_20"
+                            android:layout_marginEnd="@dimen/margin_20"
+                            android:layout_marginStart="@dimen/margin_20"
+                            android:layout_height="wrap_content">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:orientation="vertical"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="Allergy"
+                                    android:textColor="@color/colorDarkGrey"
+                                    android:textSize="12dp"
+                                    android:fontFamily="@font/poppinsmedium"
+                                    />
+
+                                <EditText
+                                    android:textSize="16sp"
+                                    android:padding="@dimen/margin_10"
+                                    android:textColor="@color/colorBlack"
+                                    android:layout_marginTop="@dimen/margin_8"
+                                    android:textColorHint="@color/colorBlack"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/margin_40"
+                                    android:background="@drawable/blue_faint_btn_gradient2"/>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/textView_chief_complaint"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/margin_30"
+                            android:layout_marginRight="@dimen/margin_30"
+                            android:layout_marginEnd="@dimen/margin_30"
+                            android:layout_marginStart="@dimen/margin_30"
+                            android:layout_marginTop="@dimen/margin_15"
+                            android:gravity="center"
+                            android:text="Chief Complaint"
+                            android:textColor="@color/colorDarkGrey"
+                            android:textSize="13dp"
+                            android:fontFamily="@font/poppinsmedium"
+                            />
+
+                        <EditText
+                            android:id="@+id/et_chief_complaint"
+                            style="@style/MaterialSearchBarLight"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="#000"
+                            android:textSize="14sp"
+                            android:minLines="2"
+                            android:imeOptions="actionNext"
+
+                            android:inputType="textCapSentences|textMultiLine"
+                            android:layout_marginLeft="@dimen/margin_20"
+                            android:layout_marginRight="@dimen/margin_20"
+                            android:layout_marginTop="@dimen/margin_10"
+                            android:layout_marginBottom="@dimen/margin_10"
+                            android:padding="@dimen/margin_10"
+                            android:background="@drawable/spinner_background"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/textView_history"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/margin_30"
+                            android:layout_marginRight="@dimen/margin_30"
+                            android:layout_marginEnd="@dimen/margin_30"
+                            android:layout_marginStart="@dimen/margin_30"
+                            android:layout_marginTop="@dimen/margin_10"
+                            android:gravity="center"
+                            android:text="History"
+                            android:textColor="@color/colorDarkGrey"
+                            android:textSize="13dp"
+                            android:fontFamily="@font/poppinsmedium"
+                            />
+
+                        <EditText
+                            android:id="@+id/et_history"
+                            style="@style/MaterialSearchBarLight"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="#000"
+                            android:textSize="14sp"
+                            android:minLines="2"
+
+                            android:imeOptions="actionNext"
+                            android:inputType="textCapSentences|textMultiLine"
+
+                            android:layout_marginLeft="@dimen/margin_20"
+                            android:layout_marginRight="@dimen/margin_20"
+                            android:layout_marginTop="@dimen/margin_10"
+                            android:layout_marginBottom="@dimen/margin_10"
+                            android:padding="@dimen/margin_10"
+                            android:background="@drawable/spinner_background"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/textView_findings"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/margin_30"
+                            android:layout_marginRight="@dimen/margin_30"
+                            android:layout_marginEnd="@dimen/margin_30"
+                            android:layout_marginStart="@dimen/margin_30"
+                            android:layout_marginTop="@dimen/margin_10"
+                            android:gravity="center"
+                            android:text="Findings"
+                            android:textColor="@color/colorDarkGrey"
+                            android:textSize="13dp"
+                            android:fontFamily="@font/poppinsmedium"
+                            />
+
+                        <EditText
+                            android:id="@+id/et_findings"
+                            style="@style/MaterialSearchBarLight"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="#000"
+                            android:textSize="14sp"
+                            android:minLines="4"
+
+                            android:imeOptions="actionNext"
+                            android:inputType="textCapSentences|textMultiLine"
+
+                            android:layout_marginLeft="@dimen/margin_20"
+                            android:layout_marginRight="@dimen/margin_20"
+                            android:layout_marginTop="@dimen/margin_10"
+                            android:layout_marginBottom="@dimen/margin_10"
+                            android:padding="@dimen/margin_10"
+                            android:background="@drawable/spinner_background"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/textView_diagnosis"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/margin_30"
+                            android:layout_marginRight="@dimen/margin_30"
+                            android:layout_marginEnd="@dimen/margin_30"
+                            android:layout_marginStart="@dimen/margin_30"
+                            android:layout_marginTop="@dimen/margin_10"
+                            android:gravity="center"
+                            android:text="Diagnosis"
+                            android:textColor="@color/colorDarkGrey"
+                            android:textSize="13dp"
+                            android:fontFamily="@font/poppinsmedium"
+                            />
+
+                        <EditText
+                            android:id="@+id/et_diagnosis"
+                            style="@style/MaterialSearchBarLight"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="#000"
+                            android:textSize="14sp"
+                            android:minLines="2"
+                            android:inputType="textCapSentences|textMultiLine"
+                            android:imeOptions="actionNext"
+                            android:layout_marginLeft="@dimen/margin_20"
+                            android:layout_marginRight="@dimen/margin_20"
+                            android:layout_marginTop="@dimen/margin_10"
+                            android:layout_marginBottom="@dimen/margin_10"
+                            android:padding="@dimen/margin_10"
+                            android:background="@drawable/spinner_background"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/textView_treatment_advice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/margin_30"
+                            android:layout_marginRight="@dimen/margin_30"
+                            android:layout_marginEnd="@dimen/margin_30"
+                            android:layout_marginStart="@dimen/margin_30"
+                            android:layout_marginTop="@dimen/margin_10"
+                            android:gravity="center"
+                            android:text="Treatment/Advice"
+                            android:textColor="@color/colorDarkGrey"
+                            android:textSize="13dp"
+                            android:fontFamily="@font/poppinsmedium"
+                            />
+
+                        <EditText
+                            android:id="@+id/et_treatment_advice"
+                            style="@style/MaterialSearchBarLight"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="#000"
+                            android:textSize="14sp"
+                            android:minLines="2"
+
+                            android:imeOptions="actionNext"
+                            android:inputType="textCapSentences|textMultiLine"
+
+                            android:layout_marginLeft="@dimen/margin_20"
+                            android:layout_marginRight="@dimen/margin_20"
+                            android:layout_marginTop="@dimen/margin_10"
+                            android:layout_marginBottom="@dimen/margin_10"
+                            android:padding="@dimen/margin_10"
+                            android:background="@drawable/spinner_background"
+                            android:textStyle="bold" />
+
+
+
+                        <TextView
+                            android:id="@+id/textView_end_note"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/margin_30"
+                            android:layout_marginRight="@dimen/margin_30"
+                            android:layout_marginEnd="@dimen/margin_30"
+                            android:layout_marginStart="@dimen/margin_30"
+                            android:layout_marginTop="@dimen/margin_10"
+                            android:gravity="center"
+                            android:text="End Note"
+                            android:textColor="@color/colorDarkGrey"
+                            android:textSize="13dp"
+                            android:fontFamily="@font/poppinsmedium"
+                            />
+
+                        <EditText
+                            android:id="@+id/et_end_note"
+                            style="@style/MaterialSearchBarLight"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="#000"
+                            android:textSize="14sp"
+                            android:minLines="2"
+
+
+                            android:imeOptions="actionNext"
+                            android:inputType="textCapSentences|textMultiLine"
+
+                            android:layout_marginLeft="@dimen/margin_20"
+                            android:layout_marginRight="@dimen/margin_20"
+                            android:layout_marginTop="@dimen/margin_10"
+                            android:layout_marginBottom="@dimen/margin_10"
+                            android:padding="@dimen/margin_10"
+                            android:background="@drawable/spinner_background"
+                            android:textStyle="bold" />
+
+
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/ll_main_certificate"
+
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        >
+
+                        <TextView
+                            android:id="@+id/textView_certificate_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/margin_30"
+                            android:layout_marginRight="@dimen/margin_30"
+                            android:layout_marginEnd="@dimen/margin_30"
+                            android:layout_marginStart="@dimen/margin_30"
+                            android:layout_marginTop="@dimen/margin_10"
+                            android:gravity="center"
+                            android:text="Certificate Title"
+                            android:textColor="@color/colorDarkGrey"
+                            android:textSize="13dp"
+                            android:fontFamily="@font/poppinsmedium"
+                            />
+
+                        <EditText
+                            android:id="@+id/et_certificate_title"
+                            style="@style/MaterialSearchBarLight"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="#000"
+                            android:textSize="14sp"
+                            android:lines="1"
+                            android:text="Medical Certificate"
+                            android:imeOptions="actionNext"
+                            android:maxLines="1"
+                            android:layout_marginLeft="@dimen/margin_20"
+                            android:layout_marginRight="@dimen/margin_20"
+                            android:layout_marginTop="@dimen/margin_10"
+                            android:layout_marginBottom="@dimen/margin_10"
+                            android:padding="@dimen/margin_10"
+                            android:background="@drawable/spinner_background"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/textView_certificate_desc"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/margin_30"
+                            android:layout_marginRight="@dimen/margin_30"
+                            android:layout_marginEnd="@dimen/margin_30"
+                            android:layout_marginStart="@dimen/margin_30"
+                            android:layout_marginTop="@dimen/margin_10"
+                            android:gravity="center"
+                            android:text="Description"
+                            android:textColor="@color/colorDarkGrey"
+                            android:textSize="13dp"
+                            android:fontFamily="@font/poppinsmedium"
+                            />
+
+                        <EditText
+                            android:id="@+id/et_certificate_desc"
+                            style="@style/MaterialSearchBarLight"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="#000"
+                            android:textSize="14sp"
+                            android:minLines="4"
+                            android:imeOptions="actionNext"
+                            android:inputType="textCapSentences|textMultiLine"
+                            android:maxLength="1000"
+                            android:maxLines="25"
+                            android:layout_marginLeft="@dimen/margin_20"
+                            android:layout_marginRight="@dimen/margin_20"
+                            android:layout_marginTop="@dimen/margin_10"
+                            android:layout_marginBottom="@dimen/margin_10"
+                            android:padding="@dimen/margin_10"
+                            android:background="@drawable/spinner_background"
+                            android:textStyle="bold" />
+
+
+                    </LinearLayout>
+
+
+
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+        <Button
+            android:id="@+id/btn_prescribe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/margin_10"
+            android:background="@drawable/blue_round_btn_gradient"
+            android:paddingLeft="30dp"
+            android:paddingTop="@dimen/margin_10"
+            android:paddingBottom="@dimen/margin_10"
+            android:paddingRight="30dp"
+            android:text="Prescribe"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhite"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            android:layout_alignParentBottom="true"
+             />
+
+        </RelativeLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:visibility="visible"
+        android:id="@+id/info_no_patients"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        >
+
+        <ImageView
+            android:layout_marginTop="100dp"
+            android:layout_gravity="top|center"
+            android:layout_width="120dp"
+            android:layout_weight="1"
+            android:layout_height="120dp"
+            android:layout_marginBottom="@dimen/margin_10"
+            android:src="@drawable/pres_no"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="2"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_gravity="top|center"
+                android:layout_width="120dp"
+                android:layout_weight="1"
+                android:layout_height="120dp"
+                android:src="@drawable/pat_m"
+
+                />
+            <ImageView
+                android:layout_gravity="top|center"
+                android:layout_width="120dp"
+                android:layout_weight="1"
+                android:layout_height="120dp"
+                android:src="@drawable/pat_f"
+
+                />
+        </LinearLayout>
+
+        <TextView
+            android:layout_marginTop="@dimen/margin_40"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginLeft="@dimen/margin_30"
+            android:layout_marginStart="@dimen/margin_30"
+            android:layout_marginRight="@dimen/margin_30"
+            android:layout_marginEnd="@dimen/margin_30"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No patients to prescribe currently"
+            android:textColor="@color/colorBlack"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            android:typeface="sans"
+            />
+
+    </LinearLayout>
+    <Button
+        android:visibility="gone"
+        android:id="@+id/btn_create_patient"
+        android:textSize="17sp"
+        android:layout_margin="@dimen/margin_10"
+        android:layout_gravity="center|bottom"
+        android:gravity="center"
+        android:textStyle="normal"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Patient and Prescribe"
+        android:background="@drawable/blue_round_btn_gradient"
+        />
+    <include layout="@layout/progress_bar_layout"
+        />
+
+    <FrameLayout
+        android:id="@+id/homePageContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_anchor="@+id/ll_invite_member"
+        app:layout_anchorGravity="center" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+
+
+<!--old Code-->
+
+<!--    <?xml version="1.0" encoding="utf-8"?>-->
+<!--<androidx.coordinatorlayout.widget.CoordinatorLayout-->
+<!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--xmlns:tools="http://schemas.android.com/tools"-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="match_parent"-->
+<!--android:orientation="vertical"-->
+<!--tools:context=".RegisterDetails">-->
+
+<!--<LinearLayout-->
+<!--    android:background="@color/colorDarkBlue"-->
+<!--    android:id="@+id/ll_invite_member"-->
+<!--    android:orientation="vertical"-->
+<!--    android:clickable="true"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent">-->
+
+
+<!--    <com.google.android.material.appbar.AppBarLayout-->
+<!--        android:id="@+id/appbar_layout"-->
+<!--        android:animateLayoutChanges="true"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:theme="@style/AppTheme.NoActionBar"-->
+<!--        >-->
+
+<!--        <androidx.appcompat.widget.Toolbar-->
+<!--            android:id="@+id/toolbar_invite_member"-->
+<!--            app:contentInsetLeft="0dp"-->
+<!--            app:contentInsetStart="0dp"-->
+<!--            app:contentInsetStartWithNavigation="0dp"-->
+<!--            app:layout_collapseMode="pin"-->
+<!--            app:titleTextColor="@color/colorWhite"-->
+<!--            app:subtitleTextColor="@color/colorWhite"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="?attr/actionBarSize"-->
+<!--            android:background="?attr/colorPrimary"-->
+<!--            android:padding="-48dp"-->
+
+
+<!--            app:popupTheme="@style/AppThemeNOAC">-->
+<!--            <FrameLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content">-->
+<!--                <FrameLayout-->
+<!--                    android:gravity="center"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    >-->
+
+<!--                    <ImageView-->
+<!--                        android:id="@+id/btn_back_edit_profile"-->
+<!--                        android:layout_margin="@dimen/margin_10"-->
+<!--                        android:layout_gravity="center|start"-->
+<!--                        android:layout_width="25dp"-->
+<!--                        android:layout_height="25dp"-->
+<!--                        android:src="@drawable/ic_back_button"-->
+<!--                        />-->
+
+<!--                    <TextView-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:textSize="18sp"-->
+<!--                        android:textColor="@color/colorWhite"-->
+<!--                        android:gravity="center"-->
+<!--                        android:id="@+id/header"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="Create Prescription"-->
+<!--                        android:typeface="sans"-->
+<!--                        />-->
+
+<!--                </FrameLayout>-->
+
+
+<!--            </FrameLayout>-->
+<!--        </androidx.appcompat.widget.Toolbar>-->
+<!--    </com.google.android.material.appbar.AppBarLayout>-->
+
+<!--    <LinearLayout-->
+<!--        android:id="@+id/ll_patients_view"-->
+<!--        android:orientation="vertical"-->
+<!--        android:background="#fff"-->
+<!--        android:visibility="gone"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent">-->
+
+
+
+<!--        <EditText-->
+<!--            android:id="@+id/patient_searchview"-->
+<!--            style="@style/MaterialSearchBarLight"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="40dp"-->
+<!--            android:textColor="#000"-->
+<!--            android:textSize="16sp"-->
+<!--            android:layout_marginLeft="@dimen/margin_20"-->
+<!--            android:layout_marginRight="@dimen/margin_20"-->
+<!--            android:layout_marginTop="@dimen/margin_10"-->
+<!--            android:layout_marginBottom="@dimen/margin_10"-->
+<!--            android:paddingLeft     ="@dimen/margin_4"-->
+<!--            android:paddingStart    ="@dimen/margin_4"-->
+<!--            android:paddingEnd      ="@dimen/margin_4"-->
+<!--            android:paddingRight    ="@dimen/margin_4"-->
+<!--            android:background="@drawable/spinner_background"-->
+<!--            android:textStyle="bold" />-->
+
+<!--        <androidx.recyclerview.widget.RecyclerView-->
+<!--            android:nestedScrollingEnabled="true"-->
+<!--            android:id="@+id/patient_recycler"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginLeft="@dimen/margin_10"-->
+<!--            android:layout_marginRight="@dimen/margin_10"-->
+<!--            android:layout_marginBottom="60dp"/>-->
+
+<!--    </LinearLayout>-->
+
+
+<!--    <androidx.core.widget.NestedScrollView-->
+<!--        android:id="@+id/scrollview_edit_profile"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:background="#fff"-->
+<!--        android:layout_height="match_parent"-->
+<!--        >-->
+
+<!--        <LinearLayout-->
+<!--            android:orientation="vertical"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content">-->
+
+
+
+
+<!--            <LinearLayout-->
+<!--                android:id="@+id/ll_prescription_view"-->
+<!--                android:orientation="vertical"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent">-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:padding="@dimen/margin_5"-->
+<!--                    android:id="@+id/patientdetails"-->
+<!--                    android:textSize="@dimen/font_14"-->
+<!--                    android:background="@color/colorDarkestBlue"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:gravity="center"-->
+<!--                    android:text=""-->
+<!--                    />-->
+
+<!--                <LinearLayout-->
+<!--                    android:layout_marginTop   ="@dimen/margin_5"-->
+
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:weightSum="0"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:gravity="center"-->
+<!--                    >-->
+
+<!--                    <LinearLayout-->
+<!--                        android:focusable="true"-->
+<!--                        android:clickable="true"-->
+<!--                        android:id="@+id/ll_end_note"-->
+<!--                        android:paddingBottom   ="@dimen/margin_8"-->
+<!--                        android:paddingLeft     ="@dimen/margin_10"-->
+<!--                        android:paddingStart    ="@dimen/margin_10"-->
+<!--                        android:paddingEnd      ="@dimen/margin_8"-->
+<!--                        android:paddingRight    ="@dimen/margin_8"-->
+<!--                        android:paddingTop      ="@dimen/margin_8"-->
+<!--                        android:background="@drawable/faint_white_round"-->
+<!--                        android:layout_marginLeft   ="@dimen/margin_5"-->
+<!--                        android:layout_marginStart  ="@dimen/margin_5"-->
+<!--                        android:layout_marginEnd    ="@dimen/margin_10"-->
+<!--                        android:layout_marginRight  ="@dimen/margin_10"-->
+<!--                        android:layout_marginBottom ="@dimen/margin_5"-->
+<!--                        android:layout_marginTop    ="@dimen/margin_5"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:gravity="center"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="@dimen/margin_40"-->
+<!--                        android:layout_weight="1"-->
+<!--                        >-->
+
+<!--                        <ImageView-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:src="@drawable/ic_edit_note"-->
+<!--                            />-->
+
+<!--                        <TextView-->
+<!--                            android:paddingLeft="@dimen/margin_5"-->
+<!--                            android:paddingStart   ="@dimen/margin_5"-->
+<!--                            android:textColor="@color/colorDarkBlue2"-->
+<!--                            android:textStyle="bold"-->
+<!--                            android:textSize="11sp"-->
+<!--                            android:text="Case History"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            />-->
+<!--                    </LinearLayout>-->
+
+<!--                    <LinearLayout-->
+<!--                        android:id="@+id/ll_medicine_product"-->
+<!--                        android:focusable="true"-->
+<!--                        android:clickable="true"-->
+<!--                        android:paddingBottom   ="@dimen/margin_8"-->
+<!--                        android:paddingLeft     ="@dimen/margin_10"-->
+<!--                        android:paddingStart    ="@dimen/margin_10"-->
+<!--                        android:paddingEnd      ="@dimen/margin_8"-->
+<!--                        android:paddingRight    ="@dimen/margin_8"-->
+<!--                        android:paddingTop      ="@dimen/margin_8"-->
+<!--                        android:background="@drawable/faint_white_round"-->
+<!--                        android:layout_marginLeft   ="@dimen/margin_10"-->
+<!--                        android:layout_marginStart  ="@dimen/margin_10"-->
+<!--                        android:layout_marginEnd    ="@dimen/margin_5"-->
+<!--                        android:layout_marginRight  ="@dimen/margin_5"-->
+<!--                        android:layout_marginBottom ="@dimen/margin_5"-->
+<!--                        android:layout_marginTop    ="@dimen/margin_5"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:gravity="center"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="@dimen/margin_40"-->
+<!--                        android:layout_weight="1"-->
+<!--                        >-->
+<!--                        <ImageView-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:src="@drawable/ic_medicine_product"-->
+<!--                            />-->
+
+<!--                        <TextView-->
+
+<!--                            android:paddingLeft="@dimen/margin_5"-->
+<!--                            android:paddingStart   ="@dimen/margin_5"-->
+<!--                            android:textColor="@color/colorDarkBlue2"-->
+<!--                            android:textStyle="bold"-->
+<!--                            android:textSize="11sp"-->
+<!--                            android:text="Medicine/Product"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            />-->
+<!--                    </LinearLayout>-->
+
+<!--                    <LinearLayout-->
+<!--                        android:focusable="true"-->
+<!--                        android:clickable="true"-->
+<!--                        android:id="@+id/ll_medicinal_lab"-->
+
+<!--                        android:paddingBottom   ="@dimen/margin_8"-->
+<!--                        android:paddingLeft     ="@dimen/margin_10"-->
+<!--                        android:paddingStart    ="@dimen/margin_10"-->
+<!--                        android:paddingEnd      ="@dimen/margin_8"-->
+<!--                        android:paddingRight    ="@dimen/margin_8"-->
+<!--                        android:paddingTop      ="@dimen/margin_8"-->
+<!--                        android:background="@drawable/faint_white_round"-->
+<!--                        android:layout_marginLeft   ="@dimen/margin_5"-->
+<!--                        android:layout_marginStart  ="@dimen/margin_5"-->
+<!--                        android:layout_marginEnd    ="@dimen/margin_5"-->
+<!--                        android:layout_marginRight  ="@dimen/margin_5"-->
+<!--                        android:layout_marginBottom ="@dimen/margin_5"-->
+<!--                        android:layout_marginTop    ="@dimen/margin_5"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:gravity="center"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="@dimen/margin_40"-->
+<!--                        android:layout_weight="1"-->
+<!--                        >-->
+
+<!--                        <ImageView-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:src="@drawable/ic_microscope"-->
+<!--                            />-->
+
+<!--                        <TextView-->
+
+<!--                            android:paddingLeft="@dimen/margin_5"-->
+<!--                            android:paddingStart   ="@dimen/margin_5"-->
+<!--                            android:textColor="@color/colorDarkBlue2"-->
+<!--                            android:textStyle="bold"-->
+<!--                            android:textSize="11sp"-->
+<!--                            android:text="Lab Test/Imaging"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            />-->
+<!--                    </LinearLayout>-->
+
+
+<!--                    <LinearLayout-->
+
+<!--                        android:id="@+id/ll_certificate"-->
+<!--                        android:focusable="true"-->
+<!--                        android:clickable="true"-->
+<!--                        android:paddingBottom   ="@dimen/margin_8"-->
+<!--                        android:paddingLeft     ="@dimen/margin_10"-->
+<!--                        android:paddingStart    ="@dimen/margin_10"-->
+<!--                        android:paddingEnd      ="@dimen/margin_8"-->
+<!--                        android:paddingRight    ="@dimen/margin_8"-->
+<!--                        android:paddingTop      ="@dimen/margin_8"-->
+<!--                        android:background="@drawable/faint_white_round"-->
+<!--                        android:layout_marginLeft   ="@dimen/margin_10"-->
+<!--                        android:layout_marginStart  ="@dimen/margin_10"-->
+<!--                        android:layout_marginEnd    ="@dimen/margin_5"-->
+<!--                        android:layout_marginRight  ="@dimen/margin_5"-->
+<!--                        android:layout_marginBottom ="@dimen/margin_5"-->
+<!--                        android:layout_marginTop    ="@dimen/margin_5"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:gravity="center"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="@dimen/margin_40"-->
+<!--                        android:layout_weight="1"-->
+<!--                        >-->
+<!--                        <ImageView-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:src="@drawable/ic_medical_certificate"-->
+<!--                            />-->
+
+<!--                        <TextView-->
+<!--                            android:paddingLeft="@dimen/margin_5"-->
+<!--                            android:paddingStart   ="@dimen/margin_5"-->
+<!--                            android:gravity="center"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            android:textColor="@color/colorDarkBlue2"-->
+<!--                            android:textStyle="bold"-->
+<!--                            android:textSize="11sp"-->
+<!--                            android:text="Medical Certificate"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            />-->
+<!--                    </LinearLayout>-->
+
+
+<!--                </LinearLayout>-->
+<!--                <TextView-->
+<!--                    android:layout_marginTop   ="2dp"-->
+<!--                    android:background="@color/white"-->
+
+<!--                    android:id="@+id/textView3_5"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center|top"-->
+<!--                    android:fontFamily="sans-serif"-->
+<!--                    android:includeFontPadding="false"-->
+<!--                    android:gravity="center"-->
+<!--                    android:text="3/5"-->
+<!--                    android:textAllCaps="true"-->
+<!--                    android:textColor="@color/colorBlack"-->
+<!--                    android:textSize="10sp"-->
+<!--                    android:textStyle="normal"/>-->
+
+<!--                <androidx.recyclerview.widget.RecyclerView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_marginLeft="@dimen/margin_10"-->
+<!--                    android:layout_marginRight="@dimen/margin_10"-->
+<!--                    app:stackFromEnd="true"-->
+<!--                    app:reverseLayout="true"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:id="@+id/added_medicines_recycler"/>-->
+
+
+
+
+<!--                <androidx.recyclerview.widget.RecyclerView-->
+<!--                    android:visibility="gone"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_marginLeft="@dimen/margin_10"-->
+<!--                    android:layout_marginRight="@dimen/margin_10"-->
+<!--                    app:stackFromEnd="true"-->
+<!--                    app:reverseLayout="true"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:id="@+id/added_lab_test_recycler"/>-->
+
+
+
+
+<!--                &lt;!&ndash;-    MEDICINE with search and details    &ndash;&gt;-->
+<!--                &lt;!&ndash;-    MEDICINE with search and details    &ndash;&gt;-->
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/ll_main_medicine_details"-->
+<!--                    android:visibility="visible"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="vertical"-->
+<!--                    >-->
+
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/textView_name"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginLeft="@dimen/margin_30"-->
+<!--                        android:layout_marginRight="@dimen/margin_30"-->
+<!--                        android:layout_marginEnd="@dimen/margin_30"-->
+<!--                        android:layout_marginStart="@dimen/margin_30"-->
+<!--                        android:layout_marginTop="@dimen/margin_5"-->
+<!--                        android:gravity="center"-->
+<!--                        android:text="Brand Name of Medicine/Product *"-->
+<!--                        android:textColor="@color/colorDarkGrey"-->
+<!--                        android:textSize="14dp"-->
+<!--                        android:textStyle="bold"-->
+<!--                        />-->
+
+
+<!--                    <EditText-->
+<!--                        android:id="@+id/medicine_searchview"-->
+<!--                        style="@style/MaterialSearchBarLight"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:textColor="#000"-->
+<!--                        android:textSize="14sp"-->
+<!--                        android:inputType="textMultiLine"-->
+<!--                        android:layout_marginLeft="@dimen/margin_20"-->
+<!--                        android:layout_marginRight="@dimen/margin_20"-->
+<!--                        android:layout_marginTop="@dimen/margin_5"-->
+<!--                        android:layout_marginBottom="@dimen/margin_5"-->
+<!--                        android:paddingLeft     ="@dimen/margin_10"-->
+<!--                        android:paddingTop="@dimen/margin_10"-->
+<!--                        android:paddingBottom="@dimen/margin_10"-->
+<!--                        android:paddingStart    ="@dimen/margin_10"-->
+<!--                        android:paddingEnd      ="@dimen/margin_6"-->
+<!--                        android:paddingRight    ="@dimen/margin_6"-->
+<!--                        android:background="@drawable/spinner_background"-->
+<!--                        android:textStyle="bold" />-->
+
+<!--                    <androidx.recyclerview.widget.RecyclerView-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_margin="@dimen/margin_10"-->
+<!--                        android:visibility="gone"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:id="@+id/medicines_recycler"/>-->
+
+
+
+
+
+
+<!--                    <LinearLayout-->
+<!--                        android:layout_marginTop   ="@dimen/margin_5"-->
+<!--                        android:id="@+id/ll_btn_templates"-->
+
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:gravity="center"-->
+<!--                        android:weightSum="2"-->
+<!--                        android:layout_height="wrap_content">-->
+
+
+<!--                        <Button-->
+<!--                            android:foreground="?android:attr/selectableItemBackground"-->
+<!--                            android:textStyle="normal"-->
+<!--                            android:id="@+id/btn_add"-->
+<!--                            android:layout_weight="2"-->
+<!--                            android:layout_marginLeft="@dimen/margin_20"-->
+<!--                            android:layout_marginRight="5dp"-->
+<!--                            android:layout_marginBottom   ="@dimen/margin_3"-->
+
+<!--                            app:layout_constraintTop_toTopOf="parent"-->
+<!--                            app:layout_constraintLeft_toLeftOf="parent"-->
+<!--                            app:layout_constraintRight_toRightOf="parent"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:paddingLeft="20dp"-->
+<!--                            android:paddingRight="20dp"-->
+<!--                            android:layout_height="@dimen/margin_35"-->
+<!--                            android:layout_gravity="right"-->
+<!--                            android:textSize="@dimen/font_14"-->
+<!--                            android:background="@drawable/blue_round"-->
+<!--                            android:text="Save and Add next"-->
+<!--                            android:textAllCaps="false"-->
+<!--                            android:textColor="#17263E"-->
+<!--                            app:layout_constraintEnd_toEndOf="parent"-->
+<!--                            tools:layout_editor_absoluteY="27dp" />-->
+
+<!--                        <Button-->
+<!--                            android:layout_marginBottom   ="@dimen/margin_3"-->
+<!--                            android:foreground="?android:attr/selectableItemBackground"-->
+<!--                            android:textStyle="normal"-->
+<!--                            android:layout_weight="1"-->
+<!--                            android:id="@+id/choose"-->
+<!--                            app:layout_constraintTop_toTopOf="parent"-->
+<!--                            app:layout_constraintLeft_toLeftOf="parent"-->
+<!--                            app:layout_constraintRight_toRightOf="parent"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:paddingLeft="20dp"-->
+<!--                            android:paddingRight="20dp"-->
+<!--                            android:layout_height="@dimen/margin_35"-->
+<!--                            android:layout_gravity="right"-->
+<!--                            android:layout_marginLeft="5dp"-->
+<!--                            android:layout_marginRight="@dimen/margin_20"-->
+<!--                            android:textSize="@dimen/font_14"-->
+<!--                            android:background="@drawable/blue_round"-->
+<!--                            android:text="Choose from Template"-->
+<!--                            android:textAllCaps="false"-->
+<!--                            android:textColor="#17263E"-->
+<!--                            app:layout_constraintEnd_toEndOf="parent"-->
+<!--                            tools:layout_editor_absoluteY="27dp" />-->
+
+<!--                    </LinearLayout>-->
+
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:weightSum="6"-->
+<!--                        android:orientation="horizontal">-->
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_weight="1"-->
+<!--                            android:orientation="vertical">-->
+<!--                            &lt;!&ndash;        Org Name       &ndash;&gt;-->
+<!--                            <TextView-->
+<!--                                android:id="@+id/textView_frequency"-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_marginLeft="@dimen/margin_30"-->
+<!--                                android:layout_marginRight="@dimen/margin_30"-->
+<!--                                android:layout_marginEnd="@dimen/margin_30"-->
+<!--                                android:layout_marginStart="@dimen/margin_30"-->
+
+<!--                                android:layout_marginTop="@dimen/margin_5"-->
+<!--                                android:fontFamily="sans-serif"-->
+<!--                                android:gravity="center"-->
+<!--                                android:text="Frequency"-->
+<!--                                android:textColor="@color/colorDarkGrey"-->
+<!--                                android:textSize="14dp"-->
+<!--                                android:textStyle="bold"-->
+<!--                                />-->
+
+<!--                            <Spinner-->
+<!--                                android:paddingLeft     ="@dimen/margin_4"-->
+<!--                                android:paddingStart    ="@dimen/margin_4"-->
+<!--                                android:paddingEnd      ="@dimen/margin_4"-->
+<!--                                android:paddingRight    ="@dimen/margin_4"-->
+<!--                                android:background="@drawable/spinner_background"-->
+<!--                                android:id="@+id/frequency_spinner"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="@dimen/margin_35"-->
+<!--                                android:layout_marginLeft="@dimen/margin_20"-->
+<!--                                android:layout_marginRight="@dimen/margin_20"-->
+<!--                                android:layout_marginEnd="@dimen/margin_20"-->
+<!--                                android:layout_marginStart="@dimen/margin_20"-->
+<!--                                android:layout_marginTop="@dimen/margin_5"-->
+<!--                                android:layout_marginBottom   ="@dimen/margin_5"-->
+
+<!--                                android:spinnerMode="dialog"-->
+<!--                                android:textColor="#000000"-->
+<!--                                android:textColorHint="#000000" />-->
+
+
+
+<!--                            <EditText-->
+<!--                                android:visibility="gone"-->
+<!--                                android:textSize="16sp"-->
+<!--                                android:inputType="text"-->
+<!--                                android:padding="@dimen/margin_10"-->
+<!--                                android:textColor="@color/colorBlack"-->
+<!--                                android:layout_marginLeft="@dimen/margin_20"-->
+<!--                                android:layout_marginRight="@dimen/margin_20"-->
+<!--                                android:layout_marginEnd="@dimen/margin_20"-->
+<!--                                android:layout_marginStart="@dimen/margin_20"-->
+<!--                                android:layout_marginTop="@dimen/margin_10"-->
+<!--                                android:textColorHint="@color/colorBlack"-->
+<!--                                android:id="@+id/et_frequency"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="@dimen/margin_35"-->
+<!--                                android:background="@drawable/blue_faint_btn_gradient2"-->
+<!--                                />-->
+<!--                        </LinearLayout>-->
+
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_weight="5"-->
+<!--                            android:orientation="vertical">-->
+<!--                            &lt;!&ndash;        Org Name       &ndash;&gt;-->
+<!--                            <TextView-->
+<!--                                android:id="@+id/textView_Route"-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+
+<!--                                android:layout_marginLeft="@dimen/margin_30"-->
+<!--                                android:layout_marginRight="@dimen/margin_30"-->
+<!--                                android:layout_marginEnd="@dimen/margin_30"-->
+<!--                                android:layout_marginStart="@dimen/margin_30"-->
+<!--                                android:layout_marginTop="@dimen/margin_5"-->
+
+<!--                                android:fontFamily="sans-serif"-->
+<!--                                android:gravity="center"-->
+<!--                                android:text="Route/Form"-->
+<!--                                android:textColor="@color/colorDarkGrey"-->
+<!--                                android:textSize="14dp"-->
+<!--                                android:textStyle="bold"-->
+<!--                                />-->
+
+<!--                            <Spinner-->
+<!--                                android:paddingLeft     ="@dimen/margin_4"-->
+<!--                                android:paddingStart    ="@dimen/margin_4"-->
+<!--                                android:paddingEnd      ="@dimen/margin_4"-->
+<!--                                android:paddingRight    ="@dimen/margin_4"-->
+<!--                                android:background="@drawable/spinner_background"-->
+<!--                                android:id="@+id/route_spinner"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="@dimen/margin_35"-->
+<!--                                android:layout_marginLeft="@dimen/margin_20"-->
+<!--                                android:layout_marginRight="@dimen/margin_20"-->
+<!--                                android:layout_marginEnd="@dimen/margin_20"-->
+<!--                                android:layout_marginStart="@dimen/margin_20"-->
+<!--                                android:layout_marginTop="@dimen/margin_5"-->
+<!--                                android:layout_marginBottom   ="@dimen/margin_5"-->
+
+<!--                                android:spinnerMode="dialog"-->
+<!--                                android:textColor="#000000"-->
+<!--                                android:textColorHint="#000000" />-->
+
+<!--                            <EditText-->
+<!--                                android:visibility="gone"-->
+
+<!--                                android:textSize="14sp"-->
+<!--                                android:maxLines="1"-->
+<!--                                android:inputType="text"-->
+<!--                                android:padding="@dimen/margin_10"-->
+<!--                                android:textColor="@color/colorBlack"-->
+<!--                                android:layout_marginLeft="@dimen/margin_20"-->
+<!--                                android:layout_marginRight="@dimen/margin_20"-->
+<!--                                android:layout_marginEnd="@dimen/margin_20"-->
+<!--                                android:layout_marginStart="@dimen/margin_20"-->
+<!--                                android:layout_marginTop="@dimen/margin_10"-->
+<!--                                android:textColorHint="@color/colorBlack"-->
+<!--                                android:id="@+id/et_Route"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="@dimen/margin_35"-->
+<!--                                android:background="@drawable/blue_faint_btn_gradient2"-->
+<!--                                />-->
+<!--                        </LinearLayout>-->
+
+<!--                        <LinearLayout-->
+
+
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_weight="5"-->
+<!--                            android:visibility="gone"-->
+<!--                            android:orientation="vertical">-->
+<!--                            &lt;!&ndash;        Org Name       &ndash;&gt;-->
+<!--                            <TextView-->
+<!--                                android:id="@+id/textView_temp"-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:visibility="invisible"-->
+<!--                                android:layout_marginLeft="@dimen/margin_30"-->
+<!--                                android:layout_marginRight="@dimen/margin_30"-->
+<!--                                android:layout_marginEnd="@dimen/margin_30"-->
+<!--                                android:layout_marginStart="@dimen/margin_30"-->
+<!--                                android:layout_marginTop="@dimen/margin_30"-->
+<!--                                android:fontFamily="sans-serif"-->
+<!--                                android:gravity="center"-->
+<!--                                android:text="Gender"-->
+<!--                                android:textColor="@color/colorDarkGrey"-->
+<!--                                android:textSize="16dp"-->
+<!--                                android:textStyle="bold"-->
+<!--                                />-->
+
+<!--                            <Spinner-->
+<!--                                android:paddingLeft     ="@dimen/margin_4"-->
+<!--                                android:paddingStart    ="@dimen/margin_4"-->
+<!--                                android:paddingEnd      ="@dimen/margin_4"-->
+<!--                                android:paddingRight    ="@dimen/margin_4"-->
+<!--                                android:background="@drawable/spinner_background"-->
+<!--                                android:id="@+id/frequency2_spinner"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="@dimen/margin_40"-->
+<!--                                android:layout_marginLeft="@dimen/margin_20"-->
+<!--                                android:layout_marginRight="@dimen/margin_20"-->
+<!--                                android:layout_marginEnd="@dimen/margin_20"-->
+<!--                                android:layout_marginStart="@dimen/margin_20"-->
+<!--                                android:layout_marginTop="@dimen/margin_10"-->
+<!--                                android:inputType="text"-->
+<!--                                android:spinnerMode="dialog"-->
+<!--                                android:textColor="#000000"-->
+<!--                                android:textColorHint="#000000" />-->
+
+<!--                            <EditText-->
+<!--                                android:visibility="gone"-->
+<!--                                android:layout_marginBottom   ="@dimen/margin_5"-->
+
+<!--                                android:textSize="16sp"-->
+<!--                                android:maxLines="1"-->
+<!--                                android:inputType="text"-->
+<!--                                android:imeOptions="actionNext"-->
+<!--                                android:padding="@dimen/margin_10"-->
+<!--                                android:textColor="@color/colorBlack"-->
+<!--                                android:layout_marginLeft="@dimen/margin_20"-->
+<!--                                android:layout_marginRight="@dimen/margin_20"-->
+<!--                                android:layout_marginEnd="@dimen/margin_20"-->
+<!--                                android:layout_marginStart="@dimen/margin_20"-->
+<!--                                android:layout_marginTop="@dimen/margin_10"-->
+<!--                                android:textColorHint="@color/colorBlack"-->
+<!--                                android:id="@+id/et_frequency1"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="@dimen/margin_40"-->
+<!--                                android:background="@drawable/blue_faint_btn_gradient2"-->
+<!--                                />-->
+<!--                        </LinearLayout>-->
+<!--                    </LinearLayout>-->
+
+<!--                    <LinearLayout-->
+
+
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:weightSum="6"-->
+<!--                        android:orientation="horizontal">-->
+<!--                        <LinearLayout-->
+
+
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_weight="1"-->
+<!--                            android:orientation="vertical">-->
+<!--                            &lt;!&ndash;        Org Name       &ndash;&gt;-->
+<!--                            <TextView-->
+<!--                                android:id="@+id/textView_days"-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_marginLeft="@dimen/margin_30"-->
+<!--                                android:layout_marginRight="@dimen/margin_30"-->
+<!--                                android:layout_marginEnd="@dimen/margin_30"-->
+<!--                                android:layout_marginStart="@dimen/margin_30"-->
+<!--                                android:layout_marginTop="@dimen/margin_5"-->
+<!--                                android:fontFamily="sans-serif"-->
+<!--                                android:gravity="center"-->
+<!--                                android:text="No of days"-->
+<!--                                android:textColor="@color/colorDarkGrey"-->
+<!--                                android:textSize="14dp"-->
+<!--                                android:textStyle="bold"-->
+
+<!--                                />-->
+
+
+
+<!--                            <EditText-->
+<!--                                android:layout_marginBottom   ="@dimen/margin_5"-->
+
+<!--                                android:textSize="14sp"-->
+<!--                                android:inputType="number"-->
+<!--                                android:maxLength="3"-->
+<!--                                android:padding="@dimen/margin_10"-->
+<!--                                android:textColor="@color/colorBlack"-->
+<!--                                android:layout_marginLeft="@dimen/margin_20"-->
+<!--                                android:layout_marginRight="@dimen/margin_20"-->
+<!--                                android:layout_marginEnd="@dimen/margin_20"-->
+<!--                                android:layout_marginStart="@dimen/margin_20"-->
+<!--                                android:layout_marginTop="@dimen/margin_5"-->
+<!--                                android:textColorHint="@color/colorBlack"-->
+<!--                                android:id="@+id/et_days"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="@dimen/margin_35"-->
+<!--                                android:background="@drawable/blue_faint_btn_gradient2"-->
+<!--                                />-->
+<!--                        </LinearLayout>-->
+<!--                        <LinearLayout-->
+
+
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_weight="6"-->
+<!--                            android:layout_marginRight="@dimen/margin_20"-->
+<!--                            android:layout_marginEnd="@dimen/margin_20"-->
+<!--                            android:orientation="vertical">-->
+
+<!--                            <TextView-->
+<!--                                android:id="@+id/textView_instruction"-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_marginLeft="@dimen/margin_30"-->
+<!--                                android:layout_marginRight="@dimen/margin_30"-->
+<!--                                android:layout_marginEnd="@dimen/margin_30"-->
+<!--                                android:layout_marginStart="@dimen/margin_30"-->
+<!--                                android:layout_marginTop="@dimen/margin_5"-->
+<!--                                android:fontFamily="sans-serif"-->
+<!--                                android:gravity="center"-->
+
+<!--                                android:text="Instructions"-->
+<!--                                android:textColor="@color/colorDarkGrey"-->
+<!--                                android:textSize="14dp"-->
+<!--                                android:textStyle="bold"-->
+<!--                                />-->
+
+<!--                            <Spinner-->
+<!--                                android:paddingLeft     ="@dimen/margin_4"-->
+<!--                                android:paddingStart    ="@dimen/margin_4"-->
+<!--                                android:paddingEnd      ="@dimen/margin_4"-->
+<!--                                android:paddingRight    ="@dimen/margin_4"-->
+<!--                                android:background="@drawable/spinner_background"-->
+<!--                                android:id="@+id/instructions_spinner"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="@dimen/margin_35"-->
+<!--                                android:layout_marginLeft="@dimen/margin_20"-->
+<!--                                android:layout_marginRight="@dimen/margin_20"-->
+<!--                                android:layout_marginEnd="@dimen/margin_20"-->
+<!--                                android:layout_marginStart="@dimen/margin_20"-->
+<!--                                android:layout_marginTop="@dimen/margin_5"-->
+<!--                                android:spinnerMode="dialog"-->
+<!--                                android:layout_marginBottom   ="@dimen/margin_5"-->
+
+<!--                                android:textColor="#000000"-->
+<!--                                android:textColorHint="#000000" />-->
+
+<!--                            <EditText-->
+<!--                                android:visibility="gone"-->
+<!--                                android:textSize="14sp"-->
+<!--                                android:layout_marginBottom   ="@dimen/margin_5"-->
+
+<!--                                android:padding="@dimen/margin_10"-->
+<!--                                android:inputType="text"-->
+<!--                                android:textColor="@color/colorBlack"-->
+<!--                                android:layout_marginLeft="@dimen/margin_20"-->
+<!--                                android:layout_marginRight="@dimen/margin_20"-->
+<!--                                android:layout_marginEnd="@dimen/margin_20"-->
+<!--                                android:layout_marginStart="@dimen/margin_20"-->
+<!--                                android:layout_marginTop="@dimen/margin_10"-->
+<!--                                android:textColorHint="@color/colorBlack"-->
+<!--                                android:id="@+id/et_instruction"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="@dimen/margin_35"-->
+<!--                                android:background="@drawable/blue_faint_btn_gradient2"/>-->
+<!--                        </LinearLayout>-->
+<!--                    </LinearLayout>-->
+<!--                    &lt;!&ndash;        Name       &ndash;&gt;-->
+
+
+<!--                    &lt;!&ndash;        Org Name       &ndash;&gt;-->
+<!--                    <TextView-->
+<!--                        android:id="@+id/textView_comments"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginLeft="@dimen/margin_30"-->
+<!--                        android:layout_marginRight="@dimen/margin_30"-->
+<!--                        android:layout_marginEnd="@dimen/margin_30"-->
+<!--                        android:layout_marginStart="@dimen/margin_30"-->
+<!--                        android:layout_marginTop="@dimen/margin_5"-->
+<!--                        android:fontFamily="sans-serif"-->
+<!--                        android:gravity="center"-->
+<!--                        android:text="Additional comments"-->
+<!--                        android:textColor="@color/colorDarkGrey"-->
+<!--                        android:textSize="14dp"-->
+
+<!--                        android:textStyle="bold"-->
+<!--                        />-->
+
+<!--                    <EditText-->
+
+<!--                        android:textSize="14sp"-->
+<!--                        android:padding="@dimen/margin_10"-->
+<!--                        android:imeOptions="actionDone"-->
+<!--                        android:maxLines="1"-->
+<!--                        android:inputType="text"-->
+<!--                        android:textColor="@color/colorBlack"-->
+<!--                        android:layout_marginLeft="@dimen/margin_20"-->
+<!--                        android:layout_marginRight="@dimen/margin_20"-->
+<!--                        android:layout_marginEnd="@dimen/margin_20"-->
+<!--                        android:layout_marginStart="@dimen/margin_20"-->
+<!--                        android:layout_marginTop="@dimen/margin_5"-->
+<!--                        android:layout_marginBottom   ="@dimen/margin_5"-->
+
+<!--                        android:textColorHint="@color/colorBlack"-->
+<!--                        android:id="@+id/et_comments"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="@dimen/margin_35"-->
+<!--                        android:background="@drawable/blue_faint_btn_gradient2"-->
+<!--                        />-->
+
+
+
+
+<!--                </LinearLayout>-->
+
+<!--                &lt;!&ndash;-    LAB TEST with search and details    &ndash;&gt;-->
+<!--                &lt;!&ndash;-    LAB TEST with search and details    &ndash;&gt;-->
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/ll_main_lab_test_details"-->
+
+<!--                    android:visibility="gone"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="vertical"-->
+<!--                    >-->
+
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/textView_name_labtest"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginLeft="@dimen/margin_30"-->
+<!--                        android:layout_marginRight="@dimen/margin_30"-->
+<!--                        android:layout_marginEnd="@dimen/margin_30"-->
+<!--                        android:layout_marginStart="@dimen/margin_30"-->
+<!--                        android:layout_marginTop="@dimen/margin_10"-->
+<!--                        android:gravity="center"-->
+<!--                        android:text="Name of Lab Test/Imaging"-->
+<!--                        android:textColor="@color/colorDarkGrey"-->
+<!--                        android:textSize="14dp"-->
+<!--                        android:textStyle="bold"-->
+<!--                        />-->
+
+
+
+<!--                    <EditText-->
+<!--                        android:id="@+id/labtest_searchview"-->
+<!--                        style="@style/MaterialSearchBarLight"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:textColor="#000"-->
+<!--                        android:textSize="14dp"-->
+<!--                        android:inputType="textMultiLine"-->
+<!--                        android:layout_marginLeft="@dimen/margin_20"-->
+<!--                        android:layout_marginRight="@dimen/margin_20"-->
+<!--                        android:layout_marginTop="@dimen/margin_5"-->
+<!--                        android:layout_marginBottom="@dimen/margin_10"-->
+<!--                        android:paddingLeft     ="@dimen/margin_10"-->
+
+<!--                        android:paddingTop="@dimen/margin_10"-->
+<!--                        android:paddingBottom="@dimen/margin_10"-->
+<!--                        android:paddingStart    ="@dimen/margin_10"-->
+<!--                        android:paddingEnd      ="@dimen/margin_6"-->
+<!--                        android:paddingRight    ="@dimen/margin_6"-->
+<!--                        android:background="@drawable/spinner_background"-->
+<!--                        android:textStyle="bold" />-->
+
+<!--                    <androidx.recyclerview.widget.RecyclerView-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_margin="@dimen/margin_10"-->
+<!--                        android:visibility="gone"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:id="@+id/labtest_recycler"/>-->
+
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:weightSum="2"-->
+<!--                        >-->
+<!--                        <Button-->
+<!--                            android:foreground="?android:attr/selectableItemBackground"-->
+<!--                            android:textStyle="normal"-->
+<!--                            android:id="@+id/btn_add_labtest"-->
+<!--                            android:layout_weight="2"-->
+<!--                            android:layout_marginLeft="@dimen/margin_20"-->
+<!--                            android:layout_marginRight="5dp"-->
+<!--                            android:layout_marginBottom   ="@dimen/margin_5"-->
+
+<!--                            app:layout_constraintTop_toTopOf="parent"-->
+<!--                            app:layout_constraintLeft_toLeftOf="parent"-->
+<!--                            app:layout_constraintRight_toRightOf="parent"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:paddingLeft="20dp"-->
+<!--                            android:paddingRight="20dp"-->
+<!--                            android:layout_height="@dimen/margin_35"-->
+<!--                            android:layout_gravity="right"-->
+<!--                            android:textSize="@dimen/font_14"-->
+<!--                            android:background="@drawable/blue_round"-->
+<!--                            android:text="Save and Add next"-->
+<!--                            android:textAllCaps="false"-->
+<!--                            android:textColor="#17263E"-->
+<!--                            app:layout_constraintEnd_toEndOf="parent"-->
+<!--                            tools:layout_editor_absoluteY="27dp" />-->
+
+<!--                        <Button-->
+<!--                            android:layout_marginBottom   ="@dimen/margin_5"-->
+
+<!--                            android:foreground="?android:attr/selectableItemBackground"-->
+<!--                            android:textStyle="normal"-->
+<!--                            android:layout_weight="1"-->
+<!--                            android:id="@+id/choose_labtest"-->
+<!--                            app:layout_constraintTop_toTopOf="parent"-->
+<!--                            app:layout_constraintLeft_toLeftOf="parent"-->
+<!--                            app:layout_constraintRight_toRightOf="parent"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:paddingLeft="20dp"-->
+<!--                            android:paddingRight="20dp"-->
+<!--                            android:layout_height="@dimen/margin_35"-->
+<!--                            android:layout_gravity="right"-->
+<!--                            android:layout_marginLeft="5dp"-->
+<!--                            android:layout_marginRight="@dimen/margin_20"-->
+<!--                            android:textSize="@dimen/font_14"-->
+<!--                            android:background="@drawable/blue_round"-->
+<!--                            android:text="Choose from Template"-->
+<!--                            android:textAllCaps="false"-->
+<!--                            android:textColor="#17263E"-->
+<!--                            app:layout_constraintEnd_toEndOf="parent"-->
+<!--                            tools:layout_editor_absoluteY="27dp" />-->
+<!--                    </LinearLayout>-->
+
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/textView_additional_comments_labtest"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginLeft="@dimen/margin_30"-->
+<!--                        android:layout_marginRight="@dimen/margin_30"-->
+<!--                        android:layout_marginEnd="@dimen/margin_30"-->
+<!--                        android:layout_marginStart="@dimen/margin_30"-->
+<!--                        android:layout_marginTop="@dimen/margin_10"-->
+<!--                        android:gravity="center"-->
+<!--                        android:text="Additional Comments for Lab Test/Imaging"-->
+<!--                        android:textColor="@color/colorDarkGrey"-->
+<!--                        android:textSize="14dp"-->
+<!--                        android:textStyle="bold"-->
+<!--                        />-->
+
+<!--                    <EditText-->
+<!--                        android:id="@+id/labtest_additional_comments"-->
+<!--                        style="@style/MaterialSearchBarLight"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:textColor="#000"-->
+<!--                        android:textSize="14sp"-->
+<!--                        android:lines="4"-->
+
+<!--                        android:imeOptions="actionNext"-->
+<!--                        android:maxLines="4"-->
+<!--                        android:hint="Type here if any"-->
+<!--                        android:layout_marginLeft="@dimen/margin_20"-->
+<!--                        android:layout_marginRight="@dimen/margin_20"-->
+<!--                        android:layout_marginTop="@dimen/margin_5"-->
+<!--                        android:layout_marginBottom="@dimen/margin_10"-->
+<!--                        android:padding="@dimen/margin_10"-->
+<!--                        android:background="@drawable/spinner_background"-->
+<!--                        android:textStyle="bold" />-->
+
+
+<!--                </LinearLayout>-->
+
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/ll_main_end_note_details"-->
+
+<!--                    android:visibility="gone"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="vertical"-->
+<!--                    >-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/textView_chief_complaint"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginLeft="@dimen/margin_30"-->
+<!--                        android:layout_marginRight="@dimen/margin_30"-->
+<!--                        android:layout_marginEnd="@dimen/margin_30"-->
+<!--                        android:layout_marginStart="@dimen/margin_30"-->
+<!--                        android:layout_marginTop="@dimen/margin_10"-->
+<!--                        android:gravity="center"-->
+<!--                        android:text="Chief Complaint"-->
+<!--                        android:textColor="@color/colorDarkGrey"-->
+<!--                        android:textSize="14dp"-->
+<!--                        android:textStyle="bold"-->
+<!--                        />-->
+
+<!--                    <EditText-->
+<!--                        android:id="@+id/et_chief_complaint"-->
+<!--                        style="@style/MaterialSearchBarLight"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:textColor="#000"-->
+<!--                        android:textSize="14sp"-->
+<!--                        android:minLines="2"-->
+
+<!--                        android:imeOptions="actionNext"-->
+<!--                        android:inputType="textMultiLine"-->
+
+<!--                        android:layout_marginLeft="@dimen/margin_20"-->
+<!--                        android:layout_marginRight="@dimen/margin_20"-->
+<!--                        android:layout_marginTop="@dimen/margin_10"-->
+<!--                        android:layout_marginBottom="@dimen/margin_10"-->
+<!--                        android:padding="@dimen/margin_10"-->
+<!--                        android:background="@drawable/spinner_background"-->
+<!--                        android:textStyle="bold" />-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/textView_history"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginLeft="@dimen/margin_30"-->
+<!--                        android:layout_marginRight="@dimen/margin_30"-->
+<!--                        android:layout_marginEnd="@dimen/margin_30"-->
+<!--                        android:layout_marginStart="@dimen/margin_30"-->
+<!--                        android:layout_marginTop="@dimen/margin_10"-->
+<!--                        android:gravity="center"-->
+<!--                        android:text="History"-->
+<!--                        android:textColor="@color/colorDarkGrey"-->
+<!--                        android:textSize="14dp"-->
+<!--                        android:textStyle="bold"-->
+<!--                        />-->
+
+<!--                    <EditText-->
+<!--                        android:id="@+id/et_history"-->
+<!--                        style="@style/MaterialSearchBarLight"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:textColor="#000"-->
+<!--                        android:textSize="14sp"-->
+<!--                        android:minLines="2"-->
+
+<!--                        android:imeOptions="actionNext"-->
+<!--                        android:inputType="textMultiLine"-->
+
+<!--                        android:layout_marginLeft="@dimen/margin_20"-->
+<!--                        android:layout_marginRight="@dimen/margin_20"-->
+<!--                        android:layout_marginTop="@dimen/margin_10"-->
+<!--                        android:layout_marginBottom="@dimen/margin_10"-->
+<!--                        android:padding="@dimen/margin_10"-->
+<!--                        android:background="@drawable/spinner_background"-->
+<!--                        android:textStyle="bold" />-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/textView_findings"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginLeft="@dimen/margin_30"-->
+<!--                        android:layout_marginRight="@dimen/margin_30"-->
+<!--                        android:layout_marginEnd="@dimen/margin_30"-->
+<!--                        android:layout_marginStart="@dimen/margin_30"-->
+<!--                        android:layout_marginTop="@dimen/margin_10"-->
+<!--                        android:gravity="center"-->
+<!--                        android:text="Findings"-->
+<!--                        android:textColor="@color/colorDarkGrey"-->
+<!--                        android:textSize="14dp"-->
+<!--                        android:textStyle="bold"-->
+<!--                        />-->
+
+<!--                    <EditText-->
+<!--                        android:id="@+id/et_findings"-->
+<!--                        style="@style/MaterialSearchBarLight"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:textColor="#000"-->
+<!--                        android:textSize="14sp"-->
+<!--                        android:minLines="4"-->
+
+<!--                        android:imeOptions="actionNext"-->
+<!--                        android:inputType="textMultiLine"-->
+
+<!--                        android:layout_marginLeft="@dimen/margin_20"-->
+<!--                        android:layout_marginRight="@dimen/margin_20"-->
+<!--                        android:layout_marginTop="@dimen/margin_10"-->
+<!--                        android:layout_marginBottom="@dimen/margin_10"-->
+<!--                        android:padding="@dimen/margin_10"-->
+<!--                        android:background="@drawable/spinner_background"-->
+<!--                        android:textStyle="bold" />-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/textView_diagnosis"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginLeft="@dimen/margin_30"-->
+<!--                        android:layout_marginRight="@dimen/margin_30"-->
+<!--                        android:layout_marginEnd="@dimen/margin_30"-->
+<!--                        android:layout_marginStart="@dimen/margin_30"-->
+<!--                        android:layout_marginTop="@dimen/margin_10"-->
+<!--                        android:gravity="center"-->
+<!--                        android:text="Diagnosis"-->
+<!--                        android:textColor="@color/colorDarkGrey"-->
+<!--                        android:textSize="14dp"-->
+<!--                        android:textStyle="bold"-->
+<!--                        />-->
+
+<!--                    <EditText-->
+<!--                        android:id="@+id/et_diagnosis"-->
+<!--                        style="@style/MaterialSearchBarLight"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:textColor="#000"-->
+<!--                        android:textSize="14sp"-->
+<!--                        android:minLines="2"-->
+<!--                        android:inputType="textMultiLine"-->
+<!--                        android:imeOptions="actionNext"-->
+<!--                        android:layout_marginLeft="@dimen/margin_20"-->
+<!--                        android:layout_marginRight="@dimen/margin_20"-->
+<!--                        android:layout_marginTop="@dimen/margin_10"-->
+<!--                        android:layout_marginBottom="@dimen/margin_10"-->
+<!--                        android:padding="@dimen/margin_10"-->
+<!--                        android:background="@drawable/spinner_background"-->
+<!--                        android:textStyle="bold" />-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/textView_treatment_advice"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginLeft="@dimen/margin_30"-->
+<!--                        android:layout_marginRight="@dimen/margin_30"-->
+<!--                        android:layout_marginEnd="@dimen/margin_30"-->
+<!--                        android:layout_marginStart="@dimen/margin_30"-->
+<!--                        android:layout_marginTop="@dimen/margin_10"-->
+<!--                        android:gravity="center"-->
+<!--                        android:text="Treatment/Advice"-->
+<!--                        android:textColor="@color/colorDarkGrey"-->
+<!--                        android:textSize="14dp"-->
+<!--                        android:textStyle="bold"-->
+<!--                        />-->
+
+<!--                    <EditText-->
+<!--                        android:id="@+id/et_treatment_advice"-->
+<!--                        style="@style/MaterialSearchBarLight"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:textColor="#000"-->
+<!--                        android:textSize="14sp"-->
+<!--                        android:minLines="2"-->
+
+<!--                        android:imeOptions="actionNext"-->
+<!--                        android:inputType="textMultiLine"-->
+
+<!--                        android:layout_marginLeft="@dimen/margin_20"-->
+<!--                        android:layout_marginRight="@dimen/margin_20"-->
+<!--                        android:layout_marginTop="@dimen/margin_10"-->
+<!--                        android:layout_marginBottom="@dimen/margin_10"-->
+<!--                        android:padding="@dimen/margin_10"-->
+<!--                        android:background="@drawable/spinner_background"-->
+<!--                        android:textStyle="bold" />-->
+
+
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/textView_end_note"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginLeft="@dimen/margin_30"-->
+<!--                        android:layout_marginRight="@dimen/margin_30"-->
+<!--                        android:layout_marginEnd="@dimen/margin_30"-->
+<!--                        android:layout_marginStart="@dimen/margin_30"-->
+<!--                        android:layout_marginTop="@dimen/margin_10"-->
+<!--                        android:gravity="center"-->
+<!--                        android:text="End Note"-->
+<!--                        android:textColor="@color/colorDarkGrey"-->
+<!--                        android:textSize="14dp"-->
+<!--                        android:textStyle="bold"-->
+<!--                        />-->
+
+<!--                    <EditText-->
+<!--                        android:id="@+id/et_end_note"-->
+<!--                        style="@style/MaterialSearchBarLight"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:textColor="#000"-->
+<!--                        android:textSize="14sp"-->
+<!--                        android:minLines="2"-->
+
+
+<!--                        android:imeOptions="actionNext"-->
+<!--                        android:inputType="textMultiLine"-->
+
+<!--                        android:layout_marginLeft="@dimen/margin_20"-->
+<!--                        android:layout_marginRight="@dimen/margin_20"-->
+<!--                        android:layout_marginTop="@dimen/margin_10"-->
+<!--                        android:layout_marginBottom="@dimen/margin_10"-->
+<!--                        android:padding="@dimen/margin_10"-->
+<!--                        android:background="@drawable/spinner_background"-->
+<!--                        android:textStyle="bold" />-->
+
+
+
+<!--                </LinearLayout>-->
+
+
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/ll_main_certificate"-->
+
+<!--                    android:visibility="gone"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="vertical"-->
+<!--                    >-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/textView_certificate_title"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginLeft="@dimen/margin_30"-->
+<!--                        android:layout_marginRight="@dimen/margin_30"-->
+<!--                        android:layout_marginEnd="@dimen/margin_30"-->
+<!--                        android:layout_marginStart="@dimen/margin_30"-->
+<!--                        android:layout_marginTop="@dimen/margin_10"-->
+<!--                        android:gravity="center"-->
+<!--                        android:text="Certificate Title"-->
+<!--                        android:textColor="@color/colorDarkGrey"-->
+<!--                        android:textSize="14dp"-->
+<!--                        android:textStyle="bold"-->
+<!--                        />-->
+
+<!--                    <EditText-->
+<!--                        android:id="@+id/et_certificate_title"-->
+<!--                        style="@style/MaterialSearchBarLight"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:textColor="#000"-->
+<!--                        android:textSize="14sp"-->
+<!--                        android:lines="1"-->
+<!--                        android:text="Medical Certificate"-->
+<!--                        android:imeOptions="actionNext"-->
+<!--                        android:maxLines="1"-->
+<!--                        android:layout_marginLeft="@dimen/margin_20"-->
+<!--                        android:layout_marginRight="@dimen/margin_20"-->
+<!--                        android:layout_marginTop="@dimen/margin_10"-->
+<!--                        android:layout_marginBottom="@dimen/margin_10"-->
+<!--                        android:padding="@dimen/margin_10"-->
+<!--                        android:background="@drawable/spinner_background"-->
+<!--                        android:textStyle="bold" />-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/textView_certificate_desc"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginLeft="@dimen/margin_30"-->
+<!--                        android:layout_marginRight="@dimen/margin_30"-->
+<!--                        android:layout_marginEnd="@dimen/margin_30"-->
+<!--                        android:layout_marginStart="@dimen/margin_30"-->
+<!--                        android:layout_marginTop="@dimen/margin_10"-->
+<!--                        android:gravity="center"-->
+<!--                        android:text="Description"-->
+<!--                        android:textColor="@color/colorDarkGrey"-->
+<!--                        android:textSize="14dp"-->
+<!--                        android:textStyle="bold"-->
+<!--                        />-->
+
+<!--                    <EditText-->
+<!--                        android:id="@+id/et_certificate_desc"-->
+<!--                        style="@style/MaterialSearchBarLight"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:textColor="#000"-->
+<!--                        android:textSize="14sp"-->
+<!--                        android:minLines="4"-->
+<!--                        android:imeOptions="actionNext"-->
+<!--                        android:inputType="textMultiLine"-->
+
+<!--                        android:layout_marginLeft="@dimen/margin_20"-->
+<!--                        android:layout_marginRight="@dimen/margin_20"-->
+<!--                        android:layout_marginTop="@dimen/margin_10"-->
+<!--                        android:layout_marginBottom="@dimen/margin_10"-->
+<!--                        android:padding="@dimen/margin_10"-->
+<!--                        android:background="@drawable/spinner_background"-->
+<!--                        android:textStyle="bold" />-->
+
+
+<!--                </LinearLayout>-->
+
+<!--                <Button-->
+
+<!--                    android:id="@+id/btn_prescribe"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="@dimen/margin_40"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_marginStart="@dimen/margin_20"-->
+<!--                    android:layout_marginLeft="@dimen/margin_20"-->
+<!--                    android:layout_marginTop="@dimen/margin_5"-->
+<!--                    android:layout_marginEnd="@dimen/margin_20"-->
+<!--                    android:layout_marginRight="@dimen/margin_20"-->
+<!--                    android:layout_marginBottom="@dimen/margin_20"-->
+<!--                    android:background="@drawable/blue_round_btn_gradient"-->
+<!--                    android:paddingLeft="20dp"-->
+<!--                    android:paddingRight="20dp"-->
+<!--                    android:text="Prescribe"-->
+<!--                    android:textAllCaps="false"-->
+<!--                    android:textColor="@color/colorWhite"-->
+<!--                    android:textSize="16sp"-->
+<!--                    android:textStyle="normal"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintLeft_toLeftOf="parent"-->
+<!--                    app:layout_constraintRight_toRightOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent"-->
+<!--                    tools:layout_editor_absoluteY="27dp" />-->
+
+
+<!--            </LinearLayout>-->
+<!--        </LinearLayout>-->
+
+<!--    </androidx.core.widget.NestedScrollView>-->
+<!--</LinearLayout>-->
+<!--<LinearLayout-->
+<!--    android:visibility="visible"-->
+<!--    android:id="@+id/info_no_patients"-->
+<!--    android:orientation="vertical"-->
+<!--    android:layout_gravity="center"-->
+<!--    android:gravity="center"-->
+<!--    android:layout_width="wrap_content"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    >-->
+
+<!--    <ImageView-->
+<!--        android:layout_marginTop="100dp"-->
+<!--        android:layout_gravity="top|center"-->
+<!--        android:layout_width="120dp"-->
+<!--        android:layout_weight="1"-->
+<!--        android:layout_height="120dp"-->
+<!--        android:layout_marginBottom="@dimen/margin_10"-->
+<!--        android:src="@drawable/pres_no"/>-->
+
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:weightSum="2"-->
+<!--        android:orientation="horizontal">-->
+<!--        <ImageView-->
+<!--            android:layout_gravity="top|center"-->
+<!--            android:layout_width="120dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:layout_height="120dp"-->
+<!--            android:src="@drawable/pat_m"-->
+
+<!--            />-->
+<!--        <ImageView-->
+<!--            android:layout_gravity="top|center"-->
+<!--            android:layout_width="120dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:layout_height="120dp"-->
+<!--            android:src="@drawable/pat_f"-->
+
+<!--            />-->
+<!--    </LinearLayout>-->
+
+<!--    <TextView-->
+<!--        android:layout_marginTop="@dimen/margin_40"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:gravity="center"-->
+<!--        android:layout_marginLeft="@dimen/margin_30"-->
+<!--        android:layout_marginStart="@dimen/margin_30"-->
+<!--        android:layout_marginRight="@dimen/margin_30"-->
+<!--        android:layout_marginEnd="@dimen/margin_30"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="No patients to prescribe currently"-->
+<!--        android:textColor="@color/colorBlack"-->
+<!--        android:textSize="14sp"-->
+<!--        android:textStyle="normal"-->
+<!--        android:typeface="sans"-->
+<!--        />-->
+
+<!--</LinearLayout>-->
+<!--<Button-->
+<!--    android:visibility="gone"-->
+<!--    android:id="@+id/btn_create_patient"-->
+<!--    android:textSize="17sp"-->
+<!--    android:layout_margin="@dimen/margin_10"-->
+<!--    android:layout_gravity="center|bottom"-->
+<!--    android:gravity="center"-->
+<!--    android:textStyle="normal"-->
+<!--    android:textAllCaps="false"-->
+<!--    android:textColor="@color/white"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    android:text="Add Patient and Prescribe"-->
+<!--    android:background="@drawable/blue_round_btn_gradient"-->
+<!--    />-->
+<!--<include layout="@layout/progress_bar_layout"-->
+<!--    />-->
+
+<!--<FrameLayout-->
+<!--    android:id="@+id/homePageContainer"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    app:layout_anchor="@+id/ll_invite_member"-->
+<!--    app:layout_anchorGravity="center" />-->
+
+<!--</androidx.coordinatorlayout.widget.CoordinatorLayout>-->

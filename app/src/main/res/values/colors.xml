@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="colorPrimary">#003D46</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorAccent">#0F2F3F</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorWhite2">#F4F4F4</color>
+    <color name="colorCustomWhite">#DCF5FD</color>
+    <color name="colorFaintWhite">#E4E3E3</color>
+    <color name="contentBodyColor">#FCFCFC</color>
+    <color name="colorWhiteTransparent1">#80FFFFFF</color>
+    <color name="colorWhiteTransparent2">#16FFFFFF</color>
+    <color name="colorWhiteTransparent3">#2DFFFFFF</color>
+    <color name="colorWhiteTransparent4">#43FFFFFF</color>
+    <color name="contentTextColor">#020000</color>
+    <color name="colorBlackTransparent1">#80000000</color>
+    <color name="colorBlackTransparent2">#16000000</color>
+    <color name="colorBlackTransparent3">#2D000000</color>
+    <color name="colorBlackTransparent4">#43000000</color>
+    <color name="Transparent4">#00000000</color>
+
+    <color name="colorBlack">#000000</color>
+    <color name="colorRed">#E70505</color>
+    <color name="colorGreen">#32DA0C</color>
+    <color name="colorFaintGreen">#F2FFF0</color>
+    <color name="colorDarkGreen">#219108</color>
+
+    <color name="frame">#86c166</color>
+    <color name="frame2">#0AA83E</color>
+    <color name="handle">#86c166</color>
+    <color name="guide">#aa86c166</color>
+
+    <color name="colorBlue">#1B44D8</color>
+    <color name="colorBlueTop">#16265B</color>
+    <color name="colorBlue4">#3E61D8</color>
+    <color name="colorBlueNew">#71A7F8</color>
+    <color name="colorBlueDarkNew">#407AD1</color>
+    <color name="colorBlueNew2">#345C97</color>
+    <color name="colorBlue3">#367AED</color>
+    <color name="colorBlue2">#4E80D5</color>
+    <color name="colorYellow">#FFD500</color>
+    <color name="colorYellow2">#FF9800</color>
+    <color name="colorOrange">#E75E02</color>
+    <color name="colorOrange2">#E71D02</color>
+    <color name="colorOrangeFaint">#160998A8</color>
+    <color name="colorOrangeFaintest">#009FDA</color>
+    <color name="colorBlueFaintNew">#739CC7</color>
+    <color name="colorBlueFaintMAIN">#A9C3EA</color>
+    <color name="colorOrangeDark">#AD4601</color>
+
+    <color name="colorGrey">#A3A2A3</color>
+
+    <color name="colorDarkBlue">#112842</color>
+    <color name="colorDarkBlue2">#143D51</color>
+    <color name="colorDarkestBlue">#0A1E29</color>
+    <color name="colorDarkestBlue2">#02071B</color>
+    <color name="colorDarkestBlue3">#172457</color>
+    <color name="colorFaintBlue">#82B7D1</color>
+    <color name="colorFaintGrey">#C2C1C1</color>
+    <color name="colorDarkGrey">#777676</color>
+    <color name="colorDarkstGrey">#535353</color>
+    <color name="colorheaderDark">#004E89</color>
+
+
+    <color name="dayPressed">#82B7D1</color>
+    <color name="daySelected">#82B7D1</color>
+    <color name="daySelectedTextColor">@android:color/white</color>
+    <color name="dayDeselected">#FAFAFA</color>
+    <color name="dayDeselectedTextColor">@android:color/black</color>
+
+    <!-- Customizing colors for disabled days-->
+    <color name="daySelectedAndDisabled">#43444F</color>
+    <color name="daySelectedAndDisabledTextColor">@color/daySelectedTextColor</color>
+    <color name="dayDeselectedAndDisabled">@color/dayDeselected</color>
+    <color name="dayDeselectedAndDisabledTextColor">@android:color/darker_gray</color>
+
+
+
+</resources>

@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:clickable="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorWhite"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+
+<FrameLayout
+    android:layout_gravity="center|top"
+    android:layout_marginTop="10dp"
+    android:layout_width="match_parent"
+    android:paddingLeft="@dimen/margin_20"
+    android:paddingStart="@dimen/margin_20"
+    android:paddingEnd="@dimen/margin_20"
+    android:paddingRight="@dimen/margin_20"
+    android:paddingBottom="@dimen/margin_20"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+
+<LinearLayout
+    android:id="@+id/ll_submit"
+    android:background="@drawable/background_gradient"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+   >
+
+
+        <ImageView
+            android:layout_gravity="center"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/image"
+            android:background="@color/cardview_shadow_end_color"
+            android:src="@drawable/bludoc_shadow"
+            />
+        <LinearLayout
+            android:layout_marginBottom="@dimen/margin_10"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            >
+            <TextView
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/colorBlueDarkNew"
+                android:textSize="30sp"
+                android:text="Blu"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Doc"
+
+                android:textAllCaps="false"
+                android:textColor="@color/colorBlueTop"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+
+
+    <TextView
+        android:padding="@dimen/margin_12"
+        android:id="@+id/tv_please_otp"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:textColor="@color/colorBlack"
+        android:textSize="12sp"
+        android:background="@drawable/faint_white_round"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:text="Kindly enter the mail ID you wish to use.\n\n You will receive an OTP to login &amp; verify with the mail ID provided by you"
+        />
+
+        <!--<TextView
+            android:layout_toLeftOf="@id/til"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_country_code"
+            android:text="Country Code"
+            android:textSize="12sp"
+            android:textColor="@color/colorBlack"
+            />-->
+
+        <LinearLayout
+
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/margin_20"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/ll_spinner_email"
+            >
+
+
+            <EditText
+
+                android:textCursorDrawable="@color/colorBlack"
+                android:visibility="visible"
+                android:textAlignment="center"
+                android:background="@drawable/faint_white_round_border"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:paddingLeft     ="@dimen/margin_15"
+                android:paddingStart    ="@dimen/margin_15"
+                android:paddingEnd      ="@dimen/margin_15"
+                android:paddingRight    ="@dimen/margin_15"
+                    android:id="@+id/et_email"
+                    android:layout_width="280dp"
+                    android:layout_height="@dimen/margin_40"
+                    android:inputType="textEmailAddress"
+                    android:textColor="@color/colorBlack"
+                    android:textColorHint="@color/colorDarkstGrey"
+                    android:textSize="12sp"
+                android:hint="@string/type_here_mail_id"
+                    android:typeface="sans"
+                />
+
+            <View
+                android:visibility="gone"
+                android:id="@+id/green_view"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/margin_10"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/colorGreen"
+                />
+
+        <TextView
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/submit"
+            android:layout_marginTop="@dimen/margin_10"
+            android:paddingTop="@dimen/margin_10"
+            android:paddingBottom="@dimen/margin_10"
+            android:paddingLeft="@dimen/margin_20"
+            android:paddingRight="@dimen/margin_20"
+            android:text="@string/send_otp"
+            android:textColor="@color/colorBlack"
+            android:background="@drawable/blue_round"/>
+
+
+
+            <LinearLayout
+                android:layout_marginTop   ="@dimen/margin_10"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+
+                >
+
+
+                <RelativeLayout
+                    android:id="@+id/login_verifyOTPLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible">
+
+                    <ImageView
+                        android:id="@+id/login_imageView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_8"
+                        android:layout_marginTop="@dimen/margin_15"
+                        android:layout_marginEnd="@dimen/margin_8"
+                        android:layout_alignParentTop="true"/>
+
+                    <LinearLayout
+                        android:background="@drawable/faint_white_round"
+
+                        android:layout_centerInParent="true"
+                        android:gravity="center"
+                        android:layout_below="@+id/login_imageView2"
+                        android:id="@+id/ll_ll"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        >
+
+
+                    <TextView
+                        android:padding="@dimen/margin_12"
+                        android:id="@+id/login_textView_ot"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="12sp"
+                        android:layout_width="280dp"
+                        android:layout_height="wrap_content"
+                        android:text="Please enter the OTP sent to your mail ID -"
+
+                        android:layout_centerHorizontal="true"/>
+
+                    <TextView
+                        android:visibility="gone"
+                        android:paddingBottom   ="@dimen/margin_10"
+                        android:paddingLeft     ="@dimen/margin_12"
+                        android:paddingStart    ="@dimen/margin_12"
+                        android:paddingEnd      ="@dimen/margin_12"
+                        android:paddingRight    ="@dimen/margin_12"
+                        android:id="@+id/login_textView_otp"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:textColor="@color/colorBlue"
+                        android:textSize="14sp"
+                        android:layout_width="250dp"
+                        android:textStyle="bold"
+                        android:layout_height="wrap_content"
+                        android:text=""
+
+                        android:layout_centerHorizontal="true"/>
+
+                    </LinearLayout>
+
+
+
+
+                    <TextView
+
+                        android:layout_below="@id/ll_ll"
+                        android:visibility="gone"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_width="120dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/submit_resend"
+                        android:layout_marginTop="@dimen/margin_5"
+                        android:layout_marginBottom="@dimen/margin_5"
+                        android:paddingTop="@dimen/margin_10"
+                        android:paddingBottom="@dimen/margin_10"
+                        android:paddingLeft="@dimen/margin_20"
+                        android:paddingRight="@dimen/margin_20"
+                        android:text="@string/resend_otp"
+                        android:textColor="@color/colorBlack"
+                        android:background="@drawable/faint_white_round"/>
+
+                    <com.chaos.view.PinView
+                        android:id="@+id/login_editTextOTP"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/PinWidget.PinView"
+                        android:layout_marginStart="@dimen/margin_16"
+                        android:layout_marginTop="@dimen/margin_15"
+                        android:layout_marginEnd="@dimen/margin_16"
+                        android:ems="10"
+                        android:gravity="center"
+                        android:inputType="phone"
+                        android:cursorVisible="true"
+                        android:hint=""
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:cursorColor="@color/colorDarkBlue"
+                        app:cursorWidth="@dimen/margin_2"
+                        app:hideLineWhenFilled="true"
+                        app:itemCount="4"
+                        app:itemHeight="@dimen/margin_30"
+                        app:itemRadius="@dimen/margin_4"
+                        app:itemSpacing="@dimen/margin_4"
+                        app:itemWidth="@dimen/margin_30"
+                        app:lineColor="@color/colorRed"
+                        app:lineWidth="@dimen/margin_2"
+                        app:viewType="rectangle"
+                        android:textColor="@android:color/black"
+                        android:layout_below="@+id/submit_resend"
+                        android:layout_centerHorizontal="true"/>
+
+                    <TextView
+                        android:layout_centerHorizontal="true"
+                        android:layout_below="@+id/login_editTextOTP"
+                        android:visibility="visible"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_width="120dp"
+                        android:layout_height="35dp"
+                        android:id="@+id/login_buttonVerify"
+                        android:layout_marginTop="@dimen/margin_15"
+
+                        android:text="@string/verify"
+                        android:textColor="@color/colorBlack"
+                        android:background="@drawable/blue_round"/>
+
+
+                    <TextView
+                        android:layout_centerHorizontal="true"
+                        android:layout_below="@+id/login_buttonVerify"
+                        android:visibility="visible"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_width="120dp"
+                        android:layout_height="35dp"
+                        android:id="@+id/btn_clear"
+                        android:layout_marginTop="@dimen/margin_10"
+
+                        android:text="@string/clear"
+                        android:textColor="@color/colorBlack"
+                        android:background="@drawable/faint_white_round"/>
+
+                </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+
+</LinearLayout>
+    <LinearLayout
+        android:visibility="gone"
+        android:layout_gravity="center|top"
+        android:id="@+id/ll_submit_phone"
+        android:background="@drawable/background_gradient"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+       >
+
+        <TextView
+            android:textAllCaps="true"
+            android:id="@+id/tv_please_enter_mob"
+            android:gravity="center"
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/phone_number"
+            />
+
+        <TextView
+            android:layout_marginTop="@dimen/margin_10"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:textColor="@color/colorDarkGrey"
+            android:textSize="12sp"
+            android:layout_width="210dp"
+            android:layout_height="wrap_content"
+            android:text="Kindly enter the phone number to register your account"
+            />
+
+        <!--<TextView
+            android:layout_toLeftOf="@id/til"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_country_code"
+            android:text="Country Code"
+            android:textSize="12sp"
+            android:textColor="@color/colorBlack"
+            />-->
+
+        <LinearLayout
+
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/margin_30"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/ll_spinner_mob"
+            >
+
+
+            <com.lamudi.phonefield.PhoneEditText
+                android:id="@+id/login_editTextInputMobile"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:inputType="textEmailAddress"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/submit_phone"
+                android:layout_marginTop="@dimen/margin_20"
+                android:paddingTop="@dimen/margin_10"
+                android:paddingBottom="@dimen/margin_10"
+                android:paddingLeft="@dimen/margin_20"
+                android:paddingRight="@dimen/margin_20"
+                android:text="@string/submit"
+                android:background="@drawable/blue_round"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ImageView
+        android:focusable="true"
+        android:clickable="true"
+        android:layout_marginTop="@dimen/margin_10"
+        android:id="@+id/btn_back"
+        android:padding="@dimen/margin_5"
+        android:layout_gravity="start|top"
+        android:layout_width="@dimen/margin_40"
+        android:layout_height="@dimen/margin_40"
+        android:src="@drawable/ic_back_button_black"
+        />
+
+</FrameLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <FrameLayout
+    android:visibility="gone"
+    android:id="@+id/fl_progress_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    >
+
+    <ProgressBar
+        android:visibility="visible"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/margin_25"
+        android:id="@+id/progress_bar_send"
+        />
+
+</FrameLayout>
+</FrameLayout>

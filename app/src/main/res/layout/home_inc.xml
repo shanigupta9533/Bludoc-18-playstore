@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.likesby.bludoc.HomeActivity"
+    tools:showIn="@layout/app_bar_main"
+    style="@style/parent.contentLayout"
+    android:background="#00000000">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_marginTop="35dp"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:weightSum="2"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_premium_top"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Premium"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textColor="@color/colorDarkestBlue"
+                android:layout_marginBottom="@dimen/margin_10"
+                />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/pager"
+                    android:layout_width="match_parent"
+                    android:layout_height="170dp"
+                    android:layout_alignParentTop="true" />
+
+                <com.viewpagerindicator.CirclePageIndicator
+                    android:id="@+id/indicator"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="bottom"
+                    android:padding="5dip"
+                    app:centered="true"
+                    android:layout_below="@+id/pager"
+                    app:fillColor="#149EEA"
+                    app:pageColor="#121A49"
+                    app:snap="false" />
+            </RelativeLayout>
+
+
+
+            <LinearLayout
+                android:elevation="@dimen/margin_5"
+                android:background="@drawable/yellow_gradient"
+                android:layout_marginLeft   ="@dimen/margin_10"
+                android:layout_marginStart  ="@dimen/margin_10"
+                android:layout_marginEnd    ="@dimen/margin_10"
+                android:layout_marginRight  ="@dimen/margin_10"
+                android:layout_marginBottom ="@dimen/margin_10"
+                android:layout_marginTop    ="@dimen/margin_5"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/ll_premium"
+                android:visibility="visible"
+                >
+
+                <TextView
+                    android:id="@+id/tv_days_left"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Days Left"
+                    android:layout_weight="1"
+                    android:textColor="#121A49"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    />
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="@dimen/margin_5"
+                    android:id="@+id/close_pop"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_close_black_48dp"/>
+
+
+            </LinearLayout>
+
+
+            <Button
+                android:visibility="gone"
+                android:textColor="@color/white"
+                android:text="Whatsapp Test"
+                android:background="@drawable/blue_round_btn_gradient"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/wahtsappTest"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="2"
+                android:orientation="horizontal">
+
+
+                <androidx.cardview.widget.CardView
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="15dp"
+                    android:layout_margin="@dimen/margin_5"
+                    android:id="@+id/prescribe"
+                    android:layout_weight="1"
+                    android:layout_marginBottom="20dp"
+                    app:cardPreventCornerOverlap="true"
+                    android:layout_marginTop="20dp">
+
+                    <LinearLayout
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:minHeight="90dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/home_gradient_2"
+                        android:padding="10dp">
+
+                        <ImageView
+                            android:layout_marginTop="@dimen/margin_2"
+                            android:maxHeight="80dp"
+                            android:layout_centerHorizontal="true"
+                            android:id="@+id/img2"
+                            android:src="@drawable/prescribe_new"
+                            style="@style/homeCardImage"/>
+                        <TextView
+                            android:text="Prescribe"
+                            android:gravity="center"
+                            android:textColor="#000"
+                            android:layout_marginBottom="@dimen/margin_2"
+                            android:layout_centerHorizontal="true"
+                            android:layout_below="@+id/img2"
+                            style="@style/viewParent.headerText"
+                            android:textSize="14sp"/>
+
+
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+                <androidx.cardview.widget.CardView
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="15dp"
+                    android:layout_weight="1"
+                    android:id="@+id/new_patient"
+                    android:layout_margin="@dimen/margin_5"
+                    android:layout_marginBottom="20dp"
+                    app:cardPreventCornerOverlap="true"
+                    android:layout_marginTop="20dp">
+
+                    <LinearLayout
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:minHeight="90dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/home_gradient_2"
+                        android:padding="10dp">
+
+                        <ImageView
+                            android:layout_marginTop="@dimen/margin_2"
+                            android:maxHeight="80dp"
+                            android:layout_centerHorizontal="true"
+                            android:id="@+id/img3"
+                            android:src="@drawable/patient_new"
+                            style="@style/homeCardImage"/>
+                        <TextView
+                            android:text="Add Patient"
+                            android:gravity="center"
+                            android:textColor="#000"
+                            android:layout_marginBottom="@dimen/margin_2"
+                            android:layout_centerHorizontal="true"
+                            android:layout_below="@+id/img3"
+                            style="@style/viewParent.headerText"
+                            android:textSize="14sp"/>
+
+
+
+
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="2"
+                android:orientation="horizontal">
+
+                <androidx.cardview.widget.CardView
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="15dp"
+                    android:layout_margin="@dimen/margin_5"
+                    android:layout_weight="1"
+                    android:id="@+id/my_template"
+                    android:layout_marginBottom="20dp"
+                    app:cardPreventCornerOverlap="true"
+                    android:layout_marginTop="20dp">
+
+                    <LinearLayout
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:minHeight="90dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/home_gradient_2"
+                        android:padding="10dp">
+
+                        <ImageView
+                            android:layout_marginTop="@dimen/margin_2"
+                            android:maxHeight="80dp"
+                            android:layout_centerHorizontal="true"
+                            android:id="@+id/img4"
+                            android:src="@drawable/template_new"
+                            style="@style/homeCardImage"/>
+                        <TextView
+                            android:text="My Templates"
+                            android:gravity="center"
+                            android:textColor="#000"
+                            android:layout_marginBottom="@dimen/margin_2"
+                            android:layout_centerHorizontal="true"
+                            android:layout_below="@+id/img4"
+                            style="@style/viewParent.headerText"
+                            android:textSize="14sp"/>
+
+
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+
+                <androidx.cardview.widget.CardView
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="15dp"
+                    android:layout_weight="1"
+                    android:id="@+id/History"
+                    android:layout_margin="@dimen/margin_5"
+                    android:layout_marginBottom="20dp"
+                    app:cardPreventCornerOverlap="true"
+                    android:layout_marginTop="20dp">
+
+                    <LinearLayout
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:minHeight="90dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/home_gradient_2"
+                        android:padding="10dp">
+
+                        <ImageView
+                            android:layout_marginTop="@dimen/margin_2"
+                            android:maxHeight="80dp"
+                            android:layout_centerHorizontal="true"
+                            android:id="@+id/img7"
+                            android:src="@drawable/history_new"
+                            style="@style/homeCardImage"/>
+                        <TextView
+                            android:text="View History"
+                            android:gravity="center"
+                            android:textColor="#000"
+                            android:layout_marginBottom="@dimen/margin_2"
+                            android:layout_centerHorizontal="true"
+                            android:layout_below="@+id/img7"
+                            style="@style/viewParent.headerText"
+                            android:textSize="14sp"/>
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
+            <Button
+                android:foreground="?android:attr/selectableItemBackground"
+                android:layout_marginLeft   ="@dimen/margin_10"
+                android:layout_marginStart  ="@dimen/margin_10"
+                android:layout_marginEnd    ="@dimen/margin_10"
+                android:layout_marginRight  ="@dimen/margin_10"
+                android:layout_marginBottom ="@dimen/margin_5"
+                android:layout_marginTop    ="@dimen/margin_5"
+                android:textStyle="normal"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:paddingLeft="@dimen/margin_10"
+                android:paddingStart="@dimen/margin_10"
+                android:paddingEnd="@dimen/margin_10"
+                android:paddingRight="@dimen/margin_10"
+                android:paddingTop="@dimen/margin_10"
+                android:paddingBottom="@dimen/margin_10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Get a desktop version of BluDoc"
+                android:textSize="16sp"
+                android:textAllCaps="false"
+                android:background="@drawable/blue_btn_gradient_2"
+                android:textColor="@color/colorWhite"
+                android:id="@+id/btn_desktop"
+                />
+
+            <View
+                android:background="@color/colorWhite"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.gms.ads.AdView
+        android:visibility="gone"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+
+        ads:adSize="BANNER"
+
+        ads:adUnitId="ca-app-pub-6756023122563497/9775804120">
+    </com.google.android.gms.ads.AdView>
+
+</RelativeLayout>

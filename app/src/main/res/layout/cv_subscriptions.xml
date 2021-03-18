@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/ll_subscriptions"
+    android:layout_margin="@dimen/margin_10"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+<LinearLayout android:elevation="@dimen/margin_5"
+    android:layout_margin="@dimen/margin_5"
+    android:background="@drawable/white_gradient"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:id="@+id/asd"
+        android:background="@drawable/blue_grad"/>
+
+    <TextView
+        android:paddingTop="@dimen/margin_4"
+        android:id="@+id/__subscriptions_id"
+        android:text="45"
+        android:visibility="gone"
+        android:textAlignment="center"
+        android:maxLines="1"
+        android:minLines="1"
+        android:background="@color/colorOrangeFaint"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorOrangeFaintest"
+        />
+
+
+    <ImageView
+        android:id="@+id/floatingActionButton1"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="@dimen/margin_5"
+        android:layout_centerHorizontal="true"
+        app:layout_anchor="@+id/imageView"
+        app:layout_anchorGravity="center"
+        android:src="@drawable/bludoc_shadow"/>
+
+
+    <TextView
+        android:layout_margin="@dimen/margin_5"
+        android:id="@+id/__subscriptions_name"
+        android:text="Monthly Plan"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorBlack"
+        />
+
+    <View
+        android:layout_marginLeft   ="@dimen/margin_20"
+        android:layout_marginStart  ="@dimen/margin_20"
+        android:layout_marginEnd    ="@dimen/margin_20"
+        android:layout_marginRight  ="@dimen/margin_20"
+        android:layout_marginTop    ="@dimen/margin_5"
+
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorBlue2"
+
+        />
+
+
+
+
+    <LinearLayout
+        android:layout_gravity="center"
+        android:layout_marginLeft   ="@dimen/margin_10"
+        android:layout_marginStart  ="@dimen/margin_10"
+        android:layout_marginEnd    ="@dimen/margin_10"
+        android:layout_marginRight  ="@dimen/margin_10"
+        android:layout_marginTop    ="@dimen/margin_5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <ImageView
+            android:layout_width="@dimen/margin_30"
+            android:layout_height="@dimen/margin_30"
+            android:padding="@dimen/margin_3"
+
+            android:src="@drawable/ic_verified"/>
+
+        <TextView
+            android:layout_marginLeft   ="@dimen/margin_10"
+            android:layout_marginStart  ="@dimen/margin_10"
+
+
+            android:text="Unlimited Prescriptions"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            android:textColor="@color/colorBlack"
+            />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_gravity="center"
+        android:layout_marginLeft   ="@dimen/margin_10"
+        android:layout_marginStart  ="@dimen/margin_10"
+        android:layout_marginEnd    ="@dimen/margin_10"
+        android:layout_marginRight  ="@dimen/margin_10"
+        android:layout_marginTop    ="@dimen/margin_5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <ImageView
+            android:layout_width="@dimen/margin_30"
+            android:layout_height="@dimen/margin_30"
+            android:padding="@dimen/margin_3"
+
+            android:src="@drawable/ic_verified"/>
+
+        <TextView
+            android:layout_marginLeft   ="@dimen/margin_10"
+            android:layout_marginStart  ="@dimen/margin_10"
+
+
+            android:text="Full Access to all features"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            android:textColor="@color/colorBlack"
+            />
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_gravity="center"
+        android:layout_marginLeft   ="@dimen/margin_10"
+        android:layout_marginStart  ="@dimen/margin_10"
+        android:layout_marginEnd    ="@dimen/margin_10"
+        android:layout_marginRight  ="@dimen/margin_10"
+        android:layout_marginTop    ="@dimen/margin_5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <ImageView
+            android:layout_width="@dimen/margin_30"
+            android:layout_height="@dimen/margin_30"
+            android:padding="@dimen/margin_3"
+
+            android:src="@drawable/ic_verified"/>
+
+        <TextView
+            android:layout_marginLeft   ="@dimen/margin_10"
+            android:layout_marginStart  ="@dimen/margin_10"
+
+
+            android:text="No ads"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            android:textColor="@color/colorBlack"
+            />
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_gravity="center"
+        android:layout_marginLeft   ="@dimen/margin_10"
+        android:layout_marginStart  ="@dimen/margin_10"
+        android:layout_marginEnd    ="@dimen/margin_10"
+        android:layout_marginRight  ="@dimen/margin_10"
+        android:layout_marginTop    ="@dimen/margin_5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <ImageView
+            android:padding="@dimen/margin_3"
+            android:layout_width="@dimen/margin_30"
+            android:layout_height="@dimen/margin_30"
+
+            android:src="@drawable/ic_verified"/>
+
+        <TextView
+            android:layout_marginLeft   ="@dimen/margin_10"
+            android:layout_marginStart  ="@dimen/margin_10"
+
+
+            android:text="Inclusive of Android app + Desktop + Tabs + iPad + Laptop versions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            android:textColor="@color/colorBlack"
+            />
+
+    </LinearLayout>
+
+    <View
+        android:layout_marginLeft   ="@dimen/margin_20"
+        android:layout_marginStart  ="@dimen/margin_20"
+        android:layout_marginEnd    ="@dimen/margin_20"
+        android:layout_marginRight  ="@dimen/margin_20"
+        android:layout_marginTop    ="@dimen/margin_5"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorBlue2"
+        />
+
+<LinearLayout
+    android:layout_marginTop   ="@dimen/margin_5"
+    android:layout_marginBottom="@dimen/margin_5"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    >
+
+    <TextView
+        android:id="@+id/mrp"
+        android:text="3,399/- per year (inclusive of all taxes)"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textStyle="normal"
+        android:textColor="@color/colorBlack"
+        />
+
+    <TextView
+        android:foreground="?android:attr/selectableItemBackground"
+        android:layout_marginTop="@dimen/margin_10"
+        android:textStyle="normal"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:paddingLeft="@dimen/margin_10"
+        android:paddingStart="@dimen/margin_10"
+        android:paddingEnd="@dimen/margin_10"
+        android:paddingRight="@dimen/margin_10"
+        android:paddingTop="@dimen/margin_5"
+        android:paddingBottom="@dimen/margin_5"
+        android:layout_marginBottom="@dimen/margin_5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Click here to get Special Discount"
+        android:textSize="15sp"
+        android:background="@drawable/blue_btn_gradient"
+        android:textColor="@color/colorWhite"
+        android:id="@+id/btn_coupon"
+        />
+
+</LinearLayout>
+
+    <LinearLayout
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+        android:id="@+id/coupon"
+        android:visibility="gone"
+    android:layout_gravity="center"
+    >
+
+        <ImageView
+            android:padding="@dimen/margin_3"
+            android:layout_width="@dimen/margin_30"
+            android:layout_height="@dimen/margin_30"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/ic_verified_green"/>
+        <TextView
+            android:layout_margin="@dimen/margin_5"
+            android:text="Congratulations !!!"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorBlack"
+            />
+
+
+
+        <TextView
+            android:text="You’ve saved 1,100/-"
+            android:id="@+id/save"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:textStyle="normal"
+            android:textColor="@color/colorBlack"
+            />
+
+        <TextView
+            android:layout_marginLeft   ="@dimen/margin_10"
+            android:layout_marginStart  ="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
+            android:layout_marginEnd="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_5"
+            android:text="New price 2,299/-  per year (inclusive of all taxes)"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:id="@+id/sellprice"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorBlack"
+            />
+
+
+        <View
+            android:layout_marginLeft   ="@dimen/margin_20"
+            android:layout_marginStart  ="@dimen/margin_20"
+            android:layout_marginEnd    ="@dimen/margin_20"
+            android:layout_marginRight  ="@dimen/margin_20"
+            android:layout_marginTop    ="@dimen/margin_5"
+
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorBlue2"
+
+            />
+
+
+        <TextView
+            android:layout_marginTop="@dimen/margin_5"
+            android:id="@+id/total"
+            android:text="Total 2,299/- per year to pay"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:visibility="gone"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorBlack"
+            />
+
+        <Button
+            android:foreground="?android:attr/selectableItemBackground"
+            android:layout_marginLeft="@dimen/margin_20"
+            android:layout_marginRight="@dimen/margin_20"
+            android:layout_marginTop="@dimen/margin_5"
+            android:textStyle="normal"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:paddingLeft="@dimen/margin_10"
+            android:paddingStart="@dimen/margin_10"
+            android:paddingEnd="@dimen/margin_10"
+            android:paddingRight="@dimen/margin_10"
+            android:layout_marginBottom="@dimen/margin_10"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/margin_40"
+            android:text="Proceed to Pay"
+            android:textSize="15sp"
+            android:background="@drawable/blue_btn_gradient"
+            android:textColor="@color/colorWhite"
+            android:id="@+id/btn_subscribe"
+            />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/__subscriptions_amount"
+        android:text="Price"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:visibility="gone"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorDarkGreen"
+        />
+
+
+
+    <TextView
+        android:layout_marginLeft   ="@dimen/margin_10"
+        android:layout_marginStart  ="@dimen/margin_10"
+
+        android:id="@+id/__subscriptions_sell_price"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:visibility="gone"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:textStyle="normal"
+        android:textColor="@color/colorDarkestBlue"
+        />
+
+
+    <TextView
+        android:layout_marginLeft   ="@dimen/margin_10"
+        android:layout_marginStart  ="@dimen/margin_10"
+        android:layout_marginEnd    ="@dimen/margin_10"
+        android:layout_marginRight  ="@dimen/margin_10"
+        android:layout_marginBottom ="@dimen/margin_10"
+        android:paddingTop="@dimen/margin_4"
+        android:id="@+id/__subscriptions_days"
+        android:text="Valdity  - No of Days"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:visibility="gone"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:textStyle="normal"
+        android:textColor="@color/colorDarkstGrey"
+        />
+
+
+    <TextView
+        android:visibility="gone"
+        android:layout_margin="@dimen/margin_10"
+        android:paddingTop="@dimen/margin_4"
+        android:id="@+id/__subscriptions_type"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textStyle="normal"
+        android:textColor="@color/colorDarkGreen"
+        />
+
+
+
+</LinearLayout>
+</androidx.core.widget.NestedScrollView>

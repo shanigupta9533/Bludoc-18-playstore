@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <LinearLayout
+        android:id="@+id/ll_promo"
+        android:visibility="visible"
+
+        android:padding="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:elevation="@dimen/margin_5"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+
+        <TextView
+            android:id="@+id/tv_no_template"
+            android:layout_marginTop="@dimen/margin_10"
+            android:layout_marginLeft="@dimen/margin_30"
+            android:layout_marginStart="@dimen/margin_30"
+            android:layout_marginRight="@dimen/margin_30"
+            android:layout_marginEnd="@dimen/margin_30"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="Create Your Digital Signature Within The Box"
+            android:textColor="@color/colorBlack"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            android:typeface="sans"
+            />
+
+        <RelativeLayout
+            android:layout_marginLeft   ="@dimen/margin_10"
+            android:layout_marginStart  ="@dimen/margin_10"
+            android:layout_marginEnd    ="@dimen/margin_10"
+            android:layout_marginRight  ="@dimen/margin_10"
+            android:layout_marginBottom ="@dimen/margin_20"
+            android:layout_marginTop    ="@dimen/margin_20"
+            android:layout_width="match_parent"
+            android:layout_height="300dp">
+
+        <com.github.gcacace.signaturepad.views.SignaturePad
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            xmlns:sign="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/signature_pad"
+            android:background="@drawable/blue_faint_btn_gradient2"
+            sign:penColor="@color/colorBlue"/>
+
+
+            <ImageView
+                android:id="@+id/btn_close"
+                android:layout_margin="@dimen/margin_10"
+                android:layout_width="45dp"
+                android:layout_alignTop="@+id/signature_pad"
+                android:layout_alignRight="@+id/signature_pad"
+                android:layout_height="45dp"
+                android:src="@drawable/ic_close"
+            />
+</RelativeLayout>
+
+
+        <ImageView
+            android:layout_marginTop="@dimen/margin_20"
+            android:id="@+id/iv_sign"
+            android:layout_gravity="top|center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            />
+
+
+        <Button
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:elevation="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_30"
+            android:id="@+id/btn_clear"
+            android:layout_width="260dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center"
+
+            android:background="@drawable/grey_dark_round_btn_gradient"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:text="Clear"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhite"
+            android:textColorHint="@color/colorWhite"
+            android:textSize="16sp"
+            android:typeface="sans" />
+
+    <Button
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:elevation="@dimen/margin_10"
+        android:layout_marginTop="@dimen/margin_20"
+        android:layout_marginBottom="@dimen/margin_40"
+        android:id="@+id/btn_upload"
+        android:layout_width="260dp"
+        android:layout_height="35dp"
+        android:layout_gravity="center"
+
+        android:background="@drawable/blue_round_btn_gradient"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:text="Upload"
+        android:textAllCaps="false"
+        android:textColor="@color/colorWhite"
+        android:textColorHint="@color/colorWhite"
+        android:textSize="16sp"
+        android:typeface="sans" />
+
+
+
+    </LinearLayout>
+</FrameLayout>
+

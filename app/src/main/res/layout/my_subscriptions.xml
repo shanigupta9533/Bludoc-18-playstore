@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/ll_subscriptions"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout android:elevation="@dimen/margin_5"
+        android:layout_marginLeft   ="@dimen/margin_10"
+        android:layout_marginStart  ="@dimen/margin_10"
+        android:layout_marginEnd    ="@dimen/margin_10"
+        android:layout_marginRight  ="@dimen/margin_10"
+        android:layout_marginBottom ="@dimen/margin_10"
+        android:layout_marginTop    ="@dimen/margin_10"
+        android:padding="@dimen/margin_10"
+        android:background="@drawable/white_gradient"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+
+
+        <TextView
+            android:layout_marginTop   ="@dimen/margin_10"
+            android:text="Package Name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:id="@+id/packagename"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:textColor="@color/colorDarkstGrey"
+            />
+
+
+        <View
+            android:layout_marginBottom ="@dimen/margin_5"
+            android:layout_marginTop    ="@dimen/margin_5"
+
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorBlue2"
+
+            />
+        <TextView
+            android:id="@+id/amount"
+
+
+            android:layout_marginTop="@dimen/margin_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            android:textColor="@color/colorDarkstGrey"
+            />
+
+        <TextView
+            android:id="@+id/validity"
+            android:layout_marginTop="@dimen/margin_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            android:textColor="@color/colorDarkstGrey"
+            />
+
+
+        <TextView
+            android:id="@+id/dateofpurchase"
+            android:layout_marginTop="@dimen/margin_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            android:textColor="@color/colorDarkstGrey"
+            />
+
+        <TextView
+            android:id="@+id/dateofstart"
+            android:layout_marginTop="@dimen/margin_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            android:textColor="@color/colorDarkstGrey"
+            />
+
+        <TextView
+            android:id="@+id/dateofend"
+            android:layout_marginTop="@dimen/margin_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            android:textColor="@color/colorDarkstGrey"
+            />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+        <TextView
+            android:id="@+id/txnid"
+
+            android:layout_marginTop="@dimen/margin_2"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            android:textColor="@color/colorDarkstGrey"
+            />
+
+            <ImageView
+                android:layout_width="@dimen/margin_30"
+                android:layout_height="@dimen/margin_30"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:id="@+id/copy"
+                android:src="@drawable/copy"/>
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:layout_height="match_parent"
+    android:background="@color/white"
+    android:layout_width="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <ImageView
+        android:id="@+id/btn_close"
+        android:padding="@dimen/margin_10"
+        android:layout_margin="@dimen/margin_15"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:src="@drawable/ic_close_black_48dp"
+        android:layout_gravity="end"
+        android:visibility="gone"
+        />
+
+    <LinearLayout
+        android:id="@+id/ll_promo"
+        android:visibility="visible"
+        android:layout_height="match_parent"
+        android:padding="15dp"
+        android:layout_width="wrap_content"
+        android:orientation="vertical"
+
+        android:layout_gravity="center"
+        android:elevation="@dimen/margin_5"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+<!--        <ImageView-->
+<!--            android:layout_marginTop="@dimen/margin_20"-->
+<!--            android:id="@+id/iv_no_template"-->
+<!--            android:layout_gravity="top|center"-->
+<!--            android:layout_width="150dp"-->
+<!--            android:layout_height="150dp"-->
+<!--            android:src="@drawable/ic_reward"-->
+
+<!--            />-->
+
+        <pl.droidsonroids.gif.GifImageView
+            android:layout_marginTop="@dimen/margin_20"
+            android:id="@+id/iv_no_template"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="top|center"
+            android:src="@drawable/success"
+            />
+
+        <TextView
+            android:id="@+id/tv_no_templatetitle"
+            android:layout_marginTop="@dimen/margin_20"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginLeft="@dimen/margin_20"
+            android:layout_marginStart="@dimen/margin_20"
+            android:layout_marginRight="@dimen/margin_20"
+            android:layout_marginEnd="@dimen/margin_20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="Congratulations!!"
+            android:textColor="@color/colorBlack"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:typeface="sans"
+            />
+
+        <TextView
+            android:id="@+id/tv_end_date"
+            android:layout_marginTop="@dimen/margin_20"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginLeft="@dimen/margin_20"
+            android:layout_marginStart="@dimen/margin_20"
+            android:layout_marginRight="@dimen/margin_20"
+            android:layout_marginEnd="@dimen/margin_20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="You have successfully upgraded to BluDoc Premium. Your subscription will end on"
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            android:typeface="sans"
+            />
+
+        <Button
+            android:foreground="?android:attr/selectableItemBackground"
+            android:layout_marginLeft   ="@dimen/margin_20"
+            android:layout_marginStart  ="@dimen/margin_20"
+            android:layout_marginEnd    ="@dimen/margin_20"
+            android:layout_marginRight  ="@dimen/margin_20"
+            android:layout_marginBottom ="@dimen/margin_10"
+            android:layout_marginTop    ="@dimen/margin_40"
+            android:textStyle="normal"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:paddingLeft="@dimen/margin_10"
+            android:paddingStart="@dimen/margin_10"
+            android:paddingEnd="@dimen/margin_10"
+            android:paddingRight="@dimen/margin_10"
+
+            android:layout_width="200dp"
+            android:layout_height="@dimen/margin_40"
+            android:text="Okay"
+            android:textSize="16sp"
+            android:textAllCaps="false"
+            android:background="@drawable/blue_round_btn_gradient"
+            android:textColor="@color/colorWhite"
+            android:id="@+id/btn_continue"
+            />
+
+
+        <TextView
+            android:id="@+id/tv_no_template1"
+            android:layout_marginTop="@dimen/margin_20"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginLeft="@dimen/margin_20"
+            android:layout_marginStart="@dimen/margin_20"
+            android:layout_marginRight="@dimen/margin_20"
+            android:layout_marginEnd="@dimen/margin_20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="BluDoc - Prescription Made Easy!"
+            android:textColor="#1451A8"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:typeface="sans"
+            />
+    </LinearLayout>
+</FrameLayout>

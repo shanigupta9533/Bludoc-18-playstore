@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/ll_medicine_main"
+    android:background="@drawable/blue_faint_btn_gradient2"
+    android:layout_marginLeft   ="@dimen/margin_10"
+    android:layout_marginStart  ="@dimen/margin_10"
+    android:layout_marginEnd    ="@dimen/margin_10"
+    android:layout_marginRight  ="@dimen/margin_10"
+    android:layout_marginBottom ="@dimen/margin_5"
+    android:layout_marginTop    ="@dimen/margin_5"
+    android:paddingBottom   ="@dimen/margin_10"
+    android:paddingLeft     ="@dimen/margin_15"
+    android:paddingStart    ="@dimen/margin_15"
+    android:paddingEnd      ="@dimen/margin_15"
+    android:paddingRight    ="@dimen/margin_15"
+    android:paddingTop      ="@dimen/margin_10"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tv_medicine_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:fontFamily="sans-serif"
+        android:gravity="center"
+        android:text="Medicine Name"
+        android:textColor="@color/colorBlack"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        />
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+    <TextView
+        android:id="@+id/tv_frequency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:fontFamily="sans-serif"
+        android:text="Frequency"
+        android:textColor="@color/colorDarkGrey"
+        android:textSize="13dp"
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:id="@+id/tv_nodays"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:fontFamily="sans-serif"
+        android:text="No of Days"
+        android:textColor="@color/colorDarkGrey"
+        android:textSize="13dp"
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:id="@+id/tv_instructions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:fontFamily="sans-serif"
+        android:text="Instructions"
+        android:textColor="@color/colorDarkGrey"
+        android:textSize="13dp"
+        android:textStyle="bold"
+        />
+
+</LinearLayout>
+
+    <LinearLayout
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="0"
+        >
+
+        <TextView
+            android:id="@+id/tv_route"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:fontFamily="sans-serif"
+            android:text="Route"
+            android:textColor="@color/colorDarkGrey"
+            android:textSize="13dp"
+            android:textStyle="bold"
+            />
+
+
+    </LinearLayout>
+
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/tv_medicine_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:text=""
+        android:textColor="@color/colorDarkGrey"
+        android:textSize="10dp"
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/tv_frequency2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:text=""
+        android:textColor="@color/colorDarkGrey"
+        android:textSize="10dp"
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/tv_medicine_created"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:text=""
+        android:textColor="@color/colorDarkGrey"
+        android:textSize="10dp"
+        android:textStyle="bold"
+        />
+
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/tv_medicine_modified"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:text=""
+        android:textColor="@color/colorDarkGrey"
+        android:textSize="10dp"
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/tv_medicine_add_comments"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:text=""
+        android:textColor="@color/colorDarkGrey"
+        android:textSize="10dp"
+        android:textStyle="bold"
+        />
+
+</LinearLayout>

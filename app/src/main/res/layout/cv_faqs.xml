@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:layout_marginTop="@dimen/margin_10"
+    android:padding="@dimen/margin_20"
+    android:background="@drawable/no_border"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/__faq_id"
+        android:text=""
+        android:maxLines="1"
+        android:minLines="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:textColor="@color/colorBlue"
+        />
+
+    <TextView
+        android:paddingStart="@dimen/margin_5"
+        android:paddingLeft="@dimen/margin_5"
+        android:paddingEnd="@dimen/margin_5"
+        android:paddingRight="@dimen/margin_5"
+        android:id="@+id/__faq_que"
+        android:justificationMode="inter_word"
+        android:text=""
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textColor="@color/colorBlack"
+        />
+
+    <TextView
+        android:paddingEnd="@dimen/margin_5"
+        android:paddingRight="@dimen/margin_5"
+        android:paddingStart="@dimen/margin_5"
+        android:paddingLeft="@dimen/margin_5"
+        android:layout_marginTop="@dimen/margin_5"
+        android:id="@+id/__faq_ans"
+        android:justificationMode="inter_word"
+        android:text=""
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textColor="@color/colorDarkstGrey"
+        />
+
+</LinearLayout>

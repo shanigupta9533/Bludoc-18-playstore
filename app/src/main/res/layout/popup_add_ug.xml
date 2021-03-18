@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:layout_gravity="center"
+    android:gravity="center|top"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <TextView
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_margin="@dimen/margin_15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add UG Qualification"
+        android:textColor="@color/colorBlack"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        />
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <!--        Name       -->
+
+
+        <TextView
+            android:id="@+id/textView_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_30"
+            android:layout_marginRight="@dimen/margin_30"
+            android:layout_marginEnd="@dimen/margin_30"
+            android:layout_marginStart="@dimen/margin_30"
+            android:layout_marginTop="@dimen/margin_20"
+            android:gravity="center"
+            android:text="UG Qualification"
+            android:textColor="@color/colorDarkGrey"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            />
+
+        <EditText
+            android:focusedByDefault="false"
+            android:textSize="16sp"
+            android:maxLines="1"
+            android:inputType="text"
+            android:imeOptions="actionNext"
+            android:padding="@dimen/margin_10"
+            android:textColor="@color/colorBlack"
+            android:layout_marginLeft="@dimen/margin_20"
+            android:layout_marginRight="@dimen/margin_20"
+            android:layout_marginEnd="@dimen/margin_20"
+            android:layout_marginStart="@dimen/margin_20"
+            android:layout_marginTop="@dimen/margin_10"
+            android:textColorHint="@color/colorBlack"
+            android:id="@+id/et_ug_name"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/margin_40"
+            android:background="@drawable/blue_faint_btn_gradient2"/>
+
+
+
+        <Button
+            android:layout_margin="@dimen/margin_20"
+            android:textSize="16sp"
+            android:textColor="@color/colorWhite"
+            android:textStyle="normal"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:background="@drawable/blue_btn_gradient_new"
+            android:textAllCaps="false"
+            android:layout_width="200dp"
+            android:layout_height="@dimen/margin_35"
+            android:text="Add"
+
+            android:id="@+id/btn_add_ug"
+            />
+
+        <Button
+            android:layout_marginBottom="@dimen/margin_40"
+            android:textSize="16sp"
+            android:textColor="@color/colorWhite"
+            android:textStyle="normal"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:background="@drawable/grey_dark_btn_gradient_tablet"
+            android:textAllCaps="false"
+            android:layout_width="200dp"
+            android:layout_height="@dimen/margin_35"
+            android:text="@string/cancel"
+
+            android:id="@+id/btn_cancel"
+            />
+    </LinearLayout>
+
+</LinearLayout>

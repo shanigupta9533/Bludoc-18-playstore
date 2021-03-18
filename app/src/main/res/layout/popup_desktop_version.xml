@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+
+    <ImageView
+        android:id="@+id/btn_close"
+        android:padding="@dimen/margin_10"
+        android:layout_margin="@dimen/margin_10"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:src="@drawable/ic_close_black_48dp"
+        android:layout_gravity="end"
+        />
+
+    <LinearLayout
+        android:id="@+id/ll_promo"
+        android:visibility="visible"
+        android:layout_height="match_parent"
+        android:padding="15dp"
+        android:layout_width="wrap_content"
+        android:orientation="vertical"
+
+        android:layout_gravity="center"
+        android:elevation="@dimen/margin_5"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+
+
+        <TextView
+            android:id="@+id/tv_no_templatetitle"
+            android:layout_marginTop="@dimen/margin_20"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginLeft="@dimen/margin_20"
+            android:layout_marginStart="@dimen/margin_20"
+            android:layout_marginRight="@dimen/margin_20"
+            android:layout_marginEnd="@dimen/margin_20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="Desktop Version"
+            android:textColor="@color/colorDarkestBlue"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:typeface="sans"
+            />
+
+        <TextView
+            android:id="@+id/tv_end_date"
+            android:layout_marginTop="@dimen/margin_20"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginLeft="@dimen/margin_20"
+            android:layout_marginStart="@dimen/margin_20"
+            android:layout_marginRight="@dimen/margin_20"
+            android:layout_marginEnd="@dimen/margin_20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="Copy link and  send it to your mail and open this link in your laptop, desktop, tab, mac book etc to login with your registered mail id for desktop version"
+            android:textColor="@color/colorBlack"
+            android:textSize="15sp"
+            android:textStyle="normal"
+            android:typeface="sans"
+            />
+
+        <Button
+            android:foreground="?android:attr/selectableItemBackground"
+            android:layout_marginLeft   ="@dimen/margin_20"
+            android:layout_marginStart  ="@dimen/margin_20"
+            android:layout_marginEnd    ="@dimen/margin_20"
+            android:layout_marginRight  ="@dimen/margin_20"
+            android:layout_marginBottom ="@dimen/margin_10"
+            android:layout_marginTop    ="@dimen/margin_30"
+            android:textStyle="normal"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:paddingLeft="@dimen/margin_10"
+            android:paddingStart="@dimen/margin_10"
+            android:paddingEnd="@dimen/margin_10"
+            android:paddingRight="@dimen/margin_10"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/margin_40"
+            android:text="Copy link and send via Email"
+            android:textSize="15sp"
+            android:textAllCaps="false"
+            android:background="@drawable/blue_round_btn_gradient"
+            android:textColor="@color/colorWhite"
+            android:id="@+id/btn_email"
+            />
+
+
+
+        <TextView
+            android:layout_marginTop="@dimen/margin_15"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginLeft="@dimen/margin_20"
+            android:layout_marginStart="@dimen/margin_20"
+            android:layout_marginRight="@dimen/margin_20"
+            android:layout_marginEnd="@dimen/margin_20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="OR"
+            android:textColor="@color/colorDarkstGrey"
+            android:textSize="12sp"
+            android:textStyle="normal"
+            android:typeface="sans"
+            />
+
+
+
+
+
+        <TextView
+            android:autoLink="web"
+            android:layout_marginTop="@dimen/margin_15"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginLeft="@dimen/margin_20"
+            android:layout_marginStart="@dimen/margin_20"
+            android:layout_marginRight="@dimen/margin_20"
+            android:layout_marginEnd="@dimen/margin_20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="Simply visit our website from your desktop\nwww.bludoc.in\nAnd click on ‘Get Desktop Version’ and login with your registered mail ID of BluDoc
+"
+            android:textColor="@color/colorBlack"
+            android:textSize="15sp"
+            android:textStyle="normal"
+            android:typeface="sans"
+            />
+
+
+        <TextView
+            android:layout_marginBottom="@dimen/margin_20"
+            android:id="@+id/tv_no_template1"
+            android:layout_marginTop="@dimen/margin_20"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginLeft="@dimen/margin_20"
+            android:layout_marginStart="@dimen/margin_20"
+            android:layout_marginRight="@dimen/margin_20"
+            android:layout_marginEnd="@dimen/margin_20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:text="BluDoc - Prescription Made Easy!"
+            android:textColor="#1451A8"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:typeface="sans"
+            />
+    </LinearLayout>
+</FrameLayout>

@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    android:background="@color/colorWhite"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Feedback">
+
+    <LinearLayout
+        android:id="@+id/ll_invite_member"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar_layout"
+            android:animateLayoutChanges="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.NoActionBar"
+            >
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar_invite_member"
+                app:contentInsetLeft="0dp"
+                app:contentInsetStart="0dp"
+                app:contentInsetStartWithNavigation="0dp"
+                app:layout_collapseMode="pin"
+                app:titleTextColor="@color/colorWhite"
+                app:subtitleTextColor="@color/colorWhite"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                android:padding="-48dp"
+
+
+                app:popupTheme="@style/AppThemeNOAC">
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:layout_gravity="center|start"
+                        android:gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        >
+                        <ImageView
+                            android:id="@+id/btn_back"
+                            android:layout_margin="@dimen/margin_10"
+                            android:layout_gravity="center|start"
+                            android:layout_width="@dimen/margin_25"
+                            android:layout_height="@dimen/margin_25"
+                            android:src="@drawable/ic_back_button"
+                            />
+                        <TextView
+
+                            android:layout_gravity="start|center"
+                            android:textSize="16sp"
+                            android:textColor="@color/colorWhite"
+                            android:gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Feedback"
+                            android:typeface="sans"
+                            />
+
+                    </LinearLayout>
+<!--                    <Button-->
+
+<!--                        android:textAllCaps="false"-->
+<!--                        android:textSize="12sp"-->
+<!--                        android:layout_margin="@dimen/margin_10"-->
+<!--                        android:layout_gravity="end|center"-->
+<!--                        android:background="@drawable/invite_btn_gradient"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="@dimen/margin_25"-->
+<!--                        android:id="@+id/btn_type_feedback"-->
+<!--                        android:text="Personal"-->
+<!--                        />-->
+
+                </FrameLayout>
+            </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.AppBarLayout>
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/feedback"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/margin_30"
+        android:layout_marginRight="@dimen/margin_50"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+
+        <TextView
+            android:id="@+id/textView_name1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="@dimen/margin_20"
+            android:layout_marginLeft   ="@dimen/margin_20"
+            android:layout_marginStart  ="@dimen/margin_20"
+
+
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:text="Select Type"
+            android:textColor="@color/colorDarkGrey"
+            android:textSize="14dp"
+            android:textStyle="normal"
+            />
+        <LinearLayout
+            android:layout_marginLeft   ="@dimen/margin_20"
+            android:layout_marginStart  ="@dimen/margin_20"
+            android:gravity="center"
+            android:layout_gravity="center|start"
+            android:background="@android:color/transparent"
+            android:padding="@dimen/margin_5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:weightSum="0">
+
+            <RadioButton
+                android:buttonTint="@color/colorBlack"
+                android:textStyle="normal"
+                android:textSize="16sp"
+                android:textColor="@color/colorBlack"
+                android:text="Feedback"
+                android:scaleX="0.80"
+                android:scaleY="0.80"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/rb_feedback"
+                android:layout_weight="1"
+                />
+
+            <RadioButton
+                android:buttonTint="@color/colorBlack"
+
+                android:textStyle="normal"
+                android:textColor="@color/colorBlack"
+                android:textSize="16sp"
+                android:scaleX="0.80"
+                android:scaleY="0.80"
+                android:text="Complaint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/rb_complaints"
+                android:layout_weight="1"
+                />
+
+            <RadioButton
+                android:buttonTint="@color/colorBlack"
+
+                android:textStyle="normal"
+                android:textColor="@color/colorBlack"
+                android:textSize="16sp"
+                android:scaleX="0.80"
+                android:scaleY="0.80"
+                android:text="Suggestion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/rb_suggestion"
+                android:layout_weight="1"
+                />
+
+        </LinearLayout>
+
+        <!--        Name       -->
+        <TextView
+            android:id="@+id/textView_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginLeft="@dimen/margin_30"
+            android:layout_marginRight="@dimen/margin_30"
+            android:layout_marginEnd="@dimen/margin_30"
+            android:layout_marginStart="@dimen/margin_30"
+            android:layout_marginTop="@dimen/margin_20"
+
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:text="Subject"
+            android:textColor="@color/colorDarkGrey"
+            android:textSize="14dp"
+            android:textStyle="normal"
+            />
+
+        <EditText
+            android:focusedByDefault="false"
+            android:textSize="16sp"
+            android:padding="@dimen/margin_10"
+            android:textColor="@color/colorBlack"
+            android:layout_marginLeft="@dimen/margin_20"
+            android:layout_marginRight="@dimen/margin_20"
+            android:layout_marginEnd="@dimen/margin_20"
+            android:layout_marginStart="@dimen/margin_20"
+            android:layout_marginTop="@dimen/margin_10"
+            android:textColorHint="@color/colorBlack"
+            android:id="@+id/et_subject"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/margin_40"
+            android:background="@color/colorWhite2"
+
+            />
+
+
+        <!--        Name       -->
+        <TextView
+            android:id="@+id/textView_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginLeft="@dimen/margin_30"
+            android:layout_marginRight="@dimen/margin_30"
+            android:layout_marginEnd="@dimen/margin_30"
+            android:layout_marginStart="@dimen/margin_30"
+            android:layout_marginTop="@dimen/margin_20"
+
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:text="Message"
+            android:textColor="@color/colorDarkGrey"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            />
+
+        <EditText
+            android:gravity="start"
+            android:inputType="textMultiLine"
+            android:focusedByDefault="false"
+            android:textSize="16sp"
+            android:padding="@dimen/margin_10"
+            android:textColor="@color/colorBlack"
+            android:layout_marginLeft="@dimen/margin_20"
+            android:layout_marginRight="@dimen/margin_20"
+            android:layout_marginEnd="@dimen/margin_20"
+            android:layout_marginStart="@dimen/margin_20"
+            android:layout_marginTop="@dimen/margin_10"
+            android:textColorHint="@color/colorBlack"
+            android:id="@+id/et_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorWhite2"
+            android:minLines="10"
+            android:lines="10"
+
+            />
+
+
+        <Button
+            android:foreground="?android:attr/selectableItemBackground"
+            android:textSize="16sp"
+            android:textAllCaps="false"
+            android:layout_gravity="center"
+            android:id="@+id/submit_feedback_suggestion"
+            android:layout_width="150dp"
+            android:layout_height="@dimen/margin_35"
+            android:textStyle="normal"
+            android:textColor="@color/colorWhite"
+            android:gravity="center"
+            android:text="Submit"
+            android:layout_margin="@dimen/margin_20"
+            android:background="@drawable/blue_btn_gradient_new"/>
+    </LinearLayout>
+
+    </RelativeLayout>
+</ScrollView>
+    </LinearLayout>
+
+    <FrameLayout
+        android:visibility="gone"
+        android:background="@color/colorWhite"
+        android:id="@+id/fl_progress_bar_feedback"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <ProgressBar
+            android:layout_gravity="center"
+
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/margin_25"
+            android:id="@+id/progress_bar_submit"
+            />
+    </FrameLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

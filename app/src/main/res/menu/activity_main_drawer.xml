@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="@layout/home_fragment">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/Profile"
+            android:icon="@drawable/profile"
+            android:title="Profile" />
+
+        <item
+            android:id="@+id/My_Subscription"
+            android:icon="@drawable/my_subscription"
+            android:title="My Subscription" />
+
+        <item
+            android:id="@+id/Subscription_packages"
+            android:icon="@drawable/ic_subscrip"
+            android:title="Subscription Packages" />
+
+<!--        <item-->
+<!--            android:id="@+id/Assign_a_task"-->
+<!--            android:icon="@drawable/checklist"-->
+<!--            android:title="Assign a task" />-->
+        <item
+            android:id="@+id/letter_head_preview"
+            android:icon="@drawable/e_letter"
+            android:title="E-letter head preview" />
+
+        <item
+            android:id="@+id/Rate_and_review"
+            android:icon="@drawable/review"
+            android:title="Rate and review" />
+
+        <item
+            android:id="@+id/Feedback"
+            android:icon="@drawable/feedback"
+            android:title="Feedback" />
+
+        <item
+            android:id="@+id/Contact_Us"
+            android:icon="@drawable/contact_us"
+            android:title="Contact Us" />
+
+        <item
+            android:id="@+id/About_Us"
+            android:icon="@drawable/policies"
+            android:title="Terms &amp; Policies" />
+
+        <item
+            android:id="@+id/FAQ"
+            android:icon="@drawable/question"
+            android:title="FAQ" />
+
+        <item
+            android:id="@+id/logout"
+            android:icon="@drawable/logout"
+            android:title="Logout" />
+
+<!--        <item-->
+<!--            android:id="@+id/Logout"-->
+<!--            android:icon="@drawable/hero"-->
+<!--            android:title="Logout" />-->
+
+    </group>
+
+
+</menu>

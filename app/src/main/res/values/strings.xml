@@ -1,0 +1,187 @@
+<resources>
+    <string name="app_name">BluDoc</string>
+
+    <string name="ad_attribution">Ad</string>
+
+
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="email_id">Email Id</string>
+    <string name="city">City</string>
+    <string name="address">Address</string>
+    <string name="pincode">Pincode</string>
+    <string name="contact_no">Mobile No</string>
+    <string name="password">Password</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="tenDigit">10 Digit Mobile No</string>
+    <string name="register">Didnt have an account? <b>SIGN UP</b></string>
+    <string name="ok_label">Ok</string>
+    <string name="login">Login/Sign Up</string>
+    <string name="didn_t_have_an_account_sign_up">Didn\'t have an account?    <font fgcolor='#000000'>  Sign Up</font></string>
+    <string name="submit">Submit</string>
+    <string name="verify">Verify</string>
+    <string name="otp">Otp</string>
+    <string name="Rs">\u20B9</string>
+    <string name="skip">Skip</string>
+    <string name="photo">Choose Photo</string>
+    <string name="kindly_login">Kindly enter the mail ID you wish to use.\n\n You will receive an OTP to login &amp; verifty in the mail ID provided by you</string>
+
+    <string name="navigation_drawer_open">About Us</string>
+    <string name="navigation_drawer_close">About Us</string>
+    <string name="create_prescribed_medicines">Create &amp; customise templates of your routinely prescribed medications</string>
+    <string name="create_prescribed_lab_test">Create &amp; customise templates of your routinely prescribed lab test / investigations.</string>
+
+    <!--Fetch Address-->
+    <string name="no_geocoder_available">No geocoder available</string>
+
+    <string name="fetch_address">Fetch address</string>
+    <string name="otp_recive">Fetching the OTP and Verifying</string>
+    <string name="phone_hint">999999999</string>
+    <string name="address_found">Address found</string>
+    <string name="select_designation">Select Designation</string>
+    <string name="select_pg">Select PG</string>
+    <string name="select_ug">Select UG</string>
+
+    <string name="select_specialities">Select Specialities</string>
+
+    <string-array name="blood_groups">
+        <item>O+</item>
+        <item>O-</item>
+        <item>A+</item>
+        <item>A-</item>
+        <item>B+</item>
+        <item>B-</item>
+        <item>AB+</item>
+        <item>AB-</item>
+    </string-array>
+
+    <string name="no_address_found">Sorry, no address found</string>
+    <string name="no_location_data_provided">No location data provided</string>
+    <string name="service_not_available">Sorry, the service is not available</string>
+    <string name="invalid_lat_long_used">Invalid latitude or longitude used</string>
+
+    <!---       Facebook        -->
+    <string name="facebook_app_id">601543813837895</string>
+    <string name="fb_login_protocol_scheme">fb601543813837895</string>
+    <string name="termsnconditions">By continuing, you agree that you have read and accepted our, <u>T&amp;Cs and Privacy Policy</u></string>
+    <string name="termsnconditions_details">Please read the following terms and conditions carefully as it sets out the terms of a legally binding agreement between you (the reader) and Business Standard Private Limited.
+1) Introduction
+This following sets out the terms and conditions on which you may use the content on
+business-standard.com website, business-standard.com\'s mobile browser site, Business Standard instore Applications and other digital publishing services (www.smartinvestor.in, www.bshindi.com and www.bsmotoring,com) owned by Business Standard Private Limited, all the services herein will be referred to as Business Standard Content Services.
+
+2) Registration Access and Use
+We welcome users to register on our digital platforms. We offer the below mentioned registration services which may be subject to change in the future. All changes will be appended in the terms and conditions page and communicated to existing users by email.
+
+Registration services are offered for individual subscribers only. If multiple individuals propose to access the same account or for corporate accounts kindly contact or write in to us. Subscription rates will vary for multiple same time access.
+
+The nature and volume of Business Standard content services you consume on the digital platforms will vary according to the type of registration you choose, on the geography you reside or the offer you subscribe to.
+
+a) Free Registration
+
+b) Premium Registration
+
+c) Special Offers
+
+d) Combo registrations with partners
+
+The details of the services and access offered for each account have been listed on
+www.business-standard.com/subscription-cart/product
+
+We may in exceptional circumstances cease to provide subscription services. We will give you at least 7 days notice of this, if possible. If we do so, then we will have no further obligation to you.
+
+3) Privacy Policy and Registration
+All information received by us from your registration on business-standard.com or other digital products of Business Standard will be used by Business Standard in accordance with our Privacy Policy. Kindly read the below mentioned details.
+
+On registration, we expect you to provide Business Standard with an accurate and complete information of the compulsory fields. We also expect you to keep the information secure, specifically access passwords and payment information. Kindly update the information periodically to keep your account relevant. Business Standard will rely on any information you provide to us.
+
+Each registration is for a single user only. On registration, you will choose a user name and password ("ID"). You are not allowed to share your ID or give access to your account to anyone else. Business Standard Premium subscription does not allow multiple users on a network or within an organization to use the same ID.
+
+On knowledge, Business Standard may cancel or suspend your access to Business Standard premium services if it comes across you sharing your personal access without further obligation to you.
+
+You are responsible for all the use of business-standard.com premium service made by you or anyone else using your ID and for preventing unauthorised use of your ID. If you believe there has been any breach of security such as the disclosure, theft or unauthorised use of your ID or any payment information, you must notify Business Standard immediately by e-mailing us at assist@bsmail.in. We recommend that you do not select an obvious user password (such as your name) and that you change it regularly.
+
+If you provide Business Standard with an email address that will result in any messages Business Standard may send you being sent to you via a network or device operated or owned by a third party (e.g. your employer or college) then you promise that you are entitled to receive those messages. To ensure email\'s land in your inbox, you will add the bsmail receipt id to your safe list. You also agree that Business Standard may stop sending messages to you without notifying you.
+
+Important - Kindly note
+
+(A) When you participate and choose to subscribe to joint content subscription offers that Business Standard partners with; your email id, access password and entered personal information will be shared with the participating content partner brand via an encrypted server to server protocol. This sharing is to facilitate your seamless access across the partner brand\'s platform. Once you login to the partner brand\'s platform, specific terms and privacy policies of the partner brand (mentioned on its website) will apply.
+
+(B) Joint offers including special price offers are generally limited to new users on the partner sites. Clubbed Offers on partner sites will not be available to you should your email id be registered with the partner website.
+
+You are advised to study the offer before you subscribe.
+
+Merely subscribing to such a joint offer does not make you eligible to gain access to the partner platform. Business Standard does not take responsibility of providing you with an access on the partner site for existing users/subscribers of these sites.
+
+(C) When you subscribe to joint offers supported by (non-content) brands; specific brands would ask you to share personal or private information in lieu of a value that the brand extends. By participating in such offers you implicitly and by confirming the terms of the offer you agree to share your registration information and personal data with the concerned brand. The brand or its associates may use this personal information to contact you with their promotional offers. Further by participating to such offers your will be additionally governed by the privacy policy and terms and conditions of the concerned brand. You are advised to go through them carefully before you decide to opt in.
+
+As a registered user of or subscriber to business-standard.com you may choose to use business-standard.com\'s "Remember me" log in feature that enables you to be logged in automatically to business-standard.com whenever you visit business-standard.com without having to manually log in each time. We recommend that you do not enable this feature on any computer that is or may be used by anyone other than you in order to prevent unauthorized access by third parties to both your subscription details and features of business-standard.com personal to you.</string>
+    <string name="your_number">Your number</string>
+    <string name="next">Next</string>
+    <string name="send">Send</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="subscriptions">My Subscriptions</string>
+    <string name="invites">My Invites</string>
+    <string name="switch_account">Switch Account</string>
+    <string name="reports">Reports</string>
+    <string name="rate_review">Rate &amp; Review</string>
+    <string name="help_and_support">Help and Support</string>
+    <string name="about_us">About Us</string>
+    <string name="contact_us">Contact Us</string>
+    <string name="faq">FAQ</string>
+    <string name="logout">Logout</string>
+    <string name="profile">Profile</string>
+    <string name="pay">Pay</string>
+    <string name="emergency">Emergency</string>
+    <!-- <string name="google_maps_key"> </string>-->
+
+    <string name="title_activity_maps">Map with Marker</string>
+    <string name="launch_activity">Launch activity</string>
+    <string name="location_unknown">Location unknown</string>
+    <string name="location_updates_label">Location Updates</string>
+
+    <string name="permission_rationale">Location permission is needed for core functionality</string>
+    <string name="permission_denied_explanation">Permission was denied, but is needed for core
+        functionality.</string>
+    <string name="settings">Settings</string>
+    <string name="ok">OK</string>
+    <string name="request_location_updates">Request location updates</string>
+    <string name="remove_location_updates">Remove location updates</string>
+
+    <string name="location_updated">Live Tracking Active</string>
+    <string name="full_name">Full Name</string>
+    <string name="registered_mobile_number">Registered Mobile Number</string>
+    <string name="registered_email_id">Registered Email Id</string>
+    <string name="registration_number">Medical/Dental/Other Registration Number</string>
+    <string name="designation">Designation/Specialty</string>
+    <string name="undergraduate_qualification">Undergraduate Qualification</string>
+    <string name="postgraduation_qualification">Postgraduation Qualification</string>
+    <string name="additional_qualification_optional">Additional Qualification</string>
+    <string name="contact_number_for_letter_head">Contact Number for letter head</string>
+    <string name="mail_id_for_letter_head">Mail ID for Letter Head</string>
+    <string name="working_days">Working Days</string>
+    <string name="visit_hours_from">Visit Hours - from</string>
+    <string name="visit_hours_to">Visit Hours - to</string>
+    <string name="closed_day">Closed Day</string>
+    <string name="upload_logo_of_your_brand">Upload logo of your brand</string>
+    <string name="enter_your_clinic_hospital_name_if_any">Enter your Clinic/Hospital name if any</string>
+    <string name="address_of_your_clinic_hospital_if_any">Address of your Clinic/Hospital if any</string>
+    <string name="create_your_digital_signature">Create your digital Signature</string>
+    <string name="this_signature_will_be_present_at_every_prescription">This signature will be present at every prescription</string>
+    <string name="speciality">Speciality</string>
+    <string name="subscrip">As our privileged user you have been offered a free subscription.</string>
+
+    <string name="hey_doctor">Hey Doctor! Try this new application\n<b>BluDoc : E-prescription app for Doctors.</b> Make your prescriptions easy, quick, smart, paper free and send them to your patients across the world on a single click. I have started using it.\nDownload BluDoc now!!</string>
+    <string name="your_digital_signature_nwill_appear_here">Click on <b> Add Signature</b> to draw signature, \n your digital signature will appear here</string>
+    <string name="description">Description</string>
+    <string name="cancel">Cancel</string>
+    <string name="proceed">Proceed</string>
+    <string name="type_here_if_any">Type here if any</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="type_here_mail_id">Type your mail ID here to receive OTP</string>
+    <string name="send_otp">Send OTP</string>
+    <string name="resend_otp">Resend OTP</string>
+    <string name="clear">Clear</string>
+    <string name="medical_certificate"><u>Medical Certificate</u></string>
+
+
+</resources>

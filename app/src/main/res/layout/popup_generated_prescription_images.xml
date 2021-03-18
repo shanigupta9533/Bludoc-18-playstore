@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:layout_gravity="center"
+    android:gravity="center|top"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <TextView
+        android:layout_gravity="center|top"
+        android:gravity="center"
+        android:layout_margin="@dimen/margin_15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Generated Prescription List"
+        android:textColor="@color/colorBlack"
+        android:textStyle="normal"
+        android:textSize="16sp"
+        />
+
+    <ImageView
+        android:layout_margin="@dimen/margin_8"
+        android:layout_gravity="end"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:id="@+id/remove_image"
+        android:layout_alignTop="@+id/image_layout"
+        android:layout_alignRight="@+id/image_layout"
+        android:src="@drawable/ic_close"
+        />
+
+    <androidx.viewpager.widget.ViewPager
+        android:layout_marginTop   ="@dimen/margin_50"
+        android:layout_marginBottom   ="@dimen/margin_50"
+
+        android:id="@+id/pager_images"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         />
+<FrameLayout
+    android:layout_margin="@dimen/margin_8"
+    android:layout_gravity="bottom"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+    <com.viewpagerindicator.CirclePageIndicator
+        android:layout_gravity="center"
+        android:id="@+id/indicato_imagesr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:padding="5dp"
+        app:centered="true"
+        app:fillColor="#149EEA"
+        app:pageColor="#121A49"
+        app:snap="false" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/margin_35"
+            android:textColor="@color/colorWhite"
+            android:background="@drawable/blue_faint_round_btn_gradient"
+            android:text="Proceed"
+            android:gravity="center"
+            android:layout_gravity="end|bottom"
+            android:textAllCaps="true"
+            android:textSize="13sp"
+            android:id="@+id/btn_proceed"
+            />
+</FrameLayout>
+
+</FrameLayout>

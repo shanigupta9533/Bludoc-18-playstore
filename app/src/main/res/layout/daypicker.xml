@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:layout_height="wrap_content">
+
+    <HorizontalScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+    <ToggleButton
+        android:id="@+id/Mon"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginLeft="@dimen/margin_5"
+        android:layout_marginRight="@dimen/margin_5"
+        android:textOff="Mon"
+        android:textOn="Mon"
+        android:textSize="@dimen/font_12"
+        style="@style/toggleButton"
+        android:background="@drawable/toggle_bg" />
+    <ToggleButton
+        android:id="@+id/Tue"
+        android:layout_marginLeft="@dimen/margin_5"
+        android:layout_marginRight="@dimen/margin_5"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:textOff="Tue"
+        android:textOn="Tue"
+        android:textSize="@dimen/font_12"
+        style="@style/toggleButton"
+        android:background="@drawable/toggle_bg" />
+
+    <ToggleButton
+        android:id="@+id/Wed"
+        android:layout_marginLeft="@dimen/margin_5"
+        android:layout_marginRight="@dimen/margin_5"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:textOff="Wed"
+        android:textOn="Wed"
+        android:textSize="@dimen/font_12"
+        style="@style/toggleButton"
+        android:background="@drawable/toggle_bg" />
+
+    <ToggleButton
+        android:id="@+id/Thu"
+        android:layout_marginLeft="@dimen/margin_5"
+        android:layout_marginRight="@dimen/margin_5"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:textOff="Thu"
+        android:textOn="Thu"
+        android:textSize="@dimen/font_12"
+        style="@style/toggleButton"
+        android:background="@drawable/toggle_bg" />
+
+    <ToggleButton
+        android:id="@+id/Fri"
+        android:layout_marginLeft="@dimen/margin_5"
+        android:layout_marginRight="@dimen/margin_5"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:textOff="Fri"
+        android:textOn="Fri"
+        android:textSize="@dimen/font_12"
+        style="@style/toggleButton"
+        android:background="@drawable/toggle_bg" />
+
+    <ToggleButton
+        android:id="@+id/Sat"
+        android:layout_marginLeft="@dimen/margin_5"
+        android:layout_marginRight="@dimen/margin_5"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:textOff="Sat"
+        android:textOn="Sat"
+        android:textSize="@dimen/font_12"
+        style="@style/toggleButton"
+        android:background="@drawable/toggle_bg" />
+
+    <ToggleButton
+        android:id="@+id/Sun"
+        android:layout_marginLeft="@dimen/margin_5"
+        android:layout_marginRight="@dimen/margin_5"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:textOff="Sun"
+        android:textOn="Sun"
+        android:textSize="@dimen/font_12"
+        style="@style/toggleButton"
+        android:background="@drawable/toggle_bg" />
+
+        </LinearLayout>
+    </HorizontalScrollView>
+</LinearLayout>

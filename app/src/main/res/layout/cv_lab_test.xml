@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:focusable="true"
+    android:clickable="true"
+    android:id="@+id/ll_labtest_main"
+    android:background="@drawable/blue_faint_btn_gradient2"
+    android:layout_marginLeft   ="@dimen/margin_10"
+    android:layout_marginStart  ="@dimen/margin_10"
+    android:layout_marginEnd    ="@dimen/margin_10"
+    android:layout_marginRight  ="@dimen/margin_10"
+    android:layout_marginBottom ="@dimen/margin_5"
+    android:layout_marginTop    ="@dimen/margin_5"
+    android:paddingBottom   ="@dimen/margin_10"
+    android:paddingLeft     ="@dimen/margin_15"
+    android:paddingStart    ="@dimen/margin_15"
+    android:paddingEnd      ="@dimen/margin_15"
+    android:paddingRight    ="@dimen/margin_15"
+    android:paddingTop      ="@dimen/margin_10"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tv_labtest_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:fontFamily="sans-serif"
+        android:gravity="center"
+        android:text="LabTest Name"
+        android:textColor="@color/colorBlack"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:visibility="gone"
+        android:lines="1"
+        android:maxLines="1"
+        android:id="@+id/tv_labtest_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:text="Additional Comment"
+        android:textColor="@color/colorDarkGrey"
+        android:textSize="13dp"
+        android:textStyle="bold"
+        />
+
+    <TextView
+
+        android:id="@+id/tv_labtest_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:fontFamily="sans-serif"
+        android:text="Additional Comment"
+        android:textColor="@color/colorDarkGrey"
+        android:textSize="13dp"
+        android:textStyle="bold"
+        />
+
+
+</LinearLayout>
