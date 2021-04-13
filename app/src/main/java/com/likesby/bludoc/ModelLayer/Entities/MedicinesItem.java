@@ -28,6 +28,9 @@ public class MedicinesItem{
 	@SerializedName("medicine_name")
 	private String medicineName;
 
+	@SerializedName("qty")
+	private String qty;
+
 	@SerializedName("created_by")
 	private String createdBy;
 
@@ -76,6 +79,14 @@ public class MedicinesItem{
 
 	public void setAdditionaComment(String additionaComment){
 		this.additionaComment = additionaComment;
+	}
+
+	public String getQty() {
+		return qty;
+	}
+
+	public void setQty(String qty) {
+		this.qty = qty;
 	}
 
 	public String getAdditionaComment(){
@@ -128,6 +139,7 @@ public class MedicinesItem{
 			",medicine_name = '" + medicineName + '\'' + 
 			",created_by = '" + createdBy + '\'' + 
 			",frequency = '" + frequency + '\'' + 
+			",qty = '" + qty + '\'' +
 			"}";
 		}
 }

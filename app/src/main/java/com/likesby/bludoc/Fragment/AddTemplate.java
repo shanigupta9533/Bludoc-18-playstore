@@ -116,6 +116,7 @@ public class AddTemplate  extends Fragment {
     MyDB myDB;
     ArrayList<com.likesby.bludoc.ModelLayer.Entities.MedicinesItem> SearchMedicine;
     Boolean searchFlag;
+    private EditText medicine_qty;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -174,6 +175,7 @@ public class AddTemplate  extends Fragment {
                         mii.setMedicineId(mi.getPresbMedicineId());
                         mii.setAdditionaComment(mi.getAdditionaComment());
                         mii.setFrequency(mi.getFrequency());
+                        mii.setQty(mi.getQty());
                         mii.setInstruction(mi.getInstruction());
                         mii.setNoOfDays(mi.getNoOfDays());
                         mii.setRoute(mi.getRoute());
@@ -225,6 +227,7 @@ public class AddTemplate  extends Fragment {
                                     medicinesItem.setFrequency(frequency.trim());
                                     medicinesItem.setNoOfDays(et_no_of_days.getText().toString().trim());
                                     medicinesItem.setRoute(route.trim());
+                                    medicinesItem.setQty(medicine_qty.getText().toString());
                                     medicinesItem.setInstruction(instructions_spinner.getSelectedItem().toString());
                                     medicinesItem.setAdditionaComment(et_additional_comments.getText().toString().trim());
 
@@ -237,7 +240,7 @@ public class AddTemplate  extends Fragment {
 
                                     addMedicineAdapter = new AddMedicineAdapter(mContext,addMedicinesArrayList,
                                             frequency_list, frequency2_list, et_no_of_days,
-                                            route_list, instructions_list, frequency_spinner, frequency2_spinner,
+                                            medicine_qty, route_list, instructions_list, frequency_spinner, frequency2_spinner,
                                             route_spinner, instructions_spinner, et_additional_comments, btn_add, textView3_5, ll_35, searchBarMaterialMedicine,mRecyclerViewMedicines, btnChooseFromTemplate, btn_save_template,"template",fl_progress_bar);
                                     mRecyclerViewAddedMedicines.setAdapter(addMedicineAdapter);
                                     if (addMedicinesArrayList.size() > 0) {
@@ -282,6 +285,7 @@ public class AddTemplate  extends Fragment {
                                         medicinesItem.setFrequency(frequency.trim());
                                         medicinesItem.setNoOfDays(et_no_of_days.getText().toString().trim()+" Days");
                                         medicinesItem.setRoute(route.trim());
+                                        medicinesItem.setQty(medicine_qty.getText().toString());
                                         medicinesItem.setInstruction(instructions_spinner.getSelectedItem().toString());
                                         medicinesItem.setAdditionaComment(et_additional_comments.getText().toString().trim());
 
@@ -301,7 +305,7 @@ public class AddTemplate  extends Fragment {
                                 btn_add.setText("Save and Add next");
                                 addMedicineAdapter = new AddMedicineAdapter(mContext, addMedicinesArrayList,
                                          frequency_list,frequency2_list,et_no_of_days,
-                                        route_list,instructions_list, frequency_spinner,frequency2_spinner,
+                                        medicine_qty, route_list,instructions_list, frequency_spinner,frequency2_spinner,
                                         route_spinner,instructions_spinner, et_additional_comments, btn_add, textView3_5, ll_35, searchBarMaterialMedicine, mRecyclerViewMedicines, btnChooseFromTemplate, btn_save_template,"template", fl_progress_bar);
                                 mRecyclerViewAddedMedicines.setAdapter(addMedicineAdapter);
 
@@ -341,6 +345,7 @@ public class AddTemplate  extends Fragment {
                             frequency_spinner.setSelection(0);
                             frequency2_spinner.setSelection(0);
                             route_spinner.setSelection(0);
+                            medicine_qty.setText("");
                             instructions_spinner.setSelection(0);
 
 
@@ -587,6 +592,7 @@ public class AddTemplate  extends Fragment {
         et_frequency = view.findViewById(R.id.et_frequency);
         et_frequency2 = view.findViewById(R.id.et_frequency1);
         et_route = view.findViewById(R.id.et_Route);
+        medicine_qty=view.findViewById(R.id.medicine_qty);
         et_additional_comments = view.findViewById(R.id.et_comments);
         et_instructions = view.findViewById(R.id.et_instruction);
         back = view.findViewById(R.id.btn_back_edit_profile);

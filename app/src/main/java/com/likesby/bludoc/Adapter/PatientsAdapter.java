@@ -577,18 +577,18 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
                             if (isChecked) {
                                 rb_month.setChecked(false);
                                 age_type[0] = "yr";
-
-                                if (TextUtils.isEmpty(et_age.getText().toString())) {
-
-
-
-                                } else if (!isConstant) {
-
-                                    String age = et_age.getText().toString();
-                                    et_age.setText(String.valueOf(Integer.parseInt(age) / 12));
-                                    et_age.setSelection(et_age.getText().toString().length());
-                                    isConstant = false;
-                                }
+//
+//                                if (TextUtils.isEmpty(et_age.getText().toString())) {
+//
+//
+//
+//                                } else if (!isConstant) {
+//
+//                                    String age = et_age.getText().toString();
+//                                    et_age.setText(String.valueOf(Integer.parseInt(age) / 12));
+//                                    et_age.setSelection(et_age.getText().toString().length());
+//                                    isConstant = false;
+//                                }
 
                             }
                         }
@@ -601,18 +601,18 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
                                 rb_year.setChecked(false);
                                 age_type[0] = "months";
 
-                                if (TextUtils.isEmpty(et_age.getText().toString())) {
-
-
-
-                                } else {
-
-                                    String age = et_age.getText().toString();
-                                    et_age.setText(String.valueOf(Integer.parseInt(age) * 12));
-                                    et_age.setSelection(et_age.getText().toString().length());
-                                }
-
-                                isConstant = false;
+//                                if (TextUtils.isEmpty(et_age.getText().toString())) {
+//
+//
+//
+//                                } else {
+//
+//                                    String age = et_age.getText().toString();
+//                                    et_age.setText(String.valueOf(Integer.parseInt(age) * 12));
+//                                    et_age.setSelection(et_age.getText().toString().length());
+//                                }
+//
+//                                isConstant = false;
 
                             }
                         }

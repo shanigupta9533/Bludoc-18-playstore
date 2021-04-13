@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout  xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/tools">
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -437,9 +438,8 @@
                                     android:layout_height="wrap_content"
                                     android:text="Name of Medicine/Product"
                                     android:id="@+id/textView_name"
-                                    android:layout_marginTop="@dimen/margin_2"
                                     android:textColor="@color/colorDarkGrey"
-                                    android:textSize="11dp"
+                                    android:textSize="12dp"
                                     android:fontFamily="@font/poppinsmedium"
                                     />
 
@@ -451,7 +451,7 @@
                                     android:inputType="textCapSentences"
                                     android:hint="type here"
                                     android:maxLines="2"
-                                    android:layout_marginTop="@dimen/font_11"
+                                    android:layout_marginTop="@dimen/margin_8"
                                     android:textColorHint="#dcdcdc"
                                     android:layout_width="match_parent"
                                     android:layout_height="@dimen/margin_40"
@@ -462,7 +462,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:orientation="vertical"
-                                android:layout_weight="1"
+                                android:layout_weight="5"
                                 android:layout_marginStart="@dimen/margin_4"
                                 android:layout_height="wrap_content">
 
@@ -470,7 +470,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:gravity="center"
-                                    android:text="Total Quantity"
+                                    android:text="T. QTY"
                                     android:textColor="@color/colorDarkGrey"
                                     android:textSize="12dp"
                                     android:fontFamily="@font/poppinsmedium"
@@ -484,6 +484,9 @@
                                     android:textColorHint="@color/colorBlack"
                                     android:layout_width="match_parent"
                                     android:layout_height="@dimen/margin_40"
+                                    android:id="@id/medicine_qty"
+                                    android:inputType="number|phone"
+                                    android:digits="0123456789"
                                     android:background="@drawable/blue_faint_btn_gradient2"/>
 
                             </LinearLayout>
@@ -505,7 +508,7 @@
 
 
                         <LinearLayout
-                            android:layout_marginTop   ="@dimen/margin_5"
+                            android:layout_marginTop   ="@dimen/font_15"
                             android:id="@+id/ll_btn_templates"
 
                             android:layout_width="match_parent"
@@ -795,7 +798,7 @@
                                 android:layout_marginTop="@dimen/margin_5"
                                 android:fontFamily="sans-serif"
                                 android:gravity="center"
-                                android:text="No of days"
+                                android:text="No. of days"
                                 android:textColor="@color/colorDarkGrey"
                                 android:textSize="14dp"
                                 android:textStyle="bold"
@@ -935,8 +938,6 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/blue_faint_btn_gradient2"
                         />
-
-
 
 
                 </LinearLayout>
@@ -1109,10 +1110,68 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
+                            android:orientation="vertical"
+                            android:visibility="gone"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:layout_marginTop="@dimen/margin_15"
+                                android:text="Would you like to watch doctors details."
+                                android:textColor="@color/colorDarkGrey"
+                                android:textSize="14dp"
+                                android:fontFamily="@font/poppinsmedium"
+                                />
+
+                            <RadioGroup
+                                android:layout_width="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_gravity="center"
+                                android:id="@+id/radio_show_group"
+                                android:layout_marginTop="@dimen/margin_8"
+                                android:layout_height="wrap_content">
+
+                                <RadioButton
+                                    android:textSize="14sp"
+                                    android:textColor="@color/colorBlack"
+                                    android:buttonTint="@color/colorBlack"
+                                    android:text="Yes"
+                                    android:alpha="0.8"
+                                    android:checked="true"
+                                    android:fontFamily="@font/poppins"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/yes_radio_group"
+                                    android:layout_weight="1"
+                                    />
+
+                                <RadioButton
+                                    android:textSize="14sp"
+                                    android:textColor="@color/colorBlack"
+                                    android:buttonTint="@color/colorBlack"
+                                    android:text="No"
+                                    android:layout_marginStart="@dimen/margin_8"
+                                    android:alpha="0.8"
+                                    android:fontFamily="@font/poppins"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/no_radio_group"
+                                    android:layout_weight="1"
+                                    />
+
+                            </RadioGroup>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:orientation="horizontal"
                             android:layout_marginLeft="@dimen/margin_20"
+                            android:visibility="visible"
                             android:layout_marginRight="@dimen/margin_20"
-                            android:layout_marginTop="@dimen/margin_15"
+                            android:layout_marginTop="@dimen/margin_20"
                             android:layout_marginEnd="@dimen/margin_20"
                             android:layout_marginStart="@dimen/margin_20"
                             android:layout_height="wrap_content">
@@ -1138,6 +1197,7 @@
                                     android:padding="@dimen/margin_10"
                                     android:textColor="@color/colorBlack"
                                     android:layout_marginTop="@dimen/margin_8"
+                                    android:id="@+id/temperature"
                                     android:textColorHint="@color/colorBlack"
                                     android:layout_width="match_parent"
                                     android:layout_height="@dimen/margin_40"
@@ -1170,6 +1230,7 @@
                                     android:textColorHint="@color/colorBlack"
                                     android:layout_width="match_parent"
                                     android:layout_height="@dimen/margin_40"
+                                    android:id="@+id/height"
                                     android:background="@drawable/blue_faint_btn_gradient2"/>
 
                             </LinearLayout>
@@ -1199,6 +1260,7 @@
                                     android:textColorHint="@color/colorBlack"
                                     android:layout_width="match_parent"
                                     android:layout_height="@dimen/margin_40"
+                                    android:id="@+id/weight"
                                     android:background="@drawable/blue_faint_btn_gradient2"/>
 
                             </LinearLayout>
@@ -1211,6 +1273,7 @@
                             android:orientation="horizontal"
                             android:layout_marginLeft="@dimen/margin_20"
                             android:layout_marginRight="@dimen/margin_20"
+                            android:visibility="visible"
                             android:layout_marginTop="@dimen/margin_20"
                             android:layout_marginEnd="@dimen/margin_20"
                             android:layout_marginStart="@dimen/margin_20"
@@ -1241,6 +1304,7 @@
                                     android:textColorHint="@color/colorBlack"
                                     android:layout_width="match_parent"
                                     android:layout_height="@dimen/margin_40"
+                                    android:id="@+id/pulse"
                                     android:background="@drawable/blue_faint_btn_gradient2"/>
 
                             </LinearLayout>
@@ -1270,6 +1334,7 @@
                                     android:textColorHint="@color/colorBlack"
                                     android:layout_width="match_parent"
                                     android:layout_height="@dimen/margin_40"
+                                    android:id="@+id/blood_pressure"
                                     android:background="@drawable/blue_faint_btn_gradient2"/>
 
                             </LinearLayout>
@@ -1281,6 +1346,7 @@
                             android:orientation="horizontal"
                             android:layout_marginLeft="@dimen/margin_20"
                             android:layout_marginRight="@dimen/margin_20"
+                            android:visibility="visible"
                             android:layout_marginTop="@dimen/margin_20"
                             android:layout_marginEnd="@dimen/margin_20"
                             android:layout_marginStart="@dimen/margin_20"
@@ -1311,6 +1377,7 @@
                                     android:textColorHint="@color/colorBlack"
                                     android:layout_width="match_parent"
                                     android:layout_height="@dimen/margin_40"
+                                    android:id="@+id/blood_sugar"
                                     android:background="@drawable/blue_faint_btn_gradient2"/>
 
                             </LinearLayout>
@@ -1340,6 +1407,7 @@
                                     android:textColorHint="@color/colorBlack"
                                     android:layout_width="match_parent"
                                     android:layout_height="@dimen/margin_40"
+                                    android:id="@+id/hemoglobin"
                                     android:background="@drawable/blue_faint_btn_gradient2"/>
 
                             </LinearLayout>
@@ -1352,6 +1420,7 @@
                             android:layout_marginLeft="@dimen/margin_20"
                             android:layout_marginRight="@dimen/margin_20"
                             android:layout_marginTop="@dimen/margin_20"
+                            android:visibility="visible"
                             android:layout_marginEnd="@dimen/margin_20"
                             android:layout_marginStart="@dimen/margin_20"
                             android:layout_height="wrap_content">
@@ -1381,6 +1450,7 @@
                                     android:textColorHint="@color/colorBlack"
                                     android:layout_width="match_parent"
                                     android:layout_height="@dimen/margin_40"
+                                    android:id="@+id/spo2"
                                     android:background="@drawable/blue_faint_btn_gradient2"/>
 
                             </LinearLayout>
@@ -1410,6 +1480,7 @@
                                     android:textColorHint="@color/colorBlack"
                                     android:layout_width="match_parent"
                                     android:layout_height="@dimen/margin_40"
+                                    android:id="@+id/respiration_rate"
                                     android:background="@drawable/blue_faint_btn_gradient2"/>
 
                             </LinearLayout>
@@ -1422,6 +1493,7 @@
                             android:layout_marginLeft="@dimen/margin_20"
                             android:layout_marginRight="@dimen/margin_20"
                             android:layout_marginTop="@dimen/margin_20"
+                            android:visibility="visible"
                             android:layout_marginEnd="@dimen/margin_20"
                             android:layout_marginStart="@dimen/margin_20"
                             android:layout_height="wrap_content">
@@ -1450,6 +1522,7 @@
                                     android:textColorHint="@color/colorBlack"
                                     android:layout_width="match_parent"
                                     android:layout_height="@dimen/margin_40"
+                                    android:id="@+id/allergy"
                                     android:background="@drawable/blue_faint_btn_gradient2"/>
 
                             </LinearLayout>
@@ -1481,7 +1554,6 @@
                             android:textSize="14sp"
                             android:minLines="2"
                             android:imeOptions="actionNext"
-
                             android:inputType="textCapSentences|textMultiLine"
                             android:layout_marginLeft="@dimen/margin_20"
                             android:layout_marginRight="@dimen/margin_20"
@@ -1877,10 +1949,11 @@
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+</layout>
 
 
 
-<!--old Code-->
+    <!--old Code-->
 
 <!--    <?xml version="1.0" encoding="utf-8"?>-->
 <!--<androidx.coordinatorlayout.widget.CoordinatorLayout-->

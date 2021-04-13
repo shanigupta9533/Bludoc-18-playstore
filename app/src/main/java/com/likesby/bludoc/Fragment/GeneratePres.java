@@ -1,17 +1,14 @@
 package com.likesby.bludoc.Fragment;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
-import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,7 +20,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -31,20 +27,16 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProviders;
@@ -62,10 +54,7 @@ import com.itextpdf.text.Image;
 import com.likesby.bludoc.Adapter.BottomSheetAdapter;
 import com.likesby.bludoc.Adapter.Pres_LabTest_adapter;
 import com.likesby.bludoc.Adapter.Pres_adapter;
-import com.likesby.bludoc.Adapter.SlidingImage_Adapter;
 import com.likesby.bludoc.Adapter.SlidingImage_Adapter_GeneratedPrescription;
-import com.likesby.bludoc.HomeActivity;
-import com.likesby.bludoc.MainActivity;
 import com.likesby.bludoc.ModelLayer.Entities.BottomSheetItem;
 import com.likesby.bludoc.ModelLayer.Entities.MedicinesItem;
 import com.likesby.bludoc.ModelLayer.Entities.PrescriptionJSON;
@@ -75,8 +64,8 @@ import com.likesby.bludoc.ModelLayer.NewEntities3.Doctor;
 import com.likesby.bludoc.ModelLayer.NewEntities3.PrescriptionItem;
 import com.likesby.bludoc.R;
 import com.likesby.bludoc.SessionManager.SessionManager;
-import com.likesby.bludoc.SplashActivity;
 import com.likesby.bludoc.constants.ApplicationConstant;
+import com.likesby.bludoc.databinding.GeneratePrescriptionBinding;
 import com.likesby.bludoc.utils.DateUtils;
 import com.likesby.bludoc.utils.ScreenSize;
 import com.likesby.bludoc.viewModels.ApiViewHolder;
@@ -84,18 +73,11 @@ import com.squareup.picasso.Picasso;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.regex.Pattern;
 
 import io.reactivex.SingleObserver;
@@ -107,31 +89,29 @@ import io.reactivex.schedulers.Schedulers;
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.likesby.bludoc.Fragment.CreatePrescription.certificate_selection;
-import static com.likesby.bludoc.Fragment.CreatePrescription.patient_id;
-import static com.likesby.bludoc.Fragment.CreatePrescription.pos;
 
 public class GeneratePres extends Fragment {
     ArrayList<com.likesby.bludoc.ModelLayer.Entities.MedicinesItem> medicinesItemArrayListO = new ArrayList<>();
-    Button generatePDF,back,btn_backbtn_edit_profile;
+    Button generatePDF, back, btn_backbtn_edit_profile;
     Context mContext;
     Dialog dialog;
-     Dialog dialog_data;
+    Dialog dialog_data;
     View v;
-    static RecyclerView rView,rViewlabtest;
+    static RecyclerView rView, rViewlabtest;
     TextView textView_advice;
-    static LinearLayoutManager lLayout,lLayout2;
+    static LinearLayoutManager lLayout, lLayout2;
     ArrayList<LabTestItem> labTestItem = new ArrayList<>();
     ArrayList<LabTestItem> labTestItemTEMP = new ArrayList<>();
     PrescriptionItem prescriptionItem = new PrescriptionItem();
-    PrescriptionItem prescriptionItemTEMP= new PrescriptionItem();
-    ImageView image_layout ,signature;
-    TextView sig_text,title,textView_Clinic_name,textView_DocName,textView_degree,textView_res_num,textView_des;
-    TextView textView_UID, textView_pat_name,textView_age, textView_days,textView_diagnosis,
-                textView_treatment_advice,textView_findings,textView_history,textView_chief_complaint;
-    TextView textView_date,textView_add ,textView_time,textView_contact, textView_email;
+    PrescriptionItem prescriptionItemTEMP = new PrescriptionItem();
+    ImageView image_layout, signature;
+    TextView sig_text, title, textView_Clinic_name, textView_DocName, textView_degree, textView_res_num, textView_des;
+    TextView textView_UID, textView_pat_name, textView_age, textView_days, textView_diagnosis,
+            textView_treatment_advice, textView_findings, textView_history, textView_chief_complaint;
+    TextView textView_date, textView_add, textView_time, textView_contact, textView_email;
     SessionManager manager;
-    NestedScrollView scrollview_edit_profile;
-    String definer,diagnosis_desc="",end_note="",definerTEMP,end_noteTEMP="";
+    LinearLayout scrollview_edit_profile;
+    String definer, diagnosis_desc = "", end_note = "", definerTEMP, end_noteTEMP = "";
     private ApiViewHolder apiViewHolder;
     private CompositeDisposable mBag = new CompositeDisposable();
     private static final String TAG = "generatePres___";
@@ -140,21 +120,23 @@ public class GeneratePres extends Fragment {
     FrameLayout fl_progress_bar;
     private static final int PERMISSION_REQUEST_CODE = 100;
     boolean count;
-     BottomSheetBehavior behavior;
-    public  static PrescriptionItem patient_item = new PrescriptionItem();
+    BottomSheetBehavior behavior;
+    public static PrescriptionItem patient_item = new PrescriptionItem();
     private static ArrayList<Uri> filesGlobal;
     TextView textView_end_note;
     int currentPage = 0;
     int DELAY_TIME = 2000;
     int DELAY_TIME_MULTIPLIER = 5000;
     ImageView fl_medicines_symbol;
-    TextView textView_medical_cert_desc,textView_medical_cert,page_no;
+    TextView textView_medical_cert_desc, textView_medical_cert, page_no;
     int page_no_count = 1;
-    Bundle  bundle;
+    Bundle bundle;
     LinearLayout ll_patient_name;
     ArrayList<String> stringArrayDESC;
     int width = 480;
 
+    private GeneratePrescriptionBinding binding;
+    private String yesOrNo;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -168,7 +150,9 @@ public class GeneratePres extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //inflater.inflate(R.layout.state_frag, container, false);
-        v = inflater.inflate(R.layout.generate_prescription, container, false);
+        binding = GeneratePrescriptionBinding.inflate(inflater, container, false);
+
+        v = binding.getRoot();
 
         width = ScreenSize.getDimensions(mContext)[0];
         initCalls(v);
@@ -190,13 +174,10 @@ public class GeneratePres extends Fragment {
 
         v.setFocusableInTouchMode(true);
         v.requestFocus();
-        v.setOnKeyListener( new View.OnKeyListener()
-        {
+        v.setOnKeyListener(new View.OnKeyListener() {
             @Override
-            public boolean onKey( View v, int keyCode, KeyEvent event )
-            {
-                if( keyCode == KeyEvent.KEYCODE_BACK )
-                {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
                     CreatePrescription.backCheckerFlag = true;
 
                     FragmentManager fm = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
@@ -211,18 +192,21 @@ public class GeneratePres extends Fragment {
                 }
                 return false;
             }
-        } );
-        return v;
+        });
+        return binding.getRoot();
     }
 
     public static Bitmap getBitmapFromView(View view) {
         //Define a bitmap with the same size as the view
-        Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(),Bitmap.Config.ARGB_8888);
+
+        view.setDrawingCacheEnabled(true);
+
+        Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
         //Bind a canvas to it
         Canvas canvas = new Canvas(returnedBitmap);
         //Get the view's background
-        Drawable bgDrawable =view.getBackground();
-        if (bgDrawable!=null)
+        Drawable bgDrawable = view.getBackground();
+        if (bgDrawable != null)
             //has background drawable, then draw it on the canvas
             bgDrawable.draw(canvas);
         else
@@ -234,9 +218,8 @@ public class GeneratePres extends Fragment {
         return returnedBitmap;
     }
 
-    private  void popupCreatingPrescription()
-    {
-       dialog_data = new Dialog(mContext);
+    private void popupCreatingPrescription() {
+        dialog_data = new Dialog(mContext);
         dialog_data.setCancelable(false);
         dialog_data.requestWindowFeature(Window.FEATURE_NO_TITLE);
         Objects.requireNonNull(dialog_data.getWindow()).setGravity(Gravity.CENTER);
@@ -252,7 +235,6 @@ public class GeneratePres extends Fragment {
     }
 
 
-
     private void initCalls(View view) {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);
         ConstraintLayout root = (ConstraintLayout) inflater.inflate(R.layout.activity_main, null); //RelativeLayout is root view of my UI(xml) file.
@@ -260,14 +242,14 @@ public class GeneratePres extends Fragment {
 
         lLayout = new LinearLayoutManager(mContext);
         lLayout2 = new LinearLayoutManager(mContext);
-        rView =  view.findViewById(R.id.pres_recycler);
+        rView = view.findViewById(R.id.pres_recycler);
         rView.setLayoutManager(lLayout);
         ll_patient_name = view.findViewById(R.id.ll_patient_name);
-        textView_medical_cert  = view.findViewById(R.id.textView_medical_certificate);
-        textView_medical_cert_desc  = view.findViewById(R.id.textView_medical_cert_desc);
+        textView_medical_cert = view.findViewById(R.id.textView_medical_certificate);
+        textView_medical_cert_desc = view.findViewById(R.id.textView_medical_cert_desc);
         textView_medical_cert.setPaintFlags(textView_medical_cert.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        fl_medicines_symbol  = view.findViewById(R.id.fl_medicines_symbol);
-        page_no  = view.findViewById(R.id.page_no);
+        fl_medicines_symbol = view.findViewById(R.id.fl_medicines_symbol);
+        page_no = view.findViewById(R.id.page_no);
         textView_end_note = view.findViewById(R.id.textView_end_note);
         rViewlabtest = view.findViewById(R.id.pres_recycler_labtest);
         textView_advice = view.findViewById(R.id.textView_advice);
@@ -275,43 +257,50 @@ public class GeneratePres extends Fragment {
 
         back = view.findViewById(R.id.btn_back_edit_profile);
         btn_backbtn_edit_profile = view.findViewById(R.id.btn_backbtn_edit_profile);
-        image_layout =  view.findViewById(R.id.image_layout);
-        signature =  view.findViewById(R.id.iv_signature);
+        image_layout = view.findViewById(R.id.image_layout);
+        signature = view.findViewById(R.id.iv_signature);
         fl_progress_bar = view.findViewById(R.id.fl_progress_layout);
-        textView_Clinic_name=  view.findViewById(R.id.textView_Clinic_name);
-        textView_DocName=  view.findViewById(R.id.textView_DocName);
-        textView_degree=  view.findViewById(R.id.textView_degree);
-        textView_res_num=  view.findViewById(R.id.textView_res_num);
-        textView_des=  view.findViewById(R.id.textView_des);
-        textView_UID=  view.findViewById(R.id.textView_UID);
-        textView_pat_name=  view.findViewById(R.id.textView_pat_name);
+        textView_Clinic_name = view.findViewById(R.id.textView_Clinic_name);
+        textView_DocName = view.findViewById(R.id.textView_DocName);
+        textView_degree = view.findViewById(R.id.textView_degree);
+        textView_res_num = view.findViewById(R.id.textView_res_num);
+        textView_des = view.findViewById(R.id.textView_des);
+        textView_UID = view.findViewById(R.id.textView_UID);
+        textView_pat_name = view.findViewById(R.id.textView_pat_name);
 
-        textView_age=  view.findViewById(R.id.textView_age);
-        textView_diagnosis=  view.findViewById(R.id.textView_diag);
-        textView_chief_complaint=  view.findViewById(R.id.textView_chief_complaint);
-        textView_history=  view.findViewById(R.id.textView_history);
-        textView_findings=  view.findViewById(R.id.textView_findings);
-        textView_treatment_advice=  view.findViewById(R.id.textView_treatment_advice);
+        textView_age = view.findViewById(R.id.textView_age);
+        textView_diagnosis = view.findViewById(R.id.textView_diag);
+        textView_chief_complaint = view.findViewById(R.id.textView_chief_complaint);
+        textView_history = view.findViewById(R.id.textView_history);
+        textView_findings = view.findViewById(R.id.textView_findings);
+        textView_treatment_advice = view.findViewById(R.id.textView_treatment_advice);
 
 
-        textView_days=  view.findViewById(R.id.textView_days);
-        textView_date=  view.findViewById(R.id.textView_date);
-        textView_add =  view.findViewById(R.id.textView_add);
-        textView_time=  view.findViewById(R.id.textView_time);
-        textView_contact=  view.findViewById(R.id.textView_contact);
-        scrollview_edit_profile = view.findViewById(R.id.scrollview_edit_profile);
-      //  textView_closed_day=  view.findViewById(R.id.textView_closed_day);
-        textView_email=  view.findViewById(R.id.textView_email);
-        title  =  view.findViewById(R.id.title);
-        generatePDF  =  view.findViewById(R.id.generatePDF);
-        sig_text =  view.findViewById(R.id.sig_text);
-         bundle = getArguments();
+        textView_days = view.findViewById(R.id.textView_days);
+        textView_date = view.findViewById(R.id.textView_date);
+        textView_add = view.findViewById(R.id.textView_add);
+        textView_time = view.findViewById(R.id.textView_time);
+        textView_contact = view.findViewById(R.id.textView_contact);
+        scrollview_edit_profile = view.findViewById(R.id.saveBitmapFromImage);
+        //  textView_closed_day=  view.findViewById(R.id.textView_closed_day);
+        textView_email = view.findViewById(R.id.textView_email);
+        title = view.findViewById(R.id.title);
+        generatePDF = view.findViewById(R.id.generatePDF);
+        sig_text = view.findViewById(R.id.sig_text);
+        bundle = getArguments();
         if (bundle != null) {
-            Log.e("prescriptionItem","________________"+prescriptionItem.toString());
+            Log.e("prescriptionItem", "________________" + prescriptionItem.toString());
             prescriptionItem = bundle.getParcelable("defaultAttributeId");
             labTestItem = bundle.getParcelableArrayList("defaultAttributeIdLabTest");
             definer = bundle.getString("definer");
             end_note = bundle.getString("end_note");
+            yesOrNo = bundle.getString("yesOrNo");
+
+            if (yesOrNo.equals("Yes"))
+                binding.topHeaderParent.setVisibility(View.VISIBLE);
+            else
+                binding.topHeaderParent.setVisibility(View.GONE);
+
 
             prescriptionItemTEMP = prescriptionItem;
             labTestItemTEMP = labTestItem;
@@ -327,11 +316,9 @@ public class GeneratePres extends Fragment {
     }
 
 
-
-    private  void BottomSheet(View view)
-    {
+    private void BottomSheet(View view) {
         View bottomSheet = view.findViewById(R.id.bottom_sheet);
-        RecyclerView recyclerView =  view.findViewById(R.id.recyclerView_bottom_sheet);
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerView_bottom_sheet);
         //Create new GridLayoutManager
         @SuppressLint("WrongConstant") GridLayoutManager gridLayoutManagerr = new GridLayoutManager(mContext,
                 1,//span count no of items in single row
@@ -365,12 +352,12 @@ public class GeneratePres extends Fragment {
         bottomSheetItem.setMenuImage("ic_share_");
         bottomSheetItemArrayList.add(bottomSheetItem);*/
 
-        BottomSheetAdapter mAdapter = new BottomSheetAdapter(mContext,bottomSheetItemArrayList,fl_progress_bar);
+        BottomSheetAdapter mAdapter = new BottomSheetAdapter(mContext, bottomSheetItemArrayList, fl_progress_bar);
         recyclerView.setAdapter(mAdapter);
 
         behavior = BottomSheetBehavior.from(bottomSheet);
         behavior.setHideable(true);
-        behavior.setState(BottomSheetBehavior.STATE_HIDDEN );
+        behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
         //   behavior.setPeekHeight(200);
         //behavior.setPeekHeight(72);
@@ -445,7 +432,7 @@ public class GeneratePres extends Fragment {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
 
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, pName+"IMG_" + Calendar.getInstance().getTime(), null);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, pName + "IMG_" + Calendar.getInstance().getTime(), null);
         return Uri.parse(path);
     }
 
@@ -453,17 +440,17 @@ public class GeneratePres extends Fragment {
         int result = ContextCompat.checkSelfPermission(mContext, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
         if (result == PackageManager.PERMISSION_GRANTED)
-            return  true;
+            return true;
         else
             return false;
     }
 
     private void requestPermission() {
-        if (shouldShowRequestPermissionRationale( android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+        if (shouldShowRequestPermissionRationale(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             Toast.makeText(mContext, "Write External Storage permission allows us to save files. Please allow this permission in App Settings.", Toast.LENGTH_LONG).show();
         } else {
-            requestPermissions( new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-                    }, PERMISSION_REQUEST_CODE);
+            requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+            }, PERMISSION_REQUEST_CODE);
         }
     }
 
@@ -473,13 +460,14 @@ public class GeneratePres extends Fragment {
             case PERMISSION_REQUEST_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     GenratePres();
-                Log.e("value", "Permission Granted, Now you can use local drive .");
-            } else {
-                Log.e("value", "Permission Denied, You cannot use local drive .");
-            }
-            break;
+                    Log.e("value", "Permission Granted, Now you can use local drive .");
+                } else {
+                    Log.e("value", "Permission Denied, You cannot use local drive .");
+                }
+                break;
         }
     }
+
     private void onclick() {
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -521,217 +509,230 @@ public class GeneratePres extends Fragment {
                         } else {
                             requestPermission(); // Code for permission
                         }
-                    }else {
+                    } else {
                         GenratePres();
                     }
                 }
             }
         });
-        }
+    }
 
-        public void GenratePres(){
-            if (("history").equalsIgnoreCase(definer)) {
+    public void GenratePres() {
+        if (("history").equalsIgnoreCase(definer)) {
 //                textView_medical_cert.setVisibility(View.GONE);
 //                textView_medical_cert_desc.setVisibility(View.GONE);
 
-                genInv();
-            } else {
-                if(!count) {
-                    PrescriptionJSON prescriptionJSON = new PrescriptionJSON();
+            genInv();
+        } else {
+            if (!count) {
+                PrescriptionJSON prescriptionJSON = new PrescriptionJSON();
 
-                    prescriptionJSON.setPatientId(prescriptionItem.getPatientId());
-                    prescriptionJSON.setDoctorId(manager.getPreferences(mContext, "doctor_id"));
-                    if(prescriptionItem.getMedicines()!=null) {
-                        if (prescriptionItem.getMedicines().size() != 0) {
-                            medicinesItemArrayListO = new ArrayList<>();
-                            for (com.likesby.bludoc.ModelLayer.NewEntities3.MedicinesItem mi : prescriptionItem.getMedicines()) {
-                                com.likesby.bludoc.ModelLayer.Entities.MedicinesItem mii = new com.likesby.bludoc.ModelLayer.Entities.MedicinesItem();
-                                mii.setMedicineName(mi.getMedicineName());
-                                mii.setMedicineId(mi.getPresbMedicineId());
-                                mii.setAdditionaComment(mi.getAdditionaComment());
-                                mii.setFrequency(mi.getFrequency());
-                                mii.setInstruction(mi.getInstruction());
-                                mii.setNoOfDays(mi.getNoOfDays());
-                                mii.setRoute(mi.getRoute());
-                                medicinesItemArrayListO.add(mii);
-                            }
+                prescriptionJSON.setPatientId(prescriptionItem.getPatientId());
+                prescriptionJSON.setDoctorId(manager.getPreferences(mContext, "doctor_id"));
+                if (prescriptionItem.getMedicines() != null) {
+                    if (prescriptionItem.getMedicines().size() != 0) {
+                        medicinesItemArrayListO = new ArrayList<>();
+                        for (com.likesby.bludoc.ModelLayer.NewEntities3.MedicinesItem mi : prescriptionItem.getMedicines()) {
+                            com.likesby.bludoc.ModelLayer.Entities.MedicinesItem mii = new com.likesby.bludoc.ModelLayer.Entities.MedicinesItem();
+                            mii.setMedicineName(mi.getMedicineName());
+                            mii.setMedicineId(mi.getPresbMedicineId());
+                            mii.setAdditionaComment(mi.getAdditionaComment());
+                            mii.setQty(mi.getQty());
+                            mii.setFrequency(mi.getFrequency());
+                            mii.setInstruction(mi.getInstruction());
+                            mii.setNoOfDays(mi.getNoOfDays());
+                            mii.setRoute(mi.getRoute());
+                            medicinesItemArrayListO.add(mii);
                         }
                     }
+                }
 
-                    prescriptionJSON.setMedicines(medicinesItemArrayListO);
-                    prescriptionJSON.setDiagnosis(prescriptionItem.getDiagnosis());
-                    prescriptionJSON.setEndNote(end_note);
-                    if(labTestItem!=null) {
-                        if (labTestItem.size() != 0) {
-                            prescriptionJSON.setLabTest(labTestItem);
-                        }
+                prescriptionJSON.setMedicines(medicinesItemArrayListO);
+                prescriptionJSON.setDiagnosis(prescriptionItem.getDiagnosis());
+                prescriptionJSON.setEndNote(end_note);
+                if (labTestItem != null) {
+                    if (labTestItem.size() != 0) {
+                        prescriptionJSON.setLabTest(labTestItem);
                     }
-                    Gson gson = new Gson();
-                    String json = gson.toJson(prescriptionJSON);
-                    fl_progress_bar.setVisibility(View.VISIBLE);
-                    if(prescriptionItem.getMedicines()!=null)
-                    if(prescriptionItem.getMedicines().size()>5)
-                    {
+                }
+                Gson gson = new Gson();
+                String json = gson.toJson(prescriptionJSON);
+                fl_progress_bar.setVisibility(View.VISIBLE);
+                if (prescriptionItem.getMedicines() != null)
+                    if (prescriptionItem.getMedicines().size() > 5) {
                         popupCreatingPrescription();
-                    }
-                    else  if(labTestItem!=null)
-                        if(labTestItem.size()>5)
-                        {
+                    } else if (labTestItem != null)
+                        if (labTestItem.size() > 5) {
                             popupCreatingPrescription();
                         }
 
-                    apiViewHolder.Prescription(json)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(responsePrescription);
-                }else {
-                    genInv();
-                }
+                apiViewHolder.Prescription(json)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(responsePrescription);
+            } else {
+                genInv();
             }
         }
+    }
 
-        public static ArrayList<Uri>  getFiles()
-        {
-            return filesGlobal;
-        }
+    public static ArrayList<Uri> getFiles() {
+        return filesGlobal;
+    }
 
 
+    public void genInv() {
+        popupCreatingPrescription();
+        rViewlabtest.setVisibility(View.GONE);
+        textView_advice.setVisibility(View.GONE);
+        try {
+            final ArrayList<Uri> files = new ArrayList<Uri>();
 
-        public void genInv(){
-            popupCreatingPrescription();
-            rViewlabtest.setVisibility(View.GONE);
-            textView_advice.setVisibility(View.GONE);
-            try {
-                final ArrayList<Uri> files = new ArrayList<Uri>();
+            final int[] p = {0};
+            int line = 0;
+            String[] lines = null;
+            String[] details = diagnosis_desc.split(Pattern.quote("|"));
 
-                final int[] p = {0};
-                int line =0;
-                String[] lines=null;
-                String[] details = diagnosis_desc.split(Pattern.quote("|"));
+            for (String strr : details
+            ) {
+                line = line + strr.length();
+            }
 
-                for (String strr: details
-                ) {
-                    line = line+strr.length();
-                }
-
-                int field_active = 0;
-                for (String str: details ) {
-                    if(!str.trim().equals(""))
-                        field_active = field_active +1;
-                }
-                if(line > 210) {
-                    rView.setVisibility(View.GONE);
-                    rViewlabtest.setVisibility(View.GONE);
-                    fl_medicines_symbol.setVisibility(View.GONE);
-                    final Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
+            int field_active = 0;
+            for (String str : details) {
+                if (!str.trim().equals(""))
+                    field_active = field_active + 1;
+            }
+            if (line > 210) {
+//                rView.setVisibility(View.GONE);
+                rViewlabtest.setVisibility(View.GONE);
+                fl_medicines_symbol.setVisibility(View.GONE);
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
 
                                                /* if(prescriptionItem.getMedicines()!=null)
                                                 if (prescriptionItem.getMedicines().size() > 4)
                                                 page_no.setText("1/"+(prescriptionItem.getMedicines().size()/4)+1);*/
-                            // Do something after 4s = 4000ms
+                        // Do something after 4s = 4000ms
 
-                            page_no.setText("Page No. "+page_no_count);
+                        page_no.setText("Page No. " + page_no_count);
+                        Bitmap screen = getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
+                        files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
+
+                        filesGlobal = files;
+                        page_no_count = page_no_count + 1;
+                        textView_chief_complaint.setVisibility(View.GONE);
+                        textView_history.setVisibility(View.GONE);
+                        binding.textviewTemprature.setVisibility(View.GONE);
+                        binding.textviewHeight.setVisibility(View.GONE);
+                        binding.textviewWeight.setVisibility(View.GONE);
+                        binding.textviewPulse.setVisibility(View.GONE);
+                        binding.textviewBloodPressure.setVisibility(View.GONE);
+                        binding.textviewBloodSugar.setVisibility(View.GONE);
+                        binding.textviewHemoglobing.setVisibility(View.GONE);
+                        binding.textviewSpo2.setVisibility(View.GONE);
+                        binding.textviewRespirationRate.setVisibility(View.GONE);
+                        binding.textviewAllergy.setVisibility(View.GONE);
+                        textView_findings.setVisibility(View.GONE);
+                        textView_treatment_advice.setVisibility(View.GONE);
+                        textView_diagnosis.setVisibility(View.GONE);
+                        rView.setVisibility(View.VISIBLE);
+                        fl_medicines_symbol.setVisibility(View.VISIBLE);
+                    }
+                }, 1);
+            }
+
+
+            if (prescriptionItem != null) {
+
+                fl_progress_bar.setVisibility(View.VISIBLE);
+                if (prescriptionItem.getMedicines().size() >= 5) {
+                    // Toast.makeText(mContext, ""+DELAY_TIME_MULTIPLIER, Toast.LENGTH_SHORT).show();
+
+                    ArrayList<MedicinesItem> medicineList = new ArrayList<>();
+                    for (int i = 0; i < 5; i++) {
+                        if (prescriptionItem.getMedicines().size() > p[0]) {
+                            medicineList.add(medicinesItemArrayListO.get(p[0]));
+                            p[0] = p[0] + 1;
+                        }
+                    }
+
+                    Pres_adapter templateAdapter = new Pres_adapter(medicineList, mContext);
+                    rView.setAdapter(templateAdapter);
+
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            // Do something after 4s = 4000ms
+                            page_no.setText("Page No. " + page_no_count);
+
                             Bitmap screen = getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
                             files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
-
-
-                            filesGlobal = files;
-                            page_no_count = page_no_count+1;
+                            patient_item = prescriptionItem;
                             textView_chief_complaint.setVisibility(View.GONE);
                             textView_history.setVisibility(View.GONE);
                             textView_findings.setVisibility(View.GONE);
                             textView_treatment_advice.setVisibility(View.GONE);
                             textView_diagnosis.setVisibility(View.GONE);
-                            rView.setVisibility(View.VISIBLE);
-                            fl_medicines_symbol.setVisibility(View.VISIBLE);
+                            binding.textviewTemprature.setVisibility(View.GONE);
+                            binding.textviewHeight.setVisibility(View.GONE);
+                            binding.textviewWeight.setVisibility(View.GONE);
+                            binding.textviewPulse.setVisibility(View.GONE);
+                            binding.textviewBloodPressure.setVisibility(View.GONE);
+                            binding.textviewBloodSugar.setVisibility(View.GONE);
+                            binding.textviewHemoglobing.setVisibility(View.GONE);
+                            binding.textviewSpo2.setVisibility(View.GONE);
+                            binding.textviewRespirationRate.setVisibility(View.GONE);
+                            binding.textviewAllergy.setVisibility(View.GONE);
+                            Log.e(TAG, "-------------------------------------------- p[0] - 608 = " + p[0]);
+                            temp(p[0], files);
+
                         }
-                    }, 1);
-                }
+                    }, DELAY_TIME);
 
+                } else {
+                    page_no.setText("Page No. " + page_no_count);
+                    Bitmap screen = getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
+                    files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
+                    patient_item = prescriptionItem;
+                    filesGlobal = files;
+                    rViewlabtest.setVisibility(View.VISIBLE);
+                    textView_advice.setVisibility(View.VISIBLE);
+                    behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    fl_progress_bar.setVisibility(View.GONE);
+                    if (dialog_data != null) {
+                        dialog_data.dismiss();
 
-                if (prescriptionItem != null) {
-
-                    fl_progress_bar.setVisibility(View.VISIBLE);
-                    if (prescriptionItem.getMedicines().size() >= 5) {
-                       // Toast.makeText(mContext, ""+DELAY_TIME_MULTIPLIER, Toast.LENGTH_SHORT).show();
-
-                        ArrayList<MedicinesItem> medicineList = new ArrayList<>();
-                        for (int i = 0; i < 5; i++) {
-                            if (prescriptionItem.getMedicines().size() > p[0]) {
-                                medicineList.add(medicinesItemArrayListO.get(p[0]));
-                                p[0] = p[0] + 1;
-                            }
-                        }
-
-                        Pres_adapter templateAdapter = new Pres_adapter(medicineList, mContext);
-                       rView.setAdapter(templateAdapter);
-
-                        final Handler handler = new Handler();
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                // Do something after 4s = 4000ms
-                                page_no.setText("Page No. "+page_no_count);
-
-                                Bitmap screen = getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
-                                files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
-                                patient_item = prescriptionItem;
-                                textView_chief_complaint.setVisibility(View.GONE);
-                                textView_history.setVisibility(View.GONE);
-                                textView_findings.setVisibility(View.GONE);
-                                textView_treatment_advice.setVisibility(View.GONE);
-                                textView_diagnosis.setVisibility(View.GONE);
-                                Log.e(TAG,"-------------------------------------------- p[0] - 608 = "+p[0]);
-                                temp(p[0], files);
-
-                            }
-                        }, DELAY_TIME);
-
-                    } else {
-                        page_no.setText("Page No. "+page_no_count);
-                        Bitmap screen = getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
-                        files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
-                        patient_item = prescriptionItem;
-                        filesGlobal = files;
-                        rViewlabtest.setVisibility(View.VISIBLE);
-                        textView_advice.setVisibility(View.VISIBLE);
-                        behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                        fl_progress_bar.setVisibility(View.GONE);
-                       if(dialog_data!=null)
-                       {
-                           dialog_data.dismiss();
-
-                       }
                     }
                 }
-            } catch (Exception e) {
-                fl_progress_bar.setVisibility(View.GONE);
-                if(dialog_data!=null)
-                {
-                    dialog_data.dismiss();
-
-                }
-                e.printStackTrace();
             }
+        } catch (Exception e) {
+            fl_progress_bar.setVisibility(View.GONE);
+            if (dialog_data != null) {
+                dialog_data.dismiss();
+
+            }
+            e.printStackTrace();
         }
+    }
 
-        public void temp(int p, final ArrayList<Uri> files){
-            if(prescriptionItem.getMedicines().size()> p) {
-                int diff_size = prescriptionItem.getMedicines().size() - p;
-                Log.e(TAG,"--------------------------------------------diff_size - 701 = "+diff_size);
+    public void temp(int p, final ArrayList<Uri> files) {
+        if (prescriptionItem.getMedicines().size() > p) {
+            int diff_size = prescriptionItem.getMedicines().size() - p;
+            Log.e(TAG, "--------------------------------------------diff_size - 701 = " + diff_size);
 
-                if(diff_size<3) {
-                if( rViewlabtest.getVisibility()==View.VISIBLE)
+            if (diff_size < 3) {
+                if (rViewlabtest.getVisibility() == View.VISIBLE)
                     rViewlabtest.setVisibility(View.GONE);
 
-                if( textView_advice.getVisibility()==View.VISIBLE)
+                if (textView_advice.getVisibility() == View.VISIBLE)
                     textView_advice.setVisibility(View.GONE);
 
                 ArrayList<MedicinesItem> medicineList1 = new ArrayList<>();
-                for (int i = 0; i <diff_size; i++) {
+                for (int i = 0; i < diff_size; i++) {
                     if (prescriptionItem.getMedicines().size() > p) {
                         medicineList1.add(medicinesItemArrayListO.get(p));
                         p = p + 1;
@@ -741,19 +742,16 @@ public class GeneratePres extends Fragment {
                 Pres_adapter templateAdapter1 = new Pres_adapter(medicineList1, mContext);
                 rView.setAdapter(templateAdapter1);
 
-                    if(labTestItem!=null)
-                    {
-                        if(labTestItem.size()>0)
-                        {
-                            Pres_LabTest_adapter pres_labTest_adapter = new Pres_LabTest_adapter(labTestItem,mContext);
-                            rViewlabtest.setAdapter(pres_labTest_adapter);
-                            rViewlabtest.setVisibility(View.VISIBLE);
-                            textView_advice.setVisibility(View.VISIBLE);
-                        }
-                        else {
-                            textView_advice.setVisibility(View.GONE);
-                        }
+                if (labTestItem != null) {
+                    if (labTestItem.size() > 0) {
+                        Pres_LabTest_adapter pres_labTest_adapter = new Pres_LabTest_adapter(labTestItem, mContext);
+                        rViewlabtest.setAdapter(pres_labTest_adapter);
+                        rViewlabtest.setVisibility(View.VISIBLE);
+                        textView_advice.setVisibility(View.VISIBLE);
+                    } else {
+                        textView_advice.setVisibility(View.GONE);
                     }
+                }
 
                 final Handler handler = new Handler();
                 final int finalP = p;
@@ -764,8 +762,8 @@ public class GeneratePres extends Fragment {
                       /*  if(prescriptionItem.getMedicines()!=null)
                             if (prescriptionItem.getMedicines().size() > 4)
                                 page_no.setText("3/"+(prescriptionItem.getMedicines().size()/4)+1);*/
-                        page_no_count = page_no_count+1;
-                        page_no.setText("Page No. "+page_no_count);
+                        page_no_count = page_no_count + 1;
+                        page_no.setText("Page No. " + page_no_count);
                         Bitmap screen1 = getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
                         files.add(getImageUri(mContext, screen1, prescriptionItem.getPName() + "1"));
 
@@ -778,14 +776,23 @@ public class GeneratePres extends Fragment {
                         textView_findings.setVisibility(View.GONE);
                         textView_treatment_advice.setVisibility(View.GONE);
                         textView_diagnosis.setVisibility(View.GONE);
-                        Log.e(TAG,"--------------------------------------------finalP 760 = "+finalP);
+                        binding.textviewTemprature.setVisibility(View.GONE);
+                        binding.textviewHeight.setVisibility(View.GONE);
+                        binding.textviewWeight.setVisibility(View.GONE);
+                        binding.textviewPulse.setVisibility(View.GONE);
+                        binding.textviewBloodPressure.setVisibility(View.GONE);
+                        binding.textviewBloodSugar.setVisibility(View.GONE);
+                        binding.textviewHemoglobing.setVisibility(View.GONE);
+                        binding.textviewSpo2.setVisibility(View.GONE);
+                        binding.textviewRespirationRate.setVisibility(View.GONE);
+                        binding.textviewAllergy.setVisibility(View.GONE);
+                        Log.e(TAG, "--------------------------------------------finalP 760 = " + finalP);
                         // temp1(finalP, files);
                         filesGlobal = files;
                         fl_progress_bar.setVisibility(View.GONE);
                         behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
-                        if(dialog_data!=null)
-                        {
+                        if (dialog_data != null) {
                             dialog_data.dismiss();
                             PopupGeneratedImages();
                         }
@@ -793,23 +800,22 @@ public class GeneratePres extends Fragment {
 
                     }
                 }, DELAY_TIME);
-                }
-                else{
+            } else {
 
-                if( rViewlabtest.getVisibility()==View.VISIBLE)
+                if (rViewlabtest.getVisibility() == View.VISIBLE)
                     rViewlabtest.setVisibility(View.GONE);
 
-                if( textView_advice.getVisibility()==View.VISIBLE)
+                if (textView_advice.getVisibility() == View.VISIBLE)
                     textView_advice.setVisibility(View.GONE);
 
                 ArrayList<MedicinesItem> medicineList1 = new ArrayList<>();
-                    int sizee = 5;
-                    if(width<520)
-                        sizee = 3;
-                    else if(width<820)
-                        sizee = 4;
+                int sizee = 5;
+                if (width < 520)
+                    sizee = 3;
+                else if (width < 820)
+                    sizee = 4;
 
-                for (int i = 0; i <sizee; i++) {
+                for (int i = 0; i < sizee; i++) {
                     if (prescriptionItem.getMedicines().size() > p) {
                         medicineList1.add(medicinesItemArrayListO.get(p));
                         p = p + 1;
@@ -829,8 +835,8 @@ public class GeneratePres extends Fragment {
                       /*  if(prescriptionItem.getMedicines()!=null)
                             if (prescriptionItem.getMedicines().size() > 4)
                                 page_no.setText("3/"+(prescriptionItem.getMedicines().size()/4)+1);*/
-                        page_no_count = page_no_count+1;
-                        page_no.setText("Page No. "+page_no_count);
+                        page_no_count = page_no_count + 1;
+                        page_no.setText("Page No. " + page_no_count);
                         Bitmap screen1 = getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
                         files.add(getImageUri(mContext, screen1, prescriptionItem.getPName() + "1"));
 
@@ -843,95 +849,96 @@ public class GeneratePres extends Fragment {
                         textView_findings.setVisibility(View.GONE);
                         textView_treatment_advice.setVisibility(View.GONE);
                         textView_diagnosis.setVisibility(View.GONE);
-                        Log.e(TAG,"--------------------------------------------finalP - 817 = "+finalP);
+                        binding.textviewTemprature.setVisibility(View.GONE);
+                        binding.textviewHeight.setVisibility(View.GONE);
+                        binding.textviewWeight.setVisibility(View.GONE);
+                        binding.textviewPulse.setVisibility(View.GONE);
+                        binding.textviewBloodPressure.setVisibility(View.GONE);
+                        binding.textviewBloodSugar.setVisibility(View.GONE);
+                        binding.textviewHemoglobing.setVisibility(View.GONE);
+                        binding.textviewSpo2.setVisibility(View.GONE);
+                        binding.textviewRespirationRate.setVisibility(View.GONE);
+                        binding.textviewAllergy.setVisibility(View.GONE);
+                        Log.e(TAG, "--------------------------------------------finalP - 817 = " + finalP);
                         temp(finalP, files);
 
                         filesGlobal = files;
                     }
                 }, DELAY_TIME);
-                }
-
-               // rViewlabtest.setVisibility(View.VISIBLE);//*****************
-                //textView_advice.setVisibility(View.VISIBLE);//*****************
-
             }
-            else if(labTestItem!=null)
-                {
-                    page_no_count = page_no_count+1;
-                    page_no.setText("Page No. "+page_no_count);
-                    rView.setVisibility(View.GONE);
 
-                    if(labTestItem.size()>0)
-                    {
-                        rView.setVisibility(View.GONE);
+            // rViewlabtest.setVisibility(View.VISIBLE);//*****************
+            //textView_advice.setVisibility(View.VISIBLE);//*****************
 
-                        Pres_LabTest_adapter pres_labTest_adapter = new Pres_LabTest_adapter(labTestItem,mContext);
-                        rViewlabtest.setAdapter(pres_labTest_adapter);
-                        rViewlabtest.setVisibility(View.VISIBLE);
-                        textView_advice.setVisibility(View.VISIBLE);
+        } else if (labTestItem != null) {
+            page_no_count = page_no_count + 1;
+            page_no.setText("Page No. " + page_no_count);
+//            rView.setVisibility(View.GONE);
 
-                        final Handler handler = new Handler();
-                        final int finalP = p;
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
+            if (labTestItem.size() > 0) {
+//                rView.setVisibility(View.GONE);
 
-                                // Do something after 4s = 4000ms
+                Pres_LabTest_adapter pres_labTest_adapter = new Pres_LabTest_adapter(labTestItem, mContext);
+                rViewlabtest.setAdapter(pres_labTest_adapter);
+                rViewlabtest.setVisibility(View.VISIBLE);
+                textView_advice.setVisibility(View.VISIBLE);
+
+                final Handler handler = new Handler();
+                final int finalP = p;
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        // Do something after 4s = 4000ms
                       /*  if(prescriptionItem.getMedicines()!=null)
                             if (prescriptionItem.getMedicines().size() > 4)
                                 page_no.setText("3/"+(prescriptionItem.getMedicines().size()/4)+1);*/
-                                Bitmap screen1 = getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
-                                files.add(getImageUri(mContext, screen1, prescriptionItem.getPName() + "1"));
+                        Bitmap screen1 = getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
+                        files.add(getImageUri(mContext, screen1, prescriptionItem.getPName() + "1"));
 
                      /*   if(prescriptionItem.getMedicines()!=null)
                             if (prescriptionItem.getMedicines().size() > 4)
                                 page_no.setText("4/"+(prescriptionItem.getMedicines().size()/4)+1);*/
-                                patient_item = prescriptionItem;
-                                textView_chief_complaint.setVisibility(View.GONE);
-                                textView_history.setVisibility(View.GONE);
-                                textView_findings.setVisibility(View.GONE);
-                                textView_treatment_advice.setVisibility(View.GONE);
-                                textView_diagnosis.setVisibility(View.GONE);
-                                Log.e(TAG,"--------------------------------------------finalP - 866 = "+finalP);
+                        patient_item = prescriptionItem;
+                        textView_chief_complaint.setVisibility(View.GONE);
+                        textView_history.setVisibility(View.GONE);
+                        textView_findings.setVisibility(View.GONE);
+                        textView_treatment_advice.setVisibility(View.GONE);
+                        textView_diagnosis.setVisibility(View.GONE);
+                        binding.textviewTemprature.setVisibility(View.GONE);
+                        binding.textviewHeight.setVisibility(View.GONE);
+                        binding.textviewWeight.setVisibility(View.GONE);
+                        binding.textviewPulse.setVisibility(View.GONE);
+                        binding.textviewBloodPressure.setVisibility(View.GONE);
+                        binding.textviewBloodSugar.setVisibility(View.GONE);
+                        binding.textviewHemoglobing.setVisibility(View.GONE);
+                        binding.textviewSpo2.setVisibility(View.GONE);
+                        binding.textviewRespirationRate.setVisibility(View.GONE);
+                        binding.textviewAllergy.setVisibility(View.GONE);
+                        Log.e(TAG, "--------------------------------------------finalP - 866 = " + finalP);
 
-                                filesGlobal = files;
+                        filesGlobal = files;
 
-                                behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                        behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
-                                fl_progress_bar.setVisibility(View.GONE);
-                                if(dialog_data!=null)
-                                {
-                                    dialog_data.dismiss();
-                                    PopupGeneratedImages();
-                                }
-                            }
-                        }, DELAY_TIME);
-
+                        fl_progress_bar.setVisibility(View.GONE);
+                        if (dialog_data != null) {
+                            dialog_data.dismiss();
+                            PopupGeneratedImages();
+                        }
                     }
-                    else {
-                        rView.setVisibility(View.GONE);
-                        textView_advice.setVisibility(View.GONE);
-                        rViewlabtest.setVisibility(View.GONE);
-                    }
+                }, DELAY_TIME);
 
-
-                Log.e(TAG,"--------------------------------------------(labTestItem>0)");
-
-
-
-                /*Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_SEND_MULTIPLE);
-                intent.putExtra(Intent.EXTRA_SUBJECT, "E-prescription from "+ manager.getPreferences(mContext, "name"));
-                intent.putExtra(Intent.EXTRA_TEXT, "Dear "+prescriptionItem.getPName()+ ", Dr. "+ manager.getPreferences(mContext, "name")+ " has sent you an E-prescription via BluDoc");
-                intent.setType("image/jpeg"); *//* This example is sharing jpeg images. *//*
-                intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
-                Intent shareIntent = Intent.createChooser(intent, null);
-                startActivity(shareIntent);*/
-
-            }
-            else {
-                rViewlabtest.setVisibility(View.GONE);
+            } else {
+//                rView.setVisibility(View.GONE);
                 textView_advice.setVisibility(View.GONE);
+                rViewlabtest.setVisibility(View.GONE);
+            }
+
+
+            Log.e(TAG, "--------------------------------------------(labTestItem>0)");
+
+
 
                 /*Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_SEND_MULTIPLE);
@@ -941,23 +948,35 @@ public class GeneratePres extends Fragment {
                 intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
                 Intent shareIntent = Intent.createChooser(intent, null);
                 startActivity(shareIntent);*/
-                behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
-                fl_progress_bar.setVisibility(View.GONE);
-                if(dialog_data!=null)
-                {
-                    dialog_data.dismiss();
-                    PopupGeneratedImages();
-                }
+        } else {
+            rViewlabtest.setVisibility(View.GONE);
+            textView_advice.setVisibility(View.GONE);
+
+                /*Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_SEND_MULTIPLE);
+                intent.putExtra(Intent.EXTRA_SUBJECT, "E-prescription from "+ manager.getPreferences(mContext, "name"));
+                intent.putExtra(Intent.EXTRA_TEXT, "Dear "+prescriptionItem.getPName()+ ", Dr. "+ manager.getPreferences(mContext, "name")+ " has sent you an E-prescription via BluDoc");
+                intent.setType("image/jpeg"); *//* This example is sharing jpeg images. *//*
+                intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
+                Intent shareIntent = Intent.createChooser(intent, null);
+                startActivity(shareIntent);*/
+            behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+
+            fl_progress_bar.setVisibility(View.GONE);
+            if (dialog_data != null) {
+                dialog_data.dismiss();
+                PopupGeneratedImages();
             }
         }
+    }
 
-    public void temp1(int p, final ArrayList<Uri> files){
-        if(prescriptionItem.getMedicines().size()> p) {
-            if( rViewlabtest.getVisibility()==View.VISIBLE)
+    public void temp1(int p, final ArrayList<Uri> files) {
+        if (prescriptionItem.getMedicines().size() > p) {
+            if (rViewlabtest.getVisibility() == View.VISIBLE)
                 rViewlabtest.setVisibility(View.GONE);
 
-            if( textView_advice.getVisibility()==View.VISIBLE)
+            if (textView_advice.getVisibility() == View.VISIBLE)
                 textView_advice.setVisibility(View.GONE);
             ArrayList<MedicinesItem> medicineList1 = new ArrayList<>();
             for (int i = 0; i < 5; i++) {
@@ -966,7 +985,7 @@ public class GeneratePres extends Fragment {
                     p = p + 1;
                 }
             }
-            Log.e(TAG,"--------------------------------------------p - 940 = "+p);
+            Log.e(TAG, "--------------------------------------------p - 940 = " + p);
             Pres_adapter templateAdapter1 = new Pres_adapter(medicineList1, mContext);
             rView.setAdapter(templateAdapter1);
 
@@ -974,8 +993,8 @@ public class GeneratePres extends Fragment {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    page_no_count = page_no_count+1;
-                    page_no.setText("Page No. "+page_no_count);
+                    page_no_count = page_no_count + 1;
+                    page_no.setText("Page No. " + page_no_count);
 
                     // Do something after 4s = 4000ms
                     Bitmap screen1 = getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
@@ -992,17 +1011,16 @@ public class GeneratePres extends Fragment {
                     startActivity(shareIntent);*/
                     behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                     fl_progress_bar.setVisibility(View.GONE);
-                    if(dialog_data!=null)
-                    {
+                    if (dialog_data != null) {
                         dialog_data.dismiss();
                         PopupGeneratedImages();
                     }
                 }
             }, DELAY_TIME);
 
-        }else {
+        } else {
             rView.setAdapter(null);
-            rView.setVisibility(View.GONE);
+//            rView.setVisibility(View.GONE);
 
             /*Intent intent = new Intent();
             intent.setAction(Intent.ACTION_SEND_MULTIPLE);
@@ -1015,14 +1033,12 @@ public class GeneratePres extends Fragment {
 
             behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
-            if(labTestItem!=null)
-            {
-                if(labTestItem.size()>0)
-                {
-                    page_no_count = page_no_count+1;
-                    page_no.setText("Page No. "+page_no_count);
+            if (labTestItem != null) {
+                if (labTestItem.size() > 0) {
+                    page_no_count = page_no_count + 1;
+                    page_no.setText("Page No. " + page_no_count);
 
-                    Pres_LabTest_adapter pres_labTest_adapter = new Pres_LabTest_adapter(labTestItem,mContext);
+                    Pres_LabTest_adapter pres_labTest_adapter = new Pres_LabTest_adapter(labTestItem, mContext);
                     rViewlabtest.setAdapter(pres_labTest_adapter);
                     rViewlabtest.setVisibility(View.VISIBLE);
                     textView_advice.setVisibility(View.VISIBLE);
@@ -1045,35 +1061,30 @@ public class GeneratePres extends Fragment {
                     startActivity(shareIntent);*/
                             behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                             fl_progress_bar.setVisibility(View.GONE);
-                            if(dialog_data!=null)
-                            {
+                            if (dialog_data != null) {
                                 dialog_data.dismiss();
                                 PopupGeneratedImages();
                             }
                         }
                     }, DELAY_TIME);
 
-                }
-                else {
+                } else {
                     textView_advice.setVisibility(View.GONE);
                     rViewlabtest.setVisibility(View.GONE);
 
                     behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                     fl_progress_bar.setVisibility(View.GONE);
-                    if(dialog_data!=null)
-                    {
+                    if (dialog_data != null) {
                         dialog_data.dismiss();
                         PopupGeneratedImages();
                     }
                 }
-            }
-            else {
+            } else {
                 textView_advice.setVisibility(View.GONE);
                 rViewlabtest.setVisibility(View.GONE);
                 behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 fl_progress_bar.setVisibility(View.GONE);
-                if(dialog_data!=null)
-                {
+                if (dialog_data != null) {
                     dialog_data.dismiss();
                     PopupGeneratedImages();
                 }
@@ -1083,37 +1094,28 @@ public class GeneratePres extends Fragment {
     }
 
 
-
-    private static void addImage(Document document,byte[] byteArray)
-    {
-        try
-        {
+    private static void addImage(Document document, byte[] byteArray) {
+        try {
             image = Image.getInstance(byteArray);
-        }
-        catch (BadElementException e)
-        {
+        } catch (BadElementException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }
-        catch (MalformedURLException e)
-        {
+        } catch (MalformedURLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
         // image.scaleAbsolute(140f, 140f);
-        try
-        {
+        try {
             document.add(image);
         } catch (DocumentException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
+
     private SingleObserver<ResponseSuccess> responsePrescription = new SingleObserver<ResponseSuccess>() {
         @Override
         public void onSubscribe(Disposable d) {
@@ -1127,35 +1129,34 @@ public class GeneratePres extends Fragment {
                 if (response.getMessage() == null) {
                     Toast.makeText(mContext, "Unable to process your request", Toast.LENGTH_SHORT).show();
                     fl_progress_bar.setVisibility(View.GONE);
-                   if(dialog_data!=null)
-                     dialog_data.dismiss();
+                    if (dialog_data != null)
+                        dialog_data.dismiss();
 
                 } else if (response.getMessage().equals("Prescription Added")) {
-                   // Toast.makeText(mContext, "Prescription Added", Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(mContext, "Prescription Added", Toast.LENGTH_SHORT).show();
                     count = true;
                     generatePDF.setText("Share");
                     back.setVisibility(View.GONE);
                     btn_backbtn_edit_profile.setVisibility(View.VISIBLE);
-                    try
-                    {
+                    try {
                         final ArrayList<Uri> files = new ArrayList<Uri>();
                         final int[] p = {0};
                         int line = 0;
-                        String[] lines=null;
+                        String[] lines = null;
                         String[] details = diagnosis_desc.split(Pattern.quote("|"));
 
-                        for (String strr: details
+                        for (String strr : details
                         ) {
-                            line = line+strr.length();
+                            line = line + strr.length();
                         }
-                       // Toast.makeText(mContext, "Lines = "+line, Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(mContext, "Lines = "+line, Toast.LENGTH_SHORT).show();
                         int field_active = 0;
-                        for (String str: details ) {
-                                    if(!str.trim().equals(""))
-                                        field_active = field_active +1;
+                        for (String str : details) {
+                            if (!str.trim().equals(""))
+                                field_active = field_active + 1;
                         }
-                        if(line > 200) {
-                            rView.setVisibility(View.GONE);
+                        if (line > 200) {
+//                            rView.setVisibility(View.GONE);
                             rViewlabtest.setVisibility(View.GONE);
                             fl_medicines_symbol.setVisibility(View.GONE);
                             final Handler handler = new Handler();
@@ -1168,31 +1169,39 @@ public class GeneratePres extends Fragment {
                                                 page_no.setText("1/"+(prescriptionItem.getMedicines().size()/4)+1);*/
                                     // Do something after 4s = 4000ms
 
-                                    page_no.setText("Page No. "+page_no_count);
+                                    page_no.setText("Page No. " + page_no_count);
                                     Bitmap screen = getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
                                     files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
                                     filesGlobal = files;
-                                    page_no_count = page_no_count+1;
+                                    page_no_count = page_no_count + 1;
                                     textView_chief_complaint.setVisibility(View.GONE);
                                     textView_history.setVisibility(View.GONE);
                                     textView_findings.setVisibility(View.GONE);
                                     textView_treatment_advice.setVisibility(View.GONE);
                                     textView_diagnosis.setVisibility(View.GONE);
                                     rView.setVisibility(View.VISIBLE);
-                                    fl_medicines_symbol.setVisibility(View.VISIBLE);
+                                    binding.textviewTemprature.setVisibility(View.GONE);
+                                    binding.textviewHeight.setVisibility(View.GONE);
+                                    binding.textviewWeight.setVisibility(View.GONE);
+                                    binding.textviewPulse.setVisibility(View.GONE);
+                                    binding.textviewBloodPressure.setVisibility(View.GONE);
+                                    binding.textviewBloodSugar.setVisibility(View.GONE);
+                                    binding.textviewHemoglobing.setVisibility(View.GONE);
+                                    binding.textviewSpo2.setVisibility(View.GONE);
+                                    binding.textviewRespirationRate.setVisibility(View.GONE);
+                                    binding.textviewAllergy.setVisibility(View.GONE);
                                 }
                             }, 1);
                         }
                         //==========================================================================
-                        if(prescriptionItem!=null)
-                        {
+                        if (prescriptionItem != null) {
                             generatePDF.setVisibility(View.GONE);
-                            if(prescriptionItem.getMedicines()!=null) {
+                            if (prescriptionItem.getMedicines() != null) {
                                 if (prescriptionItem.getMedicines().size() != 0) {
                                     int sizee = 5;
-                                    if(width<520)
+                                    if (width < 520)
                                         sizee = 3;
-                                    else if(width<820)
+                                    else if (width < 820)
                                         sizee = 4;
 
                                     if (prescriptionItem.getMedicines().size() >= sizee) {
@@ -1218,7 +1227,7 @@ public class GeneratePres extends Fragment {
                                                 if (prescriptionItem.getMedicines().size() > 4)
                                                 page_no.setText("1/"+(prescriptionItem.getMedicines().size()/4)+1);*/
                                                 // Do something after 4s = 4000ms
-                                                page_no.setText("Page No. "+page_no_count);
+                                                page_no.setText("Page No. " + page_no_count);
                                                 Bitmap screen = getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
                                                 files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
 
@@ -1232,7 +1241,17 @@ public class GeneratePres extends Fragment {
                                                 textView_findings.setVisibility(View.GONE);
                                                 textView_treatment_advice.setVisibility(View.GONE);
                                                 textView_diagnosis.setVisibility(View.GONE);
-                                                Log.e(TAG,"--------------------------------------------p[0] - 1199 = "+p[0]);
+                                                binding.textviewTemprature.setVisibility(View.GONE);
+                                                binding.textviewHeight.setVisibility(View.GONE);
+                                                binding.textviewWeight.setVisibility(View.GONE);
+                                                binding.textviewPulse.setVisibility(View.GONE);
+                                                binding.textviewBloodPressure.setVisibility(View.GONE);
+                                                binding.textviewBloodSugar.setVisibility(View.GONE);
+                                                binding.textviewHemoglobing.setVisibility(View.GONE);
+                                                binding.textviewSpo2.setVisibility(View.GONE);
+                                                binding.textviewRespirationRate.setVisibility(View.GONE);
+                                                binding.textviewAllergy.setVisibility(View.GONE);
+                                                Log.e(TAG, "--------------------------------------------p[0] - 1199 = " + p[0]);
 
                                                 temp(p[0], files);
                                                 filesGlobal = files;
@@ -1240,11 +1259,10 @@ public class GeneratePres extends Fragment {
                                             }
                                         }, DELAY_TIME);
 
-                                    }
-                                    else {
-                                        page_no.setText("Page No. "+page_no_count);
+                                    } else {
+                                        page_no.setText("Page No. " + page_no_count);
 
-                                        Bitmap screen= getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
+                                        Bitmap screen = getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
 
                                         files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
                                         patient_item = prescriptionItem;
@@ -1259,13 +1277,12 @@ public class GeneratePres extends Fragment {
                                         startActivity(shareIntent);*/
                                         behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                                         fl_progress_bar.setVisibility(View.GONE);
-                                       if(dialog_data!=null)
-                                        dialog_data.dismiss();
+                                        if (dialog_data != null)
+                                            dialog_data.dismiss();
                                     }
                                 }
-                            }
-                        else if(labTestItem!=null) {
-                                Bitmap screen= getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
+                            } else if (labTestItem != null) {
+                                Bitmap screen = getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
                                 rViewlabtest.setVisibility(View.VISIBLE);
                                 textView_advice.setVisibility(View.VISIBLE);
 
@@ -1282,11 +1299,10 @@ public class GeneratePres extends Fragment {
                                 startActivity(shareIntent);*/
                                 behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                                 fl_progress_bar.setVisibility(View.GONE);
-                               if(dialog_data!=null)
-                                dialog_data.dismiss();
-                            }
-                            else {
-                                Bitmap screen= getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
+                                if (dialog_data != null)
+                                    dialog_data.dismiss();
+                            } else {
+                                Bitmap screen = getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
                                 rViewlabtest.setVisibility(View.GONE);
                                 textView_advice.setVisibility(View.GONE);
 
@@ -1303,8 +1319,8 @@ public class GeneratePres extends Fragment {
                                 startActivity(shareIntent);*/
                                 behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                                 fl_progress_bar.setVisibility(View.GONE);
-                               if(dialog_data!=null)
-                                dialog_data.dismiss();
+                                if (dialog_data != null)
+                                    dialog_data.dismiss();
 
 //                                String myString = textView_medical_cert_desc.getText().toString().trim();
 //                                String [] arr = myString.split("\\s+");
@@ -1368,13 +1384,13 @@ public class GeneratePres extends Fragment {
                             }
 
 
-                            }else {
-                                Bitmap screen= getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
+                        } else {
+                            Bitmap screen = getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
                             rViewlabtest.setVisibility(View.GONE);
                             textView_advice.setVisibility(View.GONE);
                             files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
-                                patient_item = prescriptionItem;
-                                filesGlobal = files;
+                            patient_item = prescriptionItem;
+                            filesGlobal = files;
                                 /*Intent intent = new Intent();
                                 intent.setAction(Intent.ACTION_SEND_MULTIPLE);
                                 intent.putExtra(Intent.EXTRA_SUBJECT, "E-prescription from "+ manager.getPreferences(mContext, "name"));
@@ -1383,36 +1399,32 @@ public class GeneratePres extends Fragment {
                                 intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
                                 Intent shareIntent = Intent.createChooser(intent, null);
                                 startActivity(shareIntent);*/
-                                behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                                fl_progress_bar.setVisibility(View.GONE);
-                           if(dialog_data!=null)
-                            dialog_data.dismiss();
-                            }
+                            behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                            fl_progress_bar.setVisibility(View.GONE);
+                            if (dialog_data != null)
+                                dialog_data.dismiss();
+                        }
                        /* else {
                         fl_progress_bar.setVisibility(View.GONE);
                     }*/
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         fl_progress_bar.setVisibility(View.GONE);
-                        if(dialog_data!=null)
-                       if(dialog_data!=null)
-                        e.printStackTrace();
+                        if (dialog_data != null)
+                            if (dialog_data != null)
+                                e.printStackTrace();
                     }
-                }else {
+                } else {
                     fl_progress_bar.setVisibility(View.GONE);
-                   if(dialog_data!=null)
-                    dialog_data.dismiss();
+                    if (dialog_data != null)
+                        dialog_data.dismiss();
 
 
                 }
 
-            }
-            else
-            {
+            } else {
                 fl_progress_bar.setVisibility(View.GONE);
-               if(dialog_data!=null)
-                dialog_data.dismiss();
+                if (dialog_data != null)
+                    dialog_data.dismiss();
                 Toast.makeText(mContext, "Unable to process your request", Toast.LENGTH_SHORT).show();
             }
         }
@@ -1420,15 +1432,15 @@ public class GeneratePres extends Fragment {
         @Override
         public void onError(Throwable e) {
             fl_progress_bar.setVisibility(View.GONE);
-           if(dialog_data!=null)
-            dialog_data.dismiss();
+            if (dialog_data != null)
+                dialog_data.dismiss();
             Log.e(TAG, "onError: responsePrescription >> " + e.toString());
             //intentCall();
             Toast.makeText(mContext, ApplicationConstant.ANYTHING_WRONG, Toast.LENGTH_SHORT).show();
         }
     };
 
-    public void tempMEDICAL_CERT(final int position, final ArrayList<Uri> files){
+    public void tempMEDICAL_CERT(final int position, final ArrayList<Uri> files) {
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -1454,11 +1466,21 @@ public class GeneratePres extends Fragment {
                     textView_findings.setVisibility(View.GONE);
                     textView_treatment_advice.setVisibility(View.GONE);
                     textView_diagnosis.setVisibility(View.GONE);
+                    binding.textviewTemprature.setVisibility(View.GONE);
+                    binding.textviewHeight.setVisibility(View.GONE);
+                    binding.textviewWeight.setVisibility(View.GONE);
+                    binding.textviewPulse.setVisibility(View.GONE);
+                    binding.textviewBloodPressure.setVisibility(View.GONE);
+                    binding.textviewBloodSugar.setVisibility(View.GONE);
+                    binding.textviewHemoglobing.setVisibility(View.GONE);
+                    binding.textviewSpo2.setVisibility(View.GONE);
+                    binding.textviewRespirationRate.setVisibility(View.GONE);
+                    binding.textviewAllergy.setVisibility(View.GONE);
                     Log.e(TAG, "MEDICAL CERTIFICATE WITH DESC --------------------------------------------p[0] - 1310 = ");
 
-                    if (position < stringArrayDESC.size()-1  ) {
+                    if (position < stringArrayDESC.size() - 1) {
                         tempMEDICAL_CERT(position + 1, files);
-                    }else {
+                    } else {
                         filesGlobal = files;
                     }
                 }
@@ -1466,8 +1488,7 @@ public class GeneratePres extends Fragment {
         }, DELAY_TIME);
     }
 
-    private void PopupGeneratedImages()
-    {
+    private void PopupGeneratedImages() {
         final Dialog dialog_data = new Dialog(mContext);
         dialog_data.setCancelable(false);
 
@@ -1494,8 +1515,8 @@ public class GeneratePres extends Fragment {
         iv_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               if(dialog_data!=null)
-                dialog_data.dismiss();
+                if (dialog_data != null)
+                    dialog_data.dismiss();
             }
         });
 
@@ -1505,24 +1526,24 @@ public class GeneratePres extends Fragment {
             @Override
             public void onClick(View v) {
 
-               if(dialog_data!=null)
-                   dialog_data.dismiss();
+                if (dialog_data != null)
+                    dialog_data.dismiss();
 
                 prescriptionItem = prescriptionItemTEMP;
                 labTestItem = labTestItemTEMP;
                 definer = definerTEMP;
                 end_note = end_noteTEMP;
 
-               initViews();
+                initViews();
 
             }
         });
        /* for(int i=0;i<IMAGES.length;i++)
             ImagesArray.add(IMAGES[i]);*/
 
-       final ViewPager mPager =  dialog_data.findViewById(R.id.pager_images);
+        final ViewPager mPager = dialog_data.findViewById(R.id.pager_images);
 
-        mPager.setAdapter(new SlidingImage_Adapter_GeneratedPrescription(getApplicationContext(),filesGlobal));
+        mPager.setAdapter(new SlidingImage_Adapter_GeneratedPrescription(getApplicationContext(), filesGlobal));
 
         CirclePageIndicator indicator = (CirclePageIndicator)
                 dialog_data.findViewById(R.id.indicato_imagesr);
@@ -1584,153 +1605,158 @@ public class GeneratePres extends Fragment {
     private void initViews() {
 
 
+        if (certificate_selection) {
+            page_no.setVisibility(View.GONE);
+            fl_medicines_symbol.setVisibility(View.GONE);
+            textView_diagnosis.setVisibility(View.GONE);
+            textView_advice.setVisibility(View.GONE);
+            textView_medical_cert.setVisibility(View.VISIBLE);
+            textView_medical_cert_desc.setVisibility(View.VISIBLE);
+            textView_medical_cert.setText(bundle.getString("certificate_title"));
+            textView_medical_cert_desc.setText("" + bundle.getString("certificate_desc"));
+            textView_medical_cert_desc.setTextColor(getResources().getColor(R.color.colorBlack));
+            textView_pat_name.setTextColor(getResources().getColor(R.color.colorBlack));
 
-                if(certificate_selection)
-                {
-                    page_no.setVisibility(View.GONE);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.gravity = Gravity.CENTER;
+            ll_patient_name.setLayoutParams(params);
+        } else {
+            if (prescriptionItem.getMedicines() != null) {
+                if (prescriptionItem.getMedicines().size() != 0)
+                    fl_medicines_symbol.setVisibility(View.VISIBLE);
+            } else {
+                if (labTestItem != null) {
+                    if (labTestItem.size() != 0)
+                        fl_medicines_symbol.setVisibility(View.VISIBLE);
+                } else
                     fl_medicines_symbol.setVisibility(View.GONE);
-                    textView_diagnosis.setVisibility(View.GONE);
-                    textView_advice.setVisibility(View.GONE);
-                    textView_medical_cert.setVisibility(View.VISIBLE);
-                    textView_medical_cert_desc.setVisibility(View.VISIBLE);
-                    textView_medical_cert.setText(bundle.getString("certificate_title"));
-                    textView_medical_cert_desc.setText(""+bundle.getString("certificate_desc"));
-                    textView_medical_cert_desc.setTextColor(getResources().getColor(R.color.colorBlack));
-                    textView_pat_name.setTextColor(getResources().getColor(R.color.colorBlack));
-
-                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    params.gravity = Gravity.CENTER;
-                    ll_patient_name.setLayoutParams(params);
-                }
-                else {
-                    if(prescriptionItem.getMedicines()!=null){
-                        if(prescriptionItem.getMedicines().size()!=0)
-                            fl_medicines_symbol.setVisibility(View.VISIBLE);
-                    }
-                    else {
-                        if(labTestItem!=null)
-                        {
-                            if(labTestItem.size()!=0)
-                                fl_medicines_symbol.setVisibility(View.VISIBLE);
-                        }
-                        else
-                            fl_medicines_symbol.setVisibility(View.GONE);
-                    }
-
-                    textView_medical_cert.setVisibility(View.GONE);
-                    textView_medical_cert_desc.setVisibility(View.GONE);
-                }
-
-            CreatePrescription.labtestAddFLAG = true;
-            CreatePrescription.medicineAddFLAG = true;
-            if(end_note==null)
-                textView_end_note.setVisibility(View.GONE);
-            else {
-                    if(end_note.contains("|"))
-                    {
-                    String[] details = end_note.split(Pattern.quote("|"));
-                    if (details.length != 0) {
-                        if (details[0] != null)
-                            if (details[0].equals(""))
-                            {
-                                page_no.setVisibility(View.GONE);
-                                fl_medicines_symbol.setVisibility(View.GONE);
-                                textView_diagnosis.setVisibility(View.GONE);
-                                textView_advice.setVisibility(View.GONE);
-                                textView_medical_cert.setVisibility(View.VISIBLE);
-                                textView_medical_cert_desc.setVisibility(View.VISIBLE);
-                                textView_medical_cert_desc.setTextColor(getResources().getColor(R.color.colorBlack));
-                                textView_pat_name.setTextColor(getResources().getColor(R.color.colorBlack));
-
-                                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                                params.gravity = Gravity.CENTER;
-                                ll_patient_name.setLayoutParams(params);
-                                textView_chief_complaint.setVisibility(View.GONE);
-                                textView_medical_cert.setVisibility(View.VISIBLE);
-                                textView_medical_cert_desc.setVisibility(View.VISIBLE);
-                                if (details.length==2)
-                                    if (!details[1].equals("")) {
-                                        textView_medical_cert.setText(details[1]);
-                                    }
-
-                                if (details.length==3)
-                                    if (!details[2].equals("")) {
-                                        textView_medical_cert_desc.setText(details[2]);
-                                    }
-                            }
-                            else {
-                                textView_chief_complaint.setVisibility(View.VISIBLE);
-                                textView_end_note.setText("Note : " + details[0]);
-                            }
-
-                }
-                    }
-                    else {
-                        if(end_note.trim().equals(""))
-                            textView_end_note.setVisibility(View.GONE);
-                        else
-                            textView_chief_complaint.setVisibility(View.VISIBLE);
-                            textView_end_note.setText("Note : " + end_note);
-                    }
             }
 
-            diagnosis_desc  = prescriptionItem.getDiagnosis();
-            if(prescriptionItem.getMedicines()!=null)
-            {
-                if(prescriptionItem.getMedicines().size()!=0)
-                {
-            medicinesItemArrayListO = new ArrayList<>();
-                for (com.likesby.bludoc.ModelLayer.NewEntities3.MedicinesItem mi: prescriptionItem.getMedicines()   ) {
+            textView_medical_cert.setVisibility(View.GONE);
+            textView_medical_cert_desc.setVisibility(View.GONE);
+        }
+
+        CreatePrescription.labtestAddFLAG = true;
+        CreatePrescription.medicineAddFLAG = true;
+        if (end_note == null)
+            textView_end_note.setVisibility(View.GONE);
+        else {
+            if (end_note.contains("|")) {
+                String[] details = end_note.split(Pattern.quote("|"));
+                if (details.length != 0) {
+                    if (details[0] != null)
+                        if (details[0].equals("")) {
+                            page_no.setVisibility(View.GONE);
+                            fl_medicines_symbol.setVisibility(View.GONE);
+                            textView_diagnosis.setVisibility(View.GONE);
+                            textView_advice.setVisibility(View.GONE);
+                            textView_medical_cert.setVisibility(View.VISIBLE);
+                            textView_medical_cert_desc.setVisibility(View.VISIBLE);
+                            textView_medical_cert_desc.setTextColor(getResources().getColor(R.color.colorBlack));
+                            textView_pat_name.setTextColor(getResources().getColor(R.color.colorBlack));
+
+                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            params.gravity = Gravity.CENTER;
+                            ll_patient_name.setLayoutParams(params);
+                            textView_chief_complaint.setVisibility(View.GONE);
+                            textView_medical_cert.setVisibility(View.VISIBLE);
+                            textView_medical_cert_desc.setVisibility(View.VISIBLE);
+                            if (details.length == 2)
+                                if (!details[1].equals("")) {
+                                    textView_medical_cert.setText(details[1]);
+                                }
+
+                            if (details.length == 3)
+                                if (!details[2].equals("")) {
+                                    textView_medical_cert_desc.setText(details[2]);
+                                }
+                        } else {
+                            textView_chief_complaint.setVisibility(View.VISIBLE);
+                            textView_end_note.setText("Note : " + details[0]);
+                        }
+
+                }
+            } else {
+                if (end_note.trim().equals(""))
+                    textView_end_note.setVisibility(View.GONE);
+                else
+                    textView_chief_complaint.setVisibility(View.VISIBLE);
+                textView_end_note.setText("Note : " + end_note);
+            }
+        }
+
+        diagnosis_desc = prescriptionItem.getDiagnosis();
+        if (prescriptionItem.getMedicines() != null) {
+            if (prescriptionItem.getMedicines().size() != 0) {
+                medicinesItemArrayListO = new ArrayList<>();
+                for (com.likesby.bludoc.ModelLayer.NewEntities3.MedicinesItem mi : prescriptionItem.getMedicines()) {
                     com.likesby.bludoc.ModelLayer.Entities.MedicinesItem mii = new com.likesby.bludoc.ModelLayer.Entities.MedicinesItem();
                     mii.setMedicineName(mi.getMedicineName());
                     mii.setMedicineId(mi.getPresbMedicineId());
                     mii.setAdditionaComment(mi.getAdditionaComment());
                     mii.setFrequency(mi.getFrequency());
+                    mii.setQty(mi.getQty());
                     mii.setInstruction(mi.getInstruction());
                     mii.setNoOfDays(mi.getNoOfDays());
                     mii.setRoute(mi.getRoute());
                     medicinesItemArrayListO.add(mii);
                 }
+            }
+        }
+
+        if (diagnosis_desc == null) {
+            textView_diagnosis.setVisibility(View.GONE);
+            textView_chief_complaint.setVisibility(View.GONE);
+            textView_history.setVisibility(View.GONE);
+            textView_treatment_advice.setVisibility(View.GONE);
+            textView_findings.setVisibility(View.GONE);
+            textView_diagnosis.setVisibility(View.GONE);
+            binding.textviewTemprature.setVisibility(View.GONE);
+            binding.textviewHeight.setVisibility(View.GONE);
+            binding.textviewWeight.setVisibility(View.GONE);
+            binding.textviewPulse.setVisibility(View.GONE);
+            binding.textviewBloodPressure.setVisibility(View.GONE);
+            binding.textviewBloodSugar.setVisibility(View.GONE);
+            binding.textviewHemoglobing.setVisibility(View.GONE);
+            binding.textviewSpo2.setVisibility(View.GONE);
+            binding.textviewRespirationRate.setVisibility(View.GONE);
+            binding.textviewAllergy.setVisibility(View.GONE);
+        } else {
+            textView_diagnosis.setVisibility(View.GONE);
+            textView_chief_complaint.setVisibility(View.GONE);
+            textView_history.setVisibility(View.GONE);
+            textView_treatment_advice.setVisibility(View.GONE);
+            textView_findings.setVisibility(View.GONE);
+            textView_diagnosis.setVisibility(View.GONE);
+            binding.textviewTemprature.setVisibility(View.GONE);
+            binding.textviewHeight.setVisibility(View.GONE);
+            binding.textviewWeight.setVisibility(View.GONE);
+            binding.textviewPulse.setVisibility(View.GONE);
+            binding.textviewBloodPressure.setVisibility(View.GONE);
+            binding.textviewBloodSugar.setVisibility(View.GONE);
+            binding.textviewHemoglobing.setVisibility(View.GONE);
+            binding.textviewSpo2.setVisibility(View.GONE);
+            binding.textviewRespirationRate.setVisibility(View.GONE);
+            binding.textviewAllergy.setVisibility(View.GONE);
+            String[] details = diagnosis_desc.split(Pattern.quote("|"));
+
+            if (details.length != 0) {
+                int line = 0;
+                String[] lines = null;
+                for (String strr : details
+                ) {
+                    line = line + strr.length();
                 }
-            }
-
-            if(diagnosis_desc==null)
-            {
-                textView_diagnosis.setVisibility(View.GONE);
-                textView_chief_complaint.setVisibility(View.GONE);
-                textView_history.setVisibility(View.GONE);
-                textView_treatment_advice.setVisibility(View.GONE);
-                textView_findings.setVisibility(View.GONE);
-                textView_diagnosis.setVisibility(View.GONE);
-
-            }
-            else
-            {
-                textView_diagnosis.setVisibility(View.GONE);
-                textView_chief_complaint.setVisibility(View.GONE);
-                textView_history.setVisibility(View.GONE);
-                textView_treatment_advice.setVisibility(View.GONE);
-                textView_findings.setVisibility(View.GONE);
-                textView_diagnosis.setVisibility(View.GONE);
-                String[] details = diagnosis_desc.split(Pattern.quote("|"));
-
-                if(details.length!=0) {
-                    int line =0;
-                    String[] lines=null;
-                    for (String strr: details
-                    ) {
-                        line = line+strr.length();
+                // Toast.makeText(mContext, "Lines = "+line, Toast.LENGTH_SHORT).show();
+                if (details[0] != null)
+                    if (details[0].equals(""))
+                        textView_chief_complaint.setVisibility(View.GONE);
+                    else {
+                        textView_chief_complaint.setVisibility(View.VISIBLE);
+                        textView_chief_complaint.setText("Chief Complaint - " + details[0]);
                     }
-                   // Toast.makeText(mContext, "Lines = "+line, Toast.LENGTH_SHORT).show();
-                    if (details[0] != null)
-                        if (details[0].equals(""))
-                            textView_chief_complaint.setVisibility(View.GONE);
-                        else{
-                            textView_chief_complaint.setVisibility(View.VISIBLE);
-                            textView_chief_complaint.setText("Chief Complaint - " + details[0]);
-                        }
 
-                        if(details.length>=2)
+                if (details.length >= 2)
                     if (details[1] != null)
                         if (details[1].equals(""))
                             textView_history.setVisibility(View.GONE);
@@ -1739,7 +1765,7 @@ public class GeneratePres extends Fragment {
                             textView_history.setText("History - " + details[1]);
                         }
 
-                    if(details.length>=3)
+                if (details.length >= 3)
                     if (details[2] != null)
                         if (details[2].equals(""))
                             textView_findings.setVisibility(View.GONE);
@@ -1748,14 +1774,21 @@ public class GeneratePres extends Fragment {
                             textView_findings.setText("Findings - " + details[2]);
                         }
 
-                        if(details.length>3 && !TextUtils.isEmpty(details[3])){
+                if (details.length > 3 && !TextUtils.isEmpty(details[3])) {
 
-                            textView_diagnosis.setVisibility(View.VISIBLE);
-                            textView_diagnosis.setText("Diagnosis - " + details[3]);
+                    textView_diagnosis.setVisibility(View.VISIBLE);
+                    textView_diagnosis.setText("Diagnosis - " + details[3]);
 
-                        }
+                }
 
-                    if(details.length>=5)
+                if (details.length > 4 && !TextUtils.isEmpty(details[4])) {
+
+                    textView_treatment_advice.setVisibility(View.VISIBLE);
+                    textView_treatment_advice.setText("Treatment/Advice - " + details[4]);
+
+                }
+
+                if (details.length >= 5)
                     if (details[3] != null)
                         if (details[3].equals(""))
                             textView_diagnosis.setVisibility(View.GONE);
@@ -1765,38 +1798,109 @@ public class GeneratePres extends Fragment {
                         }
 
 
-                    if(details.length>4 && !TextUtils.isEmpty(details[4])){
+                if (details.length > 6 && !TextUtils.isEmpty(details[6])) {
 
-                        textView_treatment_advice.setVisibility(View.VISIBLE);
-                        textView_treatment_advice.setText("Treatment/Advice - " + details[4]);
-
-                    }
+                    binding.textviewTemprature.setVisibility(View.VISIBLE);
+                    binding.textviewTemprature.setText("Temperature - " + details[6]);
 
                 }
-                else {
-                    textView_chief_complaint.setVisibility(View.GONE);
-                    textView_history.setVisibility(View.GONE);
-                    textView_treatment_advice.setVisibility(View.GONE);
-                    textView_findings.setVisibility(View.GONE);
-                    textView_diagnosis.setVisibility(View.GONE);
+
+                if (details.length > 7 && !TextUtils.isEmpty(details[7])) {
+
+                    binding.textviewHeight.setVisibility(View.VISIBLE);
+                    binding.textviewHeight.setText("Height - " + details[7]);
+
                 }
 
+                if (details.length > 8 && !TextUtils.isEmpty(details[8])) {
+
+                    binding.textviewWeight.setVisibility(View.VISIBLE);
+                    binding.textviewWeight.setText("Weight - " + details[8]);
+
+                }
+
+                if (details.length > 9 && !TextUtils.isEmpty(details[9])) {
+
+                    binding.textviewPulse.setVisibility(View.VISIBLE);
+                    binding.textviewPulse.setText("Pulse - " + details[9]);
+
+                }
+
+                if (details.length > 10 && !TextUtils.isEmpty(details[10])) {
+
+                    binding.textviewBloodPressure.setVisibility(View.VISIBLE);
+                    binding.textviewBloodPressure.setText("Blood Pressure - " + details[10]);
+
+                }
+
+                if (details.length > 11 && !TextUtils.isEmpty(details[11])) {
+
+                    binding.textviewBloodSugar.setVisibility(View.VISIBLE);
+                    binding.textviewBloodSugar.setText("Blood Sugar - " + details[11]);
+
+                }
+
+                if (details.length > 12 && !TextUtils.isEmpty(details[12])) {
+
+                    binding.textviewHemoglobing.setVisibility(View.VISIBLE);
+                    binding.textviewHemoglobing.setText("Hemoglobin - " + details[12]);
+
+                }
+
+                if (details.length > 13 && !TextUtils.isEmpty(details[13])) {
+
+                    binding.textviewSpo2.setVisibility(View.VISIBLE);
+                    binding.textviewSpo2.setText("Spo2 - " + details[13]);
+
+                }
+
+                if (details.length > 14 && !TextUtils.isEmpty(details[14])) {
+
+                    binding.textviewRespirationRate.setVisibility(View.VISIBLE);
+                    binding.textviewRespirationRate.setText("Respiration Rate - " + details[14]);
+
+                }
+
+                if (details.length > 15 && !TextUtils.isEmpty(details[15])) {
+
+                    binding.textviewAllergy.setVisibility(View.VISIBLE);
+                    binding.textviewAllergy.setText("Allergy - " + details[15]);
+
+                }
+
+            } else {
+                textView_chief_complaint.setVisibility(View.GONE);
+                textView_history.setVisibility(View.GONE);
+                textView_treatment_advice.setVisibility(View.GONE);
+                textView_findings.setVisibility(View.GONE);
+                textView_diagnosis.setVisibility(View.GONE);
+                binding.textviewTemprature.setVisibility(View.GONE);
+                binding.textviewHeight.setVisibility(View.GONE);
+                binding.textviewWeight.setVisibility(View.GONE);
+                binding.textviewPulse.setVisibility(View.GONE);
+                binding.textviewBloodPressure.setVisibility(View.GONE);
+                binding.textviewBloodSugar.setVisibility(View.GONE);
+                binding.textviewHemoglobing.setVisibility(View.GONE);
+                binding.textviewSpo2.setVisibility(View.GONE);
+                binding.textviewRespirationRate.setVisibility(View.GONE);
+                binding.textviewAllergy.setVisibility(View.GONE);
             }
 
+        }
 
 
-            if(("history").equalsIgnoreCase(definer)){
-                title.setText("Prescription Details");
-            }else {
-                title.setText("Prescription Preview");
-            }
+        if (("history").equalsIgnoreCase(definer)) {
+            title.setText("Prescription Details");
+        } else {
+            title.setText("Prescription Preview");
+        }
 
-            Doctor doctor = prescriptionItem.getDoctor();
-            if(!("").equalsIgnoreCase(doctor.getClinicName())) {
-                textView_Clinic_name.setText(doctor.getClinicName());
-            }else {
-                textView_Clinic_name.setVisibility(View.GONE);
-            }
+        Doctor doctor = prescriptionItem.getDoctor();
+        if (!("").equalsIgnoreCase(doctor.getClinicName())) {
+            textView_Clinic_name.setText(doctor.getClinicName());
+        } else {
+            textView_Clinic_name.setVisibility(View.GONE);
+        }
 
             /*String name_ =doctor.getName().trim();
             if(name_.contains("Dr.")) {
@@ -1809,60 +1913,71 @@ public class GeneratePres extends Fragment {
                 name_2 = name_2.replace("Dr.","");
               //  manager.setPreferences(mContext,"name",name_2.trim());
             }*/
-            if(!("").equalsIgnoreCase(manager.getPreferences(mContext,"name").trim())) {
-                textView_DocName.setText(doctor.getName().trim());
-            }
+        if (!("").equalsIgnoreCase(manager.getPreferences(mContext, "name").trim())) {
+            textView_DocName.setText(doctor.getName().trim());
+        }
 
-            if(!("").equalsIgnoreCase(doctor.getPgName())  && doctor.getPgName() != null) {
-                if(!("").equalsIgnoreCase(doctor.getAddtionalQualification())  && (doctor.getAddtionalQualification()!= null)) {
-                    textView_degree.setText(doctor.getUgName() + " " + doctor.getPgName() + " " + doctor.getAddtionalQualification());
-                }else {
-                    textView_degree.setText(doctor.getUgName() + " " + doctor.getPgName());
-                }
-
-            }else if(!("").equalsIgnoreCase(doctor.getAddtionalQualification())  && (doctor.getAddtionalQualification() != null)) {
-                textView_degree.setText(doctor.getUgName() + " " + doctor.getAddtionalQualification());
-
+        if (!("").equalsIgnoreCase(doctor.getPgName()) && doctor.getPgName() != null) {
+            if (!("").equalsIgnoreCase(doctor.getAddtionalQualification()) && (doctor.getAddtionalQualification() != null)) {
+                textView_degree.setText(doctor.getUgName() + " " + doctor.getPgName() + " " + doctor.getAddtionalQualification());
             } else {
-                textView_degree.setText(doctor.getUgName());
+                textView_degree.setText(doctor.getUgName() + " " + doctor.getPgName());
             }
-            textView_res_num.setText("Reg. No - " + doctor.getRegistrationNo());
-            if(!("").equalsIgnoreCase(doctor.getDesignationName())) {
-                textView_des.setText(doctor.getDesignationName());
-            }else {
-                textView_des.setVisibility(View.GONE);
-            }
-            String emaill = "";
-            if(prescriptionItem.getPEmail()==null)
-            {
-                emaill = "-";
-            }
-            else  if(prescriptionItem.getPEmail().equalsIgnoreCase("")) {
-                emaill = "-";
-            }
-            else
-                emaill = prescriptionItem.getPEmail();
 
-            String mobl = "-";
-            if(prescriptionItem.getPMobile()==null)
-            {
-                mobl = "-";
-            }
-            else  if(prescriptionItem.getPMobile().equalsIgnoreCase("")) {
-                mobl = "-";
-            }
-            else
-                mobl = prescriptionItem.getPMobile();
-            String age___ = "";
-            if(prescriptionItem.getAge().contains("yr") || prescriptionItem.getAge().contains("month"))
-                age___ = prescriptionItem.getAge();
-            else
-                age___ = prescriptionItem.getAge() + " yr";
-            textView_pat_name.setText("Patient Details : " + prescriptionItem.getPName() + ", " + prescriptionItem.getpDob() + ", " + prescriptionItem.getGender() + " / " + age___+", "+prescriptionItem.getpBloodGrp()+", "+prescriptionItem.getAddress());
-            if(prescriptionItem.getPEmail().equals(""))
+        } else if (!("").equalsIgnoreCase(doctor.getAddtionalQualification()) && (doctor.getAddtionalQualification() != null)) {
+            textView_degree.setText(doctor.getUgName() + " " + doctor.getAddtionalQualification());
+
+        } else {
+            textView_degree.setText(doctor.getUgName());
+        }
+        textView_res_num.setText("Reg. No - " + doctor.getRegistrationNo());
+        if (!("").equalsIgnoreCase(doctor.getDesignationName())) {
+            textView_des.setText(doctor.getDesignationName());
+        } else {
+            textView_des.setVisibility(View.GONE);
+        }
+        String emaill = "";
+        if (prescriptionItem.getPEmail() == null) {
+            emaill = "-";
+        } else if (prescriptionItem.getPEmail().equalsIgnoreCase("")) {
+            emaill = "-";
+        } else
+            emaill = prescriptionItem.getPEmail();
+
+        String mobl = "-";
+        if (prescriptionItem.getPMobile() == null) {
+            mobl = "-";
+        } else if (prescriptionItem.getPMobile().equalsIgnoreCase("")) {
+            mobl = "-";
+        } else
+            mobl = prescriptionItem.getPMobile();
+        String age___ = "";
+        if (prescriptionItem.getAge().contains("yr") || prescriptionItem.getAge().contains("month"))
+            age___ = prescriptionItem.getAge();
+        else
+            age___ = prescriptionItem.getAge() + " yr";
+
+        if (!TextUtils.isEmpty(prescriptionItem.getAddress())) {
+            binding.textViewHosAddress.setText("Address - " + prescriptionItem.getAddress());
+        } else {
+
+            binding.textViewHosAddress.setVisibility(View.GONE);
+
+        }
+
+        if (!TextUtils.isEmpty(prescriptionItem.getpBloodGrp())) {
+            binding.textviewBloodGroup.setText("Blood Group - " + prescriptionItem.getpBloodGrp());
+        } else {
+
+            binding.textviewBloodGroup.setVisibility(View.GONE);
+
+        }
+
+        textView_pat_name.setText("Patient Details : " + prescriptionItem.getPName() + ", " + prescriptionItem.getGender() + " / " + age___);
+        if (prescriptionItem.getPEmail().equals(""))
 
             patient_item = prescriptionItem;
-            if (("history").equalsIgnoreCase(definer)) {
+        if (("history").equalsIgnoreCase(definer)) {
                /* String sourceDate = prescriptionItem.getDate();
                 DateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd");
                 DateFormat targetFormat = new SimpleDateFormat("dd-MMM-YYYY");
@@ -1875,132 +1990,128 @@ public class GeneratePres extends Fragment {
                 String formattedDate = targetFormat.format(date);
                 System.out.println(formattedDate);*/
 
-                textView_date.setText("Date : " +DateUtils.outFormatsetMMM(prescriptionItem.getDate()));
-            } else {
-                textView_date.setText("Date : " +prescriptionItem.getDate());
-            }
-            if(!("").equalsIgnoreCase(doctor.getWorkingDays())) {
-                String work_days = doctor.getWorkingDays();
-                if(work_days.contains("MONDAY"))
-                    work_days = work_days.replace("MONDAY"," MON");
+            textView_date.setText("Date : " + DateUtils.outFormatsetMMM(prescriptionItem.getDate()));
+        } else {
+            textView_date.setText("Date : " + prescriptionItem.getDate());
+        }
+        if (!("").equalsIgnoreCase(doctor.getWorkingDays())) {
+            String work_days = doctor.getWorkingDays();
+            if (work_days.contains("MONDAY"))
+                work_days = work_days.replace("MONDAY", " MON");
 
-                if(work_days.contains("TUESDAY"))
-                    work_days = work_days.replace("TUESDAY"," TUE");
+            if (work_days.contains("TUESDAY"))
+                work_days = work_days.replace("TUESDAY", " TUE");
 
-                if(work_days.contains("WEDNESDAY"))
-                    work_days = work_days.replace("WEDNESDAY"," WED");
+            if (work_days.contains("WEDNESDAY"))
+                work_days = work_days.replace("WEDNESDAY", " WED");
 
-                if(work_days.contains("THURSDAY"))
-                    work_days = work_days.replace("THURSDAY"," THUR");
+            if (work_days.contains("THURSDAY"))
+                work_days = work_days.replace("THURSDAY", " THUR");
 
-                if(work_days.contains("FRIDAY"))
-                    work_days = work_days.replace("FRIDAY"," FRI");
+            if (work_days.contains("FRIDAY"))
+                work_days = work_days.replace("FRIDAY", " FRI");
 
-                if(work_days.contains("SATURDAY"))
-                    work_days = work_days.replace("SATURDAY"," SAT");
+            if (work_days.contains("SATURDAY"))
+                work_days = work_days.replace("SATURDAY", " SAT");
 
-                if(work_days.contains("SUNDAY"))
-                    work_days = work_days.replace("SUNDAY"," SUN");
+            if (work_days.contains("SUNDAY"))
+                work_days = work_days.replace("SUNDAY", " SUN");
 
-                textView_days.setText("Working : " + work_days);
-            }else {
-                textView_days.setVisibility(View.GONE);
-            }
+            textView_days.setText("Working : " + work_days);
+        } else {
+//            textView_days.setVisibility(View.GONE);
+        }
         if (("history").equalsIgnoreCase(definer)) {
 
-                String[] visiting_hr_from_details = prescriptionItem.getDoctor().getVisitingHrFrom().split(Pattern.quote("|"));
-                String[] visiting_hr_to_details = prescriptionItem.getDoctor().getVisitingHrTo().split(Pattern.quote("|"));
-                if(visiting_hr_from_details.length>1)
-                    textView_time.setText("Time : " +visiting_hr_from_details[0].toLowerCase().trim()+" - "+visiting_hr_to_details[0].toLowerCase().trim() +", "+visiting_hr_from_details[1].toLowerCase().trim()+" - "+visiting_hr_to_details[1].toLowerCase().trim() );
-                else
-                    textView_time.setText("Time : " +visiting_hr_from_details[0].toLowerCase().trim()+" - "+visiting_hr_to_details[0].toLowerCase().trim());
+            String[] visiting_hr_from_details = prescriptionItem.getDoctor().getVisitingHrFrom().split(Pattern.quote("|"));
+            String[] visiting_hr_to_details = prescriptionItem.getDoctor().getVisitingHrTo().split(Pattern.quote("|"));
+            if (visiting_hr_from_details.length > 1)
+                textView_time.setText("Time : " + visiting_hr_from_details[0].toLowerCase().trim() + " - " + visiting_hr_to_details[0].toLowerCase().trim() + ", " + visiting_hr_from_details[1].toLowerCase().trim() + " - " + visiting_hr_to_details[1].toLowerCase().trim());
+            else
+                textView_time.setText("Time : " + visiting_hr_from_details[0].toLowerCase().trim() + " - " + visiting_hr_to_details[0].toLowerCase().trim());
+        } else if (!("").equalsIgnoreCase(doctor.getVisitingHrFrom())) {
+            String[] visiting_hr_from_details = manager.getPreferences(mContext, "visiting_hr_from").split(Pattern.quote("|"));
+            ;
+            String[] visiting_hr_to_details = manager.getPreferences(mContext, "visiting_hr_to").split(Pattern.quote("|"));
+            ;
+            if (visiting_hr_from_details.length > 1)
+                textView_time.setText("Time : " + visiting_hr_from_details[0].toLowerCase().trim() + " - " + visiting_hr_to_details[0].toLowerCase().trim() + ", " + visiting_hr_from_details[1].toLowerCase().trim() + " - " + visiting_hr_to_details[1].toLowerCase().trim());
+            else
+                textView_time.setText("Time : " + visiting_hr_from_details[0].toLowerCase().trim() + " - " + visiting_hr_to_details[0].toLowerCase().trim());
+            //  textView_time.setText("Time : " + doctor.getVisitingHrFrom() + " to " + doctor.getVisitingHrTo());
+        } else {
+//            textView_time.setVisibility(View.GONE);
         }
-            else if(!("").equalsIgnoreCase(doctor.getVisitingHrFrom())) {
-                String[] visiting_hr_from_details = manager.getPreferences(mContext,"visiting_hr_from").split(Pattern.quote("|"));;
-                String[] visiting_hr_to_details = manager.getPreferences(mContext,"visiting_hr_to").split(Pattern.quote("|"));;
-                if(visiting_hr_from_details.length>1)
-                    textView_time.setText("Time : " +visiting_hr_from_details[0].toLowerCase().trim()+" - "+visiting_hr_to_details[0].toLowerCase().trim() +", "+visiting_hr_from_details[1].toLowerCase().trim()+" - "+visiting_hr_to_details[1].toLowerCase().trim() );
-                else
-                    textView_time.setText("Time : " +visiting_hr_from_details[0].toLowerCase().trim()+" - "+visiting_hr_to_details[0].toLowerCase().trim());
-              //  textView_time.setText("Time : " + doctor.getVisitingHrFrom() + " to " + doctor.getVisitingHrTo());
-            }else {
-                textView_time.setVisibility(View.GONE);
-            }
-            if(!("").equalsIgnoreCase(doctor.getMobileLetterHead())) {
-                textView_contact.setText("Contact : " + doctor.getMobileLetterHead());
-            }else {
-                textView_contact.setVisibility(View.GONE);
-            }
-            if(!("").equalsIgnoreCase(doctor.getEmailLetterHead())) {
-                textView_email.setText("Mail Id : " + doctor.getEmailLetterHead());
-            }else {
-                textView_email.setVisibility(View.GONE);
-            }
-            if(!("").equalsIgnoreCase(doctor.getClinicAddress())) {
-                textView_add.setText("Address : " + doctor.getClinicAddress());
-            }else {
-                textView_add.setVisibility(View.GONE);
-            }
+        if (!("").equalsIgnoreCase(doctor.getMobileLetterHead())) {
+            textView_contact.setText("Contact : " + doctor.getMobileLetterHead());
+        } else {
+//            textView_contact.setVisibility(View.GONE);
+        }
+        if (!("").equalsIgnoreCase(doctor.getEmailLetterHead())) {
+            textView_email.setText("Mail Id : " + doctor.getEmailLetterHead());
+        } else {
+//            textView_email.setVisibility(View.GONE);
+        }
+        if (!("").equalsIgnoreCase(doctor.getClinicAddress())) {
+            textView_add.setText("Address : " + doctor.getClinicAddress());
+        } else {
+//            textView_add.setVisibility(View.GONE);
+        }
 
 
-            if (!("").equalsIgnoreCase(doctor.getImage())) {
-                Picasso.with(mContext).
-                        load(doctor.getImage())
-                        .into(image_layout, new com.squareup.picasso.Callback() {
-                            @Override
-                            public void onSuccess() {
+        if (!("").equalsIgnoreCase(doctor.getImage())) {
+            Picasso.with(mContext).
+                    load(doctor.getImage())
+                    .into(image_layout, new com.squareup.picasso.Callback() {
+                        @Override
+                        public void onSuccess() {
 
-                            }
+                        }
 
-                            @Override
-                            public void onError() {
+                        @Override
+                        public void onError() {
 
-                            }
-                        });
-            }else{
-                image_layout.setVisibility(View.INVISIBLE);
-            }
-
-
-            if (!("").equalsIgnoreCase(doctor.getSignature())) {
-                Picasso.with(mContext).
-                        load(doctor.getSignature())
-                        .into(signature, new com.squareup.picasso.Callback() {
-                            @Override
-                            public void onSuccess() {
-
-                            }
-
-                            @Override
-                            public void onError() {
-
-                            }
-                        });
-            }else{
-                signature.setVisibility(View.GONE);
-                sig_text.setVisibility(View.GONE);
-            }
+                        }
+                    });
+        } else {
+            image_layout.setVisibility(View.INVISIBLE);
+        }
 
 
-        Log.e(TAG,">>11>> "+medicinesItemArrayListO.toString());
+        if (!("").equalsIgnoreCase(doctor.getSignature())) {
+            Picasso.with(mContext).
+                    load(doctor.getSignature())
+                    .into(signature, new com.squareup.picasso.Callback() {
+                        @Override
+                        public void onSuccess() {
 
-        if(prescriptionItem!=null)
-        {
-            Pres_adapter templateAdapter = new Pres_adapter(medicinesItemArrayListO,mContext);
+                        }
+
+                        @Override
+                        public void onError() {
+
+                        }
+                    });
+        } else {
+            signature.setVisibility(View.GONE);
+            sig_text.setVisibility(View.GONE);
+        }
+
+
+        Log.e(TAG, ">>11>> " + medicinesItemArrayListO.toString());
+
+        if (prescriptionItem != null) {
+            Pres_adapter templateAdapter = new Pres_adapter(medicinesItemArrayListO, mContext);
             rView.setAdapter(templateAdapter);
-        }
-        else
+        } else
             rView.setAdapter(null);
 
-        if(labTestItem!=null)
-        {
-            if(labTestItem.size()>0)
-            {
-                Pres_LabTest_adapter pres_labTest_adapter = new Pres_LabTest_adapter(labTestItem,mContext);
+        if (labTestItem != null) {
+            if (labTestItem.size() > 0) {
+                Pres_LabTest_adapter pres_labTest_adapter = new Pres_LabTest_adapter(labTestItem, mContext);
                 rViewlabtest.setAdapter(pres_labTest_adapter);
                 textView_advice.setVisibility(View.VISIBLE);
-            }
-            else{
+            } else {
                 textView_advice.setVisibility(View.GONE);
                 rViewlabtest.setAdapter(null);
             }

@@ -504,6 +504,7 @@ public class GeneratePres2 extends Fragment {
                                 mii.setMedicineId(mi.getPresbMedicineId());
                                 mii.setAdditionaComment(mi.getAdditionaComment());
                                 mii.setFrequency(mi.getFrequency());
+                                mii.setQty(mi.getQty());
                                 mii.setInstruction(mi.getInstruction());
                                 mii.setNoOfDays(mi.getNoOfDays());
                                 mii.setRoute(mi.getRoute());
@@ -1206,6 +1207,7 @@ public class GeneratePres2 extends Fragment {
                     mii.setMedicineId(mi.getPresbMedicineId());
                     mii.setAdditionaComment(mi.getAdditionaComment());
                     mii.setFrequency(mi.getFrequency());
+                    mii.setQty(mi.getQty());
                     mii.setInstruction(mi.getInstruction());
                     mii.setNoOfDays(mi.getNoOfDays());
                     mii.setRoute(mi.getRoute());

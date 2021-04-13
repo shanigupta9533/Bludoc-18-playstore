@@ -1,11 +1,13 @@
 package com.likesby.bludoc.Adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -40,7 +42,16 @@ public class Pres_adapter  extends RecyclerView.Adapter<Pres_adapter.ViewHolder>
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-        viewHolder.tab_name.setText(medicines.get(position).getMedicineName());
+
+        String qty="";
+
+        if(!TextUtils.isEmpty(medicines.get(position).getQty()) && !medicines.get(position).getQty().equalsIgnoreCase("0")){
+
+            qty=", Total Quantity : "+medicines.get(position).getQty();
+
+        }
+
+        viewHolder.tab_name.setText(medicines.get(position).getMedicineName()+qty);
         String temp = "";
         if(!("").equalsIgnoreCase(medicines.get(position).getFrequency())){
             temp += medicines.get(position).getFrequency();

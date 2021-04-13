@@ -460,18 +460,18 @@ public class PatientRegistration extends Fragment {
                     rb_month.setChecked(false);
                     age_type = "yr";
 
-                    if (TextUtils.isEmpty(et_age.getText().toString())) {
-
-                        Toast.makeText(mContext, "Enter Your Age...", Toast.LENGTH_SHORT).show();
-
-                    } else if (!isConstant) {
-
-                        String age = et_age.getText().toString();
-                        et_age.setText(String.valueOf(Integer.parseInt(age) / 12));
-                        et_age.setSelection(et_age.getText().toString().length());
-                    }
-
-                    isConstant = false;
+//                    if (TextUtils.isEmpty(et_age.getText().toString())) {
+//
+//                        Toast.makeText(mContext, "Enter Your Age...", Toast.LENGTH_SHORT).show();
+//
+//                    } else if (!isConstant) {
+//
+//                        String age = et_age.getText().toString();
+//                        et_age.setText(String.valueOf(Integer.parseInt(age) / 12));
+//                        et_age.setSelection(et_age.getText().toString().length());
+//                    }
+//
+//                    isConstant = false;
 
                 }
             }
@@ -484,17 +484,17 @@ public class PatientRegistration extends Fragment {
                     rb_year.setChecked(false);
                     age_type = "months";
 
-                    if (TextUtils.isEmpty(et_age.getText().toString())) {
-
-                        Toast.makeText(mContext, "Enter Your Age...", Toast.LENGTH_SHORT).show();
-
-                    } else {
-
-                        String age = et_age.getText().toString();
-                        et_age.setText(String.valueOf(Integer.parseInt(age) * 12));
-                        et_age.setSelection(et_age.getText().toString().length());
-                        isConstant = false;
-                    }
+//                    if (TextUtils.isEmpty(et_age.getText().toString())) {
+//
+//                        Toast.makeText(mContext, "Enter Your Age...", Toast.LENGTH_SHORT).show();
+//
+//                    } else {
+//
+//                        String age = et_age.getText().toString();
+//                        et_age.setText(String.valueOf(Integer.parseInt(age) * 12));
+//                        et_age.setSelection(et_age.getText().toString().length());
+//                        isConstant = false;
+//                    }
 
                 }
             }
@@ -612,49 +612,53 @@ public class PatientRegistration extends Fragment {
             if (et_name.getText().toString().trim().equalsIgnoreCase("")) {
                 et_name.requestFocus();
                 et_name.setError("Patient's Full Name");
-            } else {
+            }  else {
+                if (et_age.getText().toString().trim().equalsIgnoreCase("")) {
+                    et_age.requestFocus();
+                    et_age.setError("Age");
+                    Toast.makeText(mContext, "Age required", Toast.LENGTH_SHORT).show();
 
-                if (gender_.equalsIgnoreCase("")) {
-                    Toast.makeText(mContext, "Select Gender", Toast.LENGTH_SHORT).show();
                 } else {
-                    String strEnteredVal = et_age.getText().toString().trim();
-                    if (!strEnteredVal.equals("")) {
-                        int num = Integer.parseInt(strEnteredVal);
-                        if (age_type.equals("yr") && num < 151) {
-                            fl_progress_bar.setVisibility(View.VISIBLE);
-                            apiViewHolder.PatientRegister(et_name.getText().toString().trim(),
-                                    et_age.getText().toString().trim() + " " + age_type, gender_, manager.getPreferences(mContext, "doctor_id"),
-                                    et_mobile.getText().toString().trim(), et_email.getText().toString().trim(), address.getText().toString().trim(), blood_group.getText().toString().trim(), date_f_birth.getText().toString())
-                                    .subscribeOn(Schedulers.io())
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe(responsePatientRegister);
-
-                        } else if (age_type.equals("month") || age_type.equals("months")) {
-                            if (age_type.equals("months"))
-                                if (et_age.getText().toString().trim().equals("1"))
-                                    age_type = "month";
-                            fl_progress_bar.setVisibility(View.VISIBLE);
-                            apiViewHolder.PatientRegister(et_name.getText().toString().trim(),
-                                    et_age.getText().toString().trim() + " " + age_type, gender_, manager.getPreferences(mContext, "doctor_id"),
-                                    et_mobile.getText().toString().trim(), et_email.getText().toString().trim(), address.getText().toString().trim(), blood_group.getText().toString().trim(), date_f_birth.getText().toString())
-                                    .subscribeOn(Schedulers.io())
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe(responsePatientRegister);
-
-                        } else {
-                            et_age.requestFocus();
-                            et_age.setError("Age not allowed");
-                            Toast.makeText(mContext, "Age not allowed", Toast.LENGTH_SHORT).show();
-                        }
+                    if (et_age.getText().toString().trim().equalsIgnoreCase("0")) {
+                        et_age.requestFocus();
+                        et_age.setError("Zero Not Allowed");
+                        Toast.makeText(mContext, "Zero not allowed", Toast.LENGTH_SHORT).show();
                     } else {
 
-                        fl_progress_bar.setVisibility(View.VISIBLE);
-                        apiViewHolder.PatientRegister(et_name.getText().toString().trim(),
-                                "UnAvailable", gender_, manager.getPreferences(mContext, "doctor_id"),
-                                et_mobile.getText().toString().trim(), et_email.getText().toString().trim(), address.getText().toString().trim(), blood_group.getText().toString().trim(), date_f_birth.getText().toString())
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(responsePatientRegister);
+                        if (gender_.equalsIgnoreCase("")) {
+                            Toast.makeText(mContext, "Select Gender", Toast.LENGTH_SHORT).show();
+                        } else {
+                            String strEnteredVal = et_age.getText().toString().trim();
+                            if (!strEnteredVal.equals("")) {
+                                float num = Float.parseFloat(strEnteredVal);
+                                if (age_type.equals("yr") && num < 151) {
+                                    fl_progress_bar.setVisibility(View.VISIBLE);
+                                    apiViewHolder.PatientRegister(et_name.getText().toString().trim(),
+                                            et_age.getText().toString().trim() + " " + age_type, gender_, manager.getPreferences(mContext, "doctor_id"),
+                                            et_mobile.getText().toString().trim(), et_email.getText().toString().trim(), address.getText().toString().trim(), blood_group.getText().toString().trim(), date_f_birth.getText().toString())
+                                            .subscribeOn(Schedulers.io())
+                                            .observeOn(AndroidSchedulers.mainThread())
+                                            .subscribe(responsePatientRegister);
+
+                                } else if (age_type.equals("month") || age_type.equals("months")) {
+                                    if (age_type.equals("months"))
+                                        if (et_age.getText().toString().trim().equals("1"))
+                                            age_type = "month";
+                                    fl_progress_bar.setVisibility(View.VISIBLE);
+                                    apiViewHolder.PatientRegister(et_name.getText().toString().trim(),
+                                            et_age.getText().toString().trim() + " " + age_type, gender_, manager.getPreferences(mContext, "doctor_id"),
+                                            et_mobile.getText().toString().trim(), et_email.getText().toString().trim(), address.getText().toString().trim(), blood_group.getText().toString().trim(), date_f_birth.getText().toString())
+                                            .subscribeOn(Schedulers.io())
+                                            .observeOn(AndroidSchedulers.mainThread())
+                                            .subscribe(responsePatientRegister);
+
+                                } else {
+                                    et_age.requestFocus();
+                                    et_age.setError("Age not allowed");
+                                    Toast.makeText(mContext, "Age not allowed", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
 
                     }
                 }

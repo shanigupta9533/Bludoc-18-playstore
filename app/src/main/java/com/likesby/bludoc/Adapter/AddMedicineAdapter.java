@@ -1,6 +1,7 @@
 package com.likesby.bludoc.Adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +33,7 @@ public class AddMedicineAdapter extends RecyclerView.Adapter<AddMedicineAdapter.
     private ArrayList<MedicinesItem> mArrayList = new ArrayList<>();
     private ArrayList<MedicinesItem> mFilteredList = new ArrayList<>();
     private Context ctx;
-    EditText et_no_of_days,et_additional_comments;
+    EditText et_no_of_days,et_additional_comments,medicineQty;
     ArrayList<String> frequency_list, frequency2_list, EditText , route_list,instructions_list;
     Spinner frequency_spinner, frequency2_spinner, route_spinner,  instructions_spinner;
     Button btn_add,btnChooseFromTemplate,btn_prescribe;
@@ -45,7 +46,7 @@ public class AddMedicineAdapter extends RecyclerView.Adapter<AddMedicineAdapter.
     static String iden;
     int edited_=0;
     public AddMedicineAdapter(Context mContext, ArrayList<MedicinesItem> arrayList, ArrayList<String> frequency_list,
-                              ArrayList<String> frequency2_list, EditText et_no_of_days, ArrayList<String> route_list,
+                              ArrayList<String> frequency2_list, EditText et_no_of_days, android.widget.EditText medicineQty, ArrayList<String> route_list,
                               ArrayList<String> instructions_list, Spinner frequency_spinner,
                               Spinner frequency2_spinner, Spinner route_spinner,
                               Spinner instructions_spinner, EditText et_additional_comments, Button btn_add, TextView textView3_5, LinearLayout ll_35, EditText searchBarMaterialMedicine, RecyclerView mRecyclerViewAddedMedicines,
@@ -57,6 +58,7 @@ public class AddMedicineAdapter extends RecyclerView.Adapter<AddMedicineAdapter.
         this.frequency2_list = frequency2_list;
         this.et_no_of_days = et_no_of_days;
         this.route_list = route_list;
+        this.medicineQty=medicineQty;
         this.instructions_list = instructions_list;
         this.frequency_spinner = frequency_spinner;
         this.frequency2_spinner = frequency2_spinner;
@@ -87,7 +89,14 @@ public class AddMedicineAdapter extends RecyclerView.Adapter<AddMedicineAdapter.
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int i) {
         MedicinesItem medicinesItem = mFilteredList.get(i);
-        viewHolder.MEDICINE_NAME.setText(medicinesItem.getMedicineName());
+
+        String qty="";
+
+        if(!TextUtils.isEmpty(medicinesItem.getQty()) && !medicinesItem.getQty().equalsIgnoreCase("0")){
+            qty=", Total Quantity : "+medicinesItem.getQty();
+        }
+
+        viewHolder.MEDICINE_NAME.setText(medicinesItem.getMedicineName()+qty);
         String details = "";
         details = details + medicinesItem.getFrequency()+ " ";
        // viewHolder.MEDICINE_FREQ.setText(medicinesItem.getInstruction());
@@ -259,6 +268,7 @@ public class AddMedicineAdapter extends RecyclerView.Adapter<AddMedicineAdapter.
                     edited_ = getAdapterPosition();
                     MedicinesItem medicinesItem = mFilteredList.get(getAdapterPosition());
                     et_no_of_days.setText(medicinesItem.getNoOfDays());
+                    medicineQty.setText(medicinesItem.getQty());
                     et_additional_comments.setText(medicinesItem.getAdditionaComment());
                     searchBarMaterialMedicine.setText(medicinesItem.getMedicineName());
                     for (int i=0;i<frequency_list.size();i++ ) {

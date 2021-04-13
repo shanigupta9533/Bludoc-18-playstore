@@ -53,7 +53,7 @@
         android:layout_height="wrap_content"
         android:visibility="gone"
         android:fontFamily="sans-serif"
-        android:text="No of Days"
+        android:text="No. of days"
         android:textColor="@color/colorDarkGrey"
         android:textSize="13dp"
         android:textStyle="bold"

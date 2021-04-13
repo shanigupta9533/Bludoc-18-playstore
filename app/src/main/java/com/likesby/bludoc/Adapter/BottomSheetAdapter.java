@@ -1,20 +1,18 @@
 package com.likesby.bludoc.Adapter;
 
 import android.annotation.SuppressLint;
-import android.content.ContentProviderOperation;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
-import android.provider.ContactsContract;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,37 +28,26 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.likesby.bludoc.AppRater;
+import com.likesby.bludoc.BuildConfig;
 import com.likesby.bludoc.Fragment.GeneratePres;
-import com.likesby.bludoc.HomeActivity;
 import com.likesby.bludoc.ModelLayer.Entities.BottomSheetItem;
-import com.likesby.bludoc.ModelLayer.Entities.ResponseRegister;
-import com.likesby.bludoc.ModelLayer.NetworkLayer.EndpointInterfaces.WebServices;
-import com.likesby.bludoc.ModelLayer.NetworkLayer.Helpers.RetrofitClient;
 import com.likesby.bludoc.R;
 import com.likesby.bludoc.SessionManager.SessionManager;
-import com.likesby.bludoc.utils.FileUtil;
-import com.likesby.bludoc.utils.Utils;
+import com.likesby.bludoc.utils.FileUtils;
 import com.squareup.picasso.Picasso;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Retrofit;
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.ViewHolder> implements Filterable {
 
@@ -346,20 +333,21 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
                                 Toast.makeText(mContext, "No Internet Connection", Toast.LENGTH_SHORT).show();
                             }
 */
-                        Intent intent = new Intent();
-                        intent.setType("message/rfc822");
-                        intent.setAction(Intent.ACTION_SEND_MULTIPLE);
-                        intent.putExtra(Intent.EXTRA_EMAIL  , new String[]{""+GeneratePres.patient_item.getPEmail()});
-                        intent.putExtra(Intent.EXTRA_SUBJECT, "E-prescription from "+ manager.getPreferences(mContext, "name"));
-                        intent.putExtra(Intent.EXTRA_TEXT, "Dear "+ GeneratePres.patient_item.getPName() + ", "+ manager.getPreferences(mContext, "name")+ " has sent you an E-prescription / Certificate via BluDoc");
-                        intent.setPackage("com.google.android.gm");
-                        intent.setType("image/jpeg");
-                        ArrayList<Uri> files = GeneratePres.getFiles();
-                        intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
-                       //intent.setDataAndType(Uri.parse("mailto:"+GeneratePres.patient_item.getPEmail()),"message/rfc822"); // or just "mailto:" for blank
 
-                        Intent shareIntent = Intent.createChooser(intent, "Send mail...");
-                        mContext.startActivity(shareIntent);
+//                        Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+//                        emailIntent.setType("application/pdf");
+//                        emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{""+GeneratePres.patient_item.getPEmail()});
+//                        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "E-prescription from "+ manager.getPreferences(mContext, "name"));
+//                        emailIntent.putExtra(Intent.EXTRA_TEXT, "Dear "+ GeneratePres.patient_item.getPName() + ", "+ manager.getPreferences(mContext, "name")+ " has sent you an E-prescription / Certificate via BluDoc");
+//                        ArrayList<Uri> files = GeneratePres.getFiles();
+//                        File pdfWithMultipleImage = createPDFWithMultipleImage(files);
+//                        emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(pdfWithMultipleImage.getPath()));
+//                        mContext.startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+
+                        ArrayList<Uri> files = GeneratePres.getFiles();
+                        File pdfWithMultipleImage = createPDFWithMultipleImage(files);
+                        Uri contentUri = FileProvider.getUriForFile(mContext, BuildConfig.APPLICATION_ID + ".provider", pdfWithMultipleImage);
+                        sendMail(contentUri);
 
                         /*Intent intent = new Intent();
                       //  intent.setType("message/rfc822");
@@ -407,10 +395,10 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
                                 if(!(smsNumber.contains("91")))
                                     smsNumber = "91"+smsNumber;
                                 Intent sendIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
-                                sendIntent.setType("text/plain");
+                                sendIntent.setType("application/pdf");
                                 sendIntent.putExtra(Intent.EXTRA_TEXT, "Dear "+ GeneratePres.patient_item.getPName() + ", "+ manager.getPreferences(mContext, "name")+ " has sent you an E-prescription / Certificate via BluDoc");
-
-                                sendIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
+                                File pdfWithMultipleImage = createPDFWithMultipleImage(files);
+                                sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(pdfWithMultipleImage.getPath()));
                                 sendIntent.putExtra("jid", ""+smsNumber + "@s.whatsapp.net"); //phone number without "+" prefix
                                 sendIntent.setPackage("com.whatsapp");
                                 if (sendIntent.resolveActivity(mContext.getPackageManager()) == null) {
@@ -429,19 +417,20 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
 
                         }
                         else
-                            Toast.makeText(mContext, "WhatsApp not Installed", Toast.LENGTH_SHORT).show();
+                            openBusinessWhatsUpAndShare();
 
                     }
                     else if(getAdapterPosition()==2)
                     {
+
                         Intent intent = new Intent();
-                        intent.setAction(Intent.ACTION_SEND_MULTIPLE);
+                        intent.setAction(Intent.ACTION_SEND);
                         // intent.putExtra(Intent.EXTRA_EMAIL  , new String[]{""+GeneratePres.patient_item.getPEmail()});
                         intent.putExtra(Intent.EXTRA_TEXT, "Dear "+ GeneratePres.patient_item.getPName() + ", "+ manager.getPreferences(mContext, "name")+ " has sent you an E-prescription / Certificate via BluDoc");
-                        intent.setType("image/jpeg");
+                        intent.setType("*/*");
                         ArrayList<Uri> files = GeneratePres.getFiles();
-                        intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
-
+                        File pdfWithMultipleImage = createPDFWithMultipleImage(files);
+                        intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(pdfWithMultipleImage.getPath()));
                         Intent shareIntent = Intent.createChooser(intent, "Send...");
                         mContext.startActivity(shareIntent);
                     }
@@ -451,6 +440,131 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
             });
         }
 
+        private void sendMail(Uri URI) {
+            try {
+
+                final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+                emailIntent.setType("application/pdf");
+                emailIntent.setType("message/rfc822");
+                emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{""+GeneratePres.patient_item.getPEmail()});
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "E-prescription from " + manager.getPreferences(mContext, "name"));
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "Dear " + GeneratePres.patient_item.getPName() + ", " + manager.getPreferences(mContext, "name") + " has sent you an E-prescription / Certificate via BluDoc");
+
+                emailIntent.setPackage("com.google.android.gm");
+                if (URI != null) {
+                    emailIntent.putExtra(Intent.EXTRA_STREAM, URI);
+                }
+
+                emailIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                emailIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                mContext.startActivity(Intent.createChooser(emailIntent,"Sending email..."));
+
+            } catch (Throwable t) {
+
+                Toast.makeText(getApplicationContext(),
+
+                        "Request failed try again: " + t.toString(),
+
+                        Toast.LENGTH_LONG).show();
+
+            }
+
+        }
+
+        private void openBusinessWhatsUpAndShare() {
+
+            boolean isWhatsappInstalled = whatsappInstalledOrNot("com.whatsapp.w4b");
+            if(isWhatsappInstalled)
+            {
+                //======================================================================
+                PackageManager packageManager = mContext.getPackageManager();
+                // Intent sendIntent = new Intent(Intent.ACTION_VIEW);
+
+                try {
+                    ArrayList<Uri> files = GeneratePres.getFiles();
+
+                    String smsNumber = GeneratePres.patient_item.getPMobile().trim();
+                    smsNumber = smsNumber.replace("+","").trim(); // E164 format without '+' sign
+                    if(!(smsNumber.contains("91")))
+                        smsNumber = "91"+smsNumber;
+                    Intent sendIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+                    sendIntent.setType("application/pdf");
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, "Dear "+ GeneratePres.patient_item.getPName() + ", "+ manager.getPreferences(mContext, "name")+ " has sent you an E-prescription / Certificate via BluDoc");
+                    File pdfWithMultipleImage = createPDFWithMultipleImage(files);
+                    sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(pdfWithMultipleImage.getPath()));
+                    sendIntent.putExtra("jid", ""+smsNumber + "@s.whatsapp.net"); //phone number without "+" prefix
+                    sendIntent.setPackage("com.whatsapp.w4b");
+                    if (sendIntent.resolveActivity(mContext.getPackageManager()) == null) {
+                        Toast.makeText(mContext, "Error", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (sendIntent.resolveActivity(packageManager) != null) {
+                        mContext.startActivity(sendIntent);
+                    }
+                    else
+                        Toast.makeText(mContext, "Resolve activity Null", Toast.LENGTH_SHORT).show();
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+
+            }
+            else
+                Toast.makeText(mContext, "WhatsApp Not installed", Toast.LENGTH_SHORT).show();
+
+        }
+
+        private File createPDFWithMultipleImage(ArrayList<Uri> files){
+            File file = getOutputFile();
+            if (file != null){
+                try {
+                    FileOutputStream fileOutputStream = new FileOutputStream(file);
+                    PdfDocument pdfDocument = new PdfDocument();
+
+                    for (int i = 0; i < files.size(); i++){
+                        Bitmap bitmap = BitmapFactory.decodeFile(FileUtils.getPath(mContext,files.get(i)));
+                        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(bitmap.getWidth(), bitmap.getHeight(), (i + 1)).create();
+                        PdfDocument.Page page = pdfDocument.startPage(pageInfo);
+                        Canvas canvas = page.getCanvas();
+                        Paint paint = new Paint();
+                        paint.setColor(Color.BLUE);
+                        canvas.drawPaint(paint);
+                        canvas.drawBitmap(bitmap, 0f, 0f, null);
+                        pdfDocument.finishPage(page);
+                        bitmap.recycle();
+                    }
+                    pdfDocument.writeTo(fileOutputStream);
+                    pdfDocument.close();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return file;
+        }
+
+        private File getOutputFile(){
+            File root = new File(mContext.getExternalFilesDir(null),"My PDF Folder");
+
+            boolean isFolderCreated = true;
+
+            if (!root.exists()){
+                isFolderCreated = root.mkdir();
+            }
+
+            if (isFolderCreated) {
+                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
+                String imageFileName = "PDF_" + timeStamp;
+
+                return new File(root, imageFileName + ".pdf");
+            }
+            else {
+                Toast.makeText(mContext, "Folder is not created", Toast.LENGTH_SHORT).show();
+                return null;
+            }
+        }
 
         private boolean whatsappInstalledOrNot(String uri) {
             PackageManager pm = mContext.getPackageManager();

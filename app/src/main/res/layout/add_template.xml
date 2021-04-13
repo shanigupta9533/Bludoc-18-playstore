@@ -524,48 +524,88 @@
                     android:id="@+id/templates_added_medicine_recycler"/>
 
 
-
                 <FrameLayout
                     android:id="@+id/homePageContainer"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
-                <TextView
-                    android:id="@+id/textView_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_30"
-                    android:layout_marginRight="@dimen/margin_30"
-                    android:layout_marginEnd="@dimen/margin_30"
-                    android:layout_marginStart="@dimen/margin_30"
-                    android:layout_marginTop="@dimen/margin_5"
-                    android:gravity="center"
-                    android:text="Name of Medicine/Product"
-                    android:textColor="@color/colorDarkGrey"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    />
-
-
-                <EditText
-                    android:id="@+id/templates_searchview"
-                    style="@style/MaterialSearchBarLight"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="35dp"
-                    android:textColor="#000"
+                    android:orientation="horizontal"
                     android:layout_marginLeft="@dimen/margin_20"
                     android:layout_marginRight="@dimen/margin_20"
-                    android:layout_marginTop="@dimen/margin_3"
-                    android:layout_marginBottom="@dimen/margin_10"
-                    android:inputType="textCapSentences"
-                    android:paddingLeft     ="@dimen/margin_10"
-                    android:paddingStart    ="@dimen/margin_10"
-                    android:paddingEnd      ="@dimen/margin_4"
-                    android:paddingRight    ="@dimen/margin_4"
-                    android:background="@drawable/spinner_background"
-                    android:focusableInTouchMode="true"
-                    android:textStyle="bold" />
+                    android:layout_marginTop="@dimen/margin_20"
+                    android:layout_marginEnd="@dimen/margin_20"
+                    android:layout_marginStart="@dimen/margin_20"
+                    android:layout_height="wrap_content">
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="@dimen/margin_4"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Name of Medicine/Product"
+                            android:id="@+id/textView_name"
+                            android:textColor="@color/colorDarkGrey"
+                            android:textSize="12dp"
+                            android:fontFamily="@font/poppinsmedium"
+                            />
+
+                        <EditText
+                            android:textSize="16sp"
+                            android:padding="@dimen/margin_10"
+                            android:textColor="@color/colorBlack"
+                            android:id="@+id/templates_searchview"
+                            android:inputType="textCapSentences"
+                            android:hint="type here"
+                            android:maxLines="2"
+                            style="@style/MaterialSearchBarLight"
+                            android:layout_marginTop="@dimen/margin_8"
+                            android:textColorHint="#dcdcdc"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/margin_40"
+                            android:background="@drawable/blue_faint_btn_gradient2"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="vertical"
+                        android:layout_weight="5"
+                        android:layout_marginStart="@dimen/margin_4"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="T. QTY"
+                            android:textColor="@color/colorDarkGrey"
+                            android:textSize="12dp"
+                            android:fontFamily="@font/poppinsmedium"
+                            />
+
+                        <EditText
+                            android:textSize="16sp"
+                            android:padding="@dimen/margin_10"
+                            android:textColor="@color/colorBlack"
+                            android:layout_marginTop="@dimen/margin_8"
+                            android:id="@+id/medicine_qty"
+                            android:inputType="number|phone"
+                            android:digits="0123456789"
+                            android:textColorHint="@color/colorBlack"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/margin_40"
+                            android:background="@drawable/blue_faint_btn_gradient2"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:layout_width="match_parent"
@@ -587,6 +627,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:weightSum="6"
+                    android:layout_marginTop="@dimen/margin_12"
                     android:orientation="horizontal">
                     <LinearLayout
                         android:descendantFocusability="beforeDescendants"
@@ -789,43 +830,6 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:orientation="vertical"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/margin_30"
-                        android:layout_marginRight="@dimen/margin_30"
-                        android:layout_marginEnd="@dimen/margin_30"
-                        android:layout_marginStart="@dimen/margin_30"
-                        android:layout_marginTop="@dimen/margin_20"
-                        android:gravity="center"
-                        android:text="Number of Quantity"
-                        android:textColor="@color/colorDarkGrey"
-                        android:textSize="12dp"
-                        android:textStyle="bold"
-                        />
-
-                    <EditText
-                        android:textSize="16sp"
-                        android:padding="@dimen/margin_10"
-                        android:textColor="@color/colorBlack"
-                        android:layout_marginLeft="@dimen/margin_20"
-                        android:layout_marginRight="@dimen/margin_20"
-                        android:layout_marginEnd="@dimen/margin_20"
-                        android:layout_marginStart="@dimen/margin_20"
-                        android:layout_marginTop="@dimen/margin_10"
-                        android:textColorHint="@color/colorBlack"
-                        android:id="@+id/num_of_quantity"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/margin_40"
-                        android:background="@drawable/blue_faint_btn_gradient2"/>
-
-                </LinearLayout>
-
-                <LinearLayout
                     android:descendantFocusability="beforeDescendants"
                     android:focusableInTouchMode="true"
                     android:layout_width="match_parent"
@@ -851,7 +855,7 @@
                             android:layout_marginTop="@dimen/margin_10"
                             android:fontFamily="sans-serif"
                             android:gravity="center"
-                            android:text="No of days"
+                            android:text="No. of days"
                             android:textColor="@color/colorDarkGrey"
                             android:textSize="14sp"
                             android:textStyle="bold"
@@ -977,8 +981,6 @@
                     android:paddingEnd      ="@dimen/margin_10"
                     android:paddingRight    ="@dimen/margin_10"
                     android:imeOptions="actionDone"
-                    android:maxLines="1"
-
                     android:inputType="textCapSentences|textMultiLine"
                     android:textColor="@color/colorBlack"
                     android:layout_marginLeft="@dimen/margin_20"
@@ -986,11 +988,12 @@
                     android:layout_marginEnd="@dimen/margin_20"
                     android:layout_marginStart="@dimen/margin_20"
                     android:layout_marginTop="@dimen/margin_3"
-                    android:minLines="2"
+                    android:lines="3"
+                    android:gravity="top"
                     android:textColorHint="@color/colorBlack"
                     android:id="@+id/et_comments"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/margin_35"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/blue_faint_btn_gradient2"
                     />
 

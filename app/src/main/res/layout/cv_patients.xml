@@ -38,6 +38,134 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_8"
+            android:layout_marginBottom="@dimen/margin_14"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppinsmedium"
+                    android:text="DOB"
+                    android:textColor="@color/colorBlue"
+                    android:textSize="11dp" />
+
+                <TextView
+                    android:id="@+id/date_of_birth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_8"
+                    android:fontFamily="@font/poppins"
+                    android:text="Gender"
+                    android:textColor="@color/colorDarkGrey"
+                    android:textSize="11sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppinsmedium"
+                    android:text="Age/Gender : "
+                    android:textColor="@color/colorBlue"
+                    android:textSize="11dp" />
+
+                <TextView
+                    android:id="@+id/tv_age"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins"
+                    android:text="Gender"
+                    android:textColor="@color/colorDarkGrey"
+                    android:textSize="11sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_12"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppinsmedium"
+                        android:text="Blood Group : "
+                        android:textColor="@color/colorBlue"
+                        android:textSize="11dp" />
+
+                    <TextView
+                        android:id="@+id/blood_group"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins"
+                        android:text="Gender"
+                        android:textColor="@color/colorDarkGrey"
+                        android:textSize="11sp" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/patient_edit"
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
+                    android:layout_gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:padding="@dimen/margin_5"
+                    android:src="@drawable/edit___"
+                    android:textColor="@color/colorBlue" />
+
+                <ImageView
+
+                    android:id="@+id/patient_delete"
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/margin_10"
+                    android:layout_marginLeft="@dimen/margin_10"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:padding="@dimen/margin_5"
+                    android:src="@drawable/delete___"
+                    android:textColor="@color/colorBlue"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="@dimen/margin_12"
+            android:background="@color/colorBlue" />
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
@@ -48,8 +176,7 @@
                 android:fontFamily="@font/poppinsmedium"
                 android:text="Email : "
                 android:textColor="@color/colorBlue"
-                android:textSize="11dp"
-                />
+                android:textSize="11dp" />
 
             <TextView
                 android:id="@+id/tv_email"
@@ -68,6 +195,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_marginBottom="@dimen/margin_12"
             android:weightSum="0">
 
             <LinearLayout
@@ -82,160 +210,27 @@
                     android:fontFamily="@font/poppinsmedium"
                     android:text="Mobile : "
                     android:textColor="@color/colorBlue"
-                    android:textSize="11dp"
-                     />
+                    android:textSize="11dp" />
 
                 <TextView
                     android:id="@+id/tv_mobile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:alpha="0.7"
                     android:fontFamily="@font/poppins"
                     android:gravity="center"
                     android:text="Mobile"
                     android:textColor="@color/colorBlack"
-                    android:alpha="0.7"
-                    android:textSize="11dp"
-                     />
+                    android:textSize="11dp" />
 
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/patient_edit"
-                android:layout_width="@dimen/margin_25"
-                android:layout_height="@dimen/margin_25"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/margin_8"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:padding="@dimen/margin_5"
-                android:src="@drawable/edit___"
-                android:textColor="@color/colorBlue" />
-
-            <ImageView
-
-                android:id="@+id/patient_delete"
-                android:layout_width="@dimen/margin_25"
-                android:layout_height="@dimen/margin_25"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/margin_8"
-                android:layout_marginStart="@dimen/margin_10"
-                android:layout_marginLeft="@dimen/margin_10"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:padding="@dimen/margin_5"
-                android:src="@drawable/delete___"
-                android:textColor="@color/colorBlue"
-                android:textSize="12sp" />
         </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/colorBlue"
-            android:layout_marginTop="@dimen/margin_12"
-            android:layout_marginBottom="@dimen/margin_12"
-            />
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop= "@dimen/margin_8"
-                android:layout_marginBottom="@dimen/margin_14"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppinsmedium"
-                        android:text="DOB"
-                        android:textColor="@color/colorBlue"
-                        android:textSize="11dp"
-                        />
-
-                    <TextView
-                        android:id="@+id/date_of_birth"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins"
-                        android:text="Gender"
-                        android:layout_marginTop="@dimen/margin_8"
-                        android:textColor="@color/colorDarkGrey"
-                        android:textSize="11sp"
-                         />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_weight=".6"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppinsmedium"
-                        android:text="Age/Gender"
-                        android:textColor="@color/colorBlue"
-                        android:textSize="11dp"
-                        />
-
-                    <TextView
-                        android:id="@+id/tv_age"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins"
-                        android:text="Gender"
-                        android:layout_marginTop="@dimen/margin_8"
-                        android:textColor="@color/colorDarkGrey"
-                        android:textSize="11sp"
-                        />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_weight=".4"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppinsmedium"
-                        android:text="Blood Group"
-                        android:textColor="@color/colorBlue"
-                        android:textSize="11dp"
-                        />
-
-                    <TextView
-                        android:id="@+id/blood_group"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins"
-                        android:text="Gender"
-                        android:layout_marginTop="@dimen/margin_8"
-                        android:textColor="@color/colorDarkGrey"
-                        android:textSize="11sp"
-                        />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
 
             <TextView
                 android:id="@+id/tv_patient_created"
@@ -245,10 +240,10 @@
                 android:fontFamily="sans-serif"
                 android:gravity="end|bottom"
                 android:text="Created on"
-                android:visibility="gone"
                 android:textColor="@color/colorDarkGrey"
                 android:textSize="10dp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="gone" />
 
         </FrameLayout>
 

@@ -25,11 +25,38 @@ public class MedicinesItem implements Parcelable {
 	@SerializedName("additiona_comment")
 	private String additionaComment;
 
+	@SerializedName("qty")
+	private String qty;
+
 	@SerializedName("medicine_name")
 	private String medicineName;
 
 	@SerializedName("frequency")
 	private String frequency;
+
+	protected MedicinesItem(Parcel in) {
+		presbMedicineId = in.readString();
+		route = in.readString();
+		presbPatientId = in.readString();
+		instruction = in.readString();
+		noOfDays = in.readString();
+		additionaComment = in.readString();
+		qty = in.readString();
+		medicineName = in.readString();
+		frequency = in.readString();
+	}
+
+	public static final Creator<MedicinesItem> CREATOR = new Creator<MedicinesItem>() {
+		@Override
+		public MedicinesItem createFromParcel(Parcel in) {
+			return new MedicinesItem(in);
+		}
+
+		@Override
+		public MedicinesItem[] newArray(int size) {
+			return new MedicinesItem[size];
+		}
+	};
 
 	public void setPresbMedicineId(String presbMedicineId){
 		this.presbMedicineId = presbMedicineId;
@@ -61,6 +88,14 @@ public class MedicinesItem implements Parcelable {
 
 	public String getInstruction(){
 		return instruction;
+	}
+
+	public String getQty() {
+		return qty;
+	}
+
+	public void setQty(String qty) {
+		this.qty = qty;
 	}
 
 	public void setNoOfDays(String noOfDays){
@@ -107,8 +142,12 @@ public class MedicinesItem implements Parcelable {
 			",additiona_comment = '" + additionaComment + '\'' + 
 			",medicine_name = '" + medicineName + '\'' + 
 			",frequency = '" + frequency + '\'' + 
+			",qty = '" + qty + '\'' +
 			"}";
 		}
+
+	public MedicinesItem() {
+	}
 
 	@Override
 	public int describeContents() {
@@ -117,39 +156,14 @@ public class MedicinesItem implements Parcelable {
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeString(this.presbMedicineId);
-		dest.writeString(this.route);
-		dest.writeString(this.presbPatientId);
-		dest.writeString(this.instruction);
-		dest.writeString(this.noOfDays);
-		dest.writeString(this.additionaComment);
-		dest.writeString(this.medicineName);
-		dest.writeString(this.frequency);
+		dest.writeString(presbMedicineId);
+		dest.writeString(route);
+		dest.writeString(presbPatientId);
+		dest.writeString(instruction);
+		dest.writeString(noOfDays);
+		dest.writeString(additionaComment);
+		dest.writeString(qty);
+		dest.writeString(medicineName);
+		dest.writeString(frequency);
 	}
-
-	public MedicinesItem() {
-	}
-
-	protected MedicinesItem(Parcel in) {
-		this.presbMedicineId = in.readString();
-		this.route = in.readString();
-		this.presbPatientId = in.readString();
-		this.instruction = in.readString();
-		this.noOfDays = in.readString();
-		this.additionaComment = in.readString();
-		this.medicineName = in.readString();
-		this.frequency = in.readString();
-	}
-
-	public static final Parcelable.Creator<MedicinesItem> CREATOR = new Parcelable.Creator<MedicinesItem>() {
-		@Override
-		public MedicinesItem createFromParcel(Parcel source) {
-			return new MedicinesItem(source);
-		}
-
-		@Override
-		public MedicinesItem[] newArray(int size) {
-			return new MedicinesItem[size];
-		}
-	};
 }

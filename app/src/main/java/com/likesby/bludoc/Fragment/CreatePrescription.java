@@ -28,6 +28,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -84,6 +86,7 @@ import com.likesby.bludoc.SessionManager.SessionManager;
 import com.likesby.bludoc.SplashActivity;
 import com.likesby.bludoc.TemplateSelection;
 import com.likesby.bludoc.constants.ApplicationConstant;
+import com.likesby.bludoc.databinding.CreatePrescriptionBinding;
 import com.likesby.bludoc.db.MyDB;
 import com.likesby.bludoc.utils.DateUtils;
 import com.likesby.bludoc.utils.Utils;
@@ -178,6 +181,8 @@ public class CreatePrescription extends Fragment {
     private UnifiedNativeAd nativeAd;
     private static final String ADMOB_AD_UNIT_ID = "ca-app-pub-6756023122563497/5728747901";
     boolean flag_reset_free = false;
+    private CreatePrescriptionBinding binding;
+    private RadioButton radioButtonOfYes;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -195,7 +200,8 @@ public class CreatePrescription extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.create_prescription, container, false);
+        binding = CreatePrescriptionBinding.inflate(inflater, container, false);
+        v = binding.getRoot();
         addMedicinesArrayList = new ArrayList<>();
         patientsItemArrayList = new ArrayList<>();
         MedicAll = new ArrayList<>();
@@ -374,7 +380,7 @@ public class CreatePrescription extends Fragment {
                         public void run() {
                             addMedicineAdapter = new AddMedicineAdapter(mContext, addMedicinesArrayList,
                                     frequency_list, frequency2_list, et_no_of_days,
-                                    route_list, instructions_list, frequency_spinner, frequency2_spinner,
+                                    binding.medicineQty, route_list, instructions_list, frequency_spinner, frequency2_spinner,
                                     route_spinner, instructions_spinner, et_additional_comments, btn_add, textView3_5, ll_35, searchBarMaterialMedicine, mRecyclerViewMedicines, btnChooseFromTemplate, btn_prescribe, "pres", fl_progress_bar);
                             mRecyclerViewAddedMedicines.setAdapter(addMedicineAdapter);
                         }
@@ -530,6 +536,7 @@ public class CreatePrescription extends Fragment {
                                     medicinesItem.setFrequency(mi.getFrequency());
                                     medicinesItem.setNoOfDays(mi.getNoOfDays());
                                     medicinesItem.setRoute(mi.getRoute());
+                                    medicinesItem.setQty(mi.getQty());
                                     medicinesItem.setInstruction(mi.getInstruction());
                                     medicinesItem.setAdditionaComment(mi.getAdditionaComment());
                                     addMedicinesArrayList.add(medicinesItem);
@@ -549,7 +556,7 @@ public class CreatePrescription extends Fragment {
                                     public void run() {
                                         addMedicineAdapter = new AddMedicineAdapter(mContext, addMedicinesArrayList,
                                                 frequency_list, frequency2_list, et_no_of_days,
-                                                route_list, instructions_list, frequency_spinner, frequency2_spinner,
+                                                binding.medicineQty, route_list, instructions_list, frequency_spinner, frequency2_spinner,
                                                 route_spinner, instructions_spinner, et_additional_comments, btn_add, textView3_5, ll_35, searchBarMaterialMedicine, mRecyclerViewMedicines, btnChooseFromTemplate, btn_prescribe, "temp", fl_progress_bar);
                                         mRecyclerViewAddedMedicines.setAdapter(addMedicineAdapter);
 
@@ -596,6 +603,7 @@ public class CreatePrescription extends Fragment {
                         medicinesItem.setFrequency(mi.getFrequency());
                         medicinesItem.setNoOfDays(mi.getNoOfDays());
                         medicinesItem.setRoute(mi.getRoute());
+                        medicinesItem.setQty(mi.getQty());
                         medicinesItem.setInstruction(mi.getInstruction());
                         medicinesItem.setAdditionaComment(mi.getAdditionaComment());
                         addMedicinesArrayList.add(medicinesItem);
@@ -620,7 +628,7 @@ public class CreatePrescription extends Fragment {
 
                             addMedicineAdapter = new AddMedicineAdapter(mContext, addMedicinesArrayList,
                                     frequency_list, frequency2_list, et_no_of_days,
-                                    route_list, instructions_list, frequency_spinner, frequency2_spinner,
+                                    binding.medicineQty, route_list, instructions_list, frequency_spinner, frequency2_spinner,
                                     route_spinner, instructions_spinner, et_additional_comments, btn_add, textView3_5, ll_35, searchBarMaterialMedicine, mRecyclerViewMedicines, btnChooseFromTemplate, btn_prescribe, "temp", fl_progress_bar);
                             mRecyclerViewAddedMedicines.setAdapter(addMedicineAdapter);
 
@@ -773,7 +781,7 @@ public class CreatePrescription extends Fragment {
 
                             addMedicineAdapter = new AddMedicineAdapter(mContext, addMedicinesArrayList,
                                     frequency_list, frequency2_list, et_no_of_days,
-                                    route_list, instructions_list, frequency_spinner, frequency2_spinner,
+                                    binding.medicineQty, route_list, instructions_list, frequency_spinner, frequency2_spinner,
                                     route_spinner, instructions_spinner, et_additional_comments, btn_add, textView3_5, ll_35, searchBarMaterialMedicine, mRecyclerViewMedicines, btnChooseFromTemplate, btn_prescribe, "pres", fl_progress_bar);
                             mRecyclerViewAddedMedicines.setAdapter(addMedicineAdapter);
                             mAdapterSearchMedicine.notifyDataSetChanged();
@@ -827,6 +835,7 @@ public class CreatePrescription extends Fragment {
                         mRecyclerViewPatients.setAdapter(patientsAdapter);
                     }
                 });
+
 
                 ll_patients_view.setVisibility(View.VISIBLE);
                 if (patientsItemArrayList.size() > 0) {
@@ -898,7 +907,7 @@ public class CreatePrescription extends Fragment {
         }
         //  Toast.makeText(mContext, "on Create View", Toast.LENGTH_SHORT).show();
 
-        return v;
+        return binding.getRoot();
     }
 
 
@@ -1024,6 +1033,7 @@ public class CreatePrescription extends Fragment {
                         // medicinesItem.setMedicineId(mi.getTempMedicineId());
                         medicinesItem.setFrequency(mi.getFrequency());
                         medicinesItem.setNoOfDays(mi.getNoOfDays());
+                        medicinesItem.setQty(mi.getQty());
                         medicinesItem.setRoute(mi.getRoute());
                         medicinesItem.setInstruction(mi.getInstruction());
                         medicinesItem.setAdditionaComment(mi.getAdditionaComment());
@@ -1066,7 +1076,7 @@ public class CreatePrescription extends Fragment {
 
                 addMedicineAdapter = new AddMedicineAdapter(mContext, addMedicinesArrayList,
                         frequency_list, frequency2_list, et_no_of_days,
-                        route_list, instructions_list, frequency_spinner, frequency2_spinner,
+                        binding.medicineQty, route_list, instructions_list, frequency_spinner, frequency2_spinner,
                         route_spinner, instructions_spinner, et_additional_comments, btn_add, textView3_5, ll_35, searchBarMaterialMedicine, mRecyclerViewMedicines, btnChooseFromTemplate, btn_prescribe, "pres", fl_progress_bar);
                 mRecyclerViewAddedMedicines.setAdapter(addMedicineAdapter);
                 //  ll_medicine_product.performClick();
@@ -1100,7 +1110,7 @@ public class CreatePrescription extends Fragment {
             if (addMedicinesArrayList.size() > 0) {
                 addMedicineAdapter = new AddMedicineAdapter(mContext, addMedicinesArrayList,
                         frequency_list, frequency2_list, et_no_of_days,
-                        route_list, instructions_list, frequency_spinner, frequency2_spinner,
+                        binding.medicineQty, route_list, instructions_list, frequency_spinner, frequency2_spinner,
                         route_spinner, instructions_spinner, et_additional_comments, btn_add, textView3_5, ll_35, searchBarMaterialMedicine, mRecyclerViewMedicines, btnChooseFromTemplate, btn_prescribe, "pres", fl_progress_bar);
                 mRecyclerViewAddedMedicines.setAdapter(addMedicineAdapter);
                 //ll_medicine_product.performClick();
@@ -2145,6 +2155,7 @@ public class CreatePrescription extends Fragment {
                                         medicinesItem.setFrequency(mi.getFrequency());
                                         medicinesItem.setNoOfDays(mi.getNoOfDays());
                                         medicinesItem.setRoute(mi.getRoute());
+                                        medicinesItem.setQty(mi.getQty());
                                         medicinesItem.setInstruction(mi.getInstruction());
                                         medicinesItem.setAdditionaComment(mi.getAdditionaComment());
                                         addMedicinesArrayList.add(medicinesItem);
@@ -2159,7 +2170,17 @@ public class CreatePrescription extends Fragment {
                                     et_findings.getText().toString().trim() + "|" +
                                     et_diagnosis.getText().toString().trim() + "|" +
                                     et_treatment_advice.getText().toString().trim() + "|" +
-                                    et_end_note.getText().toString().trim();
+                                    et_end_note.getText().toString().trim() + "|" +
+                                    binding.temperature.getText().toString() + "|" + //7
+                                    binding.height.getText().toString() + "|" + // 8
+                                    binding.weight.getText().toString() + "|" + //9
+                                    binding.pulse.getText().toString() + "|" + //10
+                                    binding.bloodPressure.getText().toString() + "|" + // 11
+                                    binding.bloodSugar.getText().toString() + "|" +  // 12
+                                    binding.hemoglobin.getText().toString() + "|" +  // 13
+                                    binding.spo2.getText().toString() + "|" + // 14
+                                    binding.respirationRate.getText().toString() + "|" + //15
+                                    binding.allergy.getText().toString();   // 16
 
                             prescriptionItem.setDiagnosis(diagnosis_desc.trim());
 
@@ -2195,6 +2216,7 @@ public class CreatePrescription extends Fragment {
                             bundle.putString("certificate_selection", "" + certificate_selection);
                             bundle.putString("certificate_title", "" + et_cert_title.getText().toString().trim());
                             bundle.putString("certificate_desc", "" + et_cert_desc.getText().toString().trim());
+                            bundle.putString("yesOrNo",radioButtonOfYes.getText().toString());
                             bundle.putString("diagnosis", diagnosis_desc.trim());
                             if (certificate_selection)
                                 bundle.putString("end_note", "|" + et_cert_title.getText().toString().trim() + "|" + et_cert_desc.getText().toString().trim());
@@ -2276,6 +2298,7 @@ public class CreatePrescription extends Fragment {
                                         medicinesItem.setFrequency(mi.getFrequency());
                                         medicinesItem.setNoOfDays(mi.getNoOfDays());
                                         medicinesItem.setRoute(mi.getRoute());
+                                        medicinesItem.setQty(mi.getQty());
                                         medicinesItem.setInstruction(mi.getInstruction());
                                         medicinesItem.setAdditionaComment(mi.getAdditionaComment());
                                         addMedicinesArrayList.add(medicinesItem);
@@ -2291,7 +2314,18 @@ public class CreatePrescription extends Fragment {
                                     et_findings.getText().toString().trim() + "|" +
                                     et_diagnosis.getText().toString().trim() + "|" +
                                     et_treatment_advice.getText().toString().trim() + "|" +
-                                    et_end_note.getText().toString().trim();
+                                    et_end_note.getText().toString().trim() + "|" +
+                                    binding.temperature.getText().toString() + "|" +
+                                    binding.height.getText().toString() + "|" +
+                                    binding.weight.getText().toString() + "|" +
+                                    binding.pulse.getText().toString() + "|" +
+                                    binding.bloodPressure.getText().toString() + "|" +
+                                    binding.bloodSugar.getText().toString() + "|" +
+                                    binding.hemoglobin.getText().toString() + "|" +
+                                    binding.spo2.getText().toString() + "|" +
+                                    binding.respirationRate.getText().toString() + "|" +
+                                    binding.allergy.getText().toString();
+                            ;
 
                             prescriptionItem.setDiagnosis(diagnosis_desc.trim());
 
@@ -2327,6 +2361,7 @@ public class CreatePrescription extends Fragment {
                             bundle.putString("certificate_title", "" + et_cert_title.getText().toString().trim());
                             bundle.putString("certificate_desc", "" + et_cert_desc.getText().toString().trim());
                             bundle.putString("diagnosis", diagnosis_desc.trim());
+                            bundle.putString("yesOrNo",radioButtonOfYes.getText().toString());
                             if (certificate_selection)
                                 bundle.putString("end_note", "|" + et_cert_title.getText().toString().trim() + "|" + et_cert_desc.getText().toString().trim());
                             else
@@ -2379,6 +2414,7 @@ public class CreatePrescription extends Fragment {
                                         medicinesItem.setFrequency(mi.getFrequency());
                                         medicinesItem.setNoOfDays(mi.getNoOfDays());
                                         medicinesItem.setRoute(mi.getRoute());
+                                        medicinesItem.setQty(mi.getQty());
                                         medicinesItem.setInstruction(mi.getInstruction());
                                         medicinesItem.setAdditionaComment(mi.getAdditionaComment());
                                         addMedicinesArrayList.add(medicinesItem);
@@ -2393,7 +2429,18 @@ public class CreatePrescription extends Fragment {
                                     et_findings.getText().toString().trim() + "|" +
                                     et_diagnosis.getText().toString().trim() + "|" +
                                     et_treatment_advice.getText().toString().trim() + "|" +
-                                    et_end_note.getText().toString().trim();
+                                    et_end_note.getText().toString().trim() + "|" +
+                                    binding.temperature.getText().toString() + "|" +
+                                    binding.height.getText().toString() + "|" +
+                                    binding.weight.getText().toString() + "|" +
+                                    binding.pulse.getText().toString() + "|" +
+                                    binding.bloodPressure.getText().toString() + "|" +
+                                    binding.bloodSugar.getText().toString() + "|" +
+                                    binding.hemoglobin.getText().toString() + "|" +
+                                    binding.spo2.getText().toString() + "|" +
+                                    binding.respirationRate.getText().toString() + "|" +
+                                    binding.allergy.getText().toString();
+                            ;
 
                             prescriptionItem.setDiagnosis(diagnosis_desc.trim());
 
@@ -2427,6 +2474,7 @@ public class CreatePrescription extends Fragment {
                             bundle.putString("certificate_title", "" + et_cert_title.getText().toString().trim());
                             bundle.putString("certificate_desc", "" + et_cert_desc.getText().toString().trim());
                             bundle.putString("diagnosis", diagnosis_desc.trim());
+                            bundle.putString("yesOrNo",radioButtonOfYes.getText().toString());
                             if (certificate_selection)
                                 bundle.putString("end_note", "|" + et_cert_title.getText().toString().trim() + "|" + et_cert_desc.getText().toString().trim());
                             else
@@ -2469,7 +2517,18 @@ public class CreatePrescription extends Fragment {
                                     et_findings.getText().toString().trim() + "|" +
                                     et_diagnosis.getText().toString().trim() + "|" +
                                     et_treatment_advice.getText().toString().trim() + "|" +
-                                    et_end_note.getText().toString().trim();
+                                    et_end_note.getText().toString().trim() + "|" +
+                                    binding.temperature.getText().toString() + "|" +
+                                    binding.height.getText().toString() + "|" +
+                                    binding.weight.getText().toString() + "|" +
+                                    binding.pulse.getText().toString() + "|" +
+                                    binding.bloodPressure.getText().toString() + "|" +
+                                    binding.bloodSugar.getText().toString() + "|" +
+                                    binding.hemoglobin.getText().toString() + "|" +
+                                    binding.spo2.getText().toString() + "|" +
+                                    binding.respirationRate.getText().toString() + "|" +
+                                    binding.allergy.getText().toString();
+                            ;
 
                             prescriptionItem.setDiagnosis(diagnosis_desc.trim());
 
@@ -2503,6 +2562,7 @@ public class CreatePrescription extends Fragment {
                             bundle.putString("certificate_title", "" + et_cert_title.getText().toString().trim());
                             bundle.putString("certificate_desc", "" + et_cert_desc.getText().toString().trim());
                             bundle.putString("diagnosis", diagnosis_desc.trim());
+                            bundle.putString("yesOrNo",radioButtonOfYes.getText().toString());
                             if (certificate_selection)
                                 bundle.putString("end_note", "|" + et_cert_title.getText().toString().trim() + "|" + et_cert_desc.getText().toString().trim());
                             else
@@ -2842,6 +2902,7 @@ public class CreatePrescription extends Fragment {
                                 medicinesItem.setFrequency(frequency.trim());
                                 medicinesItem.setNoOfDays(et_no_of_days.getText().toString().trim());
                                 medicinesItem.setRoute(route.trim());
+                                medicinesItem.setQty(binding.medicineQty.getText().toString());
                                 medicinesItem.setInstruction(instructions_spinner.getSelectedItem().toString());
                                 medicinesItem.setAdditionaComment(et_additional_comments.getText().toString().trim());
 
@@ -2852,6 +2913,7 @@ public class CreatePrescription extends Fragment {
                                 mii.setFrequency(frequency.trim());
                                 mii.setNoOfDays(et_no_of_days.getText().toString().trim());
                                 mii.setRoute(route.trim());
+                                mii.setQty(binding.medicineQty.getText().toString());
                                 mii.setInstruction(instructions_spinner.getSelectedItem().toString());
                                 mii.setAdditionaComment(et_additional_comments.getText().toString().trim());
                                 NEWaddMedicinesArrayList.add(mii);
@@ -2878,7 +2940,7 @@ public class CreatePrescription extends Fragment {
                                         }
 
                                         addMedicineAdapter = new AddMedicineAdapter(mContext, addMedicinesArrayList,
-                                                frequency_list, frequency2_list, et_no_of_days,
+                                                frequency_list, frequency2_list, et_no_of_days, binding.medicineQty,
                                                 route_list, instructions_list, frequency_spinner, frequency2_spinner,
                                                 route_spinner, instructions_spinner, et_additional_comments, btn_add, textView3_5, ll_35, searchBarMaterialMedicine, mRecyclerViewMedicines, btnChooseFromTemplate, btn_prescribe, iden, fl_progress_bar);
                                         mRecyclerViewAddedMedicines.setAdapter(addMedicineAdapter);
@@ -2931,6 +2993,7 @@ public class CreatePrescription extends Fragment {
                                         medicinesItem.setFrequency(frequency.trim());
                                         medicinesItem.setNoOfDays(et_no_of_days.getText().toString().trim());
                                         medicinesItem.setRoute(route.trim());
+                                        medicinesItem.setQty(binding.medicineQty.getText().toString());
                                         medicinesItem.setInstruction(instructions_spinner.getSelectedItem().toString());
                                         medicinesItem.setAdditionaComment(et_additional_comments.getText().toString().trim());
 
@@ -2941,6 +3004,8 @@ public class CreatePrescription extends Fragment {
                                         mii.setFrequency(frequency.trim());
                                         mii.setNoOfDays(et_no_of_days.getText().toString().trim());
                                         mii.setRoute(route.trim());
+                                        mii.setQty(binding.medicineQty.getText().toString().trim());
+                                        medicinesItem.setQty(binding.medicineQty.getText().toString());
                                         mii.setInstruction(instructions_spinner.getSelectedItem().toString());
                                         mii.setAdditionaComment(et_additional_comments.getText().toString().trim());
                                         NEWaddMedicinesArrayList.add(mii);
@@ -2950,6 +3015,7 @@ public class CreatePrescription extends Fragment {
                                         mii.setFrequency(newMedicineAL.get(i).getFrequency());
                                         mii.setNoOfDays(newMedicineAL.get(i).getNoOfDays());
                                         mii.setRoute(newMedicineAL.get(i).getRoute());
+                                        mii.setQty(newMedicineAL.get(i).getQty());
                                         mii.setInstruction(newMedicineAL.get(i).getInstruction());
                                         mii.setAdditionaComment(newMedicineAL.get(i).getAdditionaComment());
                                         NEWaddMedicinesArrayList.add(mii);
@@ -2975,7 +3041,7 @@ public class CreatePrescription extends Fragment {
                                         }
                                         addMedicineAdapter = new AddMedicineAdapter(mContext, addMedicinesArrayList,
                                                 frequency_list, frequency2_list, et_no_of_days,
-                                                route_list, instructions_list, frequency_spinner, frequency2_spinner,
+                                                binding.medicineQty, route_list, instructions_list, frequency_spinner, frequency2_spinner,
                                                 route_spinner, instructions_spinner, et_additional_comments, btn_add, textView3_5, ll_35, searchBarMaterialMedicine, mRecyclerViewMedicines, btnChooseFromTemplate, btn_prescribe, iden, fl_progress_bar);
                                         mRecyclerViewAddedMedicines.setAdapter(addMedicineAdapter);
                                         mAdapterSearchMedicine.notifyDataSetChanged();
@@ -3023,11 +3089,13 @@ public class CreatePrescription extends Fragment {
 
                         searchBarMaterialMedicine.setText("");
                         et_no_of_days.setText("");
+                        binding.medicineQty.setText("");
                         et_additional_comments.setText("");
                         frequency_spinner.setSelection(0);
                         frequency2_spinner.setSelection(0);
                         route_spinner.setSelection(0);
                         instructions_spinner.setSelection(0);
+                        binding.medicineQty.setText("");
                         searchBarMaterialMedicine.setText("");
 
                     }
@@ -3171,6 +3239,7 @@ public class CreatePrescription extends Fragment {
                                 mii.setFrequency(mi.getFrequency());
                                 mii.setInstruction(mi.getInstruction());
                                 mii.setNoOfDays(mi.getNoOfDays());
+                                mii.setQty(mi.getQty());
                                 mii.setRoute(mi.getRoute());
                                 //mii.set(mi.getPresbPatientId());
                                 medicinesItemArrayListO.add(mii);
@@ -3597,6 +3666,19 @@ public class CreatePrescription extends Fragment {
 
         searchBarMaterialPatient = view.findViewById(R.id.patient_searchview);
         searchBarMaterialPatient.setHint("Type patient name here");
+
+        int checkedRadioButtonId = binding.radioShowGroup.getCheckedRadioButtonId();
+        radioButtonOfYes = v.findViewById(checkedRadioButtonId);
+
+        binding.radioShowGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+                int checkedRadioButtonId = binding.radioShowGroup.getCheckedRadioButtonId();
+                radioButtonOfYes = v.findViewById(checkedRadioButtonId);
+
+            }
+        });
 
         searchBarMaterialPatient.addTextChangedListener(new TextWatcher() {
             @Override

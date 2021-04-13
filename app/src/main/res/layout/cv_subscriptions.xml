@@ -444,7 +444,7 @@
         android:layout_marginBottom ="@dimen/margin_10"
         android:paddingTop="@dimen/margin_4"
         android:id="@+id/__subscriptions_days"
-        android:text="Valdity  - No of Days"
+        android:text="Valdity  - No. of Days"
         android:textAlignment="center"
         android:gravity="center"
         android:visibility="gone"
