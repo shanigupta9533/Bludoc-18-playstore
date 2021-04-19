@@ -31,6 +31,7 @@ import androidx.annotation.RequiresApi;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.itextpdf.text.PageSize;
 import com.likesby.bludoc.BuildConfig;
 import com.likesby.bludoc.Fragment.GeneratePres;
 import com.likesby.bludoc.ModelLayer.Entities.BottomSheetItem;
@@ -524,11 +525,11 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
 
                     for (int i = 0; i < files.size(); i++){
                         Bitmap bitmap = BitmapFactory.decodeFile(FileUtils.getPath(mContext,files.get(i)));
-                        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(bitmap.getWidth(), bitmap.getHeight(), (i + 1)).create();
+                         PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(bitmap.getWidth(),bitmap.getHeight(), (i + 1)).create();
                         PdfDocument.Page page = pdfDocument.startPage(pageInfo);
                         Canvas canvas = page.getCanvas();
                         Paint paint = new Paint();
-                        paint.setColor(Color.BLUE);
+                        paint.setColor(Color.WHITE);
                         canvas.drawPaint(paint);
                         canvas.drawBitmap(bitmap, 0f, 0f, null);
                         pdfDocument.finishPage(page);

@@ -3,15 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.likesby.bludoc">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
 
-   <!-- <uses-permission android:name="android.permission.CALL_PHONE" />-->
-<!--    <uses-permission android:name="android.permission.CAMERA" />-->
+    <!-- <uses-permission android:name="android.permission.CALL_PHONE" />-->
+    <!--    <uses-permission android:name="android.permission.CAMERA" />-->
 
     <queries>
 
@@ -20,46 +20,47 @@
 
     </queries>
 
-
     <application
-        android:hardwareAccelerated="true"
-        android:largeHeap="true"
-        android:requestLegacyExternalStorage="true"
-        android:usesCleartextTraffic="true"
+        android:name=".sms.SmsVerificationApp"
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@drawable/bludoc_shadow"
         android:label="@string/app_name"
-        android:name=".sms.SmsVerificationApp"
+        android:largeHeap="true"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@drawable/bludoc_shadow"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
         tools:targetApi="q">
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-6756023122563497~6049228406"/>
+            android:value="ca-app-pub-6756023122563497~6049228406" />
 
 
-
-        <activity android:name=".SplashActivity"
-            android:theme="@style/AppThemeNoActionBar"
-            android:screenOrientation="portrait">
+        <activity
+            android:name=".SplashActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBar">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"
-                    />
+                <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <meta-data android:name="com.onesignal.NotificationOpened.DEFAULT" android:value="DISABLE" />
+        <meta-data
+            android:name="com.onesignal.NotificationOpened.DEFAULT"
+            android:value="DISABLE" />
 
-        <meta-data android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id"/>
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
 
-        <activity android:name="com.facebook.FacebookActivity"
-            android:configChanges=
-                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
 
         <activity android:name=".PaymentGateway" />
@@ -69,43 +70,47 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
 
-        <meta-data android:name="com.facebook.sdk.ApplicationId"
-            tools:replace="android:value"
-            android:value="@string/facebook_app_id"/>
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id"
+            tools:replace="android:value" />
 
         <service
             android:name=".NotificationExtender"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:exported="false">
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE">
             <intent-filter>
                 <action android:name="com.onesignal.NotificationExtender" />
             </intent-filter>
         </service>
 
-
+        <activity
+            android:name=".HomeActivity"
+            android:hardwareAccelerated="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeTransparent"
+            android:windowSoftInputMode="adjustPan|adjustResize" />
 
         <activity
-            android:hardwareAccelerated="true"
-            android:name=".HomeActivity" android:theme="@style/AppThemeTransparent"
-            android:windowSoftInputMode="adjustPan|adjustResize"
-            android:screenOrientation="portrait"/>
-
-        <activity android:name=".MainActivity"
+            android:name=".MainActivity"
             android:hardwareAccelerated="true"
 
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeNoActionBar"/>
+            android:theme="@style/AppThemeNoActionBar" />
 
-        <activity android:name=".EmpLogin"
+        <activity
+            android:name=".EmpLogin"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"
-            android:theme="@style/AppThemeTransparent"/>
+            android:theme="@style/AppThemeTransparent"
+            android:windowSoftInputMode="adjustPan" />
 
         <!--<activity android:name=".EmpRegistration"
             android:screenOrientation="portrait"
@@ -113,51 +118,59 @@
             android:windowSoftInputMode="adjustPan"
             android:theme="@style/AppThemeTransparent"/>-->
 
-        <activity android:name=".PrivacyPolicy"
+        <activity
+            android:name=".PrivacyPolicy"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeNoActionBar"/>
+            android:theme="@style/AppThemeNoActionBar" />
 
-        <activity android:name=".SocialLogin"
+        <activity
+            android:name=".SocialLogin"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar"
             tools:ignore="LockedOrientationActivity" />
 
-        <activity android:name=".Feedback"
+        <activity
+            android:name=".Feedback"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"
-            android:theme="@style/AppThemeNoActionBar"/>
+            android:theme="@style/AppThemeNoActionBar"
+            android:windowSoftInputMode="adjustPan" />
 
-        <activity android:name=".About"
+        <activity
+            android:name=".About"
             android:screenOrientation="portrait"
-            
-            android:theme="@style/AppThemeNoActionBar"/>
 
-        <activity android:name=".MySubscription"
+            android:theme="@style/AppThemeNoActionBar" />
+
+        <activity
+            android:name=".MySubscription"
             android:screenOrientation="portrait"
-            
-            android:theme="@style/AppThemeNoActionBar"/>
+
+            android:theme="@style/AppThemeNoActionBar" />
 
 
-
-        <activity android:name=".RateReview"
+        <activity
+            android:name=".RateReview"
             android:screenOrientation="portrait"
-            
-            android:theme="@style/AppThemeNoActionBar"/>
 
-        <activity android:name=".Contact"
-            android:screenOrientation="portrait"
-            
-            android:theme="@style/AppThemeNoActionBar"/>
+            android:theme="@style/AppThemeNoActionBar" />
 
-        <activity android:name=".FAQ"
+        <activity
+            android:name=".Contact"
             android:screenOrientation="portrait"
-            
-            android:theme="@style/AppThemeNoActionBar"/>
 
-        <activity android:name=".RegisterDetails"
+            android:theme="@style/AppThemeNoActionBar" />
+
+        <activity
+            android:name=".FAQ"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            android:theme="@style/AppTheme.NoActionBar">
+
+            android:theme="@style/AppThemeNoActionBar" />
+
+        <activity
+            android:name=".RegisterDetails"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
                 <action android:name="android.intent.action.GET_CONTENT" />
                 <!--<data android:type="image/jpg"/>-->
@@ -170,24 +183,27 @@
         </activity>
 
 
-        <activity android:name=".Profile"
+        <activity
+            android:name=".Profile"
             android:screenOrientation="portrait"
-            
-            android:theme="@style/AppThemeNoActionBar"/>
-        <activity android:name=".SubscriptionPackages"
+
+            android:theme="@style/AppThemeNoActionBar" />
+        <activity
+            android:name=".SubscriptionPackages"
             android:screenOrientation="portrait"
-            
-            android:theme="@style/AppThemeNoActionBar"/>
+
+            android:theme="@style/AppThemeNoActionBar" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
-            android:exported="false"
             android:enabled="true"
-            android:grantUriPermissions="true">
+            android:exported="false"
+            android:grantUriPermissions="true"
+            tools:replace="android:authorities">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provide_paths"/>
+                android:resource="@xml/provide_paths_string" />
 
         </provider>
 

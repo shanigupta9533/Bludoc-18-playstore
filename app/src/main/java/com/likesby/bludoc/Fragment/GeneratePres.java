@@ -3,6 +3,7 @@ package com.likesby.bludoc.Fragment;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -47,6 +48,8 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.gson.Gson;
+import com.hendrix.pdfmyxml.PdfDocument;
+import com.hendrix.pdfmyxml.viewRenderer.AbstractViewRenderer;
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -73,6 +76,7 @@ import com.squareup.picasso.Picasso;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -134,6 +138,7 @@ public class GeneratePres extends Fragment {
     LinearLayout ll_patient_name;
     ArrayList<String> stringArrayDESC;
     int width = 480;
+    LinearLayout top_header_parent;
 
     private GeneratePrescriptionBinding binding;
     private String yesOrNo;
@@ -193,8 +198,63 @@ public class GeneratePres extends Fragment {
                 return false;
             }
         });
+
         return binding.getRoot();
     }
+
+    private void openBusinessWhatsUpAndShare(File pdfWithMultipleImage) {
+
+        boolean isWhatsappInstalled = whatsappInstalledOrNot("com.whatsapp.w4b");
+        if(isWhatsappInstalled)
+        {
+            //======================================================================
+            PackageManager packageManager = mContext.getPackageManager();
+            // Intent sendIntent = new Intent(Intent.ACTION_VIEW);
+
+            try {
+                ArrayList<Uri> files = GeneratePres.getFiles();
+
+                String smsNumber = "9399104906";
+                smsNumber = smsNumber.replace("+","").trim(); // E164 format without '+' sign
+                if(!(smsNumber.contains("91")))
+                    smsNumber = "91"+smsNumber;
+                Intent sendIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+                sendIntent.setType("application/pdf");
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "Dear "+ GeneratePres.patient_item.getPName() + ", "+ manager.getPreferences(mContext, "name")+ " has sent you an E-prescription / Certificate via BluDoc");
+                sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(pdfWithMultipleImage.getPath()));
+                sendIntent.putExtra("jid", ""+smsNumber + "@s.whatsapp.net"); //phone number without "+" prefix
+                sendIntent.setPackage("com.whatsapp.w4b");
+                if (sendIntent.resolveActivity(mContext.getPackageManager()) == null) {
+                    Toast.makeText(mContext, "Error", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (sendIntent.resolveActivity(packageManager) != null) {
+                    mContext.startActivity(sendIntent);
+                }
+                else
+                    Toast.makeText(mContext, "Resolve activity Null", Toast.LENGTH_SHORT).show();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+
+        }
+        else
+            Toast.makeText(mContext, "WhatsApp Not installed", Toast.LENGTH_SHORT).show();
+
+    }
+
+    private boolean whatsappInstalledOrNot(String uri) {
+        PackageManager pm = mContext.getPackageManager();
+        boolean app_installed = false;
+        try {
+            pm.getPackageInfo(uri, PackageManager.GET_ACTIVITIES);
+            app_installed = true;
+        } catch (PackageManager.NameNotFoundException e) {
+        }
+        return app_installed;
+    }
+
 
     public static Bitmap getBitmapFromView(View view) {
         //Define a bitmap with the same size as the view
@@ -230,7 +290,6 @@ public class GeneratePres extends Fragment {
         lp_number_picker.width = WindowManager.LayoutParams.MATCH_PARENT;
         lp_number_picker.height = WindowManager.LayoutParams.WRAP_CONTENT;
         window.setAttributes(lp_number_picker);
-
         dialog_data.show();
     }
 
@@ -244,6 +303,7 @@ public class GeneratePres extends Fragment {
         lLayout2 = new LinearLayoutManager(mContext);
         rView = view.findViewById(R.id.pres_recycler);
         rView.setLayoutManager(lLayout);
+        top_header_parent = view.findViewById(R.id.top_header_parent);
         ll_patient_name = view.findViewById(R.id.ll_patient_name);
         textView_medical_cert = view.findViewById(R.id.textView_medical_certificate);
         textView_medical_cert_desc = view.findViewById(R.id.textView_medical_cert_desc);
@@ -574,6 +634,8 @@ public class GeneratePres extends Fragment {
                 genInv();
             }
         }
+
+
     }
 
     public static ArrayList<Uri> getFiles() {
@@ -581,7 +643,8 @@ public class GeneratePres extends Fragment {
     }
 
 
-    public void genInv() {
+    public void genInv() { ;
+
         popupCreatingPrescription();
         rViewlabtest.setVisibility(View.GONE);
         textView_advice.setVisibility(View.GONE);
@@ -604,7 +667,8 @@ public class GeneratePres extends Fragment {
                     field_active = field_active + 1;
             }
             if (line > 210) {
-//                rView.setVisibility(View.GONE);
+
+                rView.setVisibility(View.GONE);
                 rViewlabtest.setVisibility(View.GONE);
                 fl_medicines_symbol.setVisibility(View.GONE);
                 final Handler handler = new Handler();
@@ -644,11 +708,12 @@ public class GeneratePres extends Fragment {
                 }, 1);
             }
 
-
             if (prescriptionItem != null) {
 
+                rView.setVisibility(View.VISIBLE);
                 fl_progress_bar.setVisibility(View.VISIBLE);
                 if (prescriptionItem.getMedicines().size() >= 5) {
+                    top_header_parent.setVisibility(View.GONE);
                     // Toast.makeText(mContext, ""+DELAY_TIME_MULTIPLIER, Toast.LENGTH_SHORT).show();
 
                     ArrayList<MedicinesItem> medicineList = new ArrayList<>();
@@ -694,6 +759,7 @@ public class GeneratePres extends Fragment {
                     }, DELAY_TIME);
 
                 } else {
+
                     page_no.setText("Page No. " + page_no_count);
                     Bitmap screen = getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
                     files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
@@ -720,11 +786,16 @@ public class GeneratePres extends Fragment {
     }
 
     public void temp(int p, final ArrayList<Uri> files) {
+        top_header_parent.setVisibility(View.GONE);
+        if(prescriptionItem.getMedicines()!=null )
+        Log.e(TAG, "--------------------------------------------prescriptionItem.getMedicines().size()   = " + prescriptionItem.getMedicines().size() );
+
         if (prescriptionItem.getMedicines().size() > p) {
             int diff_size = prescriptionItem.getMedicines().size() - p;
             Log.e(TAG, "--------------------------------------------diff_size - 701 = " + diff_size);
 
             if (diff_size < 3) {
+                textView_end_note.setVisibility(View.VISIBLE);
                 if (rViewlabtest.getVisibility() == View.VISIBLE)
                     rViewlabtest.setVisibility(View.GONE);
 
@@ -809,11 +880,11 @@ public class GeneratePres extends Fragment {
                     textView_advice.setVisibility(View.GONE);
 
                 ArrayList<MedicinesItem> medicineList1 = new ArrayList<>();
-                int sizee = 5;
+                int sizee = 7;
                 if (width < 520)
-                    sizee = 3;
+                    sizee = 7;
                 else if (width < 820)
-                    sizee = 4;
+                    sizee = 7;
 
                 for (int i = 0; i < sizee; i++) {
                     if (prescriptionItem.getMedicines().size() > p) {
@@ -828,6 +899,11 @@ public class GeneratePres extends Fragment {
 
                 final Handler handler = new Handler();
                 final int finalP = p;
+                Log.e(TAG, "--------------------------------------------finalP  = " + finalP);
+
+                if(finalP==prescriptionItem.getMedicines().size())
+                    textView_end_note.setVisibility(View.VISIBLE);
+
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -874,7 +950,7 @@ public class GeneratePres extends Fragment {
             page_no_count = page_no_count + 1;
             page_no.setText("Page No. " + page_no_count);
 //            rView.setVisibility(View.GONE);
-
+            textView_end_note.setVisibility(View.VISIBLE);
             if (labTestItem.size() > 0) {
 //                rView.setVisibility(View.GONE);
 
@@ -952,6 +1028,7 @@ public class GeneratePres extends Fragment {
         } else {
             rViewlabtest.setVisibility(View.GONE);
             textView_advice.setVisibility(View.GONE);
+            textView_end_note.setVisibility(View.VISIBLE);
 
                 /*Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_SEND_MULTIPLE);
@@ -1155,8 +1232,10 @@ public class GeneratePres extends Fragment {
                             if (!str.trim().equals(""))
                                 field_active = field_active + 1;
                         }
+                        textView_end_note.setVisibility(View.GONE);
+
                         if (line > 200) {
-//                            rView.setVisibility(View.GONE);
+                            rView.setVisibility(View.GONE);
                             rViewlabtest.setVisibility(View.GONE);
                             fl_medicines_symbol.setVisibility(View.GONE);
                             final Handler handler = new Handler();
@@ -1188,6 +1267,8 @@ public class GeneratePres extends Fragment {
                                     binding.textviewBloodSugar.setVisibility(View.GONE);
                                     binding.textviewHemoglobing.setVisibility(View.GONE);
                                     binding.textviewSpo2.setVisibility(View.GONE);
+                                    binding.textviewBloodGroup.setVisibility(View.GONE);
+                                    binding.textViewHosAddress.setVisibility(View.GONE);
                                     binding.textviewRespirationRate.setVisibility(View.GONE);
                                     binding.textviewAllergy.setVisibility(View.GONE);
                                 }
@@ -1198,11 +1279,17 @@ public class GeneratePres extends Fragment {
                             generatePDF.setVisibility(View.GONE);
                             if (prescriptionItem.getMedicines() != null) {
                                 if (prescriptionItem.getMedicines().size() != 0) {
-                                    int sizee = 5;
+                                    int sizee = 7;
                                     if (width < 520)
-                                        sizee = 3;
+                                        sizee = 7;
                                     else if (width < 820)
-                                        sizee = 4;
+                                        sizee = 7;
+
+                                    if(line==0){
+
+                                        sizee=8;
+
+                                    }
 
                                     if (prescriptionItem.getMedicines().size() >= sizee) {
                                         rViewlabtest.setVisibility(View.GONE);
@@ -1249,7 +1336,9 @@ public class GeneratePres extends Fragment {
                                                 binding.textviewBloodSugar.setVisibility(View.GONE);
                                                 binding.textviewHemoglobing.setVisibility(View.GONE);
                                                 binding.textviewSpo2.setVisibility(View.GONE);
+                                                binding.textviewBloodGroup.setVisibility(View.GONE);
                                                 binding.textviewRespirationRate.setVisibility(View.GONE);
+                                                binding.textViewHosAddress.setVisibility(View.GONE);
                                                 binding.textviewAllergy.setVisibility(View.GONE);
                                                 Log.e(TAG, "--------------------------------------------p[0] - 1199 = " + p[0]);
 
@@ -1260,6 +1349,7 @@ public class GeneratePres extends Fragment {
                                         }, DELAY_TIME);
 
                                     } else {
+                                        textView_end_note.setVisibility(View.VISIBLE);
                                         page_no.setText("Page No. " + page_no_count);
 
                                         Bitmap screen = getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
@@ -1282,6 +1372,7 @@ public class GeneratePres extends Fragment {
                                     }
                                 }
                             } else if (labTestItem != null) {
+                                textView_end_note.setVisibility(View.VISIBLE);
                                 Bitmap screen = getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
                                 rViewlabtest.setVisibility(View.VISIBLE);
                                 textView_advice.setVisibility(View.VISIBLE);
@@ -1302,6 +1393,7 @@ public class GeneratePres extends Fragment {
                                 if (dialog_data != null)
                                     dialog_data.dismiss();
                             } else {
+                                textView_end_note.setVisibility(View.VISIBLE);
                                 Bitmap screen = getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
                                 rViewlabtest.setVisibility(View.GONE);
                                 textView_advice.setVisibility(View.GONE);
@@ -1385,6 +1477,7 @@ public class GeneratePres extends Fragment {
 
 
                         } else {
+                            textView_end_note.setVisibility(View.VISIBLE);
                             Bitmap screen = getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
                             rViewlabtest.setVisibility(View.GONE);
                             textView_advice.setVisibility(View.GONE);
@@ -1973,7 +2066,7 @@ public class GeneratePres extends Fragment {
 
         }
 
-        textView_pat_name.setText("Patient Details : " + prescriptionItem.getPName() + ", " + prescriptionItem.getGender() + " / " + age___);
+        textView_pat_name.setText("Patient : " + prescriptionItem.getPName() + ", " + prescriptionItem.getGender() + " / " + age___);
         if (prescriptionItem.getPEmail().equals(""))
 
             patient_item = prescriptionItem;
@@ -2019,8 +2112,16 @@ public class GeneratePres extends Fragment {
 
             textView_days.setText("Working : " + work_days);
         } else {
-//            textView_days.setVisibility(View.GONE);
+            textView_days.setVisibility(View.GONE);
         }
+
+        if (TextUtils.isEmpty(binding.textViewDays.getText().toString()) &&
+                TextUtils.isEmpty(binding.textViewTime.getText().toString()) &&
+                TextUtils.isEmpty(binding.textViewContact.getText().toString()) &&
+                TextUtils.isEmpty(binding.textViewEmail.getText().toString()) &&
+                TextUtils.isEmpty(binding.textViewAdd.getText().toString()))
+                      binding.lineOfSingle.setVisibility(View.GONE); // hide line when data is empty todo
+
         if (("history").equalsIgnoreCase(definer)) {
 
             String[] visiting_hr_from_details = prescriptionItem.getDoctor().getVisitingHrFrom().split(Pattern.quote("|"));
