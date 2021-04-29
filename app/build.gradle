@@ -112,6 +112,10 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     implementation 'com.itextpdf:itextg:5.5.10'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.21'
+    implementation 'com.github.HendrixString:Android-PdfMyXml:1.0.8'
+
+    // pull to refresh
+    implementation 'com.yalantis:phoenix:1.2.3'
 
     implementation project(':nativetemplates')
 }

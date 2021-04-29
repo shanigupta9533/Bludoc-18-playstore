@@ -32,7 +32,6 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,7 +39,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
-import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProviders;
@@ -96,8 +94,8 @@ import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.likesby.bludoc.Fragment.CreatePrescription.certificate_selection;
 
-public class GeneratePres extends Fragment {
-    ArrayList<com.likesby.bludoc.ModelLayer.Entities.MedicinesItem> medicinesItemArrayListO = new ArrayList<>();
+public class GeneratePres_copy extends Fragment {
+    ArrayList<MedicinesItem> medicinesItemArrayListO = new ArrayList<>();
     Button generatePDF, back, btn_backbtn_edit_profile;
     Context mContext;
     Dialog dialog;
@@ -116,7 +114,7 @@ public class GeneratePres extends Fragment {
             textView_treatment_advice, textView_findings, textView_history, textView_chief_complaint;
     TextView textView_date, textView_add, textView_time, textView_contact, textView_email;
     SessionManager manager;
-    View scrollview_edit_profile;
+    LinearLayout scrollview_edit_profile;
     String definer, diagnosis_desc = "", end_note = "", definerTEMP, end_noteTEMP = "";
     private ApiViewHolder apiViewHolder;
     private CompositeDisposable mBag = new CompositeDisposable();
@@ -145,7 +143,7 @@ public class GeneratePres extends Fragment {
     private GeneratePrescriptionBinding binding;
     private String yesOrNo;
     private BottomSheetAdapter mAdapter;
-    private ArrayList<AbstractViewRenderer> pages = new ArrayList();
+    private ArrayList<AbstractViewRenderer> pages=new ArrayList();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -155,20 +153,13 @@ public class GeneratePres extends Fragment {
     }
 
 
-    public View setViewInInches(float width, float height, View v) {
-        v.setDrawingCacheEnabled(false);
+    public void setViewInInches(float width, float height, View v) {
         DisplayMetrics metrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        int widthInches = Math.round(width * 300);
-        int heightInches = Math.round(height * 300);
-        Log.e("WH", "________________ " + widthInches+" : "+heightInches);
-        v.setLayoutParams(new FrameLayout.LayoutParams(widthInches, heightInches));
+        int widthInches = Math.round(width * metrics.xdpi);
+        int heightInches = Math.round(height * metrics.ydpi);
+        v.setLayoutParams(new LinearLayout.LayoutParams(widthInches, heightInches));
         v.requestLayout();
-
-        return v;
-
-//        v.setLayoutParams(new FrameLayout.LayoutParams(2542, 3210));
-
     }
 
 
@@ -179,9 +170,11 @@ public class GeneratePres extends Fragment {
         binding = GeneratePrescriptionBinding.inflate(inflater, container, false);
 
         v = binding.getRoot();
-        //
+        setViewInInches(8.3f, 11.7f, v);
+
         width = ScreenSize.getDimensions(mContext)[0];
         initCalls(v);
+
 
        /* v.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
@@ -231,7 +224,7 @@ public class GeneratePres extends Fragment {
             // Intent sendIntent = new Intent(Intent.ACTION_VIEW);
 
             try {
-                ArrayList<Uri> files = GeneratePres.getFiles();
+                ArrayList<Uri> files = GeneratePres_copy.getFiles();
 
                 String smsNumber = "9399104906";
                 smsNumber = smsNumber.replace("+", "").trim(); // E164 format without '+' sign
@@ -239,7 +232,7 @@ public class GeneratePres extends Fragment {
                     smsNumber = "91" + smsNumber;
                 Intent sendIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
                 sendIntent.setType("application/pdf");
-                sendIntent.putExtra(Intent.EXTRA_TEXT, "Dear " + GeneratePres.patient_item.getPName() + ", " + manager.getPreferences(mContext, "name") + " has sent you an E-prescription / Certificate via BluDoc");
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "Dear " + GeneratePres_copy.patient_item.getPName() + ", " + manager.getPreferences(mContext, "name") + " has sent you an E-prescription / Certificate via BluDoc");
                 sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(pdfWithMultipleImage.getPath()));
                 sendIntent.putExtra("jid", "" + smsNumber + "@s.whatsapp.net"); //phone number without "+" prefix
                 sendIntent.setPackage("com.whatsapp.w4b");
@@ -276,20 +269,21 @@ public class GeneratePres extends Fragment {
     public Bitmap getBitmapFromView(View view) {
         //Define a bitmap with the same size as the view
 
-        Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth(), 1200, Bitmap.Config.ARGB_8888);
-            //Bind a canvas to it
-            Canvas canvas = new Canvas(returnedBitmap);
-            //Get the view's background
-            Drawable bgDrawable = view.getBackground();
-            if (bgDrawable != null)
-                //has background drawable, then draw it on the canvas
-                bgDrawable.draw(canvas);
-            else
-                //does not have background drawable, then draw white background on the canvas
-                canvas.drawColor(Color.WHITE);
-            // draw the view on the canvas
-            view.draw(canvas);
+        view.setDrawingCacheEnabled(true);
 
+        Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+        //Bind a canvas to it
+        Canvas canvas = new Canvas(returnedBitmap);
+        //Get the view's background
+        Drawable bgDrawable = view.getBackground();
+        if (bgDrawable != null)
+            //has background drawable, then draw it on the canvas
+            bgDrawable.draw(canvas);
+        else
+            //does not have background drawable, then draw white background on the canvas
+            canvas.drawColor(Color.WHITE);
+        // draw the view on the canvas
+        view.draw(canvas);
         return returnedBitmap;
     }
 
@@ -356,7 +350,7 @@ public class GeneratePres extends Fragment {
         textView_add = view.findViewById(R.id.textView_add);
         textView_time = view.findViewById(R.id.textView_time);
         textView_contact = view.findViewById(R.id.textView_contact);
-        scrollview_edit_profile = view.findViewById(R.id.scroll_of_relative);
+        scrollview_edit_profile = view.findViewById(R.id.saveBitmapFromImage);
         //  textView_closed_day=  view.findViewById(R.id.textView_closed_day);
         textView_email = view.findViewById(R.id.textView_email);
         title = view.findViewById(R.id.title);
@@ -419,12 +413,6 @@ public class GeneratePres extends Fragment {
         bottomSheetItem.setMenuId("3");
         bottomSheetItem.setMenuName("Other");
         bottomSheetItem.setMenuImage("ic_share__");
-        bottomSheetItemArrayList.add(bottomSheetItem);
-
-        bottomSheetItem = new BottomSheetItem();
-        bottomSheetItem.setMenuId("4");
-        bottomSheetItem.setMenuName("Download");
-        bottomSheetItem.setMenuImage("ic_download__");
         bottomSheetItemArrayList.add(bottomSheetItem);
 
          /* bottomSheetItem = new BottomSheetItem();
@@ -599,15 +587,11 @@ public class GeneratePres extends Fragment {
     }
 
     public void GenratePres() {
-
-//        setViewInInches(3f, 30f, scrollview_edit_profile);
-
         if (("history").equalsIgnoreCase(definer)) {
 //                textView_medical_cert.setVisibility(View.GONE);
 //                textView_medical_cert_desc.setVisibility(View.GONE);
 
             genInv();
-
         } else {
             if (!count) {
                 PrescriptionJSON prescriptionJSON = new PrescriptionJSON();
@@ -618,7 +602,7 @@ public class GeneratePres extends Fragment {
                     if (prescriptionItem.getMedicines().size() != 0) {
                         medicinesItemArrayListO = new ArrayList<>();
                         for (com.likesby.bludoc.ModelLayer.NewEntities3.MedicinesItem mi : prescriptionItem.getMedicines()) {
-                            com.likesby.bludoc.ModelLayer.Entities.MedicinesItem mii = new com.likesby.bludoc.ModelLayer.Entities.MedicinesItem();
+                            MedicinesItem mii = new MedicinesItem();
                             mii.setMedicineName(mi.getMedicineName());
                             mii.setMedicineId(mi.getPresbMedicineId());
                             mii.setAdditionaComment(mi.getAdditionaComment());
@@ -644,10 +628,10 @@ public class GeneratePres extends Fragment {
                 String json = gson.toJson(prescriptionJSON);
                 fl_progress_bar.setVisibility(View.VISIBLE);
                 if (prescriptionItem.getMedicines() != null)
-                    if (prescriptionItem.getMedicines().size() > 12) {
+                    if (prescriptionItem.getMedicines().size() > 5) {
                         popupCreatingPrescription();
                     } else if (labTestItem != null)
-                        if (labTestItem.size() > 12) {
+                        if (labTestItem.size() > 5) {
                             popupCreatingPrescription();
                         }
 
@@ -664,7 +648,6 @@ public class GeneratePres extends Fragment {
     }
 
     public static ArrayList<Uri> getFiles() {
-
         return filesGlobal;
     }
 
@@ -693,7 +676,7 @@ public class GeneratePres extends Fragment {
                 if (!str.trim().equals(""))
                     field_active = field_active + 1;
             }
-            if (line > 600) {
+            if (line > 210) {
 
                 rView.setVisibility(View.GONE);
                 rViewlabtest.setVisibility(View.GONE);
@@ -739,12 +722,12 @@ public class GeneratePres extends Fragment {
 
                 rView.setVisibility(View.VISIBLE);
                 fl_progress_bar.setVisibility(View.VISIBLE);
-                if (prescriptionItem.getMedicines().size() >= 10) {
+                if (prescriptionItem.getMedicines().size() >= 5) {
                     top_header_parent.setVisibility(View.GONE);
                     // Toast.makeText(mContext, ""+DELAY_TIME_MULTIPLIER, Toast.LENGTH_SHORT).show();
 
                     ArrayList<MedicinesItem> medicineList = new ArrayList<>();
-                    for (int i = 0; i < 10; i++) {
+                    for (int i = 0; i < 5; i++) {
                         if (prescriptionItem.getMedicines().size() > p[0]) {
                             medicineList.add(medicinesItemArrayListO.get(p[0]));
                             p[0] = p[0] + 1;
@@ -821,7 +804,7 @@ public class GeneratePres extends Fragment {
             int diff_size = prescriptionItem.getMedicines().size() - p;
             Log.e(TAG, "--------------------------------------------diff_size - 701 = " + diff_size);
 
-            if (diff_size < 12) {
+            if (diff_size < 3) {
                 textView_end_note.setVisibility(View.VISIBLE);
                 if (rViewlabtest.getVisibility() == View.VISIBLE)
                     rViewlabtest.setVisibility(View.GONE);
@@ -907,11 +890,11 @@ public class GeneratePres extends Fragment {
                     textView_advice.setVisibility(View.GONE);
 
                 ArrayList<MedicinesItem> medicineList1 = new ArrayList<>();
-                int sizee = 12;
-               /* if (width < 520)
+                int sizee = 7;
+                if (width < 520)
                     sizee = 7;
                 else if (width < 820)
-                    sizee = 7;*/
+                    sizee = 7;
 
                 for (int i = 0; i < sizee; i++) {
                     if (prescriptionItem.getMedicines().size() > p) {
@@ -1083,7 +1066,7 @@ public class GeneratePres extends Fragment {
             if (textView_advice.getVisibility() == View.VISIBLE)
                 textView_advice.setVisibility(View.GONE);
             ArrayList<MedicinesItem> medicineList1 = new ArrayList<>();
-            for (int i = 0; i < 12; i++) {
+            for (int i = 0; i < 5; i++) {
                 if (prescriptionItem.getMedicines().size() > p) {
                     medicineList1.add(medicinesItemArrayListO.get(p));
                     p = p + 1;
@@ -1238,7 +1221,6 @@ public class GeneratePres extends Fragment {
 
                 } else if (response.getMessage().equals("Prescription Added")) {
                     // Toast.makeText(mContext, "Prescription Added", Toast.LENGTH_SHORT).show();
-
                     count = true;
                     generatePDF.setText("Share");
                     back.setVisibility(View.GONE);
@@ -1262,7 +1244,7 @@ public class GeneratePres extends Fragment {
                         }
                         textView_end_note.setVisibility(View.GONE);
 
-                        if (line > 600) {
+                        if (line > 200) {
                             rView.setVisibility(View.GONE);
                             rViewlabtest.setVisibility(View.GONE);
                             fl_medicines_symbol.setVisibility(View.GONE);
@@ -1307,8 +1289,8 @@ public class GeneratePres extends Fragment {
                             generatePDF.setVisibility(View.GONE);
                             if (prescriptionItem.getMedicines() != null) {
                                 if (prescriptionItem.getMedicines().size() != 0) {
-                                    int sizee = 12;
-                                    /*if (width < 520)
+                                    int sizee = 7;
+                                    if (width < 520)
                                         sizee = 7;
                                     else if (width < 820)
                                         sizee = 7;
@@ -1317,7 +1299,7 @@ public class GeneratePres extends Fragment {
 
                                         sizee = 8;
 
-                                    }*/
+                                    }
 
                                     if (prescriptionItem.getMedicines().size() >= sizee) {
                                         rViewlabtest.setVisibility(View.GONE);
@@ -1811,7 +1793,7 @@ public class GeneratePres extends Fragment {
             if (prescriptionItem.getMedicines().size() != 0) {
                 medicinesItemArrayListO = new ArrayList<>();
                 for (com.likesby.bludoc.ModelLayer.NewEntities3.MedicinesItem mi : prescriptionItem.getMedicines()) {
-                    com.likesby.bludoc.ModelLayer.Entities.MedicinesItem mii = new com.likesby.bludoc.ModelLayer.Entities.MedicinesItem();
+                    MedicinesItem mii = new MedicinesItem();
                     mii.setMedicineName(mi.getMedicineName());
                     mii.setMedicineId(mi.getPresbMedicineId());
                     mii.setAdditionaComment(mi.getAdditionaComment());
