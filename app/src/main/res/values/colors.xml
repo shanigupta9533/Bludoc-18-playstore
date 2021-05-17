@@ -74,7 +74,7 @@
     <color name="daySelectedAndDisabledTextColor">@color/daySelectedTextColor</color>
     <color name="dayDeselectedAndDisabled">@color/dayDeselected</color>
     <color name="dayDeselectedAndDisabledTextColor">@android:color/darker_gray</color>
-
+    <color name="quantum_pink">#ee2e24</color>
 
 
 </resources>

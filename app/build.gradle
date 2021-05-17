@@ -114,6 +114,9 @@ dependencies {
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.21'
     implementation 'com.github.HendrixString:Android-PdfMyXml:1.0.8'
 
+    // pull to refresh
+    implementation 'com.yalantis:phoenix:1.2.3'
+
     implementation project(':nativetemplates')
 }
 

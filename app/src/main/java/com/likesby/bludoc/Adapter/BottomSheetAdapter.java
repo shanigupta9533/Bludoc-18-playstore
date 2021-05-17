@@ -56,7 +56,7 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
 
     private ArrayList<BottomSheetItem> mArryCountries,mFilteredList;
     private Context mContext;
-    int[] image_array = new int[] { R.drawable.mail, R.drawable.whatsapp ,R.drawable.ic_share__   };
+    int[] image_array = new int[] { R.drawable.mail, R.drawable.whatsapp ,R.drawable.ic_share__,R.drawable.ic_download__   };
     SessionManager manager;
     FrameLayout fl_progress_bar;
     private ArrayList<AbstractViewRenderer> pages;
@@ -442,6 +442,9 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
                         intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(pdfWithMultipleImage.getPath()));
                         Intent shareIntent = Intent.createChooser(intent, "Send...");
                         mContext.startActivity(shareIntent);
+
+                    } else if(getAdapterPosition()==3){
+
                     }
 
                     //AppRater.app_launched(mContext);

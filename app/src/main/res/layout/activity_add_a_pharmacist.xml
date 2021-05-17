@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:background="#fafafa"
+        android:layout_height="match_parent"
+        tools:context=".AddAPharmacistActivity">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:background="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:contentInsetStart="0dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="23dp"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="12dp"
+                    android:id="@+id/back"
+                    android:src="@drawable/ic_action_back"
+                    app:tint="@color/colorBlack"
+                    android:contentDescription="TODO" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_toEndOf="@+id/back"
+                    android:layout_marginStart="12dp"
+                    android:orientation="vertical"
+                    android:layout_centerVertical="true"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins"
+                        android:text="Add A Pharmacist"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14dp" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#dcdcdc"
+                    android:layout_alignParentBottom="true"
+                    />
+
+            </RelativeLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_below="@+id/toolbar"
+            android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/textView_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_30"
+                android:layout_marginRight="@dimen/margin_30"
+                android:layout_marginEnd="@dimen/margin_30"
+                android:layout_marginStart="@dimen/margin_30"
+                android:layout_marginTop="@dimen/margin_20"
+                android:gravity="center"
+                android:text="Pharmacist's Full Name *"
+                android:textColor="@color/colorDarkGrey"
+                android:textSize="13dp"
+                android:fontFamily="@font/poppins"
+                />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_marginLeft="@dimen/margin_20"
+                android:layout_marginRight="@dimen/margin_20"
+                android:layout_marginEnd="@dimen/margin_20"
+                android:layout_marginStart="@dimen/margin_20"
+                android:layout_marginTop="@dimen/margin_10"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:textSize="16sp"
+                    android:maxLines="1"
+                    android:inputType="text"
+                    android:imeOptions="actionNext"
+                    android:padding="@dimen/margin_10"
+                    android:paddingEnd="@dimen/font_14"
+                    android:paddingStart="@dimen/margin_10"
+                    android:textColor="@color/colorBlack"
+                    android:textColorHint="@color/colorBlack"
+                    android:id="@+id/et_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/margin_40"
+                    android:background="@drawable/blue_faint_btn_gradient2"/>
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_marginTop="@dimen/font_12"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_30"
+                android:layout_marginRight="@dimen/margin_30"
+                android:layout_marginEnd="@dimen/margin_30"
+                android:layout_marginStart="@dimen/margin_30"
+                android:layout_marginTop="@dimen/margin_10"
+                android:gravity="center"
+                android:text="Pharmacist's WhatsNumber *"
+                android:textColor="@color/colorDarkGrey"
+                android:textSize="13dp"
+                android:fontFamily="@font/poppins"
+                />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_marginLeft="@dimen/margin_20"
+                android:layout_marginRight="@dimen/margin_20"
+                android:layout_marginEnd="@dimen/margin_20"
+                android:layout_marginStart="@dimen/margin_20"
+                android:layout_marginTop="@dimen/margin_10"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:textSize="16sp"
+                    android:maxLines="1"
+                    android:inputType="number"
+                    android:imeOptions="actionNext"
+                    android:padding="@dimen/margin_10"
+                    android:id="@+id/whatsnumber"
+                    android:paddingEnd="@dimen/font_14"
+                    android:paddingStart="@dimen/margin_10"
+                    android:textColor="@color/colorBlack"
+                    android:textColorHint="@color/colorBlack"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/margin_40"
+                    android:background="@drawable/blue_faint_btn_gradient2"/>
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_marginTop="@dimen/font_12"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_30"
+                android:layout_marginRight="@dimen/margin_30"
+                android:layout_marginEnd="@dimen/margin_30"
+                android:layout_marginStart="@dimen/margin_30"
+                android:layout_marginTop="@dimen/margin_10"
+                android:gravity="center"
+                android:text="Pharmacist's Email Id *"
+                android:textColor="@color/colorDarkGrey"
+                android:textSize="13dp"
+                android:fontFamily="@font/poppins"
+                />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_marginLeft="@dimen/margin_20"
+                android:layout_marginRight="@dimen/margin_20"
+                android:layout_marginEnd="@dimen/margin_20"
+                android:layout_marginStart="@dimen/margin_20"
+                android:layout_marginTop="@dimen/margin_10"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:focusedByDefault="false"
+                    android:textSize="16sp"
+                    android:maxLines="1"
+                    android:inputType="text"
+                    android:id="@+id/email_id"
+                    android:imeOptions="actionDone"
+                    android:padding="@dimen/margin_10"
+                    android:paddingEnd="@dimen/font_14"
+                    android:paddingStart="@dimen/margin_10"
+                    android:textColor="@color/colorBlack"
+                    android:textColorHint="@color/colorBlack"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/margin_40"
+                    android:background="@drawable/blue_faint_btn_gradient2"/>
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/submit"
+            android:layout_width="200dp"
+            android:layout_gravity="center"
+            android:layout_height="@dimen/margin_40"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/design_as_edittext_gradient"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:fontFamily="@font/poppins"
+                android:text="Submit"
+                android:textColor="@color/white"
+                android:textSize="13dp" />
+
+        </RelativeLayout>
+
+        </LinearLayout>
+
+           <include layout="@layout/transparent_progress_bar"/>
+
+    </RelativeLayout>
+
+</layout>

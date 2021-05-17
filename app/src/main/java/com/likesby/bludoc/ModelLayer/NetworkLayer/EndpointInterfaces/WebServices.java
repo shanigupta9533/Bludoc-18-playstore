@@ -25,6 +25,8 @@ import com.likesby.bludoc.ModelLayer.NewEntities.ResponseProfileDetails;
 import com.likesby.bludoc.ModelLayer.NewEntities.ResponseSubscriptions;
 import com.likesby.bludoc.ModelLayer.NewEntities2.ResponseLabTemplates;
 import com.likesby.bludoc.ModelLayer.NewEntities3.ResponseHistory;
+import com.likesby.bludoc.viewModels.AllPharmacistModels;
+import com.likesby.bludoc.viewModels.ResultOfApi;
 
 import java.util.ArrayList;
 
@@ -88,6 +90,28 @@ public interface WebServices {
                                              @Field("city") String city,
                                              @Field("pincode") String pincode
     );
+
+    @FormUrlEncoded
+    @POST("AddPharmacist")
+    Call<ResultOfApi> addPharmacist(@Field("doctor_id") String doctor_id,
+                                    @Field("pharmacist_name") String pharmacist_name,
+                                    @Field("pharmacist_mobile") String pharmacist_mobile,
+                                    @Field("pharmacist_email") String pharmacist_email);
+
+    @FormUrlEncoded
+    @POST("AllPharmacist")
+    Call<AllPharmacistModels> allPharmacist(@Field("doctor_id") String doctor_id);
+
+    @FormUrlEncoded
+    @POST("EditPharmacist")
+    Call<ResultOfApi> editPharmacist(@Field("pharmacist_id") String pharmacist_id,
+                                     @Field("pharmacist_name") String pharmacist_name,
+                                     @Field("pharmacist_mobile") String pharmacist_mobile,
+                                     @Field("pharmacist_email") String pharmacist_email);
+
+    @FormUrlEncoded
+    @POST("DeletePharmacist")
+    Call<ResultOfApi> deletePharmacist(@Field("pharmacist_id") String pharmacist_id);
 
     @FormUrlEncoded
     @POST("UpdateProfile")
