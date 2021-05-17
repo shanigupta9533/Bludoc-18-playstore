@@ -142,6 +142,8 @@ public class GeneratePres extends Fragment {
 
     private GeneratePrescriptionBinding binding;
     private String yesOrNo;
+    private BottomSheetAdapter mAdapter;
+    private ArrayList<AbstractViewRenderer> pages=new ArrayList();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -205,8 +207,7 @@ public class GeneratePres extends Fragment {
     private void openBusinessWhatsUpAndShare(File pdfWithMultipleImage) {
 
         boolean isWhatsappInstalled = whatsappInstalledOrNot("com.whatsapp.w4b");
-        if(isWhatsappInstalled)
-        {
+        if (isWhatsappInstalled) {
             //======================================================================
             PackageManager packageManager = mContext.getPackageManager();
             // Intent sendIntent = new Intent(Intent.ACTION_VIEW);
@@ -215,14 +216,14 @@ public class GeneratePres extends Fragment {
                 ArrayList<Uri> files = GeneratePres.getFiles();
 
                 String smsNumber = "9399104906";
-                smsNumber = smsNumber.replace("+","").trim(); // E164 format without '+' sign
-                if(!(smsNumber.contains("91")))
-                    smsNumber = "91"+smsNumber;
+                smsNumber = smsNumber.replace("+", "").trim(); // E164 format without '+' sign
+                if (!(smsNumber.contains("91")))
+                    smsNumber = "91" + smsNumber;
                 Intent sendIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
                 sendIntent.setType("application/pdf");
-                sendIntent.putExtra(Intent.EXTRA_TEXT, "Dear "+ GeneratePres.patient_item.getPName() + ", "+ manager.getPreferences(mContext, "name")+ " has sent you an E-prescription / Certificate via BluDoc");
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "Dear " + GeneratePres.patient_item.getPName() + ", " + manager.getPreferences(mContext, "name") + " has sent you an E-prescription / Certificate via BluDoc");
                 sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(pdfWithMultipleImage.getPath()));
-                sendIntent.putExtra("jid", ""+smsNumber + "@s.whatsapp.net"); //phone number without "+" prefix
+                sendIntent.putExtra("jid", "" + smsNumber + "@s.whatsapp.net"); //phone number without "+" prefix
                 sendIntent.setPackage("com.whatsapp.w4b");
                 if (sendIntent.resolveActivity(mContext.getPackageManager()) == null) {
                     Toast.makeText(mContext, "Error", Toast.LENGTH_SHORT).show();
@@ -231,15 +232,13 @@ public class GeneratePres extends Fragment {
 
                 if (sendIntent.resolveActivity(packageManager) != null) {
                     mContext.startActivity(sendIntent);
-                }
-                else
+                } else
                     Toast.makeText(mContext, "Resolve activity Null", Toast.LENGTH_SHORT).show();
-            } catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
-        }
-        else
+        } else
             Toast.makeText(mContext, "WhatsApp Not installed", Toast.LENGTH_SHORT).show();
 
     }
@@ -256,7 +255,7 @@ public class GeneratePres extends Fragment {
     }
 
 
-    public static Bitmap getBitmapFromView(View view) {
+    public Bitmap getBitmapFromView(View view) {
         //Define a bitmap with the same size as the view
 
         view.setDrawingCacheEnabled(true);
@@ -274,7 +273,6 @@ public class GeneratePres extends Fragment {
             canvas.drawColor(Color.WHITE);
         // draw the view on the canvas
         view.draw(canvas);
-        //return the bitmap
         return returnedBitmap;
     }
 
@@ -412,7 +410,7 @@ public class GeneratePres extends Fragment {
         bottomSheetItem.setMenuImage("ic_share_");
         bottomSheetItemArrayList.add(bottomSheetItem);*/
 
-        BottomSheetAdapter mAdapter = new BottomSheetAdapter(mContext, bottomSheetItemArrayList, fl_progress_bar);
+        mAdapter = new BottomSheetAdapter(mContext, bottomSheetItemArrayList, fl_progress_bar);
         recyclerView.setAdapter(mAdapter);
 
         behavior = BottomSheetBehavior.from(bottomSheet);
@@ -643,7 +641,8 @@ public class GeneratePres extends Fragment {
     }
 
 
-    public void genInv() { ;
+    public void genInv() {
+        ;
 
         popupCreatingPrescription();
         rViewlabtest.setVisibility(View.GONE);
@@ -787,8 +786,8 @@ public class GeneratePres extends Fragment {
 
     public void temp(int p, final ArrayList<Uri> files) {
         top_header_parent.setVisibility(View.GONE);
-        if(prescriptionItem.getMedicines()!=null )
-        Log.e(TAG, "--------------------------------------------prescriptionItem.getMedicines().size()   = " + prescriptionItem.getMedicines().size() );
+        if (prescriptionItem.getMedicines() != null)
+            Log.e(TAG, "--------------------------------------------prescriptionItem.getMedicines().size()   = " + prescriptionItem.getMedicines().size());
 
         if (prescriptionItem.getMedicines().size() > p) {
             int diff_size = prescriptionItem.getMedicines().size() - p;
@@ -901,7 +900,7 @@ public class GeneratePres extends Fragment {
                 final int finalP = p;
                 Log.e(TAG, "--------------------------------------------finalP  = " + finalP);
 
-                if(finalP==prescriptionItem.getMedicines().size())
+                if (finalP == prescriptionItem.getMedicines().size())
                     textView_end_note.setVisibility(View.VISIBLE);
 
                 handler.postDelayed(new Runnable() {
@@ -1285,9 +1284,9 @@ public class GeneratePres extends Fragment {
                                     else if (width < 820)
                                         sizee = 7;
 
-                                    if(line==0){
+                                    if (line == 0) {
 
-                                        sizee=8;
+                                        sizee = 8;
 
                                     }
 
@@ -2120,7 +2119,7 @@ public class GeneratePres extends Fragment {
                 TextUtils.isEmpty(binding.textViewContact.getText().toString()) &&
                 TextUtils.isEmpty(binding.textViewEmail.getText().toString()) &&
                 TextUtils.isEmpty(binding.textViewAdd.getText().toString()))
-                      binding.lineOfSingle.setVisibility(View.GONE); // hide line when data is empty todo
+            binding.lineOfSingle.setVisibility(View.GONE); // hide line when data is empty todo
 
         if (("history").equalsIgnoreCase(definer)) {
 

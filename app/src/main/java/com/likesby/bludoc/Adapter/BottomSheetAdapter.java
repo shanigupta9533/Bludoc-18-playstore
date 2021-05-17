@@ -13,6 +13,7 @@ import android.graphics.Point;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Build;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +32,7 @@ import androidx.annotation.RequiresApi;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hendrix.pdfmyxml.viewRenderer.AbstractViewRenderer;
 import com.itextpdf.text.PageSize;
 import com.likesby.bludoc.BuildConfig;
 import com.likesby.bludoc.Fragment.GeneratePres;
@@ -57,6 +59,8 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
     int[] image_array = new int[] { R.drawable.mail, R.drawable.whatsapp ,R.drawable.ic_share__   };
     SessionManager manager;
     FrameLayout fl_progress_bar;
+    private ArrayList<AbstractViewRenderer> pages;
+
     public BottomSheetAdapter(Context mContext,
                               ArrayList<BottomSheetItem> objects, FrameLayout fl_progress_bar) {
         mArryCountries = objects;
@@ -237,6 +241,10 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
                 notifyDataSetChanged();
             }
         };
+    }
+
+    public void setData(ArrayList<AbstractViewRenderer> page) {
+        this.pages=page;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder
@@ -517,6 +525,7 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
         }
 
         private File createPDFWithMultipleImage(ArrayList<Uri> files){
+
             File file = getOutputFile();
             if (file != null){
                 try {
