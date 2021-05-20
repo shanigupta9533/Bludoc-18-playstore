@@ -112,11 +112,6 @@
 <!--            android:theme="@style/AppThemeNoActionBar" />-->
 
         <activity
-            android:name=".MainActivity"
-            android:hardwareAccelerated="true"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeNoActionBar" />
-        <activity
             android:name=".EmpLogin"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeTransparent"
@@ -138,17 +133,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar"
             tools:ignore="LockedOrientationActivity" />
-        <activity
-            android:name=".AllPharmacistActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeNoActionBar"
-            tools:ignore="LockedOrientationActivity" />
 
-            <activity
-            android:name=".AddAPharmacistActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeNoActionBar"
-            tools:ignore="LockedOrientationActivity" />
 
         <activity
             android:name=".Feedback"

@@ -1542,7 +1542,7 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
                     showNativeAdFlag = true;
                    // popupFreeSubscription("", false);
                     tv_days_left.setTextColor(getResources().getColor(R.color.colorBlue));
-                    tv_days_left.setText("Upgrade to Premium for an Ad free experience\n + \n A free desktop version of BluDoc.\nClick here to upgrade");
+                    tv_days_left.setText("Upgrade to Premium");
                     ll_premium.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
