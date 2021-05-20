@@ -152,6 +152,7 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
     SessionManager manager;
     LinearLayout scrollview_edit_profile;
     NestedScrollView nestedScrollView;
+
     String definer, diagnosis_desc = "", end_note = "", definerTEMP, end_noteTEMP = "";
     private ApiViewHolder apiViewHolder;
     private CompositeDisposable mBag = new CompositeDisposable();
@@ -181,6 +182,7 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
     private GeneratePrescriptionBinding binding;
     private String yesOrNo;
     private BottomSheetAdapter mAdapter;
+
     private ArrayList<AbstractViewRenderer> pages=new ArrayList();
     FrameLayout fl_main;
     AdRequest adRequest;
@@ -294,6 +296,23 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
     }
 
 
+    public View setViewInInches(float width, float height, View v) {
+        v.setDrawingCacheEnabled(false);
+        DisplayMetrics metrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        int widthInches = Math.round(width * 300);
+        int heightInches = Math.round(height * 300);
+        Log.e("WH", "________________ " + widthInches+" : "+heightInches);
+        v.setLayoutParams(new FrameLayout.LayoutParams(widthInches, heightInches));
+        v.requestLayout();
+
+        return v;
+
+//        v.setLayoutParams(new FrameLayout.LayoutParams(2542, 3210));
+
+    }
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -301,11 +320,8 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
         binding = GeneratePrescriptionBinding.inflate(inflater, container, false);
 
         v = binding.getRoot();
-       //
-
         width = ScreenSize.getDimensions(mContext)[0];
         initCalls(v);
-
 
        /* v.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
@@ -399,7 +415,6 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
     }
 
 
-
     private void popupBottomMenu() {
         dialog_dataShareMenu = new Dialog(mContext);
         dialog_dataShareMenu.setCancelable(false);
@@ -467,8 +482,7 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
     public Bitmap getBitmapFromView(View view) {
         //Define a bitmap with the same size as the view
 
-        view.setDrawingCacheEnabled(true);
-
+        
         Bitmap returnedBitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
         //Bind a canvas to it
         Canvas canvas = new Canvas(returnedBitmap);
@@ -482,6 +496,7 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
             canvas.drawColor(Color.WHITE);
         // draw the view on the canvas
         view.draw(canvas);
+
         return returnedBitmap;
     }
 
@@ -922,7 +937,14 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
         bottomSheetItem.setMenuImage("ic_share__");
         bottomSheetItemArrayList.add(bottomSheetItem);
 
-          bottomSheetItem = new BottomSheetItem();
+        bottomSheetItem = new BottomSheetItem();
+        bottomSheetItem = new BottomSheetItem();
+        bottomSheetItem.setMenuId("4");
+        bottomSheetItem.setMenuName("Download");
+        bottomSheetItem.setMenuImage("ic_download__");
+        bottomSheetItemArrayList.add(bottomSheetItem);
+
+         /* bottomSheetItem = new BottomSheetItem();
         bottomSheetItem.setMenuId("4");
         bottomSheetItem.setMenuName("WhatsApp");
         bottomSheetItem.setMenuImage("whatsapp");
@@ -1088,6 +1110,7 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
 //                textView_medical_cert_desc.setVisibility(View.GONE);
 
             genInv();
+
         } else {
             if (!count) {
                 PrescriptionJSON prescriptionJSON = new PrescriptionJSON();
@@ -1143,12 +1166,12 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
     }
 
     public static ArrayList<Uri> getFiles() {
+
         return filesGlobal;
     }
 
 
     public void genInv() {
-
 
         popupCreatingPrescription();
         rViewlabtest.setVisibility(View.GONE);
@@ -1969,6 +1992,7 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
 
                 } else if (response.getMessage().equals("Prescription Added")) {
                     // Toast.makeText(mContext, "Prescription Added", Toast.LENGTH_SHORT).show();
+
                     count = true;
                     boolean checker = false;
                     generatePDF.setText("Share");
@@ -1992,7 +2016,6 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
                                 field_active = field_active + 1;
                         }
                         textView_end_note.setVisibility(View.GONE);
-
                         Log.e(TAG, "------------------------------------   LINE   === " + line);
 
 
@@ -2061,7 +2084,6 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
                                         sizee = 6;
 
                                     if (line == 0) {
-
                                         sizee = 6;
                                     }*/
 

@@ -13,7 +13,9 @@ import android.graphics.Point;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Build;
+
 import android.os.Environment;
+
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -490,6 +492,9 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
                         }
                         Intent shareIntent = Intent.createChooser(intent, "Send...");
                         mContext.startActivity(shareIntent);
+
+                    } else if(getAdapterPosition()==3){
+
                     }
                     else if(getAdapterPosition()==1){
                         Toast.makeText(mContext, "Downloading...", Toast.LENGTH_SHORT).show();

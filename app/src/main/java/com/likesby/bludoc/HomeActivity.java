@@ -627,6 +627,15 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        findViewById(R.id.add_pharmacist).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            startActivity(new Intent(HomeActivity.this,AllPharmacistActivity.class));
+
+            }
+        });
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(HomeActivity.this);
         navigationView.setItemIconTintList(null);

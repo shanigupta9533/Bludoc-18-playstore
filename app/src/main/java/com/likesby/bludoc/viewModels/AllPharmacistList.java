@@ -96,4 +96,5 @@ public class AllPharmacistList implements Parcelable {
     public int hashCode() {
         return Objects.hash(pharmacist_id);
     }
+
 }

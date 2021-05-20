@@ -259,4 +259,5 @@ public class AllPharmacistActivity extends AppCompatActivity {
         }
 
     }
+
 }

@@ -40,7 +40,7 @@ public class PharmacistAdapter  extends RecyclerView.Adapter<PharmacistAdapter.v
     // Create new views
     @Override
     public viewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        // create a new view
+
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.pharmacist_adapter_layout, parent, false);
         return new viewHolder(view);
     }
@@ -71,7 +71,6 @@ public class PharmacistAdapter  extends RecyclerView.Adapter<PharmacistAdapter.v
 
         if(s.getPharmacist_mobile().equals("0"))
             viewHolder.mobile_number.setText("____");
-
 
         viewHolder.patient_edit.setOnClickListener(new View.OnClickListener() {
             @Override

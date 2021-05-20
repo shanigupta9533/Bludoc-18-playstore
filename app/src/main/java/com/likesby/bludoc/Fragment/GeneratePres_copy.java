@@ -422,6 +422,7 @@ public class GeneratePres_copy extends Fragment {
         bottomSheetItemArrayList.add(bottomSheetItem);*/
 
         mAdapter = new BottomSheetAdapter(mContext, bottomSheetItemArrayList, fl_progress_bar, null, null);
+
         recyclerView.setAdapter(mAdapter);
 
         behavior = BottomSheetBehavior.from(bottomSheet);

@@ -118,6 +118,28 @@ public interface WebServices {
     );
 
     @FormUrlEncoded
+    @POST("AddPharmacist")
+    Call<ResultOfApi> addPharmacist(@Field("doctor_id") String doctor_id,
+                                    @Field("pharmacist_name") String pharmacist_name,
+                                    @Field("pharmacist_mobile") String pharmacist_mobile,
+                                    @Field("pharmacist_email") String pharmacist_email);
+
+    @FormUrlEncoded
+    @POST("AllPharmacist")
+    Call<AllPharmacistModels> allPharmacist(@Field("doctor_id") String doctor_id);
+
+    @FormUrlEncoded
+    @POST("EditPharmacist")
+    Call<ResultOfApi> editPharmacist(@Field("pharmacist_id") String pharmacist_id,
+                                     @Field("pharmacist_name") String pharmacist_name,
+                                     @Field("pharmacist_mobile") String pharmacist_mobile,
+                                     @Field("pharmacist_email") String pharmacist_email);
+
+    @FormUrlEncoded
+    @POST("DeletePharmacist")
+    Call<ResultOfApi> deletePharmacist(@Field("pharmacist_id") String pharmacist_id);
+
+    @FormUrlEncoded
     @POST("UpdateProfile")
     Single<UserResponse> updateUser(@Field("customer_id") String customer_id,
                                     @Field("customer_name") String customer_name,
