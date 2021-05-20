@@ -61,6 +61,7 @@
 
 
         <TextView
+            android:fontFamily="@font/poppinsmedium"
             android:id="@+id/tv_no_template"
             android:layout_marginTop="@dimen/margin_10"
             android:layout_gravity="center"
@@ -81,6 +82,7 @@
 
 
         <TextView
+            android:fontFamily="@font/poppins"
             android:id="@+id/tv_no_template1"
             android:layout_marginTop="@dimen/margin_10"
             android:layout_gravity="center"
@@ -110,13 +112,13 @@
             android:orientation="horizontal">
 
             <Button
+                android:fontFamily="@font/poppins"
                 android:visibility="visible"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:elevation="@dimen/margin_10"
                 android:layout_marginTop="@dimen/margin_30"
                 android:layout_marginBottom="@dimen/margin_40"
-                android:padding="@dimen/margin_10"
                 android:id="@+id/btn_no"
                 android:layout_margin="@dimen/margin_10"
                 android:layout_weight="1"
@@ -130,17 +132,17 @@
                 android:textAllCaps="true"
                 android:textColor="@color/colorWhite"
                 android:textColorHint="@color/colorWhite"
-                android:textSize="16sp"
-                android:typeface="sans" />
+                android:textSize="15sp"
+                 />
 
             <Button
+                android:fontFamily="@font/poppins"
                 android:visibility="visible"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:elevation="@dimen/margin_10"
                 android:layout_marginTop="@dimen/margin_30"
                 android:layout_marginBottom="@dimen/margin_40"
-                android:padding="@dimen/margin_10"
                 android:id="@+id/btn_yes"
                 android:layout_weight="1"
                 android:layout_width="wrap_content"
@@ -155,7 +157,7 @@
                 android:textAllCaps="true"
                 android:textColor="@color/colorWhite"
                 android:textColorHint="@color/colorWhite"
-                android:textSize="16sp"
+                android:textSize="15sp"
                 android:typeface="sans" />
 
 

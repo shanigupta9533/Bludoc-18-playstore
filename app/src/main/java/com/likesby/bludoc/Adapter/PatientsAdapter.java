@@ -5,11 +5,9 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.media.Image;
 import android.os.Build;
 import android.os.CountDownTimer;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
@@ -28,6 +26,7 @@ import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -100,11 +99,13 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
     CreatePrescription createPrescription;
     Boolean showNativeAdFlag;
     private boolean isConstant;
+    TextView header;
 
     public PatientsAdapter(ArrayList<PatientsItem> arrayList, LinearLayout ll_patients_view, LinearLayout ll_prescription_view, RelativeLayout top_view,
-                           Button btn_create_patient, TextView patientdetails, ApiViewHolder apiViewHolder, CompositeDisposable mBag, FrameLayout fl_progress_bar, LinearLayout ll_medicinal_lab, LinearLayout ll_medicine_product, LinearLayout ll_end_note, LinearLayout ll_certificate, LinearLayout ll_main_medicine_details, LinearLayout ll_main_lab_test_details, LinearLayout ll_main_end_note_details, LinearLayout ll_main_certificate_details, CreatePrescription createPrescription, boolean showNativeAdFlag) {
+                           Button btn_create_patient, TextView patientdetails, ApiViewHolder apiViewHolder, CompositeDisposable mBag, FrameLayout fl_progress_bar, LinearLayout ll_medicinal_lab, LinearLayout ll_medicine_product, LinearLayout ll_end_note, LinearLayout ll_certificate, LinearLayout ll_main_medicine_details, LinearLayout ll_main_lab_test_details, LinearLayout ll_main_end_note_details, LinearLayout ll_main_certificate_details, CreatePrescription createPrescription, boolean showNativeAdFlag, TextView header) {
         mArrayList = arrayList;
         mFilteredList = arrayList;
+        this.header = header;
         this.ll_patients_view = ll_patients_view;
         this.ll_prescription_view = ll_prescription_view;
         this.top_view = top_view;
@@ -205,7 +206,7 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
 
                     for (PatientsItem categories : mArrayList) {
 
-                        if (categories.getPName().toLowerCase().contains(charString)) {
+                        if (categories.getPName().toLowerCase().contains(charString.toLowerCase())) {
                             filteredList.add(categories);
                         }
                     }
@@ -231,7 +232,7 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
                 PATIENT_EMAIL, PATIENT_CREATED, PATIENT_AGE, PATIENT_MODIFIED, blood_group;
         // FrameLayout fl;
         ProgressBar pb;
-        //ImageButton pic;
+        ImageView patient_prescribe;
         LinearLayout ll_main_patient_view;
         ImageView patient_edit, patient_delete;
 
@@ -251,7 +252,22 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
             patient_edit = view.findViewById(R.id.patient_edit);
             patient_delete = view.findViewById(R.id.patient_delete);
             blood_group = view.findViewById(R.id.blood_group);
+            patient_prescribe = view.findViewById(R.id.patient_prescribe);
 
+
+            patient_prescribe.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ll_main_patient_view.performClick();
+                }
+            });
+
+            PATIENT_NAME.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ll_main_patient_view.performClick();
+                }
+            });
 
             ll_main_patient_view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -302,7 +318,7 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
                     FrameLayout fl_layout = dialog_data.findViewById(R.id.fl_layout);
                     final Button btnProceed = dialog_data.findViewById(R.id.btn_proceed);
                     final Button btnCancel = dialog_data.findViewById(R.id.btn_cancel);
-                    if (showNativeAdFlag) {
+                   /* if (showNativeAdFlag) {
                         NativeAd(dialog_data, pb, btnProceed, btnCancel);
 
                     } else {
@@ -322,10 +338,15 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
                             btnProceed.setVisibility(View.VISIBLE);
                         }
                     };
-                    countDownTimer.start();
+                    countDownTimer.start();*/
+
+                    btnProceed.setVisibility(View.VISIBLE);
+                    btnCancel.setVisibility(View.VISIBLE);
+                    fl_layout.setVisibility(View.GONE);
                     btnProceed.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            header.setText("Create Prescription");
                             if (rb_prescription.isChecked()) {
                                 patient_id = PATIENT_ID.getText().toString().trim();
                                 pos = getAdapterPosition();
@@ -778,8 +799,6 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
                                                 Toast.makeText(mContext, "Age not allowed", Toast.LENGTH_SHORT).show();
                                             }
                                         }
-
-
                                     }
                                 }
                             }
@@ -794,7 +813,6 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
                     });
 
                     dialog_data.show();
-
 
                 }
             });
@@ -979,18 +997,18 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
     };
 
 
-    private void NativeAd(Dialog v, ProgressBar pb, Button btnProceed, Button btnCancel) {
+   /* private void NativeAd(Dialog v, ProgressBar pb, Button btnProceed, Button btnCancel) {
         refreshAd(v, pb, btnProceed, btnCancel);
         //  "ca-app-pub-3940256099942544/1044960115"
     }
 
-    /**
+    *//**
      * Populates a {@link UnifiedNativeAdView} object with data from a given
      * {@link UnifiedNativeAd}.
      *
      * @param nativeAd the object containing the ad's assets
      * @param adView   the view to be populated
-     */
+     *//*
     private void populateUnifiedNativeAdView(UnifiedNativeAd nativeAd, UnifiedNativeAdView adView) {
         // Set the media view.
         adView.setMediaView((MediaView) adView.findViewById(R.id.ad_media));
@@ -1092,12 +1110,12 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
         }
     }
 
-    /**
+    *//**
      * Creates a request for a new native ad based on the boolean parameters and calls the
      * corresponding "populate" method when one is successfully returned.
      *
      * @param
-     */
+     *//*
     private void refreshAd(final Dialog dialog_view, final ProgressBar pb, final Button btnProceed, final Button btnCancel) {
 
         AdLoader.Builder builder = new AdLoader.Builder(mContext, ADMOB_AD_UNIT_ID);
@@ -1137,8 +1155,8 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
                     }
                 });
 
-           /* VideoOptions videoOptions =
-                    new VideoOptions.Builder().build();*/
+           *//* VideoOptions videoOptions =
+                    new VideoOptions.Builder().build();*//*
 
         NativeAdOptions adOptions =
                 new NativeAdOptions.Builder().build();
@@ -1167,7 +1185,7 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
                         .build();
 
         adLoader.loadAd(new AdRequest.Builder().build());
-    }
+    }*/
 
 
 }

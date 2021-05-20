@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout android:layout_height="wrap_content"
+<FrameLayout android:layout_height="match_parent"
     android:background="@color/white"
     android:layout_width="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
 
     <LinearLayout
+        android:gravity="center"
         android:id="@+id/ll_promo"
         android:visibility="visible"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:padding="25dp"
         android:layout_width="match_parent"
         android:orientation="vertical"
@@ -34,7 +35,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAllCaps="false"
-            android:text="Please wait...\nPrescription is too long. We are generating prescription for you"
+            android:fontFamily="@font/poppinsmedium"
+            android:text="Just a moment,\nWe are generating prescription for you"
             android:textColor="@color/colorBlack"
             android:textSize="14sp"
             android:textStyle="normal"

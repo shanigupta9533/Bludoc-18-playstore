@@ -322,7 +322,7 @@ public class GeneratePres2 extends Fragment {
         bottomSheetItem.setMenuImage("ic_share_");
         bottomSheetItemArrayList.add(bottomSheetItem);*/
 
-        BottomSheetAdapter mAdapter = new BottomSheetAdapter(mContext,bottomSheetItemArrayList,fl_progress_bar);
+        BottomSheetAdapter mAdapter = new BottomSheetAdapter(mContext,bottomSheetItemArrayList,fl_progress_bar, null, null);
         recyclerView.setAdapter(mAdapter);
 
         behavior = BottomSheetBehavior.from(bottomSheet);

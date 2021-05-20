@@ -59,6 +59,7 @@
                             />
 
                         <TextView
+                            android:fontFamily="@font/poppinsmedium"
                             android:layout_gravity="center"
                             android:textSize="18sp"
                             android:textColor="@color/colorWhite"
@@ -468,6 +469,7 @@
                 android:layout_height="wrap_content">
 
                 <TextView
+                    android:fontFamily="@font/poppinsmedium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/margin_3"
@@ -494,6 +496,7 @@
                         android:src="@drawable/ic_right_arrow"/>
 
                     <TextView
+                        android:fontFamily="@font/poppins"
                         android:layout_marginTop   ="2dp"
                         android:background="@color/white"
 
@@ -501,7 +504,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center|top"
-                        android:fontFamily="sans-serif"
                         android:includeFontPadding="false"
                         android:gravity="center"
                         android:text="3/5"
@@ -533,6 +535,7 @@
                     android:layout_height="match_parent" />
 
                 <TextView
+                    android:fontFamily="@font/poppinsmedium"
                     android:id="@+id/textView_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -550,6 +553,7 @@
 
 
                 <EditText
+                    android:fontFamily="@font/poppins"
                     android:id="@+id/templates_searchview"
                     style="@style/MaterialSearchBarLight"
                     android:layout_width="match_parent"
@@ -582,6 +586,7 @@
 
                 <!--        Org Name       -->
                 <TextView
+                    android:fontFamily="@font/poppinsmedium"
                     android:id="@+id/textView_comments"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -589,7 +594,6 @@
                     android:layout_marginRight="@dimen/margin_30"
                     android:layout_marginEnd="@dimen/margin_30"
                     android:layout_marginStart="@dimen/margin_30"
-                    android:fontFamily="sans-serif"
                     android:gravity="center"
                     android:text="Additional comments"
                     android:textColor="@color/colorDarkGrey"
@@ -598,6 +602,7 @@
                     />
 
                 <EditText
+                    android:fontFamily="@font/poppins"
                     android:focusedByDefault="false"
                     android:textSize="16sp"
                     android:paddingLeft     ="@dimen/margin_10"
@@ -639,7 +644,7 @@
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         android:layout_width="wrap_content"
-
+                        android:fontFamily="@font/poppinsmedium"
                         android:paddingLeft="20dp"
                         android:paddingRight="20dp"
                         android:layout_height="@dimen/margin_35"
@@ -671,6 +676,7 @@
                     android:layout_marginRight  ="@dimen/margin_20"
                     android:layout_marginBottom ="@dimen/margin_20"
                     android:textSize="16sp"
+                    android:fontFamily="@font/poppinsmedium"
                     android:background="@drawable/blue_round_btn_gradient"
                     android:text="Save Template"
                     android:textColor="@color/colorWhite"

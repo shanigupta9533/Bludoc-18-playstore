@@ -23,8 +23,8 @@
         android:id="@+id/tv_medicine_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/poppinsmedium"
 
-        android:fontFamily="sans-serif"
         android:gravity="center"
         android:text="Medicine Name"
         android:textColor="@color/colorBlack"
@@ -36,14 +36,14 @@
     android:layout_height="wrap_content"
     >
     <TextView
+        android:fontFamily="@font/poppins"
         android:id="@+id/tv_frequency"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        android:fontFamily="sans-serif"
         android:text="Frequency"
         android:textColor="@color/colorDarkGrey"
-        android:textSize="13dp"
+        android:textSize="13sp"
         android:textStyle="bold"
         />
 
@@ -52,22 +52,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        android:fontFamily="sans-serif"
         android:text="No. of days"
         android:textColor="@color/colorDarkGrey"
-        android:textSize="13dp"
+        android:textSize="13sp"
+        android:fontFamily="@font/poppins"
         android:textStyle="bold"
         />
 
     <TextView
+        android:fontFamily="@font/poppins"
         android:id="@+id/tv_instructions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        android:fontFamily="sans-serif"
         android:text="Instructions"
         android:textColor="@color/colorDarkGrey"
-        android:textSize="13dp"
+        android:textSize="13sp"
         android:textStyle="bold"
         />
 
@@ -84,11 +84,10 @@
             android:id="@+id/tv_route"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
-            android:fontFamily="sans-serif"
+            android:fontFamily="@font/poppins"
             android:text="Route"
             android:textColor="@color/colorDarkGrey"
-            android:textSize="13dp"
+            android:textSize="13sp"
             android:textStyle="bold"
             />
 
@@ -101,10 +100,10 @@
         android:id="@+id/tv_medicine_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
+        android:fontFamily="@font/poppins"
         android:text=""
         android:textColor="@color/colorDarkGrey"
-        android:textSize="10dp"
+        android:textSize="10sp"
         android:textStyle="bold"
         />
 
@@ -113,10 +112,11 @@
         android:id="@+id/tv_frequency2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
+
         android:text=""
+        android:fontFamily="@font/poppins"
         android:textColor="@color/colorDarkGrey"
-        android:textSize="10dp"
+        android:textSize="10sp"
         android:textStyle="bold"
         />
 
@@ -125,10 +125,11 @@
         android:id="@+id/tv_medicine_created"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
+
         android:text=""
         android:textColor="@color/colorDarkGrey"
-        android:textSize="10dp"
+        android:fontFamily="@font/poppins"
+        android:textSize="10sp"
         android:textStyle="bold"
         />
 
@@ -138,10 +139,11 @@
         android:id="@+id/tv_medicine_modified"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
+
         android:text=""
         android:textColor="@color/colorDarkGrey"
-        android:textSize="10dp"
+        android:textSize="10sp"
+        android:fontFamily="@font/poppins"
         android:textStyle="bold"
         />
 
@@ -150,10 +152,11 @@
         android:id="@+id/tv_medicine_add_comments"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
+
         android:text=""
         android:textColor="@color/colorDarkGrey"
-        android:textSize="10dp"
+        android:textSize="10sp"
+        android:fontFamily="@font/poppins"
         android:textStyle="bold"
         />
 

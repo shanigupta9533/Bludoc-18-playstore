@@ -48,7 +48,7 @@
                         android:src="@drawable/ic_back_button"
                         />
                     <TextView
-
+                        android:fontFamily="@font/poppinsmedium"
                         android:layout_gravity="start|center"
                         android:textSize="16sp"
                         android:textColor="@color/colorWhite"

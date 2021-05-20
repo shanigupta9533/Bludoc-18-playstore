@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="#fafafa"
+    android:layout_height="match_parent"
+    tools:context=".AllPharmacistActivity">
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:background="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:contentInsetStart="0dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="23dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="12dp"
+                android:id="@+id/back"
+                android:src="@drawable/ic_back_button"
+                app:tint="@color/colorBlack"
+                android:contentDescription="TODO" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_toEndOf="@+id/back"
+                android:layout_marginStart="12dp"
+                android:orientation="vertical"
+                android:layout_centerVertical="true"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins"
+                    android:text="@string/all_pharmacist"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14dp" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#dcdcdc"
+                android:layout_alignParentBottom="true"
+                />
+
+        </RelativeLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <EditText
+        android:id="@+id/add_pharmacist_serachView"
+        style="@style/MaterialSearchBarLight"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:textColor="#000"
+        android:layout_below="@+id/toolbar"
+        android:textSize="13sp"
+        android:hint="@string/search_pharmacist_here"
+        android:layout_marginLeft="@dimen/margin_20"
+        android:layout_marginRight="@dimen/margin_20"
+        android:layout_marginTop="@dimen/margin_10"
+        android:layout_marginBottom="@dimen/margin_10"
+        android:paddingLeft="@dimen/margin_4"
+        android:fontFamily="@font/poppins"
+        android:paddingStart="@dimen/margin_12"
+        android:paddingEnd="@dimen/margin_12"
+        android:paddingRight="@dimen/margin_4"
+        android:background="@drawable/spinner_background_white"
+        android:textStyle="bold" />
+
+    <com.yalantis.phoenix.PullToRefreshView
+        android:id="@+id/pullToRefresh"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/add_pharmacist_serachView"
+        android:layout_above="@+id/add_a_parmacist"
+        android:layout_height="match_parent">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/recyclerview"
+        />
+
+    </com.yalantis.phoenix.PullToRefreshView>
+
+    <Button
+        android:visibility="visible"
+        android:id="@+id/add_a_parmacist"
+        android:textSize="14sp"
+        android:layout_margin="@dimen/margin_10"
+        android:layout_gravity="center|bottom"
+        android:gravity="center"
+        android:fontFamily="@font/poppins"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:layout_width="220dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:layout_height="@dimen/margin_40"
+        android:text="@string/add_a_pharmacist"
+        android:background="@drawable/blue_round_btn_gradient"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:id="@+id/message"
+        android:fontFamily="@font/poppins"
+        android:text="@string/refresh_to_load"
+        android:textColor="@color/colorBlack"
+        android:textSize="18dp" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:background="#f7f7f7"
+        android:id="@+id/parent_of_progress_bar"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"
+        android:layout_below="@+id/toolbar"
+        android:layout_height="match_parent">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            />
+
+    </FrameLayout>
+
+</RelativeLayout>

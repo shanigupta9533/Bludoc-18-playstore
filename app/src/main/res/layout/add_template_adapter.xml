@@ -20,6 +20,7 @@
 
 
     <TextView
+        android:fontFamily="@font/poppinsmedium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="#000"
@@ -46,6 +47,7 @@
         android:layout_marginRight  ="@dimen/margin_3"
         android:orientation="horizontal">
     <TextView
+        android:fontFamily="@font/poppins"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#000"
@@ -56,6 +58,7 @@
         android:text="BD" />
 
     <TextView
+        android:fontFamily="@font/poppins"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#000"
@@ -66,6 +69,7 @@
         android:text="After Meals" />
 
     <TextView
+        android:fontFamily="@font/poppins"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#000"
@@ -88,6 +92,7 @@
         android:orientation="horizontal">
 
     <TextView
+        android:fontFamily="@font/poppins"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#000"
@@ -98,6 +103,7 @@
         android:text="Route/Form - " />
 
     <TextView
+        android:fontFamily="@font/poppins"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#000"
@@ -118,6 +124,7 @@
         android:orientation="horizontal">
 
         <TextView
+            android:fontFamily="@font/poppins"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#000"
@@ -128,6 +135,7 @@
             android:text="Comments - " />
 
         <TextView
+            android:fontFamily="@font/poppins"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#000"
@@ -149,7 +157,7 @@
 
         <Button
             android:layout_marginBottom   ="@dimen/margin_5"
-
+            android:fontFamily="@font/poppinsmedium"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/margin_25"
             android:paddingLeft="@dimen/margin_5"
@@ -167,7 +175,7 @@
 
         <Button
             android:layout_marginBottom   ="@dimen/margin_5"
-
+            android:fontFamily="@font/poppinsmedium"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/margin_25"
             android:paddingLeft="@dimen/margin_5"
@@ -185,7 +193,7 @@
 
         <Button
             android:layout_marginBottom   ="@dimen/margin_5"
-
+            android:fontFamily="@font/poppinsmedium"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/margin_25"
             android:paddingLeft="@dimen/margin_5"

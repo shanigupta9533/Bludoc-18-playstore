@@ -39,6 +39,7 @@
 
 
         <TextView
+            android:fontFamily="@font/poppinsmedium"
             android:id="@+id/tv_no_templatetitle"
             android:layout_marginTop="@dimen/margin_20"
             android:layout_gravity="center"
@@ -58,6 +59,7 @@
             />
 
         <TextView
+            android:fontFamily="@font/poppinsmedium"
             android:id="@+id/tv_no_template"
             android:layout_marginTop="@dimen/margin_20"
             android:layout_gravity="center"

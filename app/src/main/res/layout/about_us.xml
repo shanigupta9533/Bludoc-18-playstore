@@ -57,7 +57,7 @@
                             android:src="@drawable/ic_back_button"
                             />
                         <TextView
-
+                            android:fontFamily="@font/poppinsmedium"
                             android:layout_gravity="start|center"
                             android:textSize="18sp"
                             android:textColor="@color/colorWhite"
@@ -76,6 +76,8 @@
         </com.google.android.material.appbar.AppBarLayout>
 
         <TextView
+            android:fontFamily="@font/poppinsmedium"
+
             android:layout_gravity="center"
             android:layout_margin="@dimen/margin_10"
             android:textColor="@color/colorBlack"
@@ -95,6 +97,7 @@
                 />
         <TextView
             android:layout_gravity="center"
+            android:fontFamily="@font/poppins"
 
             android:textColor="@color/colorBlack"
             android:text=""

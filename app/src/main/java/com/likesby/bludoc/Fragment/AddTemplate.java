@@ -2,8 +2,11 @@ package com.likesby.bludoc.Fragment;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -63,9 +66,10 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+import static android.app.Activity.RESULT_OK;
 import static com.likesby.bludoc.HomeActivity.poss__;
 
-public class AddTemplate  extends Fragment {
+public class AddTemplate extends Fragment {
     private static Context mContext;
     private Dialog dialog;
     private View v;
@@ -86,7 +90,7 @@ public class AddTemplate  extends Fragment {
     private ArrayAdapter<String> frequency_adp, frequency2_adp, route_adp, no_of_days_adp, instructions_adp;
 
     private ArrayList<String> frequency_list, frequency2_list, route_list, no_of_days_list, instructions_list;
-    ArrayList<com.likesby.bludoc.ModelLayer.Entities.MedicinesItem>  MedicAll;
+    ArrayList<com.likesby.bludoc.ModelLayer.Entities.MedicinesItem> MedicAll;
     ArrayList<DesignationItem> designationItemArrayList;
     //    ArrayList<String> working_days_Arraylist,visit_hrs_from_Arraylist,
     //            visit_hrs_to_Arraylist,closed_day_Arraylist;;
@@ -96,34 +100,35 @@ public class AddTemplate  extends Fragment {
     ArrayList<PatientsItem> patientsItemArrayList;
     private String frequency = "", medicine_name = "", frequency2 = "", no_of_days = "", route = "",
             add_instructions = "", instructions = "";
-    private androidx.appcompat.widget.SearchView searchViewPatient,searchViewMedicine;
-    private RecyclerView mRecyclerViewMedicines,mRecyclerViewAddedMedicines;
+    private androidx.appcompat.widget.SearchView searchViewPatient, searchViewMedicine;
+    private RecyclerView mRecyclerViewMedicines, mRecyclerViewAddedMedicines;
     private SearchAdapter mAdapterSearchMedicine;
 
     private PatientsAdapter patientsAdapter;
-  //  private MaterialSearchBar searchBarMaterialPatient;
+    //  private MaterialSearchBar searchBarMaterialPatient;
     EditText searchBarMaterialMedicine;
     FrameLayout fl_progress_bar;
-    Button btn_save_template,btn_add;
+    Button btn_save_template, btn_add;
     ArrayList<MedicinesItem> addMedicinesArrayList = new ArrayList<>();
     AddMedicineAdapter addMedicineAdapter;
     TextView template_name;
-    String template_name__="";
+    String template_name__ = "";
     TextView textView3_5;
     LinearLayout ll_35;
-    GridLayoutManager gridLayoutManager2,gridLayoutManager3;
+    GridLayoutManager gridLayoutManager2, gridLayoutManager3;
     ImageView back;
     MyDB myDB;
     ArrayList<com.likesby.bludoc.ModelLayer.Entities.MedicinesItem> SearchMedicine;
     Boolean searchFlag;
     private EditText medicine_qty;
+    private EditText templates_searchview;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getActivity();
         manager = new SessionManager();
-        MedicAll= new ArrayList<>();
+        MedicAll = new ArrayList<>();
         myDB = new MyDB(mContext);
     }
 
@@ -137,10 +142,30 @@ public class AddTemplate  extends Fragment {
         Bundle args = getArguments();
         MedicAll = myDB.getMedicines();
         template_name = v.findViewById(R.id.textView_template_name);
+        templates_searchview = v.findViewById(R.id.templates_searchview);
         assert args != null;
         template_name__ = args.getString("name");
         template_name.setText(template_name__);
         initCalls(v);
+
+        v.findViewById(R.id.speech_voice).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intentSpeech = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                intentSpeech.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
+                try {
+                    startActivityForResult(intentSpeech, 500);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(
+                            mContext,
+                            "Oops! Your device doesn't support Speech to Text",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
+
+            }
+        });
 
         return v;
     }
@@ -150,7 +175,7 @@ public class AddTemplate  extends Fragment {
         fl_progress_bar = view.findViewById(R.id.fl_progress_layout);
         btn_save_template = view.findViewById(R.id.btn_save_template);
         textView3_5 = view.findViewById(R.id.textView3_5);
-        ll_35= view.findViewById(R.id.ll_35);
+        ll_35 = view.findViewById(R.id.ll_35);
         btn_add = view.findViewById(R.id.btn_add);
 
         initSpinner(view);
@@ -169,7 +194,7 @@ public class AddTemplate  extends Fragment {
                     addTemplateJSON.setTemplateName(template_name__);
                     addTemplateJSON.setCreatedBy(manager.getPreferences(mContext, "doctor_id"));
                     ArrayList<com.likesby.bludoc.ModelLayer.Entities.MedicinesItem> medicinesItemArrayListO = new ArrayList<>();
-                    for (MedicinesItem mi: addMedicinesArrayList   ) {
+                    for (MedicinesItem mi : addMedicinesArrayList) {
                         com.likesby.bludoc.ModelLayer.Entities.MedicinesItem mii = new com.likesby.bludoc.ModelLayer.Entities.MedicinesItem();
                         mii.setMedicineName(mi.getMedicineName());
                         mii.setMedicineId(mi.getPresbMedicineId());
@@ -218,81 +243,74 @@ public class AddTemplate  extends Fragment {
 
                     } else {
 
-                        if(!("").equalsIgnoreCase(searchBarMaterialMedicine.getText().toString().trim())) {
-                            if(btn_add.getText().toString().trim().equalsIgnoreCase("Save and Add next"))
-                            {
+                        if (!("").equalsIgnoreCase(searchBarMaterialMedicine.getText().toString().trim())) {
+                            if (btn_add.getText().toString().trim().equalsIgnoreCase("Save and Add next")) {
                                 btn_save_template.setVisibility(View.VISIBLE);
-                                    MedicinesItem medicinesItem = new MedicinesItem();
-                                    medicinesItem.setMedicineName(searchBarMaterialMedicine.getText().toString().trim());
-                                    medicinesItem.setFrequency(frequency.trim());
-                                    medicinesItem.setNoOfDays(et_no_of_days.getText().toString().trim());
-                                    medicinesItem.setRoute(route.trim());
-                                    medicinesItem.setQty(medicine_qty.getText().toString());
-                                    medicinesItem.setInstruction(instructions_spinner.getSelectedItem().toString());
-                                    medicinesItem.setAdditionaComment(et_additional_comments.getText().toString().trim());
+                                MedicinesItem medicinesItem = new MedicinesItem();
+                                medicinesItem.setMedicineName(searchBarMaterialMedicine.getText().toString().trim());
+                                medicinesItem.setFrequency(frequency.trim());
+                                medicinesItem.setNoOfDays(et_no_of_days.getText().toString().trim());
+                                medicinesItem.setRoute(route.trim());
+                                medicinesItem.setQty(medicine_qty.getText().toString());
+                                medicinesItem.setInstruction(instructions_spinner.getSelectedItem().toString());
+                                medicinesItem.setAdditionaComment(et_additional_comments.getText().toString().trim());
 
-                                    addMedicinesArrayList.add(medicinesItem);
+                                addMedicinesArrayList.add(medicinesItem);
 //                                                Collections.sort(addMedicinesArrayList, new Comparator<MedicinesItem>() {
 //                                                    @Override
 //                                                    public int compare(MedicinesItem lhs, MedicinesItem rhs) {
 //                                                        return lhs.getMedicineName().compareTo(rhs.getMedicineName()); }
 //                                                });
 
-                                    addMedicineAdapter = new AddMedicineAdapter(mContext,addMedicinesArrayList,
-                                            frequency_list, frequency2_list, et_no_of_days,
-                                            medicine_qty, route_list, instructions_list, frequency_spinner, frequency2_spinner,
-                                            route_spinner, instructions_spinner, et_additional_comments, btn_add, textView3_5, ll_35, searchBarMaterialMedicine,mRecyclerViewMedicines, btnChooseFromTemplate, btn_save_template,"template",fl_progress_bar);
-                                    mRecyclerViewAddedMedicines.setAdapter(addMedicineAdapter);
-                                    if (addMedicinesArrayList.size() > 0) {
-                                        textView3_5.setVisibility(View.VISIBLE);
-                                        ll_35.setVisibility(View.VISIBLE);
-                                        mRecyclerViewAddedMedicines.smoothScrollToPosition(addMedicinesArrayList.size()-1);
+                                addMedicineAdapter = new AddMedicineAdapter(mContext, addMedicinesArrayList,
+                                        frequency_list, frequency2_list, et_no_of_days,
+                                        medicine_qty, route_list, instructions_list, frequency_spinner, frequency2_spinner,
+                                        route_spinner, instructions_spinner, et_additional_comments, btn_add, textView3_5, ll_35, searchBarMaterialMedicine, mRecyclerViewMedicines, btnChooseFromTemplate, btn_save_template, "template", fl_progress_bar);
+                                mRecyclerViewAddedMedicines.setAdapter(addMedicineAdapter);
+                                if (addMedicinesArrayList.size() > 0) {
+                                    textView3_5.setVisibility(View.VISIBLE);
+                                    ll_35.setVisibility(View.VISIBLE);
+                                    mRecyclerViewAddedMedicines.smoothScrollToPosition(addMedicinesArrayList.size() - 1);
                                 }
 
 
-                                    textView3_5.setText("1/" + addMedicinesArrayList.size());
-                                    mRecyclerViewAddedMedicines.setOnScrollListener(new RecyclerView.OnScrollListener() {
-                                        @Override
-                                        public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                                            super.onScrollStateChanged(recyclerView, newState);
-                                            if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                                textView3_5.setText("1/" + addMedicinesArrayList.size());
+                                mRecyclerViewAddedMedicines.setOnScrollListener(new RecyclerView.OnScrollListener() {
+                                    @Override
+                                    public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                                        super.onScrollStateChanged(recyclerView, newState);
+                                        if (newState == RecyclerView.SCROLL_STATE_IDLE) {
 
-                                                int position = gridLayoutManager3.findFirstVisibleItemPosition();
-                                                Log.e("position", String.valueOf(position));
-                                                textView3_5.setText((position + 1) + "/" + addMedicinesArrayList.size());
+                                            int position = gridLayoutManager3.findFirstVisibleItemPosition();
+                                            Log.e("position", String.valueOf(position));
+                                            textView3_5.setText((position + 1) + "/" + addMedicinesArrayList.size());
 
-                                            }
                                         }
+                                    }
 
-                                        @Override
-                                        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                                            super.onScrolled(recyclerView, dx, dy);
-                                        }
-                                    });
+                                    @Override
+                                    public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                                        super.onScrolled(recyclerView, dx, dy);
+                                    }
+                                });
 
-                            }
-                            else if(btn_add.getText().toString().trim().equalsIgnoreCase("Save"))
-                            {
+                            } else if (btn_add.getText().toString().trim().equalsIgnoreCase("Save")) {
                                 ArrayList<MedicinesItem> newMedicineAL = addMedicinesArrayList;
                                 addMedicinesArrayList = new ArrayList<>();
                                 btn_save_template.setVisibility(View.VISIBLE);
-                                for(int i=0;i<newMedicineAL.size();i++)
-                                {
-                                    if(poss__ ==i )
-                                    {
+                                for (int i = 0; i < newMedicineAL.size(); i++) {
+                                    if (poss__ == i) {
                                         MedicinesItem medicinesItem = new MedicinesItem();
                                         medicinesItem.setMedicineName(searchBarMaterialMedicine.getText().toString().trim());
                                         medicinesItem.setFrequency(frequency.trim());
-                                        medicinesItem.setNoOfDays(et_no_of_days.getText().toString().trim()+" Days");
+                                        medicinesItem.setNoOfDays(et_no_of_days.getText().toString().trim() + " Days");
                                         medicinesItem.setRoute(route.trim());
                                         medicinesItem.setQty(medicine_qty.getText().toString());
                                         medicinesItem.setInstruction(instructions_spinner.getSelectedItem().toString());
                                         medicinesItem.setAdditionaComment(et_additional_comments.getText().toString().trim());
 
                                         addMedicinesArrayList.add(medicinesItem);
-                                    }
-                                    else
-                                    {
+                                    } else {
                                         addMedicinesArrayList.add(newMedicineAL.get(i));
                                     }
                                 }
@@ -304,9 +322,9 @@ public class AddTemplate  extends Fragment {
 //                                                });
                                 btn_add.setText("Save and Add next");
                                 addMedicineAdapter = new AddMedicineAdapter(mContext, addMedicinesArrayList,
-                                         frequency_list,frequency2_list,et_no_of_days,
-                                        medicine_qty, route_list,instructions_list, frequency_spinner,frequency2_spinner,
-                                        route_spinner,instructions_spinner, et_additional_comments, btn_add, textView3_5, ll_35, searchBarMaterialMedicine, mRecyclerViewMedicines, btnChooseFromTemplate, btn_save_template,"template", fl_progress_bar);
+                                        frequency_list, frequency2_list, et_no_of_days,
+                                        medicine_qty, route_list, instructions_list, frequency_spinner, frequency2_spinner,
+                                        route_spinner, instructions_spinner, et_additional_comments, btn_add, textView3_5, ll_35, searchBarMaterialMedicine, mRecyclerViewMedicines, btnChooseFromTemplate, btn_save_template, "template", fl_progress_bar);
                                 mRecyclerViewAddedMedicines.setAdapter(addMedicineAdapter);
 
                                 if (addMedicinesArrayList.size() > 0) {
@@ -314,7 +332,7 @@ public class AddTemplate  extends Fragment {
                                     ll_35.setVisibility(View.VISIBLE);
                                     mRecyclerViewAddedMedicines.smoothScrollToPosition(poss__);
                                 }
-                                textView3_5.setText("1/"+addMedicinesArrayList.size());
+                                textView3_5.setText("1/" + addMedicinesArrayList.size());
 
                                 poss__ = 0;
                                 mRecyclerViewAddedMedicines.setOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -326,7 +344,7 @@ public class AddTemplate  extends Fragment {
 
                                             int position = gridLayoutManager3.findFirstVisibleItemPosition();
                                             Log.e("position", String.valueOf(position));
-                                            textView3_5.setText((position+1)+"/"+addMedicinesArrayList.size());
+                                            textView3_5.setText((position + 1) + "/" + addMedicinesArrayList.size());
 
                                         }
                                     }
@@ -349,17 +367,41 @@ public class AddTemplate  extends Fragment {
                             instructions_spinner.setSelection(0);
 
 
-                        }else {
+                        } else {
                             Toast.makeText(mContext, "Please enter medicine name", Toast.LENGTH_SHORT).show();
                         }
                     }
 
-                }
-                else
+                } else
                     Toast.makeText(mContext, "No Internet Connection", Toast.LENGTH_SHORT).show();
 
             }
         });
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+
+            if (requestCode == 500 && data != null) {
+
+                ArrayList<String> stringArrayListExtra =
+                        data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                templates_searchview.setText(stringArrayListExtra.get(0));
+
+                templates_searchview.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        templates_searchview.setSelection(templates_searchview.getText().length());
+                    }
+                });
+
+            }
+
+        }
 
     }
 
@@ -390,15 +432,11 @@ public class AddTemplate  extends Fragment {
                     myTemplates.initViewHolder();
                     FragmentManager fm = getActivity().getSupportFragmentManager();
                     fm.popBackStack();
-                }
-                else
-                {
+                } else {
                     fl_progress_bar.setVisibility(View.GONE);
 
                 }
-            }
-            else
-            {
+            } else {
                 fl_progress_bar.setVisibility(View.GONE);
 
             }
@@ -415,7 +453,7 @@ public class AddTemplate  extends Fragment {
     };
 
 
-    public  String currentDate() {
+    public String currentDate() {
         DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         // get current date time with Date()
         Date date = new Date();
@@ -459,7 +497,7 @@ public class AddTemplate  extends Fragment {
                 frequency_list);
         frequency_adp.setDropDownViewResource(R.layout.simple_spinner);
         frequency_spinner.setAdapter(frequency_adp);
-        if(frequency_spinner != null) {
+        if (frequency_spinner != null) {
             frequency_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -525,7 +563,7 @@ public class AddTemplate  extends Fragment {
                 route_list);
         route_adp.setDropDownViewResource(R.layout.simple_spinner);
         route_spinner.setAdapter(route_adp);
-        if(route_spinner != null) {
+        if (route_spinner != null) {
             route_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -564,7 +602,7 @@ public class AddTemplate  extends Fragment {
                 instructions_list);
         instructions_adp.setDropDownViewResource(R.layout.simple_spinner);
         instructions_spinner.setAdapter(instructions_adp);
-        if(instructions_spinner != null) {
+        if (instructions_spinner != null) {
             instructions_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -585,14 +623,13 @@ public class AddTemplate  extends Fragment {
     }
 
 
-
     private void initViews(View view) {
-      //  et_name_of_medicine = view.findViewById(R.id.et_name_of_medicine);
+        //  et_name_of_medicine = view.findViewById(R.id.et_name_of_medicine);
         et_no_of_days = view.findViewById(R.id.et_days);
         et_frequency = view.findViewById(R.id.et_frequency);
         et_frequency2 = view.findViewById(R.id.et_frequency1);
         et_route = view.findViewById(R.id.et_Route);
-        medicine_qty=view.findViewById(R.id.medicine_qty);
+        medicine_qty = view.findViewById(R.id.medicine_qty);
         et_additional_comments = view.findViewById(R.id.et_comments);
         et_instructions = view.findViewById(R.id.et_instruction);
         back = view.findViewById(R.id.btn_back_edit_profile);
@@ -618,21 +655,21 @@ public class AddTemplate  extends Fragment {
             @Override
             public void onTextChanged(CharSequence newText, int start, int before, int count) {
                 ArrayList<com.likesby.bludoc.ModelLayer.Entities.MedicinesItem> favorites1 = searchtext(String.valueOf(newText));
-                if(searchFlag) {
+                if (searchFlag) {
                     if (favorites1.size() == 0) {
                         mRecyclerViewMedicines.setVisibility(View.GONE);
                     } else {
                         mRecyclerViewMedicines.setVisibility(View.VISIBLE);
 
                         mAdapterSearchMedicine = new SearchAdapter(favorites1,
-                                frequency_list,frequency2_list,et_no_of_days,route_list,instructions_list,
-                                frequency_spinner,frequency2_spinner,route_spinner,instructions_spinner,et_additional_comments,
-                                mRecyclerViewMedicines,searchBarMaterialMedicine);
+                                frequency_list, frequency2_list, et_no_of_days, route_list, instructions_list,
+                                frequency_spinner, frequency2_spinner, route_spinner, instructions_spinner, et_additional_comments,
+                                mRecyclerViewMedicines, searchBarMaterialMedicine);
                         mRecyclerViewMedicines.setAdapter(mAdapterSearchMedicine);
                         mAdapterSearchMedicine.notifyDataSetChanged();
 
                     }
-                }else {
+                } else {
                     mRecyclerViewMedicines.setVisibility(View.GONE);
                 }
 
@@ -653,17 +690,17 @@ public class AddTemplate  extends Fragment {
         initRecyclerViews();
     }
 
-    private  ArrayList<com.likesby.bludoc.ModelLayer.Entities.MedicinesItem> searchtext(String query) {
+    private ArrayList<com.likesby.bludoc.ModelLayer.Entities.MedicinesItem> searchtext(String query) {
         query = query.toLowerCase();
         SearchMedicine = new ArrayList<>();
-        searchFlag =false;
-        if(query.length() >= 3) {
-            query= query.trim().replaceAll("\\s+", "%%") + "%%";
+        searchFlag = false;
+        if (query.length() >= 3) {
+            query = query.trim().replaceAll("\\s+", "%%") + "%%";
             //  query = query.replace(" ", "%%");
-            query= query.trim().replaceAll("'", "%%");
+            query = query.trim().replaceAll("'", "%%");
             SearchMedicine = myDB.getSearchData(query);
             searchFlag = true;
-        }else {
+        } else {
             searchFlag = false;
             SearchMedicine = new ArrayList<>();
         }
@@ -675,17 +712,16 @@ public class AddTemplate  extends Fragment {
         //Create new GridLayoutManager
 
 
-      gridLayoutManager2 = new GridLayoutManager(mContext,
+        gridLayoutManager2 = new GridLayoutManager(mContext,
                 1,//span count no of items in single row
                 GridLayoutManager.VERTICAL,//Orientation
                 false);//reverse scrolling of recyclerview
 
 
-         gridLayoutManager3 = new GridLayoutManager(mContext,
+        gridLayoutManager3 = new GridLayoutManager(mContext,
                 1,//span count no of items in single row
                 GridLayoutManager.HORIZONTAL,//Orientation
                 false);//reverse scrolling of recyclerview
-
 
 
         mRecyclerViewMedicines.setLayoutManager(gridLayoutManager2);
@@ -702,9 +738,9 @@ public class AddTemplate  extends Fragment {
 
 
         mAdapterSearchMedicine = new SearchAdapter(MedicAll,
-                 frequency_list,frequency2_list,et_no_of_days,route_list,instructions_list,
-                frequency_spinner,frequency2_spinner,route_spinner,instructions_spinner,et_additional_comments,
-                mRecyclerViewMedicines,searchBarMaterialMedicine);
+                frequency_list, frequency2_list, et_no_of_days, route_list, instructions_list,
+                frequency_spinner, frequency2_spinner, route_spinner, instructions_spinner, et_additional_comments,
+                mRecyclerViewMedicines, searchBarMaterialMedicine);
         mRecyclerViewMedicines.setAdapter(mAdapterSearchMedicine);
     }
 

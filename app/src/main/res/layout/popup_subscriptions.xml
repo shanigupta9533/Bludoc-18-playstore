@@ -53,6 +53,7 @@
 
 
         <TextView
+            android:fontFamily="@font/poppins"
             android:padding="@dimen/margin_5"
             android:id="@+id/tv_no_templatetitle"
             android:layout_marginTop="@dimen/margin_20"
@@ -73,6 +74,7 @@
             />
 
         <TextView
+            android:fontFamily="@font/poppins"
             android:id="@+id/tv_free_trial_days_left"
             android:layout_marginTop="@dimen/margin_20"
             android:layout_gravity="center"
@@ -145,12 +147,14 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:typeface="sans"
+        android:fontFamily="@font/poppins"
             />
 
 
 
 
         <Button
+            android:fontFamily="@font/poppins"
             android:foreground="?android:attr/selectableItemBackground"
            android:layout_marginLeft   ="@dimen/margin_20"
            android:layout_marginStart  ="@dimen/margin_20"
@@ -186,6 +190,7 @@
             android:layout_marginTop    ="@dimen/margin_10"
             android:textStyle="normal"
             android:gravity="center"
+            android:fontFamily="@font/poppins"
             android:layout_gravity="center"
             android:paddingLeft="@dimen/margin_10"
             android:paddingStart="@dimen/margin_10"
@@ -213,6 +218,7 @@
 
 
         <TextView
+            android:fontFamily="@font/poppins"
             android:id="@+id/tv_no_template1"
             android:layout_marginTop="@dimen/margin_20"
             android:layout_gravity="center"

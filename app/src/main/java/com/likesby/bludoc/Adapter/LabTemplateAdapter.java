@@ -182,6 +182,7 @@ public class LabTemplateAdapter extends RecyclerView.Adapter<LabTemplateAdapter.
                     backCheckerFlag = true;
                     if(mFilteredList != null) {
                         CreatePrescription.labtestAddFLAG = true;
+                        if(mFilteredList.get(getAdapterPosition())!=null )
                         CreatePrescription.NEWaddLabTestArrayList.addAll(mFilteredList.get(getAdapterPosition()).getLabTest());
                     }
                     /*CreatePrescription myFragment = new CreatePrescription();

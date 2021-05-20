@@ -18,6 +18,7 @@
         android:layout_height="wrap_content"
         android:textColor="#000"
         android:textSize="16sp"
+        android:fontFamily="@font/poppins"
         android:layout_gravity="center|start"
         android:text="Template Name"/>
 
@@ -31,6 +32,7 @@
         android:weightSum="0">
 
         <Button
+            android:fontFamily="@font/poppins"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/margin_25"
             android:paddingLeft="@dimen/margin_10"
@@ -51,6 +53,7 @@
             android:text="Add"/>
 
         <Button
+            android:fontFamily="@font/poppins"
             android:id="@+id/template_edit"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/margin_25"
@@ -71,6 +74,7 @@
 
 
     <Button
+        android:fontFamily="@font/poppins"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/margin_25"
         android:layout_marginLeft   ="@dimen/margin_10"

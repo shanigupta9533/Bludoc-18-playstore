@@ -38,6 +38,7 @@
 
 
         <TextView
+            android:fontFamily="@font/poppins"
             android:id="@+id/tv_no_template"
             android:layout_marginTop="@dimen/margin_20"
             android:layout_gravity="center"
@@ -53,7 +54,6 @@
             android:textColor="@color/colorBlack"
             android:textSize="16sp"
             android:textStyle="normal"
-            android:typeface="sans"
             />
 
 

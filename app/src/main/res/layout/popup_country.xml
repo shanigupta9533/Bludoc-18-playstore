@@ -28,6 +28,7 @@
 
 
         <TextView
+            android:fontFamily="@font/poppins"
             android:id="@+id/tv_no_template"
             android:layout_marginTop="@dimen/margin_10"
             android:layout_gravity="center"
@@ -64,6 +65,7 @@
             android:textColor="@color/colorBlack"
             android:textSize="14sp"
             android:typeface="sans"
+            android:fontFamily="@font/poppins"
             />
 
 
@@ -77,6 +79,7 @@
             android:orientation="horizontal">
 
             <Button
+                android:fontFamily="@font/poppinsmedium"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:elevation="@dimen/margin_10"
@@ -87,7 +90,7 @@
                 android:layout_margin="@dimen/margin_10"
                 android:layout_weight="1"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:background="@drawable/faint_white_round_border_grey"
                 android:gravity="center"
@@ -110,9 +113,9 @@
                 android:layout_weight="1"
                 android:layout_width="wrap_content"
                 android:layout_margin="@dimen/margin_10"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-
+                android:fontFamily="@font/poppinsmedium"
                 android:background="@drawable/faint_white_round_border_grey"
                 android:gravity="center"
                 android:textStyle="bold"

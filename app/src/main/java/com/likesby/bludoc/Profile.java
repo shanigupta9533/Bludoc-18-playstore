@@ -55,8 +55,6 @@ public class Profile extends AppCompatActivity {
         setContentView(R.layout.profile);
         mContext = Profile.this;
         manager = new SessionManager();
-
-
     }
 
 

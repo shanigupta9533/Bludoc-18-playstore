@@ -22,15 +22,16 @@
     android:layout_height="wrap_content">
 
     <TextView
+        android:fontFamily="@font/poppinsmedium"
         android:id="@+id/tv_labtest_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:fontFamily="sans-serif"
+
         android:gravity="center"
         android:text="LabTest Name"
         android:textColor="@color/colorBlack"
-        android:textSize="15dp"
+        android:textSize="15sp"
         android:textStyle="bold"
         />
 
@@ -41,23 +42,24 @@
         android:id="@+id/tv_labtest_comment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
+
         android:text="Additional Comment"
         android:textColor="@color/colorDarkGrey"
-        android:textSize="13dp"
+        android:textSize="13sp"
+        android:fontFamily="@font/poppins"
         android:textStyle="bold"
         />
 
     <TextView
-
+        android:fontFamily="@font/poppins"
         android:id="@+id/tv_labtest_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        android:fontFamily="sans-serif"
+
         android:text="Additional Comment"
         android:textColor="@color/colorDarkGrey"
-        android:textSize="13dp"
+        android:textSize="13sp"
         android:textStyle="bold"
         />
 

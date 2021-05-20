@@ -55,6 +55,10 @@ android {
 
 
         ndkVersion "21.0.6113669"
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 
 }
 
@@ -81,11 +85,13 @@ dependencies {
     //RazorPay
     implementation 'com.razorpay:checkout:1.5.13'
     //region Gmail
+
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
     implementation 'com.google.android.gms:play-services-auth-api-phone:17.5.0'
     //implementation 'com.github.jkwiecien:EasyImage:2.1.0'
 
     implementation 'com.google.android.gms:play-services-ads:19.6.0'
+    
 
     //region Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
@@ -112,6 +118,19 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     implementation 'com.itextpdf:itextg:5.5.10'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.21'
+    implementation 'com.github.HendrixString:Android-PdfMyXml:1.0.8'
+
+    // pull to refresh
+    implementation 'com.yalantis:phoenix:1.2.3'
+
+    // one time model
+    implementation 'com.github.Commit451:ModalBottomSheetDialogFragment:1.1.0'
+
+    // translate api
+    implementation 'com.github.iammannan:TranslateAPI:1.1'
+
+    //apache scape string
+    implementation 'org.apache.commons:commons-text:1.9'
 
     implementation project(':nativetemplates')
 }

@@ -13,12 +13,14 @@
         android:layout_margin="@dimen/margin_3"
         android:orientation="horizontal">
         <TextView
+            android:fontFamily="@font/poppins"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:textSize="@dimen/font_16"
             android:text="- "/>
         <TextView
+            android:fontFamily="@font/poppins"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#626262"
@@ -37,6 +39,7 @@
         android:orientation="horizontal">
 
         <TextView
+            android:fontFamily="@font/poppins"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#626262"
@@ -49,6 +52,7 @@
 
 
     <TextView
+        android:fontFamily="@font/poppins"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/margin_20"

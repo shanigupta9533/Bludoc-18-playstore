@@ -48,6 +48,7 @@
             android:layout_marginEnd="@dimen/margin_30"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/poppinsmedium"
             android:textAllCaps="false"
             android:text="An old version detected, kindly update to the latest version."
             android:textColor="@color/colorBlack"
@@ -63,12 +64,11 @@
         android:elevation="@dimen/margin_10"
         android:layout_marginTop="@dimen/margin_40"
         android:layout_marginBottom="@dimen/margin_20"
-        android:padding="@dimen/margin_10"
         android:id="@+id/btn_update_play_store"
         android:layout_width="260dp"
         android:layout_height="40dp"
         android:layout_gravity="center"
-
+        android:fontFamily="@font/poppins"
         android:background="@drawable/blue_faint_round_btn_gradient"
         android:gravity="center"
         android:textStyle="bold"
@@ -76,15 +76,15 @@
         android:textAllCaps="true"
         android:textColor="@color/colorWhite"
         android:textColorHint="@color/colorWhite"
-        android:textSize="16sp"
+        android:textSize="15sp"
         android:typeface="sans" />
 
         <Button
+            android:fontFamily="@font/poppins"
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
             android:elevation="@dimen/margin_10"
             android:layout_marginBottom="@dimen/margin_40"
-            android:padding="@dimen/margin_10"
             android:id="@+id/btn_later"
             android:layout_width="260dp"
             android:layout_height="40dp"
@@ -97,7 +97,7 @@
             android:textAllCaps="true"
             android:textColor="@color/colorWhite"
             android:textColorHint="@color/colorWhite"
-            android:textSize="16sp"
+            android:textSize="15sp"
             android:typeface="sans" />
 
 

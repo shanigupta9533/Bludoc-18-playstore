@@ -15,6 +15,7 @@
 
 
         <EditText
+            android:fontFamily="@font/poppins"
             android:id="@+id/alertdialog_edittext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

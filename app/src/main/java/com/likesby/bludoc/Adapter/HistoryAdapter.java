@@ -148,6 +148,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
                 bundle.putParcelableArrayList("defaultAttributeIdLabTest", labTestItemArrayList);
                 bundle.putString("definer", "history");
                 bundle.putString("end_note", prescriptionItem.getEndNote());
+                bundle.putString("yesOrNo",prescriptionItem.getAge());
                 myFragment.setArguments(bundle);
                 FragmentManager fragmentManager = ((FragmentActivity) ctx).getSupportFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.homePageContainer, myFragment, "first").addToBackStack("Detail").commit();

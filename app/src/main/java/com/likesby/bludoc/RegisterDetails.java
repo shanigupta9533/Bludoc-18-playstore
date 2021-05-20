@@ -56,9 +56,15 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.github.gcacace.signaturepad.views.SignaturePad;
+import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
+import com.google.android.gms.ads.doubleclick.PublisherInterstitialAd;
 import com.isseiaoki.simplecropview.CropImageView;
 import com.isseiaoki.simplecropview.callback.CropCallback;
 import com.isseiaoki.simplecropview.callback.LoadCallback;
@@ -139,7 +145,9 @@ public class RegisterDetails extends AppCompatActivity {
     ArrayList<UGItem> ugItemArrayList;
     ArrayList<DesignationItem> specialitiesItemArrayList;
     String designation_id="",pg_id="",ug_id= "",specialities_id ="", working_days="",
-            visit_hrs_from="",visit_hrs_to="", visit_hrs_from2="",visit_hrs_to2="",closed_day="",vst_frm="",vst_to;
+            visit_hrs_from="",visit_hrs_to="", visit_hrs_from2="",visit_hrs_to2="",closed_day="",vst_frm="",vst_to="";
+    private InterstitialAd mInterstitialAd;
+
 
     boolean imageSelectedFlag = false;
     private String Document_img1="";
@@ -186,7 +194,7 @@ public class RegisterDetails extends AppCompatActivity {
     UGAdapter ugAdapter;
     public static  String ug_name__="",ug_id__="";
     private AdView mAdView,mAdViewNative;
-
+    AdRequest adRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -206,8 +214,50 @@ public class RegisterDetails extends AppCompatActivity {
         manager = new SessionManager();
         initCalls();
         initViewHolder();
+
+                 adRequest = new AdRequest.Builder()/*.addTestDevice("31B09DFC1F78AF28F2AFB1506F51B0BF")*/.build();
+        mInterstitialAd = new InterstitialAd(mContext);
+        //  mInterstitialAd.setAdUnitId("ca-app-pub-9225891557304181/3105393849");//Live
+        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");//Test
+        mInterstitialAd.loadAd(adRequest);
+
+
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                // Code to be executed when an ad finishes loading.
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                // Code to be executed when an ad request fails.
+
+            }
+
+            @Override
+            public void onAdOpened() {
+                // Code to be executed when the ad is displayed.
+            }
+
+            @Override
+            public void onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                // Code to be executed when the user has left the app.
+            }
+
+            @Override
+            public void onAdClosed() {
+                // Code to be executed when the interstitial ad is closed.
+
+            }
+        });
+
         if(manager.contains(mContext,"show_banner_ad"))
-        BannerAd();
+        BannerAd(adRequest);
         apiViewHolder.getUGs()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -238,43 +288,54 @@ public class RegisterDetails extends AppCompatActivity {
 
 
 
-    private  void BannerAd(){
+
+    private  void InterstitialAd( AdRequest adRequest){
+
+
+        if (mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+        }
+        else {
+            Intent intent1 = new Intent(RegisterDetails.this, HomeActivity.class);
+            startActivity(intent1);
+            finish();
+        }
+        }
+
+
+    private  void BannerAd( AdRequest adRequest){
         mAdView = findViewById(R.id.adView);
         mAdView.setVisibility(View.VISIBLE);
-        AdRequest adRequest = new AdRequest.Builder()/*.addTestDevice("31B09DFC1F78AF28F2AFB1506F51B0BF")*/.build();
         mAdView.loadAd(adRequest);
         mAdView.setAdListener(new AdListener() {
             @Override
-            public void onAdLoaded() {
-                // Code to be executed when an ad finishes loading.
+            public void onAdClosed() {
+                super.onAdClosed();
             }
 
             @Override
-            public void onAdFailedToLoad(int errorCode) {
-               // Toast.makeText(mContext, "ErrorCode = "+errorCode, Toast.LENGTH_SHORT).show();
-                // Code to be executed when an ad request fails.
+            public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                super.onAdFailedToLoad(loadAdError);
             }
 
             @Override
             public void onAdOpened() {
-                // Code to be executed when an ad opens an overlay that
-                // covers the screen.
+                super.onAdOpened();
+            }
+
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
             }
 
             @Override
             public void onAdClicked() {
-                // Code to be executed when the user clicks on an ad.
+                super.onAdClicked();
             }
 
             @Override
-            public void onAdLeftApplication() {
-                // Code to be executed when the user has left the app.
-            }
-
-            @Override
-            public void onAdClosed() {
-                // Code to be executed when the user is about to return
-                // to the app after tapping on an ad.
+            public void onAdImpression() {
+                super.onAdImpression();
             }
         });
 
@@ -2312,9 +2373,15 @@ public class RegisterDetails extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(mContext, "Your Profile Created Successfully", Toast.LENGTH_SHORT).show();
-                Intent intent1 = new Intent(RegisterDetails.this, HomeActivity.class);
-                startActivity(intent1);
-                finish();
+                if(manager.contains(mContext,"show_banner_ad"))
+                    InterstitialAd(adRequest);
+                else{
+                    Intent intent1 = new Intent(RegisterDetails.this, HomeActivity.class);
+                    startActivity(intent1);
+                    finish();
+                }
+
+
             }
         });
 

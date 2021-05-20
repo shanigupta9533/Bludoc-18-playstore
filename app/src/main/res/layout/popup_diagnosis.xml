@@ -37,7 +37,7 @@
 
     <RadioButton
         android:id="@+id/rb_prescription"
-
+        android:fontFamily="@font/poppins"
         android:padding="@dimen/margin_5"
         android:layout_marginLeft   ="@dimen/margin_25"
         android:layout_marginStart  ="@dimen/margin_25"
@@ -48,14 +48,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:fontFamily="sans-serif"
         android:text="Enter Case History / Lab Test / Medications"
         android:textColor="@color/colorBlack"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:textStyle="bold"
         />
 
     <RadioButton
+
         android:padding="5dp"
         android:layout_marginLeft   ="@dimen/margin_25"
         android:layout_marginStart  ="@dimen/margin_25"
@@ -67,10 +67,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:fontFamily="sans-serif"
+        android:fontFamily="@font/poppins"
         android:text="Give a Medical Certificate / Admission Letter etc"
         android:textColor="@color/colorBlack"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:textStyle="bold"
         />
 
@@ -88,13 +88,15 @@
         android:background="@drawable/blue_btn_gradient_new"
         android:textAllCaps="false"
         android:layout_width="200dp"
-        android:layout_height="@dimen/margin_35"
+        android:layout_height="@dimen/margin_40"
         android:text="@string/proceed"
+        android:fontFamily="@font/poppins"
 
         android:id="@+id/btn_proceed"
         />
 
     <Button
+        android:fontFamily="@font/poppins"
         android:visibility="visible"
         android:layout_marginBottom="@dimen/margin_40"
         android:textSize="16sp"
@@ -105,9 +107,10 @@
         android:background="@drawable/grey_dark_btn_gradient_tablet"
         android:textAllCaps="false"
         android:layout_width="200dp"
-        android:layout_height="@dimen/margin_35"
+        android:layout_height="@dimen/margin_40"
         android:text="@string/cancel"
         android:id="@+id/btn_cancel"
+
         />
 
 

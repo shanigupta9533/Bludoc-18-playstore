@@ -48,6 +48,7 @@
             />
 
         <TextView
+            android:fontFamily="@font/poppinsmedium"
             android:id="@+id/tv_no_templatetitle"
             android:layout_marginTop="@dimen/margin_20"
             android:layout_gravity="center"
@@ -78,6 +79,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAllCaps="false"
+            android:fontFamily="@font/poppins"
             android:text="You have successfully upgraded to BluDoc Premium. Your subscription will end on"
             android:textColor="@color/colorBlack"
             android:textSize="16sp"
@@ -105,6 +107,7 @@
             android:layout_height="@dimen/margin_40"
             android:text="Okay"
             android:textSize="16sp"
+            android:fontFamily="@font/poppins"
             android:textAllCaps="false"
             android:background="@drawable/blue_round_btn_gradient"
             android:textColor="@color/colorWhite"
@@ -113,6 +116,7 @@
 
 
         <TextView
+            android:fontFamily="@font/poppins"
             android:id="@+id/tv_no_template1"
             android:layout_marginTop="@dimen/margin_20"
             android:layout_gravity="center"

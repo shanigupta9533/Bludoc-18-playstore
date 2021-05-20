@@ -38,7 +38,7 @@ public class TemplateSelection extends Fragment
     ImageView back;
     String type="";
     boolean type_flag = false;
-    private AdView mAdView;
+    //private AdView mAdView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,7 +55,7 @@ public class TemplateSelection extends Fragment
         fl_lab_test = v.findViewById(R.id.fl_lab_tests);
         tv_medicines = v.findViewById(R.id.tv_medicines);
         tv_labtest = v.findViewById(R.id.tv_labtest);
-        mAdView = v.findViewById(R.id.adView);
+      //  mAdView = v.findViewById(R.id.adView);
 
         tv_medicines.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,8 +119,8 @@ public class TemplateSelection extends Fragment
                 }
             }
         }
-        if(manager.contains(mContext,"show_banner_ad"))
-        BannerAd();
+//        if(manager.contains(mContext,"show_banner_ad"))
+//        BannerAd();
         v.setFocusableInTouchMode(true);
         v.requestFocus();
         v.setOnKeyListener( new View.OnKeyListener()
@@ -150,46 +150,46 @@ public class TemplateSelection extends Fragment
         return v;
     }
 
-    private  void BannerAd(){
-        mAdView.setVisibility(View.VISIBLE);
-        AdRequest adRequest = new AdRequest.Builder()/*.addTestDevice("31B09DFC1F78AF28F2AFB1506F51B0BF")*/.build();
-        mAdView.loadAd(adRequest);
-        mAdView.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                // Code to be executed when an ad finishes loading.
-            }
-
-            @Override
-            public void onAdFailedToLoad(int errorCode) {
-               // Toast.makeText(mContext, "ErrorCode = "+errorCode, Toast.LENGTH_SHORT).show();
-                // Code to be executed when an ad request fails.
-            }
-
-            @Override
-            public void onAdOpened() {
-                // Code to be executed when an ad opens an overlay that
-                // covers the screen.
-            }
-
-            @Override
-            public void onAdClicked() {
-                // Code to be executed when the user clicks on an ad.
-            }
-
-            @Override
-            public void onAdLeftApplication() {
-                // Code to be executed when the user has left the app.
-            }
-
-            @Override
-            public void onAdClosed() {
-                // Code to be executed when the user is about to return
-                // to the app after tapping on an ad.
-            }
-        });
-
-    }
+//    private  void BannerAd(){
+//        mAdView.setVisibility(View.VISIBLE);
+//        AdRequest adRequest = new AdRequest.Builder()/*.addTestDevice("31B09DFC1F78AF28F2AFB1506F51B0BF")*/.build();
+//        mAdView.loadAd(adRequest);
+//        mAdView.setAdListener(new AdListener() {
+//            @Override
+//            public void onAdLoaded() {
+//                // Code to be executed when an ad finishes loading.
+//            }
+//
+//            @Override
+//            public void onAdFailedToLoad(int errorCode) {
+//               // Toast.makeText(mContext, "ErrorCode = "+errorCode, Toast.LENGTH_SHORT).show();
+//                // Code to be executed when an ad request fails.
+//            }
+//
+//            @Override
+//            public void onAdOpened() {
+//                // Code to be executed when an ad opens an overlay that
+//                // covers the screen.
+//            }
+//
+//            @Override
+//            public void onAdClicked() {
+//                // Code to be executed when the user clicks on an ad.
+//            }
+//
+//            @Override
+//            public void onAdLeftApplication() {
+//                // Code to be executed when the user has left the app.
+//            }
+//
+//            @Override
+//            public void onAdClosed() {
+//                // Code to be executed when the user is about to return
+//                // to the app after tapping on an ad.
+//            }
+//        });
+//
+//    }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {

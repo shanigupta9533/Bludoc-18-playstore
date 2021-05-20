@@ -13,6 +13,7 @@ import android.graphics.Point;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,16 +32,20 @@ import androidx.annotation.RequiresApi;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.itextpdf.text.PageSize;
+import com.hendrix.pdfmyxml.viewRenderer.AbstractViewRenderer;
 import com.likesby.bludoc.BuildConfig;
 import com.likesby.bludoc.Fragment.GeneratePres;
+import com.likesby.bludoc.Fragment.GeneratePresNew;
 import com.likesby.bludoc.ModelLayer.Entities.BottomSheetItem;
 import com.likesby.bludoc.R;
 import com.likesby.bludoc.SessionManager.SessionManager;
 import com.likesby.bludoc.utils.FileUtils;
 import com.squareup.picasso.Picasso;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -54,16 +59,22 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
 
     private ArrayList<BottomSheetItem> mArryCountries,mFilteredList;
     private Context mContext;
-    int[] image_array = new int[] { R.drawable.mail, R.drawable.whatsapp ,R.drawable.ic_share__   };
+    int[] image_array = new int[] { R.drawable.mail, R.drawable.ic_download_ ,R.drawable.ic_share__ ,R.drawable.whatsapp  };
     SessionManager manager;
     FrameLayout fl_progress_bar;
+    private ArrayList<AbstractViewRenderer> pages;
+    GeneratePres generatePres;
+    GeneratePresNew generatePresNew;
+
     public BottomSheetAdapter(Context mContext,
-                              ArrayList<BottomSheetItem> objects, FrameLayout fl_progress_bar) {
+                              ArrayList<BottomSheetItem> objects, FrameLayout fl_progress_bar, GeneratePres generatePres, GeneratePresNew generatePresNew) {
         mArryCountries = objects;
         mFilteredList = mArryCountries;
         this.mContext = mContext;
         manager = new SessionManager();
         this.fl_progress_bar = fl_progress_bar;
+        this.generatePres = generatePres;
+        this.generatePresNew = generatePresNew;
     }
 
     @SuppressLint("NewApi")
@@ -84,6 +95,18 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
         viewHolder.Name.setText(mFilteredList.get(i).getMenuName());
 
 
+        if(i==3){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+            {
+                viewHolder.fl_share.setVisibility(View.GONE);
+            }
+        }
+
+        if(generatePres==null){
+            viewHolder.Name.setTextColor(mContext.getResources().getColor(R.color.guidee));
+            viewHolder.Name.setBackground(mContext.getResources().getDrawable(R.drawable.faint_white_round_border_green));
+
+        }
 
         WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
@@ -239,10 +262,15 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
         };
     }
 
+    public void setData(ArrayList<AbstractViewRenderer> page) {
+        this.pages=page;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder
     {
         TextView id, Name,expiry;
         LinearLayout ll_bottom_sheet;
+        FrameLayout fl_share;
         ImageView bottom_sheet_iv;
 
         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -252,6 +280,7 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
             mContext = view.getContext();
 
             id        = view.findViewById(R.id.__bottom_sheet_id);
+            fl_share        = view.findViewById(R.id.fl_share);
             Name      = view.findViewById(R.id.__bottom_sheet_name);
             expiry      = view.findViewById(R.id.bottomsheet_sub_expiry);
             ll_bottom_sheet = view.findViewById(R.id.ll_bottom_sheet);
@@ -260,6 +289,21 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
             ll_bottom_sheet.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    ArrayList<Uri> files = new ArrayList<>();
+                    String p_name = "", smsNumber = "",p_email="";
+                    if (generatePres == null) {
+                        files = GeneratePresNew.getFiles();
+                        smsNumber = GeneratePresNew.patient_item.getPMobile().trim();
+                        p_name = GeneratePresNew.patient_item.getPName().trim();
+                        p_email = GeneratePresNew.patient_item.getPEmail().trim();
+                    } else if (generatePresNew == null) {
+                        files = GeneratePres.getFiles();
+                        smsNumber = GeneratePres.patient_item.getPMobile().trim();
+                        p_name = GeneratePres.patient_item.getPName().trim();
+                        p_email = GeneratePres.patient_item.getPEmail().trim();
+
+                    }
+
                     //Toast.makeText(mContext, ""+Name.getText().toString().trim(), Toast.LENGTH_SHORT).show();
 
                     if(getAdapterPosition()==0)
@@ -345,10 +389,10 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
 //                        emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(pdfWithMultipleImage.getPath()));
 //                        mContext.startActivity(Intent.createChooser(emailIntent, "Send mail..."));
 
-                        ArrayList<Uri> files = GeneratePres.getFiles();
+
                         File pdfWithMultipleImage = createPDFWithMultipleImage(files);
                         Uri contentUri = FileProvider.getUriForFile(mContext, BuildConfig.APPLICATION_ID + ".provider", pdfWithMultipleImage);
-                        sendMail(contentUri);
+                        sendMail(contentUri,p_name,p_email);
 
                         /*Intent intent = new Intent();
                       //  intent.setType("message/rfc822");
@@ -377,48 +421,52 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
 
 
                     }
-                    else if(getAdapterPosition()==1)
+                    else if(getAdapterPosition()==3)
                     {
                         boolean isWhatsappInstalled = whatsappInstalledOrNot("com.whatsapp");
-                        if(isWhatsappInstalled)
-                        {
+                        if(isWhatsappInstalled) {
 
 
-                            //======================================================================
-                            PackageManager packageManager = mContext.getPackageManager();
-                            // Intent sendIntent = new Intent(Intent.ACTION_VIEW);
+                                //======================================================================
+                                PackageManager packageManager = mContext.getPackageManager();
+                                // Intent sendIntent = new Intent(Intent.ACTION_VIEW);
 
-                            try {
-                                ArrayList<Uri> files = GeneratePres.getFiles();
+                                try {
 
-                                String smsNumber = GeneratePres.patient_item.getPMobile().trim();
-                                smsNumber = smsNumber.replace("+","").trim(); // E164 format without '+' sign
-                                if(!(smsNumber.contains("91")))
-                                    smsNumber = "91"+smsNumber;
-                                Intent sendIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
-                                sendIntent.setType("application/pdf");
-                                sendIntent.putExtra(Intent.EXTRA_TEXT, "Dear "+ GeneratePres.patient_item.getPName() + ", "+ manager.getPreferences(mContext, "name")+ " has sent you an E-prescription / Certificate via BluDoc");
-                                File pdfWithMultipleImage = createPDFWithMultipleImage(files);
-                                sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(pdfWithMultipleImage.getPath()));
-                                sendIntent.putExtra("jid", ""+smsNumber + "@s.whatsapp.net"); //phone number without "+" prefix
-                                sendIntent.setPackage("com.whatsapp");
-                                if (sendIntent.resolveActivity(mContext.getPackageManager()) == null) {
-                                    Toast.makeText(mContext, "Error", Toast.LENGTH_SHORT).show();
-                                    return;
+                                    smsNumber = smsNumber.replace("+", "").trim(); // E164 format without '+' sign
+                                    if (!(smsNumber.contains("91")))
+                                        smsNumber = "91" + smsNumber;
+                                    Intent sendIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+                                    sendIntent.setType("application/pdf");
+                                    sendIntent.putExtra(Intent.EXTRA_TEXT, "Dear " + p_name + ", " + manager.getPreferences(mContext, "name") + " has sent you an E-prescription / Certificate via BluDoc");
+                                    File pdfWithMultipleImage = createPDFWithMultipleImage(files);
+                                    sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(pdfWithMultipleImage.getPath()));
+                                    /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                                    {
+                                        sendIntent.putExtra(Intent.EXTRA_STREAM,
+                                                FileProvider.getUriForFile(mContext, BuildConfig.APPLICATION_ID + ".provider", pdfWithMultipleImage));
+                                    }
+                                    else
+                                    {
+                                        sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(pdfWithMultipleImage.getPath()));
+                                    }*/
+                                    sendIntent.putExtra("jid", "" + smsNumber + "@s.whatsapp.net"); //phone number without "+" prefix
+                                    sendIntent.setPackage("com.whatsapp");
+                                    if (sendIntent.resolveActivity(mContext.getPackageManager()) == null) {
+                                        Toast.makeText(mContext, "Error", Toast.LENGTH_SHORT).show();
+                                        return;
+                                    }
+
+                                    if (sendIntent.resolveActivity(packageManager) != null) {
+                                        mContext.startActivity(sendIntent);
+                                    } else
+                                        Toast.makeText(mContext, "Resolve activity Null", Toast.LENGTH_SHORT).show();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
-
-                                if (sendIntent.resolveActivity(packageManager) != null) {
-                                    mContext.startActivity(sendIntent);
-                                }
-                                else
-                                    Toast.makeText(mContext, "Resolve activity Null", Toast.LENGTH_SHORT).show();
-                            } catch (Exception e){
-                                e.printStackTrace();
-                            }
-
                         }
                         else
-                            openBusinessWhatsUpAndShare();
+                            openBusinessWhatsUpAndShare(p_name,smsNumber,files);
 
                     }
                     else if(getAdapterPosition()==2)
@@ -427,29 +475,71 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
                         Intent intent = new Intent();
                         intent.setAction(Intent.ACTION_SEND);
                         // intent.putExtra(Intent.EXTRA_EMAIL  , new String[]{""+GeneratePres.patient_item.getPEmail()});
-                        intent.putExtra(Intent.EXTRA_TEXT, "Dear "+ GeneratePres.patient_item.getPName() + ", "+ manager.getPreferences(mContext, "name")+ " has sent you an E-prescription / Certificate via BluDoc");
+                        intent.putExtra(Intent.EXTRA_TEXT, "Dear "+ p_name + ", "+ manager.getPreferences(mContext, "name")+ " has sent you an E-prescription / Certificate via BluDoc");
                         intent.setType("*/*");
-                        ArrayList<Uri> files = GeneratePres.getFiles();
+
                         File pdfWithMultipleImage = createPDFWithMultipleImage(files);
-                        intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(pdfWithMultipleImage.getPath()));
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                        {
+                            intent.putExtra(Intent.EXTRA_STREAM,
+                                    FileProvider.getUriForFile(mContext, BuildConfig.APPLICATION_ID + ".provider", pdfWithMultipleImage));
+                        }
+                        else
+                        {
+                            intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(pdfWithMultipleImage.getPath()));
+                        }
                         Intent shareIntent = Intent.createChooser(intent, "Send...");
                         mContext.startActivity(shareIntent);
                     }
+                    else if(getAdapterPosition()==1){
+                        Toast.makeText(mContext, "Downloading...", Toast.LENGTH_SHORT).show();
+
+                       
+                        File pdfWithMultipleImage = createPDFWithMultipleImage(files);
+
+                            String destinationFilename = android.os.Environment.getExternalStorageDirectory().getPath()+File.separatorChar+""+pdfWithMultipleImage.getName();
+
+                            BufferedInputStream bis = null;
+                            BufferedOutputStream bos = null;
+
+                            try {
+                                bis = new BufferedInputStream(new FileInputStream(pdfWithMultipleImage));
+                                bos = new BufferedOutputStream(new FileOutputStream(destinationFilename, false));
+                                byte[] buf = new byte[1024];
+                                bis.read(buf);
+                                do {
+                                    bos.write(buf);
+                                } while(bis.read(buf) != -1);
+
+                                Toast.makeText(mContext, "Downloaded to - "+destinationFilename, Toast.LENGTH_LONG).show();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            } finally {
+                                try {
+                                    if (bis != null) bis.close();
+                                    if (bos != null) bos.close();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+
+
 
                     //AppRater.app_launched(mContext);
                 }
             });
         }
 
-        private void sendMail(Uri URI) {
+        private void sendMail(Uri URI, String p_name, String p_email) {
             try {
 
                 final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
                 emailIntent.setType("application/pdf");
                 emailIntent.setType("message/rfc822");
-                emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{""+GeneratePres.patient_item.getPEmail()});
+                emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{""+p_email});
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "E-prescription from " + manager.getPreferences(mContext, "name"));
-                emailIntent.putExtra(Intent.EXTRA_TEXT, "Dear " + GeneratePres.patient_item.getPName() + ", " + manager.getPreferences(mContext, "name") + " has sent you an E-prescription / Certificate via BluDoc");
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "Dear " +p_name + ", " + manager.getPreferences(mContext, "name") + " has sent you an E-prescription / Certificate via BluDoc");
 
                 emailIntent.setPackage("com.google.android.gm");
                 if (URI != null) {
@@ -473,7 +563,7 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
 
         }
 
-        private void openBusinessWhatsUpAndShare() {
+        private void openBusinessWhatsUpAndShare(String p_name, String smsNumber, ArrayList<Uri> files) {
 
             boolean isWhatsappInstalled = whatsappInstalledOrNot("com.whatsapp.w4b");
             if(isWhatsappInstalled)
@@ -483,17 +573,23 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
                 // Intent sendIntent = new Intent(Intent.ACTION_VIEW);
 
                 try {
-                    ArrayList<Uri> files = GeneratePres.getFiles();
-
-                    String smsNumber = GeneratePres.patient_item.getPMobile().trim();
-                    smsNumber = smsNumber.replace("+","").trim(); // E164 format without '+' sign
+                     smsNumber = smsNumber.replace("+","").trim(); // E164 format without '+' sign
                     if(!(smsNumber.contains("91")))
                         smsNumber = "91"+smsNumber;
                     Intent sendIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
                     sendIntent.setType("application/pdf");
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, "Dear "+ GeneratePres.patient_item.getPName() + ", "+ manager.getPreferences(mContext, "name")+ " has sent you an E-prescription / Certificate via BluDoc");
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, "Dear "+ p_name + ", "+ manager.getPreferences(mContext, "name")+ " has sent you an E-prescription / Certificate via BluDoc");
                     File pdfWithMultipleImage = createPDFWithMultipleImage(files);
                     sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(pdfWithMultipleImage.getPath()));
+                    /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                    {
+                        sendIntent.putExtra(Intent.EXTRA_STREAM,
+                                FileProvider.getUriForFile(mContext, BuildConfig.APPLICATION_ID + ".provider", pdfWithMultipleImage));
+                    }
+                    else
+                    {
+                        sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(pdfWithMultipleImage.getPath()));
+                    }*/
                     sendIntent.putExtra("jid", ""+smsNumber + "@s.whatsapp.net"); //phone number without "+" prefix
                     sendIntent.setPackage("com.whatsapp.w4b");
                     if (sendIntent.resolveActivity(mContext.getPackageManager()) == null) {
@@ -517,6 +613,7 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
         }
 
         private File createPDFWithMultipleImage(ArrayList<Uri> files){
+
             File file = getOutputFile();
             if (file != null){
                 try {
@@ -547,8 +644,12 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
         }
 
         private File getOutputFile(){
-            File root = new File(mContext.getExternalFilesDir(null),"My PDF Folder");
-
+            File root = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                 root = new File (Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+ "/"+"My PDF Folder" );
+            } else {
+                 root = new File(mContext.getExternalFilesDir(null), "My PDF Folder");
+            }
             boolean isFolderCreated = true;
 
             if (!root.exists()){

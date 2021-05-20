@@ -28,6 +28,7 @@
         android:gravity="center_horizontal">
 
         <TextView
+            android:fontFamily="@font/poppins"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Select Stream / Board"
@@ -37,13 +38,7 @@
             android:layout_margin="@dimen/margin_5"
             android:id="@+id/login"/>
 
-
-
-
-
     </LinearLayout>
-
-
 
     <include
         layout="@layout/app_bar_main"
@@ -51,12 +46,13 @@
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
+
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:itemIconSize="25dp"
-        app:itemIconPadding="@dimen/margin_30"
+        app:itemIconPadding="@dimen/margin_25"
         app:itemTextAppearance="@style/text_20"
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer" />

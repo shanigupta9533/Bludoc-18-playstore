@@ -30,6 +30,7 @@
     <color name="frame2">#0AA83E</color>
     <color name="handle">#86c166</color>
     <color name="guide">#aa86c166</color>
+    <color name="guidee">#AA1B4A01</color>
 
     <color name="colorBlue">#1B44D8</color>
     <color name="colorBlueTop">#16265B</color>

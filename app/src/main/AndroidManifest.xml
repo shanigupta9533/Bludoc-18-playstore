@@ -36,7 +36,7 @@
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-6756023122563497~6049228406" />
+            android:value="ca-app-pub-9225891557304181~7586066501" />
 
 
         <activity
@@ -99,15 +99,21 @@
             android:theme="@style/AppThemeTransparent"
             android:windowSoftInputMode="adjustPan|adjustResize" />
 
-        <activity
-            android:name=".MainActivity"
-            android:hardwareAccelerated="true"
+<!--        <activity-->
+<!--            android:name=".MainActivity"-->
+<!--            android:hardwareAccelerated="true"-->
 
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeNoActionBar" />
+<!--            android:screenOrientation="portrait"-->
+<!--            android:theme="@style/AppThemeNoActionBar" />-->
 
         <activity
             android:name=".EmpLogin"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeTransparent"
+            android:windowSoftInputMode="adjustPan" />
+
+        <activity
+            android:name=".MultiplePharmacistActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeTransparent"
             android:windowSoftInputMode="adjustPan" />
@@ -125,6 +131,18 @@
 
         <activity
             android:name=".SocialLogin"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBar"
+            tools:ignore="LockedOrientationActivity" />
+
+        <activity
+            android:name=".AllPharmacistActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBar"
+            tools:ignore="LockedOrientationActivity" />
+
+            <activity
+            android:name=".AddAPharmacistActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar"
             tools:ignore="LockedOrientationActivity" />

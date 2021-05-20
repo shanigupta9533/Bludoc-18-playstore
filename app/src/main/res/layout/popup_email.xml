@@ -41,13 +41,14 @@
 
 
         <EditText
-
+            android:fontFamily="@font/poppins"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/et_email_id"
             android:hint="@string/email_id"
             />
     <Button
+        android:fontFamily="@font/poppins"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
         android:elevation="@dimen/margin_10"
@@ -56,7 +57,7 @@
         android:padding="@dimen/margin_10"
         android:id="@+id/btn_register"
         android:layout_width="260dp"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:layout_gravity="center"
 
         android:background="@drawable/blue_faint_round_btn_gradient"

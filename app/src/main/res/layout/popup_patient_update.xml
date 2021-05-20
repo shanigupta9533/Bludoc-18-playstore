@@ -17,6 +17,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:fontFamily="@font/poppins"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -36,6 +37,7 @@
 
 
                 <TextView
+                    android:fontFamily="@font/poppins"
                     android:id="@+id/textView_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -47,10 +49,11 @@
                     android:gravity="center"
                     android:text="Patient's Full Name *"
                     android:textColor="@color/colorDarkGrey"
-                    android:textSize="16dp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
 
                 <EditText
+                    android:fontFamily="@font/poppins"
                     android:id="@+id/et_name"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/margin_40"
@@ -67,7 +70,7 @@
                     android:padding="@dimen/margin_10"
                     android:textColor="@color/colorBlack"
                     android:textColorHint="@color/colorBlack"
-                    android:textSize="16sp" />
+                    android:textSize="15sp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -76,6 +79,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:fontFamily="@font/poppins"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_30"
@@ -86,7 +90,7 @@
                         android:gravity="center"
                         android:text="Date Of Birth"
                         android:textColor="@color/colorDarkGrey"
-                        android:textSize="12dp"
+                        android:textSize="12sp"
                         android:textStyle="bold" />
 
                     <FrameLayout
@@ -99,6 +103,7 @@
                         android:layout_height="wrap_content">
 
                         <TextView
+                            android:fontFamily="@font/poppins"
                             android:textSize="16sp"
                             android:padding="@dimen/margin_10"
                             android:textColor="@color/colorBlack"
@@ -133,6 +138,7 @@
                         android:orientation="vertical">
                         <!--        Org Name       -->
                         <TextView
+                            android:fontFamily="@font/poppins"
                             android:id="@+id/textView_age"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -141,11 +147,11 @@
                             android:layout_marginTop="@dimen/margin_15"
                             android:layout_marginEnd="@dimen/margin_30"
                             android:layout_marginRight="@dimen/margin_30"
-                            android:fontFamily="sans-serif"
+                            
                             android:gravity="center"
                             android:text="Age *"
                             android:textColor="@color/colorDarkGrey"
-                            android:textSize="16dp"
+                            android:textSize="15sp"
                             android:textStyle="bold" />
 
                         <LinearLayout
@@ -157,6 +163,7 @@
                             >
 
                             <EditText
+                                android:fontFamily="@font/poppins"
                                 android:id="@+id/et_age"
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/margin_40"
@@ -171,15 +178,15 @@
                                 android:padding="@dimen/margin_10"
                                 android:textColor="@color/colorBlack"
                                 android:textColorHint="@color/colorBlack"
-                                android:textSize="16sp" />
+                                android:textSize="15sp" />
 
                             <RadioButton
+                                android:fontFamily="@font/poppins"
                                 android:id="@+id/rb_year"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:layout_weight="1"
-                                android:fontFamily="sans-serif"
                                 android:text="Year"
                                 android:textColor="@color/colorDarkGrey"
                                 android:textSize="14sp"
@@ -191,7 +198,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:layout_weight="1"
-                                android:fontFamily="sans-serif"
+                                android:fontFamily="@font/poppins"
                                 android:text="Month"
                                 android:textColor="@color/colorDarkGrey"
                                 android:textSize="14sp"
@@ -221,11 +228,11 @@
                         android:layout_marginEnd="@dimen/margin_30"
                         android:layout_marginRight="@dimen/margin_30"
 
-                        android:fontFamily="sans-serif"
+                        android:fontFamily="@font/poppins"
                         android:gravity="center"
                         android:text="Gender *"
                         android:textColor="@color/colorDarkGrey"
-                        android:textSize="16dp"
+                        android:textSize="15sp"
                         android:textStyle="bold" />
 
                     <LinearLayout
@@ -246,7 +253,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_weight="1"
-                            android:fontFamily="sans-serif"
+                            android:fontFamily="@font/poppins"
                             android:text="Male"
                             android:textColor="@color/colorDarkGrey"
                             android:textSize="14sp"
@@ -258,7 +265,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_weight="1"
-                            android:fontFamily="sans-serif"
+                            android:fontFamily="@font/poppins"
                             android:text="Female"
                             android:textColor="@color/colorDarkGrey"
                             android:textSize="14sp"
@@ -270,7 +277,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_weight="1"
-                            android:fontFamily="sans-serif"
+                            android:fontFamily="@font/poppins"
                             android:text="Other"
                             android:textColor="@color/colorDarkGrey"
                             android:textSize="14sp"
@@ -284,6 +291,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:fontFamily="@font/poppins"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_30"
@@ -294,10 +302,11 @@
                         android:gravity="center"
                         android:text="Blood Group"
                         android:textColor="@color/colorDarkGrey"
-                        android:textSize="12dp"
+                        android:textSize="15sp"
                         android:textStyle="bold" />
 
                     <EditText
+                        android:fontFamily="@font/poppins"
                         android:id="@+id/blood_group"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/margin_40"
@@ -310,7 +319,7 @@
                         android:padding="@dimen/margin_10"
                         android:textColor="@color/colorBlack"
                         android:textColorHint="@color/colorBlack"
-                        android:textSize="16sp" />
+                        android:textSize="15sp" />
 
                 </LinearLayout>
 
@@ -330,11 +339,12 @@
                         android:id="@+id/textView_whtsapp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif"
+                        android:fontFamily="@font/poppins"
                         android:gravity="center"
                         android:text="WhatsApp Number (optional)"
+
                         android:textColor="@color/colorDarkGrey"
-                        android:textSize="16dp"
+                        android:textSize="15sp"
                         android:textStyle="bold" />
 
                     <ImageView
@@ -348,6 +358,7 @@
                 </LinearLayout>
 
                 <EditText
+                    android:fontFamily="@font/poppins"
                     android:id="@+id/et_whtsapp"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/margin_40"
@@ -359,7 +370,7 @@
                     android:background="@drawable/blue_faint_btn_gradient2"
                     android:focusedByDefault="false"
                     android:imeOptions="actionNext"
-                    android:inputType="number"
+                    android:inputType="phone"
                     android:maxLength="18"
                     android:padding="@dimen/margin_10"
                     android:textColor="@color/colorBlack"
@@ -382,11 +393,11 @@
                         android:id="@+id/textView_mail"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif"
+                        android:fontFamily="@font/poppins"
                         android:gravity="center"
                         android:text="Email Id (optional)"
                         android:textColor="@color/colorDarkGrey"
-                        android:textSize="16dp"
+                        android:textSize="15sp"
                         android:textStyle="bold" />
 
                     <ImageView
@@ -401,6 +412,7 @@
 
 
                 <EditText
+                    android:fontFamily="@font/poppins"
                     android:id="@+id/et_mail"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/margin_40"
@@ -417,7 +429,7 @@
                     android:padding="@dimen/margin_10"
                     android:textColor="@color/colorBlack"
                     android:textColorHint="@color/colorBlack"
-                    android:textSize="16sp" />
+                    android:textSize="15sp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -435,7 +447,7 @@
                         android:gravity="center"
                         android:text="Address"
                         android:textColor="@color/colorDarkGrey"
-                        android:textSize="12dp"
+                        android:textSize="12sp"
                         android:textStyle="bold" />
 
                     <EditText
@@ -453,11 +465,13 @@
                         android:padding="@dimen/margin_10"
                         android:textColor="@color/colorBlack"
                         android:textColorHint="@color/colorBlack"
-                        android:textSize="16sp" />
+                        android:fontFamily="@font/poppins"
+                        android:textSize="15sp" />
 
                 </LinearLayout>
 
                 <Button
+                    android:fontFamily="@font/poppinsmedium"
                     android:id="@+id/btn_upload_image"
                     android:layout_width="200dp"
                     android:layout_height="@dimen/margin_35"
@@ -484,7 +498,7 @@
                     android:textAllCaps="false"
                     android:textColor="@color/colorWhite"
                     android:textSize="16sp"
-
+                    android:fontFamily="@font/poppinsmedium"
                     android:textStyle="normal" />
             </LinearLayout>
 

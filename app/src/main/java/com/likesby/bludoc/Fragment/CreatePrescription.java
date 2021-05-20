@@ -3,17 +3,21 @@ package com.likesby.bludoc.Fragment;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.speech.RecognizerIntent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -107,6 +111,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+import static android.app.Activity.RESULT_OK;
 import static com.likesby.bludoc.HomeActivity.poss__;
 
 public class CreatePrescription extends Fragment {
@@ -206,6 +211,196 @@ public class CreatePrescription extends Fragment {
         patientsItemArrayList = new ArrayList<>();
         MedicAll = new ArrayList<>();
         MedicAll = myDB.getMedicines();
+
+        binding.speechVoice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intentSpeech = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                intentSpeech.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
+                try {
+                    startActivityForResult(intentSpeech, 500);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(
+                            mContext,
+                            "Oops! Your device doesn't support Speech to Text",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
+
+            }
+        });
+
+        binding.speechVoiceChiefComplaint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intentSpeech = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                intentSpeech.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
+                try {
+                    startActivityForResult(intentSpeech, 600);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(
+                            mContext,
+                            "Oops! Your device doesn't support Speech to Text",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
+
+            }
+        });
+
+        binding.speechVoiceHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intentSpeech = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                intentSpeech.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
+                try {
+                    startActivityForResult(intentSpeech, 700);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(
+                            mContext,
+                            "Oops! Your device doesn't support Speech to Text",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
+
+            }
+        });
+
+        binding.speechFindings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intentSpeech = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                intentSpeech.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
+                try {
+                    startActivityForResult(intentSpeech, 800);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(
+                            mContext,
+                            "Oops! Your device doesn't support Speech to Text",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
+
+            }
+        });
+
+        binding.speechVoiceDiagnoise.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intentSpeech = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                intentSpeech.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
+                try {
+                    startActivityForResult(intentSpeech, 900);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(
+                            mContext,
+                            "Oops! Your device doesn't support Speech to Text",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
+
+            }
+        });
+
+        binding.speechVoiceTreatmentAdvice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intentSpeech = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                intentSpeech.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
+                try {
+                    startActivityForResult(intentSpeech, 1000);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(
+                            mContext,
+                            "Oops! Your device doesn't support Speech to Text",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
+
+            }
+        });
+
+        binding.speechVoiceEndNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intentSpeech = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                intentSpeech.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
+                try {
+                    startActivityForResult(intentSpeech, 1100);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(
+                            mContext,
+                            "Oops! Your device doesn't support Speech to Text",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
+
+            }
+        });
+
+        binding.speechVoiceNameOfLabTest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intentSpeech = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                intentSpeech.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
+                try {
+                    startActivityForResult(intentSpeech, 1200);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(
+                            mContext,
+                            "Oops! Your device doesn't support Speech to Text",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
+
+            }
+        });
+
+        binding.speechVoiceMedicalCertificate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intentSpeech = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                intentSpeech.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
+                try {
+                    startActivityForResult(intentSpeech, 1300);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(
+                            mContext,
+                            "Oops! Your device doesn't support Speech to Text",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
+
+            }
+        });
+
+        binding.speechVoiceDescMedical.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intentSpeech = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                intentSpeech.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
+                try {
+                    startActivityForResult(intentSpeech, 1400);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(
+                            mContext,
+                            "Oops! Your device doesn't support Speech to Text",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
+
+            }
+        });
 
 
         //----------------------------------------------------------------------------------------
@@ -317,16 +512,17 @@ public class CreatePrescription extends Fragment {
         }
 
         //----------------------------------------------------------------------------------------
-
-
         initCalls(v);
         hideKeyboard(mContext);
         Bundle args = getArguments();
         patientsItemArrayList = splashActivity.getpatients();
 
         if (!is_on_lab_test)
-            if (!is_on_medicines)
+            if (!is_on_medicines){
                 setActiveEdit_Note();
+                header.setText("Patient List");
+            }
+
         if (args != null) {
 
             btn_create_patient.setVisibility(View.GONE);
@@ -734,6 +930,7 @@ public class CreatePrescription extends Fragment {
 
                 }
             } else {
+                header.setText("Create Prescription");
                 if (patientsItemArrayList != null) {
 
                     String age___ = "";
@@ -821,7 +1018,7 @@ public class CreatePrescription extends Fragment {
                 patientsItemArrayList = splashActivity.getpatients();
             }
             btn_create_patient.setVisibility(View.VISIBLE);
-            header.setText("Create Prescription");
+            header.setText("Patient List");
             ll_prescription_view.setVisibility(View.GONE);
             top_view.setVisibility(View.GONE);
             if (addMedicinesArrayList.size() == 0) {
@@ -831,16 +1028,15 @@ public class CreatePrescription extends Fragment {
                     @Override
                     public void run() {
                         patientsAdapter = new PatientsAdapter(patientsItemArrayList, ll_patients_view, ll_prescription_view, top_view, btn_create_patient, patientdetails, apiViewHolder, mBag, fl_progress_bar, ll_medicinal_lab, ll_medicine_product, ll_end_note, ll_certificate,
-                                ll_main_medicine_details, ll_main_lab_test_details, ll_main_end_note_details, ll_main_certificate_details, CreatePrescription.this, showNativeAdFlag);
+                                ll_main_medicine_details, ll_main_lab_test_details, ll_main_end_note_details, ll_main_certificate_details, CreatePrescription.this, showNativeAdFlag, header);
                         mRecyclerViewPatients.setAdapter(patientsAdapter);
                     }
                 });
 
-
                 ll_patients_view.setVisibility(View.VISIBLE);
                 if (patientsItemArrayList.size() > 0) {
                     ll_info_no_patient.setVisibility(View.GONE);
-
+                  //  header.setText("Create Prescription");
                 } else {
                     ll_info_no_patient.setVisibility(View.VISIBLE);
                     ll_patients_view.setVisibility(View.GONE);
@@ -1908,6 +2104,151 @@ public class CreatePrescription extends Fragment {
         adLoader.loadAd(new AdRequest.Builder().build());
     }
 
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+
+            if (requestCode == 500 && data != null) {
+
+                ArrayList<String> stringArrayListExtra =
+                        data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                binding.medicineSearchview.setText(stringArrayListExtra.get(0));
+
+                binding.medicineSearchview.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        binding.medicineSearchview.setSelection(binding.medicineSearchview.getText().length());
+                    }
+                });
+
+            } else if (requestCode == 600 && data != null) {
+
+                ArrayList<String> stringArrayListExtra =
+                        data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                binding.etChiefComplaint.setText(stringArrayListExtra.get(0));
+
+                binding.etChiefComplaint.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        binding.etChiefComplaint.setSelection(binding.etChiefComplaint.getText().length());
+                    }
+                });
+
+            } else if (requestCode == 700 && data != null) {
+
+                ArrayList<String> stringArrayListExtra =
+                        data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                binding.etHistory.setText(stringArrayListExtra.get(0));
+
+                binding.etHistory.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        binding.etHistory.setSelection(binding.etHistory.getText().length());
+                    }
+                });
+
+            } else if (requestCode == 800 && data != null) {
+
+                ArrayList<String> stringArrayListExtra =
+                        data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                binding.etFindings.setText(stringArrayListExtra.get(0));
+
+                binding.etFindings.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        binding.etFindings.setSelection(binding.etFindings.getText().length());
+                    }
+                });
+
+            } else if (requestCode == 900 && data != null) {
+
+                ArrayList<String> stringArrayListExtra =
+                        data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                binding.etDiagnosis.setText(stringArrayListExtra.get(0));
+
+                binding.etDiagnosis.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        binding.etDiagnosis.setSelection(binding.etDiagnosis.getText().length());
+                    }
+                });
+
+            }
+
+            else if (requestCode == 1000 && data != null) {
+
+                ArrayList<String> stringArrayListExtra =
+                        data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                binding.etTreatmentAdvice.setText(stringArrayListExtra.get(0));
+
+                binding.etTreatmentAdvice.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        binding.etTreatmentAdvice.setSelection(binding.etTreatmentAdvice.getText().length());
+                    }
+                });
+
+            } else if (requestCode == 1100 && data != null) {
+
+                ArrayList<String> stringArrayListExtra =
+                        data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                binding.etEndNote.setText(stringArrayListExtra.get(0));
+
+                binding.etEndNote.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        binding.etEndNote.setSelection(binding.etEndNote.getText().length());
+                    }
+                });
+
+            } else if (requestCode == 1200 && data != null) {
+
+                ArrayList<String> stringArrayListExtra =
+                        data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                binding.labtestSearchview.setText(stringArrayListExtra.get(0));
+
+                binding.labtestSearchview.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        binding.labtestSearchview.setSelection(binding.labtestSearchview.getText().length());
+                    }
+                });
+
+            } else if (requestCode == 1300 && data != null) {
+
+                ArrayList<String> stringArrayListExtra =
+                        data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                binding.etCertificateTitle.setText(stringArrayListExtra.get(0));
+
+                binding.etCertificateTitle.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        binding.etCertificateTitle.setSelection(binding.etCertificateTitle.getText().length());
+                    }
+                });
+
+            } else if (requestCode == 1400 && data != null) {
+
+                ArrayList<String> stringArrayListExtra =
+                        data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                binding.etCertificateDesc.setText(stringArrayListExtra.get(0));
+
+                binding.etCertificateDesc.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        binding.etCertificateDesc.setSelection(binding.etCertificateDesc.getText().length());
+                    }
+                });
+
+            }
+
+        }
+
+    }
+
     @Override
     public void onDestroyView() {
         if (nativeAd != null) {
@@ -1918,6 +2259,22 @@ public class CreatePrescription extends Fragment {
         mBag.dispose();
     }
 
+
+   private void setEnterKey(EditText editText){
+       editText.setOnKeyListener(new View.OnKeyListener() {
+           @Override
+           public boolean onKey(View view, int keyCode, KeyEvent event) {
+
+               if (keyCode==KeyEvent.KEYCODE_ENTER)
+               {
+                   // Just ignore the [Enter] key
+                   return true;
+               }
+               // Handle all other keys in the default way
+               return (keyCode == KeyEvent.KEYCODE_ENTER);
+           }
+       });
+   }
 
     private void initCalls(View view) {
         patient_id = "";
@@ -1948,6 +2305,25 @@ public class CreatePrescription extends Fragment {
         et_end_note = view.findViewById(R.id.et_end_note);
         et_diagnosis = view.findViewById(R.id.et_diagnosis);
         et_treatment_advice = view.findViewById(R.id.et_treatment_advice);
+
+        setEnterKey(et_chief_complaint);
+        setEnterKey(et_history);
+        setEnterKey(et_findings);
+        setEnterKey(et_end_note);
+        setEnterKey(et_diagnosis);
+        setEnterKey(et_treatment_advice);
+
+        setEnterKey(binding.temperature);
+        setEnterKey(binding.allergy);
+        setEnterKey(binding.bloodPressure);
+        setEnterKey(binding.bloodSugar);
+        setEnterKey(binding.height);
+        setEnterKey(binding.weight);
+        setEnterKey(binding.hemoglobin);
+        setEnterKey(binding.pulse);
+        setEnterKey(binding.spo2);
+        setEnterKey(binding.respirationRate);
+
 
         ll_main_lab_test_details = view.findViewById(R.id.ll_main_lab_test_details);
         ll_main_medicine_details = view.findViewById(R.id.ll_main_medicine_details);
@@ -3122,7 +3498,7 @@ public class CreatePrescription extends Fragment {
         ll_btn_templates.setVisibility(View.VISIBLE);
         is_on_lab_test = false;
         is_on_medicines = true;
-
+        header.setText("Create Prescription");
         is_on_case_history = false;
 
         if (addMedicinesArrayList.size() > 0) {
@@ -3159,7 +3535,7 @@ public class CreatePrescription extends Fragment {
         is_on_lab_test = true;
         is_on_case_history = false;
         is_on_medicines = false;
-
+        header.setText("Create Prescription");
         ll_btn_templates.setVisibility(View.GONE);
         if (addLabTestArrayList.size() > 0) {
             textView3_5.setVisibility(View.VISIBLE);
@@ -3189,6 +3565,7 @@ public class CreatePrescription extends Fragment {
 
 
     private void setActiveEdit_Note() {
+     //   header.setText("Create Prescription");
         is_on_case_history = true;
         is_on_lab_test = false;
         is_on_medicines = false;
@@ -3374,11 +3751,10 @@ public class CreatePrescription extends Fragment {
                     Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            patientsAdapter = new PatientsAdapter(patientsItemArrayList, ll_patients_view, ll_prescription_view, top_view, btn_create_patient, patientdetails, apiViewHolder, mBag, fl_progress_bar, ll_medicinal_lab, ll_medicine_product, ll_end_note, ll_certificate, ll_main_medicine_details, ll_main_lab_test_details, ll_main_end_note_details, ll_main_certificate_details, CreatePrescription.this, showNativeAdFlag);
+                            patientsAdapter = new PatientsAdapter(patientsItemArrayList, ll_patients_view, ll_prescription_view, top_view, btn_create_patient, patientdetails, apiViewHolder, mBag, fl_progress_bar, ll_medicinal_lab, ll_medicine_product, ll_end_note, ll_certificate, ll_main_medicine_details, ll_main_lab_test_details, ll_main_end_note_details, ll_main_certificate_details, CreatePrescription.this, showNativeAdFlag,header);
                             mRecyclerViewPatients.setAdapter(patientsAdapter);
                         }
                     });
-
 
                     ll_patients_view.setVisibility(View.VISIBLE);
                     ll_info_no_patient.setVisibility(View.GONE);
@@ -3658,6 +4034,9 @@ public class CreatePrescription extends Fragment {
         et_additional_comments_labtests = view.findViewById(R.id.labtest_additional_comments);
         et_instructions = view.findViewById(R.id.et_instruction);
 
+
+
+
         mRecyclerViewMedicines = view.findViewById(R.id.medicines_recycler);
         mRecyclerViewPatients = view.findViewById(R.id.patient_recycler);
         mRecyclerViewAddedMedicines = view.findViewById(R.id.added_medicines_recycler);
@@ -3665,7 +4044,7 @@ public class CreatePrescription extends Fragment {
         mRecyclerViewLabTest = view.findViewById(R.id.labtest_recycler);
 
         searchBarMaterialPatient = view.findViewById(R.id.patient_searchview);
-        searchBarMaterialPatient.setHint("Type patient name here");
+        searchBarMaterialPatient.setHint("Type here to search");
 
         int checkedRadioButtonId = binding.radioShowGroup.getCheckedRadioButtonId();
         radioButtonOfYes = v.findViewById(checkedRadioButtonId);

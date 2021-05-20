@@ -25,6 +25,7 @@
         android:background="@drawable/blue_grad"/>
 
     <TextView
+        android:fontFamily="@font/poppins"
         android:paddingTop="@dimen/margin_4"
         android:id="@+id/__subscriptions_id"
         android:text="45"
@@ -55,6 +56,7 @@
 
 
     <TextView
+        android:fontFamily="@font/poppinsmedium"
         android:layout_margin="@dimen/margin_5"
         android:id="@+id/__subscriptions_name"
         android:text="Monthly Plan"
@@ -105,7 +107,7 @@
         <TextView
             android:layout_marginLeft   ="@dimen/margin_10"
             android:layout_marginStart  ="@dimen/margin_10"
-
+            android:fontFamily="@font/poppinsmedium"
 
             android:text="Unlimited Prescriptions"
             android:textAlignment="center"
@@ -143,7 +145,7 @@
             android:layout_marginLeft   ="@dimen/margin_10"
             android:layout_marginStart  ="@dimen/margin_10"
 
-
+            android:fontFamily="@font/poppinsmedium"
             android:text="Full Access to all features"
             android:textAlignment="center"
             android:gravity="center"
@@ -178,6 +180,7 @@
             android:src="@drawable/ic_verified"/>
 
         <TextView
+            android:fontFamily="@font/poppinsmedium"
             android:layout_marginLeft   ="@dimen/margin_10"
             android:layout_marginStart  ="@dimen/margin_10"
 
@@ -218,7 +221,7 @@
         <TextView
             android:layout_marginLeft   ="@dimen/margin_10"
             android:layout_marginStart  ="@dimen/margin_10"
-
+            android:fontFamily="@font/poppinsmedium"
 
             android:text="Inclusive of Android app + Desktop + Tabs + iPad + Laptop versions"
             android:layout_width="wrap_content"
@@ -251,6 +254,7 @@
     >
 
     <TextView
+        android:fontFamily="@font/poppins"
         android:id="@+id/mrp"
         android:text="3,399/- per year (inclusive of all taxes)"
         android:textAlignment="center"
@@ -264,6 +268,7 @@
         />
 
     <TextView
+        android:fontFamily="@font/poppinsmedium"
         android:foreground="?android:attr/selectableItemBackground"
         android:layout_marginTop="@dimen/margin_10"
         android:textStyle="normal"
@@ -304,6 +309,7 @@
             android:layout_gravity="center_horizontal"
             android:src="@drawable/ic_verified_green"/>
         <TextView
+            android:fontFamily="@font/poppinsmedium"
             android:layout_margin="@dimen/margin_5"
             android:text="Congratulations !!!"
             android:textAlignment="center"
@@ -319,6 +325,7 @@
 
 
         <TextView
+            android:fontFamily="@font/poppins"
             android:text="You’ve saved 1,100/-"
             android:id="@+id/save"
             android:textAlignment="center"
@@ -332,6 +339,7 @@
             />
 
         <TextView
+            android:fontFamily="@font/poppins"
             android:layout_marginLeft   ="@dimen/margin_10"
             android:layout_marginStart  ="@dimen/margin_10"
             android:layout_marginRight="@dimen/margin_10"
@@ -365,6 +373,7 @@
 
 
         <TextView
+            android:fontFamily="@font/poppins"
             android:layout_marginTop="@dimen/margin_5"
             android:id="@+id/total"
             android:text="Total 2,299/- per year to pay"
@@ -380,6 +389,7 @@
             />
 
         <Button
+            android:fontFamily="@font/poppinsmedium"
             android:foreground="?android:attr/selectableItemBackground"
             android:layout_marginLeft="@dimen/margin_20"
             android:layout_marginRight="@dimen/margin_20"
@@ -404,6 +414,7 @@
     </LinearLayout>
 
     <TextView
+        android:fontFamily="@font/poppins"
         android:id="@+id/__subscriptions_amount"
         android:text="Price"
         android:textAlignment="center"
@@ -422,7 +433,7 @@
     <TextView
         android:layout_marginLeft   ="@dimen/margin_10"
         android:layout_marginStart  ="@dimen/margin_10"
-
+        android:fontFamily="@font/poppins"
         android:id="@+id/__subscriptions_sell_price"
         android:textAlignment="center"
         android:gravity="center"
@@ -437,6 +448,7 @@
 
 
     <TextView
+        android:fontFamily="@font/poppins"
         android:layout_marginLeft   ="@dimen/margin_10"
         android:layout_marginStart  ="@dimen/margin_10"
         android:layout_marginEnd    ="@dimen/margin_10"
@@ -458,6 +470,7 @@
 
 
     <TextView
+        android:fontFamily="@font/poppins"
         android:visibility="gone"
         android:layout_margin="@dimen/margin_10"
         android:paddingTop="@dimen/margin_4"

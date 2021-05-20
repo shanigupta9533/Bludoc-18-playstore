@@ -57,7 +57,7 @@
                             android:src="@drawable/ic_back_button"
                             />
                         <TextView
-
+                            android:fontFamily="@font/poppinsmedium"
                             android:layout_gravity="start|center"
                             android:textSize="16sp"
                             android:textColor="@color/colorWhite"
@@ -117,9 +117,9 @@
             android:layout_marginTop="@dimen/margin_20"
             android:layout_marginLeft   ="@dimen/margin_20"
             android:layout_marginStart  ="@dimen/margin_20"
+            android:fontFamily="@font/poppins"
 
 
-            android:fontFamily="sans-serif"
             android:gravity="center"
             android:text="Select Type"
             android:textColor="@color/colorDarkGrey"
@@ -139,6 +139,7 @@
             android:weightSum="0">
 
             <RadioButton
+                android:fontFamily="@font/poppins"
                 android:buttonTint="@color/colorBlack"
                 android:textStyle="normal"
                 android:textSize="16sp"
@@ -154,7 +155,7 @@
 
             <RadioButton
                 android:buttonTint="@color/colorBlack"
-
+                android:fontFamily="@font/poppins"
                 android:textStyle="normal"
                 android:textColor="@color/colorBlack"
                 android:textSize="16sp"
@@ -169,7 +170,7 @@
 
             <RadioButton
                 android:buttonTint="@color/colorBlack"
-
+                android:fontFamily="@font/poppins"
                 android:textStyle="normal"
                 android:textColor="@color/colorBlack"
                 android:textSize="16sp"
@@ -195,8 +196,8 @@
             android:layout_marginEnd="@dimen/margin_30"
             android:layout_marginStart="@dimen/margin_30"
             android:layout_marginTop="@dimen/margin_20"
+            android:fontFamily="@font/poppins"
 
-            android:fontFamily="sans-serif"
             android:gravity="center"
             android:text="Subject"
             android:textColor="@color/colorDarkGrey"
@@ -205,6 +206,7 @@
             />
 
         <EditText
+            android:fontFamily="@font/poppins"
             android:focusedByDefault="false"
             android:textSize="16sp"
             android:padding="@dimen/margin_10"
@@ -225,7 +227,7 @@
 
         <!--        Name       -->
         <TextView
-            android:id="@+id/textView_name"
+            android:id="@+id/textView_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
@@ -234,8 +236,8 @@
             android:layout_marginEnd="@dimen/margin_30"
             android:layout_marginStart="@dimen/margin_30"
             android:layout_marginTop="@dimen/margin_20"
+            android:fontFamily="@font/poppins"
 
-            android:fontFamily="sans-serif"
             android:gravity="center"
             android:text="Message"
             android:textColor="@color/colorDarkGrey"
@@ -244,6 +246,7 @@
             />
 
         <EditText
+            android:fontFamily="@font/poppins"
             android:gravity="start"
             android:inputType="textMultiLine"
             android:focusedByDefault="false"
@@ -267,6 +270,7 @@
 
 
         <Button
+            android:fontFamily="@font/poppinsmedium"
             android:foreground="?android:attr/selectableItemBackground"
             android:textSize="16sp"
             android:textAllCaps="false"

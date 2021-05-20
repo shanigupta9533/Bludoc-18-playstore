@@ -173,6 +173,7 @@ As a registered user of or subscriber to business-standard.com you may choose to
     <string name="hey_doctor">Hey Doctor! Try this new application\n<b>BluDoc : E-prescription app for Doctors.</b> Make your prescriptions easy, quick, smart, paper free and send them to your patients across the world on a single click. I have started using it.\nDownload BluDoc now!!</string>
     <string name="your_digital_signature_nwill_appear_here">Click on <b> Add Signature</b> to draw signature, \n your digital signature will appear here</string>
     <string name="description">Description</string>
+    <string name="desktop_version">BluDoc Desktop Version</string>
     <string name="cancel">Cancel</string>
     <string name="proceed">Proceed</string>
     <string name="type_here_if_any">Type here if any</string>
@@ -182,6 +183,25 @@ As a registered user of or subscriber to business-standard.com you may choose to
     <string name="resend_otp">Resend OTP</string>
     <string name="clear">Clear</string>
     <string name="medical_certificate"><u>Medical Certificate</u></string>
+    <string name="doctor_details">Doctor Details</string>
+    <string name="footer_details"><![CDATA[Footer (Sign & date) details]]></string>
+    <string name="add_pharmacist">Add Pharmacist</string>
+    <string name="send_to_pharmacist">Send to pharmacist</string>
+    <string name="language">Language</string>
+    <string name="email">Email :</string>
+    <string name="mobile">Mobile :</string>
+    <string name="type_here">type here</string>
+    <string name="clinic_hospital_name">Clinic / Hospital name</string>
+
+    <string name="add_a_pharmacist">Add Pharmacist</string>
+    <string name="pharmacist_s_full_name">Pharmacist\'s Full Name *</string>
+    <string name="pharmacist_s_whatsnumber">Pharmacist\'s WhatsNumber </string>
+    <string name="pharmacist_s_email_id">Pharmacist\'s Email Id </string>
+    <string name="all_pharmacist"> List of Pharmacy </string>
+    <string name="search_pharmacist_here">Search Here</string>
+    <string name="refresh_to_load">Refresh to load</string>
+    <string name="select_pharmacist">Select Pharmacist</string>
+    <string name="no_data_found">No data found</string>
 
 
 </resources>

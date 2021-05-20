@@ -50,6 +50,7 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.VideoController;
@@ -95,9 +96,10 @@ import java.util.TimerTask;
 import io.reactivex.disposables.CompositeDisposable;
 
 public class HomeActivity  extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
-    private static final String ADMOB_AD_UNIT_ID = "ca-app-pub-6756023122563497/5728747901";
+   // private static final String ADMOB_AD_UNIT_ID = "ca-app-pub-6756023122563497/5728747901";
     //Context mContext;
     Dialog dialog;
+
     static ApiViewHolder apiViewHolder;
     BottomSheetBehavior behavior;
     CoordinatorLayout coordinatorLayout;
@@ -128,7 +130,7 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
     public static int poss__=0;
     FrameLayout fl_progress_layout;
     private  static Context ctx;
-    Button wahtsappTest,btn_desktop;
+    Button wahtsappTest;
     private  static  FragmentManager fragmanager= null;
     MyDB myDB;
     private RewardedAd rewardedAd;
@@ -138,7 +140,9 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
      AdLoader adLoader;
     private UnifiedNativeAd nativeAd;
     boolean showNativeAdFlag = false;
-     Dialog dialog_data;
+    Dialog dialog_data;
+    AdRequest adRequest,adRequestInterstitial;
+    private InterstitialAd mInterstitialAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,14 +155,17 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
         }
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE|WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         mContext = HomeActivity.this;
-        MobileAds.initialize(this, "ca-app-pub-6756023122563497~6049228406");
-        rewardedAd = createAndLoadRewardedAd();
+        MobileAds.initialize(this, "ca-app-pub-9225891557304181~7586066501");
+       // rewardedAd = createAndLoadRewardedAd();
 
+        adRequest = new AdRequest.Builder()/*.addTestDevice("31B09DFC1F78AF28F2AFB1506F51B0BF")*/.build();
+        adRequestInterstitial = new AdRequest.Builder()/*.addTestDevice("31B09DFC1F78AF28F2AFB1506F51B0BF")*/.build();
         ctx = mContext;
         myDB = new MyDB(mContext);
         fragmanager = getSupportFragmentManager();
         manager = new SessionManager();
         manager.setPreferences(mContext,"home","true");
+
         initCalls();
 
         /* adLoader = new AdLoader.Builder(mContext, "ca-app-pub-6756023122563497/5728747901")
@@ -213,6 +220,51 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
 
     }
 
+
+    private void initInterstitialAd(AdRequest adRequest){
+        mInterstitialAd = new InterstitialAd(mContext);
+      //  mInterstitialAd.setAdUnitId("ca-app-pub-9225891557304181/3105393849");//Live
+        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");//Test
+        mInterstitialAd.loadAd(adRequest);
+
+
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                // Code to be executed when an ad finishes loading.
+                mInterstitialAd.show();
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                // Code to be executed when an ad request fails.
+
+            }
+
+            @Override
+            public void onAdOpened() {
+                // Code to be executed when the ad is displayed.
+            }
+
+            @Override
+            public void onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                // Code to be executed when the user has left the app.
+            }
+
+            @Override
+            public void onAdClosed() {
+                // Code to be executed when the interstitial ad is closed.
+                mInterstitialAd = null;
+                //adRequestInterstitial = null;
+            }
+        });
+
+    }
     private void displayUnifiedNativeAd(ViewGroup parent, UnifiedNativeAd ad) {
 
         // Inflate a layout and add it to the parent ViewGroup.
@@ -250,197 +302,197 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
 
 
 
-    private void NativeAd(Dialog v, ProgressBar pb, Button btn_yes, Button btn_no) {
-                refreshAd(v,pb,btn_yes,btn_no);
-        //  "ca-app-pub-3940256099942544/1044960115"
-    }
-
-        /**
-         * Populates a {@link UnifiedNativeAdView} object with data from a given
-         * {@link UnifiedNativeAd}.
-         *
-         * @param nativeAd the object containing the ad's assets
-         * @param adView          the view to be populated
-         */
-        private void populateUnifiedNativeAdView(UnifiedNativeAd nativeAd, UnifiedNativeAdView adView) {
-            // Set the media view.
-            adView.setMediaView((MediaView) adView.findViewById(R.id.ad_media));
-
-            // Set other ad assets.
-            adView.setHeadlineView(adView.findViewById(R.id.ad_headline));
-            adView.setBodyView(adView.findViewById(R.id.ad_body));
-            adView.setCallToActionView(adView.findViewById(R.id.ad_call_to_action));
-            adView.setIconView(adView.findViewById(R.id.ad_app_icon));
-            adView.setPriceView(adView.findViewById(R.id.ad_price));
-            adView.setStarRatingView(adView.findViewById(R.id.ad_stars));
-            adView.setStoreView(adView.findViewById(R.id.ad_store));
-            adView.setAdvertiserView(adView.findViewById(R.id.ad_advertiser));
-
-            // The headline and mediaContent are guaranteed to be in every UnifiedNativeAd.
-            ((TextView) adView.getHeadlineView()).setText(nativeAd.getHeadline());
-            adView.getMediaView().setMediaContent(nativeAd.getMediaContent());
-
-            // These assets aren't guaranteed to be in every UnifiedNativeAd, so it's important to
-            // check before trying to display them.
-            if (nativeAd.getBody() == null) {
-                adView.getBodyView().setVisibility(View.INVISIBLE);
-            } else {
-                adView.getBodyView().setVisibility(View.VISIBLE);
-                ((TextView) adView.getBodyView()).setText(nativeAd.getBody());
-            }
-
-            if (nativeAd.getCallToAction() == null) {
-                adView.getCallToActionView().setVisibility(View.INVISIBLE);
-            } else {
-                adView.getCallToActionView().setVisibility(View.VISIBLE);
-                ((Button) adView.getCallToActionView()).setText(nativeAd.getCallToAction());
-            }
-
-            if (nativeAd.getIcon() == null) {
-                adView.getIconView().setVisibility(View.GONE);
-            } else {
-                ((ImageView) adView.getIconView()).setImageDrawable(
-                        nativeAd.getIcon().getDrawable());
-                adView.getIconView().setVisibility(View.VISIBLE);
-            }
-
-            if (nativeAd.getPrice() == null) {
-                adView.getPriceView().setVisibility(View.INVISIBLE);
-            } else {
-                adView.getPriceView().setVisibility(View.VISIBLE);
-                ((TextView) adView.getPriceView()).setText(nativeAd.getPrice());
-            }
-
-            if (nativeAd.getStore() == null) {
-                adView.getStoreView().setVisibility(View.INVISIBLE);
-            } else {
-                adView.getStoreView().setVisibility(View.VISIBLE);
-                ((TextView) adView.getStoreView()).setText(nativeAd.getStore());
-            }
-
-            if (nativeAd.getStarRating() == null) {
-                adView.getStarRatingView().setVisibility(View.INVISIBLE);
-            } else {
-
-                ((RatingBar) adView.getStarRatingView())
-                        .setRating(nativeAd.getStarRating().floatValue());
-                adView.getStarRatingView().setVisibility(View.VISIBLE);
-            }
-
-            if (nativeAd.getAdvertiser() == null) {
-                adView.getAdvertiserView().setVisibility(View.INVISIBLE);
-            } else {
-                ((TextView) adView.getAdvertiserView()).setText(nativeAd.getAdvertiser());
-                adView.getAdvertiserView().setVisibility(View.VISIBLE);
-            }
-
-            // This method tells the Google Mobile Ads SDK that you have finished populating your
-            // native ad view with this native ad.
-            adView.setNativeAd(nativeAd);
-
-            // Get the video controller for the ad. One will always be provided, even if the ad doesn't
-            // have a video asset.
-            VideoController vc = nativeAd.getVideoController();
-
-            // Updates the UI to say whether or not this ad has a video asset.
-            if (vc.hasVideoContent()) {
-
-
-                // Create a new VideoLifecycleCallbacks object and pass it to the VideoController. The
-                // VideoController will call methods on this object when events occur in the video
-                // lifecycle.
-                vc.setVideoLifecycleCallbacks(new VideoController.VideoLifecycleCallbacks() {
-                    @Override
-                    public void onVideoEnd() {
-                        // Publishers should allow native ads to complete video playback before
-                        // refreshing or replacing them with another ad in the same UI location.
-
-                        super.onVideoEnd();
-                    }
-                });
-            } else {
-
-            }
-        }
-
-        /**
-         * Creates a request for a new native ad based on the boolean parameters and calls the
-         * corresponding "populate" method when one is successfully returned.
-         *
-         * @param
-         * @param btn_yes
-         * @param btn_no
-         */
-        private void refreshAd(final Dialog dialog_view, final ProgressBar pb, final Button btn_yes, final Button btn_no) {
-
-            AdLoader.Builder builder = new AdLoader.Builder(this, ADMOB_AD_UNIT_ID);
-
-            builder.forUnifiedNativeAd(
-                    new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
-                        // OnUnifiedNativeAdLoadedListener implementation.
-                        @Override
-                        public void onUnifiedNativeAdLoaded(UnifiedNativeAd unifiedNativeAd) {
-                            // If this callback occurs after the activity is destroyed, you must call
-                            // destroy and return or you may get a memory leak.
-                            boolean isDestroyed = false;
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                                isDestroyed = isDestroyed();
-                            }
-                            if (isDestroyed || isFinishing() || isChangingConfigurations()) {
-                                unifiedNativeAd.destroy();
-                                return;
-                            }
-                            // You must call destroy on old ads when you are done with them,
-                            // otherwise you will have a memory leak.
-                            if (nativeAd != null) {
-                                nativeAd.destroy();
-                            }
-                            nativeAd = unifiedNativeAd;
-                            FrameLayout frameLayout = dialog_view.findViewById(R.id.fl_adplaceholder);
-                            UnifiedNativeAdView adView =
-                                    (UnifiedNativeAdView) getLayoutInflater()
-                                            .inflate(R.layout.my_ad_layout, null);
-                            populateUnifiedNativeAdView(unifiedNativeAd, adView);
-                            frameLayout.removeAllViews();
-                            frameLayout.addView(adView);
-
-                            pb.setVisibility(View.GONE);
-                            btn_yes.setVisibility(View.VISIBLE);
-                            btn_no.setVisibility(View.VISIBLE);
-                        }
-                    });
-
-           /* VideoOptions videoOptions =
-                    new VideoOptions.Builder().build();*/
-
-            NativeAdOptions adOptions =
-                    new NativeAdOptions.Builder().build();
-
-            builder.withNativeAdOptions(adOptions);
-
-            AdLoader adLoader =
-                    builder
-                            .withAdListener(
-                                    new AdListener() {
-                                        @Override
-                                        public void onAdFailedToLoad(LoadAdError loadAdError) {
-                                            String error =
-                                                    String.format(
-                                                            "domain: %s, code: %d, message: %s",
-                                                            loadAdError.getDomain(),
-                                                            loadAdError.getCode(),
-                                                            loadAdError.getMessage());
-//                                            Toast.makeText(
-//                                                    mContext,
-//                                                    "Failed to load native ad with error " + error,
-//                                                    Toast.LENGTH_SHORT)
-//                                                    .show();
-                                        }
-                                    })
-                            .build();
-
-            adLoader.loadAd(new AdRequest.Builder().build());
-    }
+//    private void NativeAd(Dialog v, ProgressBar pb, Button btn_yes, Button btn_no) {
+//                refreshAd(v,pb,btn_yes,btn_no);
+//        //  "ca-app-pub-3940256099942544/1044960115"
+//    }
+//
+//        /**
+//         * Populates a {@link UnifiedNativeAdView} object with data from a given
+//         * {@link UnifiedNativeAd}.
+//         *
+//         * @param nativeAd the object containing the ad's assets
+//         * @param adView          the view to be populated
+//         */
+//        private void populateUnifiedNativeAdView(UnifiedNativeAd nativeAd, UnifiedNativeAdView adView) {
+//            // Set the media view.
+//            adView.setMediaView((MediaView) adView.findViewById(R.id.ad_media));
+//
+//            // Set other ad assets.
+//            adView.setHeadlineView(adView.findViewById(R.id.ad_headline));
+//            adView.setBodyView(adView.findViewById(R.id.ad_body));
+//            adView.setCallToActionView(adView.findViewById(R.id.ad_call_to_action));
+//            adView.setIconView(adView.findViewById(R.id.ad_app_icon));
+//            adView.setPriceView(adView.findViewById(R.id.ad_price));
+//            adView.setStarRatingView(adView.findViewById(R.id.ad_stars));
+//            adView.setStoreView(adView.findViewById(R.id.ad_store));
+//            adView.setAdvertiserView(adView.findViewById(R.id.ad_advertiser));
+//
+//            // The headline and mediaContent are guaranteed to be in every UnifiedNativeAd.
+//            ((TextView) adView.getHeadlineView()).setText(nativeAd.getHeadline());
+//            adView.getMediaView().setMediaContent(nativeAd.getMediaContent());
+//
+//            // These assets aren't guaranteed to be in every UnifiedNativeAd, so it's important to
+//            // check before trying to display them.
+//            if (nativeAd.getBody() == null) {
+//                adView.getBodyView().setVisibility(View.INVISIBLE);
+//            } else {
+//                adView.getBodyView().setVisibility(View.VISIBLE);
+//                ((TextView) adView.getBodyView()).setText(nativeAd.getBody());
+//            }
+//
+//            if (nativeAd.getCallToAction() == null) {
+//                adView.getCallToActionView().setVisibility(View.INVISIBLE);
+//            } else {
+//                adView.getCallToActionView().setVisibility(View.VISIBLE);
+//                ((Button) adView.getCallToActionView()).setText(nativeAd.getCallToAction());
+//            }
+//
+//            if (nativeAd.getIcon() == null) {
+//                adView.getIconView().setVisibility(View.GONE);
+//            } else {
+//                ((ImageView) adView.getIconView()).setImageDrawable(
+//                        nativeAd.getIcon().getDrawable());
+//                adView.getIconView().setVisibility(View.VISIBLE);
+//            }
+//
+//            if (nativeAd.getPrice() == null) {
+//                adView.getPriceView().setVisibility(View.INVISIBLE);
+//            } else {
+//                adView.getPriceView().setVisibility(View.VISIBLE);
+//                ((TextView) adView.getPriceView()).setText(nativeAd.getPrice());
+//            }
+//
+//            if (nativeAd.getStore() == null) {
+//                adView.getStoreView().setVisibility(View.INVISIBLE);
+//            } else {
+//                adView.getStoreView().setVisibility(View.VISIBLE);
+//                ((TextView) adView.getStoreView()).setText(nativeAd.getStore());
+//            }
+//
+//            if (nativeAd.getStarRating() == null) {
+//                adView.getStarRatingView().setVisibility(View.INVISIBLE);
+//            } else {
+//
+//                ((RatingBar) adView.getStarRatingView())
+//                        .setRating(nativeAd.getStarRating().floatValue());
+//                adView.getStarRatingView().setVisibility(View.VISIBLE);
+//            }
+//
+//            if (nativeAd.getAdvertiser() == null) {
+//                adView.getAdvertiserView().setVisibility(View.INVISIBLE);
+//            } else {
+//                ((TextView) adView.getAdvertiserView()).setText(nativeAd.getAdvertiser());
+//                adView.getAdvertiserView().setVisibility(View.VISIBLE);
+//            }
+//
+//            // This method tells the Google Mobile Ads SDK that you have finished populating your
+//            // native ad view with this native ad.
+//            adView.setNativeAd(nativeAd);
+//
+//            // Get the video controller for the ad. One will always be provided, even if the ad doesn't
+//            // have a video asset.
+//            VideoController vc = nativeAd.getVideoController();
+//
+//            // Updates the UI to say whether or not this ad has a video asset.
+//            if (vc.hasVideoContent()) {
+//
+//
+//                // Create a new VideoLifecycleCallbacks object and pass it to the VideoController. The
+//                // VideoController will call methods on this object when events occur in the video
+//                // lifecycle.
+//                vc.setVideoLifecycleCallbacks(new VideoController.VideoLifecycleCallbacks() {
+//                    @Override
+//                    public void onVideoEnd() {
+//                        // Publishers should allow native ads to complete video playback before
+//                        // refreshing or replacing them with another ad in the same UI location.
+//
+//                        super.onVideoEnd();
+//                    }
+//                });
+//            } else {
+//
+//            }
+//        }
+//
+//        /**
+//         * Creates a request for a new native ad based on the boolean parameters and calls the
+//         * corresponding "populate" method when one is successfully returned.
+//         *
+//         * @param
+//         * @param btn_yes
+//         * @param btn_no
+//         */
+//        private void refreshAd(final Dialog dialog_view, final ProgressBar pb, final Button btn_yes, final Button btn_no) {
+//
+//            AdLoader.Builder builder = new AdLoader.Builder(this, ADMOB_AD_UNIT_ID);
+//
+//            builder.forUnifiedNativeAd(
+//                    new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
+//                        // OnUnifiedNativeAdLoadedListener implementation.
+//                        @Override
+//                        public void onUnifiedNativeAdLoaded(UnifiedNativeAd unifiedNativeAd) {
+//                            // If this callback occurs after the activity is destroyed, you must call
+//                            // destroy and return or you may get a memory leak.
+//                            boolean isDestroyed = false;
+//                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+//                                isDestroyed = isDestroyed();
+//                            }
+//                            if (isDestroyed || isFinishing() || isChangingConfigurations()) {
+//                                unifiedNativeAd.destroy();
+//                                return;
+//                            }
+//                            // You must call destroy on old ads when you are done with them,
+//                            // otherwise you will have a memory leak.
+//                            if (nativeAd != null) {
+//                                nativeAd.destroy();
+//                            }
+//                            nativeAd = unifiedNativeAd;
+//                            FrameLayout frameLayout = dialog_view.findViewById(R.id.fl_adplaceholder);
+//                            UnifiedNativeAdView adView =
+//                                    (UnifiedNativeAdView) getLayoutInflater()
+//                                            .inflate(R.layout.my_ad_layout, null);
+//                            populateUnifiedNativeAdView(unifiedNativeAd, adView);
+//                            frameLayout.removeAllViews();
+//                            frameLayout.addView(adView);
+//
+//                            pb.setVisibility(View.GONE);
+//                            btn_yes.setVisibility(View.VISIBLE);
+//                            btn_no.setVisibility(View.VISIBLE);
+//                        }
+//                    });
+//
+//           /* VideoOptions videoOptions =
+//                    new VideoOptions.Builder().build();*/
+//
+//            NativeAdOptions adOptions =
+//                    new NativeAdOptions.Builder().build();
+//
+//            builder.withNativeAdOptions(adOptions);
+//
+//            AdLoader adLoader =
+//                    builder
+//                            .withAdListener(
+//                                    new AdListener() {
+//                                        @Override
+//                                        public void onAdFailedToLoad(LoadAdError loadAdError) {
+//                                            String error =
+//                                                    String.format(
+//                                                            "domain: %s, code: %d, message: %s",
+//                                                            loadAdError.getDomain(),
+//                                                            loadAdError.getCode(),
+//                                                            loadAdError.getMessage());
+////                                            Toast.makeText(
+////                                                    mContext,
+////                                                    "Failed to load native ad with error " + error,
+////                                                    Toast.LENGTH_SHORT)
+////                                                    .show();
+//                                        }
+//                                    })
+//                            .build();
+//
+//            adLoader.loadAd(new AdRequest.Builder().build());
+//    }
 
         @Override
         protected void onDestroy() {
@@ -450,10 +502,9 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
             super.onDestroy();
         }
 
-    private  void BannerAd(){
+    private  void BannerAd(AdRequest adRequest){
         mAdView = findViewById(R.id.adView);
         mAdView.setVisibility(View.VISIBLE);
-        AdRequest adRequest = new AdRequest.Builder()/*.addTestDevice("31B09DFC1F78AF28F2AFB1506F51B0BF")*/.build();
         //Toast.makeText(mContext, "BANNER Test Device = "+adRequest.isTestDevice(mContext), Toast.LENGTH_LONG).show();
 
 
@@ -467,7 +518,7 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
 
             @Override
             public void onAdFailedToLoad(int errorCode) {
-               // Toast.makeText(mContext, "BANNER ErrorCode = "+errorCode, Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(mContext, "BANNER ErrorCode = "+errorCode, Toast.LENGTH_SHORT).show();
                 // Code to be executed when an ad request fails.
             }
 
@@ -532,19 +583,23 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
         initViews();
         initViewHolder();
         CreatePrescription.certificate_selection = false;
+
+
+        findViewById(R.id.add_pharmacist).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                startActivity(new Intent(HomeActivity.this,AllPharmacistActivity.class));
+
+            }
+        });
         //transparentStatusAndNavigation();
         //  setState();
     }
 
     private void initViews() {
         lLayout = new GridLayoutManager(this, 2);
-        btn_desktop = findViewById(R.id.btn_desktop);
-        btn_desktop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popupDesktopVersion();
-            }
-        });
+
 
 
         tv_premium_top = findViewById(R.id.tv_premium_top);
@@ -599,6 +654,13 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
             public void onClick(View v) {
                 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                 drawer.openDrawer(GravityCompat.START);
+            }
+        });
+
+        findViewById(R.id.btn_desktop).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               popupDesktopVersion();
             }
         });
 
@@ -1354,9 +1416,9 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
                     if(days_left_paid<1){
                         tv_premium_top.setVisibility(View.GONE);
                         showNativeAdFlag = false;
-//                        popupFreeSubscription("",false);
+                       // popupFreeSubscription("",false);
                         manager.setPreferences(mContext,"show_banner_ad","true");
-                        BannerAd();
+                        BannerAd(adRequest);
                         addflag = true;
                         ll_premium.setVisibility(View.VISIBLE);
                         ll_premium.setBackgroundDrawable(getResources().getDrawable(R.drawable.blue_btn_gradient));
@@ -1393,13 +1455,13 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
                             if(manager.contains(mContext,"show_banner_ad"))
                                 manager.deletePreferences(mContext,"show_banner_ad");
                             tv_days_left.setText("Your subscription is valid till "+sub_valid+".");
-//                            ll_premium.setOnClickListener(new View.OnClickListener() {
-//                                @Override
-//                                public void onClick(View v) {
-//                                    Intent intent = new Intent(mContext,SubscriptionPackages.class);
-//                                    startActivity(intent);
-//                                }
-//                            });
+                            ll_premium.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent(mContext,SubscriptionPackages.class);
+                                    startActivity(intent);
+                                }
+                            });
 
                             /*ll_premium.setBackgroundDrawable(getResources().getDrawable(R.drawable.green_gradient));
                             ll_premium.setPadding(20,30,20,30);
@@ -1427,9 +1489,9 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
                     if(flag_reset_free){
                         if(manager.contains(mContext,"show_banner_ad"))
                             manager.deletePreferences(mContext,"show_banner_ad");
-                        /*manager.setPreferences(mContext,"show_banner_ad","true");
-                        BannerAd();*/
-                       // popupFreeSubscription(""+days_left_free,true);
+                        manager.setPreferences(mContext,"show_banner_ad","true");
+                        BannerAd(adRequest);
+                      //  popupFreeSubscription(""+days_left_free,true);
                         tv_days_left.setText("Congratulations!! \nYou have been offered a "+ premium_valid +" days free trial.\nValid till - "+sub_valid+" \nUpgrade to premium for an ad free experience.\nClick here to upgrade");
                         tv_premium_top.setVisibility(View.VISIBLE);
                         showNativeAdFlag = false;
@@ -1443,7 +1505,7 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
                     }
                     else {
                         manager.setPreferences(mContext,"show_banner_ad","true");
-                        BannerAd();
+                        BannerAd(adRequest);
                         addflag = true;
                         ll_premium.setVisibility(View.GONE);
                         ll_premium.setBackgroundDrawable(getResources().getDrawable(R.drawable.blue_btn_gradient));
@@ -1463,13 +1525,13 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
             }
             else
                 if(!flag_reset_free) {
-                    BannerAd();
+                    BannerAd(adRequest);
                     addflag = true;
                     manager.setPreferences(mContext,"show_banner_ad","true");
                     tv_premium_top.setVisibility(View.GONE);
                     ll_premium.setBackgroundDrawable(getResources().getDrawable(R.drawable.no_border));
                     showNativeAdFlag = true;
-//                    popupFreeSubscription("", false);
+                   // popupFreeSubscription("", false);
                     tv_days_left.setTextColor(getResources().getColor(R.color.colorBlue));
                     tv_days_left.setText("Upgrade to Premium for an Ad free experience\n + \n A free desktop version of BluDoc.\nClick here to upgrade");
                     ll_premium.setOnClickListener(new View.OnClickListener() {
@@ -1484,9 +1546,29 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
         }
         else{
             manager.setPreferences(mContext,"show_banner_ad","true");
-            BannerAd();
+            BannerAd(adRequest);
             addflag = true;
             showNativeAdFlag = true;
+        }
+
+        if(manager.contains(mContext,"show_banner_ad")) {
+            if (manager.contains(mContext, "show_time")){
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy, HH:mm");
+                Log.e("DIFF","____________________ "+DateUtils.getDateDiff(dateFormat,manager.getPreferences(mContext,"show_time"),DateUtils.currentDateTime()));
+
+                if(DateUtils.getDateDiff(dateFormat,manager.getPreferences(mContext,"show_time"),DateUtils.currentDateTime())>0){
+                    manager.setPreferences(mContext,"show_time",DateUtils.currentDateTime());
+                    initInterstitialAd(adRequestInterstitial);
+                }
+
+
+            }
+            else{
+                manager.setPreferences(mContext,"show_time",DateUtils.currentDateTime());
+
+                initInterstitialAd(adRequestInterstitial);
+            }
+
         }
 
       //  BannerAd();
@@ -1568,8 +1650,10 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
 
         final Button btn_no = dialog_data.findViewById(R.id.btn_no);
         final Button btn_yes = dialog_data.findViewById(R.id.btn_yes);
-
-        if(showNativeAdFlag){
+        btn_no.setVisibility(View.VISIBLE);
+        btn_yes.setVisibility(View.VISIBLE);
+        fl_layout.setVisibility(View.GONE);
+       /* if(showNativeAdFlag){
             NativeAd(dialog_data,pb,btn_yes,btn_no);
 
         }
@@ -1590,7 +1674,7 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
                 btn_yes.setVisibility(View.VISIBLE);
             }
         };
-        countDownTimer.start();
+        countDownTimer.start();*/
         TextView tv_no_template =  dialog_data.findViewById(R.id.tv_no_template);
         tv_no_template.setText("Are you sure you want to exit?");
         btn_yes.setOnClickListener(new View.OnClickListener() {
@@ -1606,6 +1690,7 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
             }
         });
 
+        if(dialog_data!=null)
         dialog_data.show();
     }
 
@@ -1950,7 +2035,7 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
 
             btn_upgrade_premium.setVisibility(View.GONE);
             btn_watch_ad.setVisibility(View.GONE);
-            NativeAd(dialog_data,pb,btn_upgrade_premium,btn_watch_ad);
+          //  NativeAd(dialog_data,pb,btn_upgrade_premium,btn_watch_ad);
         }
         else {
             btn_upgrade_premium.setVisibility(View.VISIBLE);
@@ -2010,13 +2095,13 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
                         @Override
                         public void onRewardedAdClosed() {
                             super.onRewardedAdClosed();
-                            rewardedAd = createAndLoadRewardedAd();
+                          //  rewardedAd = createAndLoadRewardedAd();
                         }
 
                         @Override
                         public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
                             flag_reset_free = true;
-                            rewardedAd = createAndLoadRewardedAd();
+                           // rewardedAd = createAndLoadRewardedAd();
                          //   Toast.makeText(mContext, "Congratulations!! You won "+rewardItem.getAmount()+" "+rewardItem.getType(), Toast.LENGTH_SHORT).show();
                         }
                         @Override
@@ -2072,7 +2157,7 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
         final Button btn_no = dialog_data.findViewById(R.id.btn_no);
         final Button btn_yes = dialog_data.findViewById(R.id.btn_yes);
         FrameLayout fl_layout = dialog_data.findViewById(R.id.fl_layout);
-        CountDownTimer countDownTimer  = new CountDownTimer(2000, 2000) {
+        /*CountDownTimer countDownTimer  = new CountDownTimer(2000, 2000) {
             @Override
             public void onTick(long millisUntilFinished) {
 
@@ -2084,8 +2169,8 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
                 btn_yes.setVisibility(View.VISIBLE);
             }
         };
-        countDownTimer.start();
-        if(showNativeAdFlag){
+        countDownTimer.start();*/
+        /*if(showNativeAdFlag){
             NativeAd(dialog_data,pb,btn_yes,btn_no);
 
         }
@@ -2094,7 +2179,11 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
             btn_yes.setVisibility(View.VISIBLE);
             fl_layout.setVisibility(View.GONE);
 
-        }
+        }*/
+        btn_no.setVisibility(View.VISIBLE);
+        btn_yes.setVisibility(View.VISIBLE);
+        fl_layout.setVisibility(View.GONE);
+
         TextView tv_no_template =  dialog_data.findViewById(R.id.tv_no_template);
         tv_no_template.setText("Would you like to leave this page?");
         btn_yes.setOnClickListener(new View.OnClickListener() {

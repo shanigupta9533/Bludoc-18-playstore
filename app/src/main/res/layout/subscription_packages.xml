@@ -57,7 +57,7 @@
                             android:src="@drawable/ic_back_button"
                             />
                         <TextView
-
+                            android:fontFamily="@font/poppinsmedium"
                             android:layout_gravity="start|center"
                             android:textSize="18sp"
                             android:textColor="@color/colorWhite"
@@ -96,6 +96,7 @@
                 android:weightSum="0">
 
                 <RadioButton
+                    android:fontFamily="@font/poppins"
                     android:textSize="18sp"
                     android:buttonTint="@color/colorBlack"
                     android:textColor="@color/colorBlack"
@@ -107,6 +108,7 @@
                     />
 
                 <RadioButton
+                    android:fontFamily="@font/poppins"
                     android:textSize="18sp"
                     android:textColor="@color/colorBlack"
                     android:buttonTint="@color/colorBlack"

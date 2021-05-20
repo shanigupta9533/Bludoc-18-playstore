@@ -5,6 +5,7 @@ import com.likesby.bludoc.ModelLayer.NetworkLayer.BasicAuthInterceptor;
 import com.likesby.bludoc.ServerConnect.ServerConnect;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.likesby.bludoc.constants.ApplicationConstant;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -41,11 +42,12 @@ public class ApiClient
                 .readTimeout(60, TimeUnit.SECONDS); // read timeout
 
 
-        //if (ApplicationConstant.DEBUG) {
-        //loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
-        //loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        httpClient.addInterceptor(loggingInterceptor);
+        if (ApplicationConstant.DEBUG) {
+            //loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
+            //loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            httpClient.addInterceptor(loggingInterceptor);
+        }
         httpClient.addInterceptor(new BasicAuthInterceptor());
         //loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
         /*httpClient.addInterceptor(new Interceptor() {

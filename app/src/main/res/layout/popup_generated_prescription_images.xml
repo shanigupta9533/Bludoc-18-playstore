@@ -9,6 +9,7 @@
 
 
     <TextView
+        android:fontFamily="@font/poppins"
         android:layout_gravity="center|top"
         android:gravity="center"
         android:layout_margin="@dimen/margin_15"
@@ -58,6 +59,7 @@
         app:snap="false" />
 
         <Button
+            android:fontFamily="@font/poppins"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/margin_35"
             android:textColor="@color/colorWhite"

@@ -35,6 +35,14 @@ public class DateUtils {
         // don't print it, but save it!
         return dateFormat.format(date);
     }
+    public static String currentDateTime() {
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy, HH:mm");
+        // get current date time with Date()
+        Date date = new Date();
+        // System.out.println(dateFormat.format(date));
+        // don't print it, but save it!
+        return dateFormat.format(date);
+    }
 
     //1 minute = 60 seconds
 //1 hour = 60 x 60 = 3600

@@ -1,15 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorWhite"
         android:orientation="vertical"
         android:id="@+id/coordinator_layout"
         tools:context=".RegisterDetails">
+        <FrameLayout
+            android:id="@+id/fl_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorDarkBlue"
+         >
 
         <LinearLayout
             android:id="@+id/ll_invite_member"
@@ -40,11 +50,13 @@
                     app:subtitleTextColor="@color/colorWhite"
                     app:titleTextColor="@color/colorWhite">
 
-
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
                     <LinearLayout
+
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/margin_10"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
@@ -60,9 +72,10 @@
                             android:paddingLeft="@dimen/margin_5"
                             android:paddingRight="@dimen/margin_5"
                             android:text="Back"
+
                             android:textAllCaps="false"
                             android:textColor="@color/white"
-                            android:textSize="12sp"
+                            android:textSize="13sp"
                             android:visibility="gone" />
 
                         <Button
@@ -77,12 +90,15 @@
                             android:paddingLeft="@dimen/margin_5"
                             android:paddingRight="@dimen/margin_5"
                             android:text="Edit"
+
                             android:textAllCaps="false"
                             android:textColor="@color/white"
-                            android:textSize="12sp"
+                            android:textSize="13sp"
                             android:visibility="visible" />
 
                         <TextView
+                            android:visibility="gone"
+
                             android:id="@+id/title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -91,14 +107,15 @@
                             android:gravity="center"
                             android:text=""
                             android:textColor="@color/colorWhite"
-                            android:textSize="18sp"
+                            android:textSize="13sp"
                             android:typeface="sans" />
 
                         <Button
+
                             android:id="@+id/generatePDF"
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/margin_35"
-                            android:layout_gravity="right|center_vertical"
+                            android:layout_gravity="center"
                             android:layout_marginRight="@dimen/margin_5"
                             android:background="@drawable/blue_round_btn_gradient"
                             android:gravity="center"
@@ -109,26 +126,41 @@
                             android:text="Approve and Share"
                             android:textAllCaps="false"
                             android:textColor="@color/white"
-                            android:textSize="12sp" />
+                            android:textSize="13sp" />
 
 
                     </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/settings"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/font_12"
+                        android:src="@drawable/ic_action_settings"
+                        android:layout_alignParentEnd="true"
+                        />
+                    </RelativeLayout>
                 </androidx.appcompat.widget.Toolbar>
             </com.google.android.material.appbar.AppBarLayout>
 
 
             <FrameLayout
+                android:id="@+id/fl_mains"
+
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/white">
 
                 <ImageView
+                    android:visibility="gone"
                     android:id="@+id/sample_image"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:src="@drawable/sample_pres" />
 
                 <androidx.core.widget.NestedScrollView
+
                     android:id="@+id/scrollview_edit_profile"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -145,29 +177,41 @@
                         <TextView
                             android:id="@+id/textView_Clinic_name"
                             android:layout_width="match_parent"
-                            android:layout_height="60dp"
+                            android:layout_height="40dp"
                             android:layout_gravity="center"
                             android:layout_weight="1"
                             android:layout_marginTop="@dimen/margin_8"
                             android:background="@color/colorDarkBlue"
-                            android:fontFamily="@font/poppinsmedium"
+                            
                             android:gravity="center"
                             android:padding="@dimen/margin_5"
                             android:text="Clinic / Hospital name"
                             android:textColor="@color/white"
-                            android:textSize="14dp"
+                            android:textSize="13sp"
                             android:textStyle="bold" />
 
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white"
+                        android:orientation="vertical"
+                       >
                         <FrameLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="match_parent">
 
                             <LinearLayout
+                                android:id="@+id/top_doctor_details"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
 
                                 <LinearLayout
+
+
+
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
@@ -187,8 +231,8 @@
 
                                         <ImageView
                                             android:id="@+id/image_layout"
-                                            android:layout_width="100dp"
-                                            android:layout_height="100dp"
+                                            android:layout_width="80dp"
+                                            android:layout_height="80dp"
                                             android:layout_gravity="center_vertical"
                                             android:foregroundGravity="center_vertical"
                                             android:scaleType="centerCrop" />
@@ -196,8 +240,9 @@
                                     </androidx.cardview.widget.CardView>
 
                                     <LinearLayout
+
                                         android:layout_width="match_parent"
-                                        android:layout_height="match_parent"
+                                        android:layout_height="wrap_content"
                                         android:layout_marginTop="@dimen/margin_12"
                                         android:layout_marginBottom="@dimen/margin_12"
                                         android:layout_weight="2"
@@ -208,55 +253,47 @@
                                             android:id="@+id/textView_DocName"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:fontFamily="@font/poppinsbold"
+                                            android:textStyle="bold"
                                             android:text=""
                                             android:layout_marginStart="@dimen/margin_8"
                                             android:textAlignment="viewEnd"
                                             android:textColor="@color/colorheaderDark"
-                                            android:textSize="@dimen/font_14" />
+                                             android:textSize="11sp" />
 
                                         <TextView
                                             android:id="@+id/textView_degree"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_marginTop="@dimen/margin_5"
-                                            android:fontFamily="@font/poppinsbold"
+                                            android:textStyle="bold"
                                             android:text=""
                                             android:textAlignment="viewEnd"
                                             android:textColor="@color/colorheaderDark"
-                                            android:textSize="@dimen/font_14" />
+                                             android:textSize="11sp" />
 
                                         <TextView
                                             android:id="@+id/textView_res_num"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_marginTop="@dimen/margin_5"
-                                            android:fontFamily="@font/poppinsbold"
+                                            android:textStyle="bold"
                                             android:text=""
                                             android:textAlignment="viewEnd"
                                             android:textColor="@color/colorheaderDark"
-                                            android:textSize="@dimen/font_14" />
+                                             android:textSize="11sp" />
 
                                         <TextView
                                             android:id="@+id/textView_des"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_marginTop="@dimen/margin_5"
-                                            android:fontFamily="@font/poppinsbold"
+                                            android:textStyle="bold"
                                             android:text=""
                                             android:textAlignment="viewEnd"
                                             android:textColor="@color/colorheaderDark"
-                                            android:textSize="@dimen/font_14" />
+                                             android:textSize="11sp" />
                                     </LinearLayout>
                                 </LinearLayout>
-
-                                <LinearLayout
-                                    android:id="@+id/top_header_parent"
-
-                                    android:layout_width="match_parent"
-                                    android:orientation="vertical"
-                                    android:background="@color/white"
-                                    android:layout_height="wrap_content">
 
                                 <View
                                     android:layout_width="match_parent"
@@ -267,9 +304,21 @@
                                     android:layout_marginEnd="@dimen/margin_10"
                                     android:layout_marginRight="@dimen/margin_10"
                                     android:layout_marginBottom="@dimen/margin_2"
-                                    android:background="#eeeeee" />
+                                    android:background="@color/colorFaintWhite" />
 
                                 <LinearLayout
+                                    android:id="@+id/top_header_parent"
+
+                                    android:layout_width="match_parent"
+                                    android:orientation="vertical"
+                                    android:background="@color/white"
+                                    android:layout_height="wrap_content">
+
+
+
+                                <LinearLayout
+                                    android:layout_marginBottom   ="@dimen/margin_10"
+
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="@dimen/margin_20"
@@ -279,7 +328,7 @@
                                     <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginTop="@dimen/margin_12"
+                                        android:layout_marginTop="@dimen/margin_10"
                                         android:orientation="vertical">
 
                                         <TextView
@@ -288,40 +337,40 @@
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="start|center"
                                             android:layout_weight="1.5"
-                                            android:fontFamily="@font/poppins"
+                                            android:textStyle="bold"
                                             android:text="Working days : "
                                             android:textColor="@color/colorheaderDark"
-                                            android:textSize="@dimen/font_14" />
+                                             android:textSize="11sp" />
 
                                         <TextView
                                             android:id="@+id/textView_time"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:layout_weight="1.5"
-                                            android:fontFamily="@font/poppins"
+                                            android:textStyle="bold"
                                             android:text="Time : "
                                             android:textColor="@color/colorheaderDark"
-                                            android:textSize="@dimen/font_14" />
+                                             android:textSize="11sp" />
 
                                         <TextView
                                             android:id="@+id/textView_contact"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:layout_weight="1"
-                                            android:fontFamily="@font/poppins"
+                                            android:textStyle="bold"
                                             android:text="Contact us : "
                                             android:textColor="@color/colorheaderDark"
-                                            android:textSize="@dimen/font_14" />
+                                             android:textSize="11sp" />
 
                                         <TextView
                                             android:id="@+id/textView_email"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:layout_weight="1"
-                                            android:fontFamily="@font/poppins"
+                                            android:textStyle="bold"
                                             android:text="Mail ID : "
                                             android:textColor="@color/colorheaderDark"
-                                            android:textSize="@dimen/font_14" />
+                                             android:textSize="11sp" />
 
                                     </LinearLayout>
 
@@ -329,11 +378,10 @@
                                         android:id="@+id/textView_add"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginBottom="@dimen/font_12"
-                                        android:fontFamily="@font/poppins"
+                                        android:textStyle="bold"
                                         android:text="Address : "
                                         android:textColor="@color/colorheaderDark"
-                                        android:textSize="@dimen/font_14" />
+                                         android:textSize="11sp" />
 
 
                                 </LinearLayout>
@@ -346,7 +394,7 @@
                                     android:layout_marginLeft="@dimen/margin_10"
                                     android:layout_marginEnd="@dimen/margin_10"
                                     android:layout_marginRight="@dimen/margin_10"
-                                    android:background="#eeeeee" />
+                                    android:background="@color/colorFaintWhite" />
 
                                 </LinearLayout>
 
@@ -366,7 +414,7 @@
                             android:gravity="center"
                             android:text="@string/medical_certificate"
                             android:textColor="@color/colorBlue"
-                            android:textSize="16sp"
+                            android:textSize="14sp"
                             android:textStyle="bold"
                             android:visibility="gone" />
 
@@ -385,7 +433,7 @@
                                 android:fontFamily="sans-serif"
                                 android:text="UID: 099883"
                                 android:textColor="@color/colorDarkGrey"
-                                android:textSize="@dimen/font_13"
+                                 android:textSize="11sp"
                                 android:visibility="gone" />
 
                             <View
@@ -400,11 +448,12 @@
                                 android:layout_gravity="center_horizontal"
                                 android:layout_marginBottom="@dimen/margin_8"
                                 android:alpha="0.8"
-                                android:fontFamily="@font/poppinsbold"
+                                android:textStyle="bold"
+                               
                                 android:gravity="center"
                                 android:text="Patient’s Name: "
                                 android:textColor="@color/colorBlack"
-                                android:textSize="@dimen/margin_14" />
+                                android:textSize="13sp" />
 
                             <TextView
                                 android:id="@+id/textView_age"
@@ -412,9 +461,10 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="10dp"
                                 android:fontFamily="sans-serif"
+                                android:textStyle="bold"
                                 android:text=""
                                 android:textColor="@color/colorBlack"
-                                android:textSize="@dimen/font_13"
+                                 android:textSize="11sp"
                                 android:visibility="gone" />
                         </LinearLayout>
 
@@ -423,21 +473,6 @@
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             android:visibility="visible">
-
-                            <TextView
-                                android:id="@+id/textview_bloodGroup"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/margin_10"
-                                android:layout_marginLeft="10dp"
-                                android:layout_marginTop="@dimen/margin_10"
-                                android:layout_weight="1"
-                                android:alpha="0.8"
-                                android:background="@drawable/background_underground"
-                                android:fontFamily="@font/poppins"
-                                android:text="Blood Group - 12"
-                                android:textColor="@color/colorBlack"
-                                android:textSize="@dimen/font_13" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -450,14 +485,50 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="@dimen/margin_10"
                                     android:layout_marginLeft="10dp"
-                                    android:layout_marginTop="@dimen/margin_10"
+                                    android:layout_marginTop="@dimen/margin_5"
                                     android:layout_weight="1"
                                     android:alpha="0.8"
                                     android:background="@drawable/background_underground"
-                                    android:fontFamily="@font/poppins"
+                                    
                                     android:text="Address - "
                                     android:textColor="@color/colorBlack"
-                                    android:textSize="@dimen/font_13" />
+                                     android:textSize="11sp" />
+
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/textview_temprature"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/margin_10"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_marginTop="@dimen/margin_5"
+                                    android:layout_weight="1"
+                                    android:alpha="0.8"
+                                    android:background="@drawable/background_underground"
+                                    
+                                    android:text="Temperature - 12"
+                                    android:textColor="@color/colorBlack"
+                                     android:textSize="11sp" />
+                                <TextView
+                                    android:id="@+id/textview_bloodGroup"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/margin_10"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_marginTop="@dimen/margin_5"
+
+                                    android:layout_weight="1"
+                                    android:alpha="0.8"
+                                    android:background="@drawable/background_underground"
+                                    
+                                    android:text="Blood Group - 12"
+                                    android:textColor="@color/colorBlack"
+                                     android:textSize="11sp" />
 
                             </LinearLayout>
 
@@ -476,10 +547,10 @@
                                     android:layout_weight="1"
                                     android:alpha="0.8"
                                     android:background="@drawable/background_underground"
-                                    android:fontFamily="@font/poppins"
+                                    
                                     android:text="Height - 12"
                                     android:textColor="@color/colorBlack"
-                                    android:textSize="@dimen/font_13" />
+                                     android:textSize="11sp" />
 
                                 <TextView
                                     android:id="@+id/textview_weight"
@@ -491,10 +562,10 @@
                                     android:layout_weight="1"
                                     android:alpha="0.8"
                                     android:background="@drawable/background_underground"
-                                    android:fontFamily="@font/poppins"
+                                    
                                     android:text="Weight - 12"
                                     android:textColor="@color/colorBlack"
-                                    android:textSize="@dimen/font_13" />
+                                     android:textSize="11sp" />
 
                             </LinearLayout>
 
@@ -513,10 +584,10 @@
                                     android:layout_weight="1"
                                     android:alpha="0.8"
                                     android:background="@drawable/background_underground"
-                                    android:fontFamily="@font/poppins"
+                                    
                                     android:text="Pulse - 12"
                                     android:textColor="@color/colorBlack"
-                                    android:textSize="@dimen/font_13" />
+                                     android:textSize="11sp" />
 
                                 <TextView
                                     android:id="@+id/textview_blood_pressure"
@@ -528,10 +599,10 @@
                                     android:layout_weight="1"
                                     android:alpha="0.8"
                                     android:background="@drawable/background_underground"
-                                    android:fontFamily="@font/poppins"
+                                    
                                     android:text="Blood Pressure - 12"
                                     android:textColor="@color/colorBlack"
-                                    android:textSize="@dimen/font_13" />
+                                     android:textSize="11sp" />
 
                             </LinearLayout>
 
@@ -550,10 +621,10 @@
                                     android:layout_weight="1"
                                     android:alpha="0.8"
                                     android:background="@drawable/background_underground"
-                                    android:fontFamily="@font/poppins"
+                                    
                                     android:text="Blood Sugar - 12"
                                     android:textColor="@color/colorBlack"
-                                    android:textSize="@dimen/font_13" />
+                                     android:textSize="11sp" />
 
 
                                 <TextView
@@ -566,10 +637,10 @@
                                     android:layout_weight="1"
                                     android:alpha="0.8"
                                     android:background="@drawable/background_underground"
-                                    android:fontFamily="@font/poppins"
+                                    
                                     android:text="Hemoglobin - 12"
                                     android:textColor="@color/colorBlack"
-                                    android:textSize="@dimen/font_13" />
+                                     android:textSize="11sp" />
 
                             </LinearLayout>
 
@@ -588,10 +659,10 @@
                                     android:layout_weight="1"
                                     android:alpha="0.8"
                                     android:background="@drawable/background_underground"
-                                    android:fontFamily="@font/poppins"
+                                    
                                     android:text="Spo2 - 12"
                                     android:textColor="@color/colorBlack"
-                                    android:textSize="@dimen/font_13" />
+                                     android:textSize="11sp" />
 
                                 <TextView
                                     android:id="@+id/textview_respiration_rate"
@@ -603,27 +674,13 @@
                                     android:layout_weight="1"
                                     android:alpha="0.8"
                                     android:background="@drawable/background_underground"
-                                    android:fontFamily="@font/poppins"
+                                    
                                     android:text="Respirational rate - 12"
                                     android:textColor="@color/colorBlack"
-                                    android:textSize="@dimen/font_13" />
+                                     android:textSize="11sp" />
 
                             </LinearLayout>
 
-                            <TextView
-                                android:id="@+id/textview_temprature"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/margin_10"
-                                android:layout_marginLeft="10dp"
-                                android:layout_marginTop="@dimen/margin_10"
-                                android:layout_weight="1"
-                                android:alpha="0.8"
-                                android:background="@drawable/background_underground"
-                                android:fontFamily="@font/poppins"
-                                android:text="Temperature - 12"
-                                android:textColor="@color/colorBlack"
-                                android:textSize="@dimen/font_13" />
 
                             <TextView
                                 android:id="@+id/textview_allergy"
@@ -635,10 +692,10 @@
                                 android:layout_weight="1"
                                 android:alpha="0.8"
                                 android:background="@drawable/background_underground"
-                                android:fontFamily="@font/poppins"
+                                
                                 android:text="Allergy - 12"
                                 android:textColor="@color/colorBlack"
-                                android:textSize="@dimen/font_13" />
+                                 android:textSize="11sp" />
 
                         </LinearLayout>
 
@@ -652,10 +709,10 @@
                             android:layout_weight="1"
                             android:alpha="0.8"
                             android:background="@drawable/background_underground"
-                            android:fontFamily="@font/poppins"
+                            
                             android:text="Chief Complaint - 12"
                             android:textColor="@color/colorBlack"
-                            android:textSize="@dimen/font_13" />
+                             android:textSize="11sp" />
 
                         <TextView
                             android:id="@+id/textView_history"
@@ -667,10 +724,10 @@
                             android:layout_weight="1"
                             android:alpha="0.8"
                             android:background="@drawable/background_underground"
-                            android:fontFamily="@font/poppins"
+                            
                             android:text=""
                             android:textColor="@color/colorBlack"
-                            android:textSize="@dimen/font_13" />
+                             android:textSize="11sp" />
 
                         <TextView
                             android:id="@+id/textView_findings"
@@ -682,10 +739,10 @@
                             android:layout_weight="1"
                             android:alpha="0.8"
                             android:background="@drawable/background_underground"
-                            android:fontFamily="@font/poppins"
+                            
                             android:text=""
                             android:textColor="@color/colorBlack"
-                            android:textSize="@dimen/font_13" />
+                             android:textSize="11sp" />
 
                         <TextView
                             android:id="@+id/textView_diag"
@@ -697,10 +754,10 @@
                             android:layout_weight="1"
                             android:alpha="0.8"
                             android:background="@drawable/background_underground"
-                            android:fontFamily="@font/poppins"
+                            
                             android:text=""
                             android:textColor="@color/colorBlack"
-                            android:textSize="@dimen/font_13" />
+                             android:textSize="11sp" />
 
                         <TextView
                             android:id="@+id/textView_treatment_advice"
@@ -712,10 +769,10 @@
                             android:layout_weight="1"
                             android:alpha="0.8"
                             android:background="@drawable/background_underground"
-                            android:fontFamily="@font/poppins"
+                            
                             android:text=""
                             android:textColor="@color/colorBlack"
-                            android:textSize="@dimen/font_13" />
+                             android:textSize="11sp" />
 
                         <TextView
                             android:id="@+id/textView_medical_cert_desc"
@@ -725,7 +782,7 @@
                             android:fontFamily="sans-serif"
                             android:text=""
                             android:textColor="@color/colorBlack"
-                            android:textSize="@dimen/font_13" />
+                             android:textSize="11sp" />
 
                         <FrameLayout
                             android:layout_width="match_parent"
@@ -750,11 +807,15 @@
                             android:id="@+id/pres_recycler"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:paddingLeft    ="@dimen/margin_20"
+                            android:paddingStart   ="@dimen/margin_20"
                             android:layout_marginLeft="@dimen/margin_20"
                             android:layout_marginRight="@dimen/margin_20"
-                            android:nestedScrollingEnabled="false" />
+                            android:nestedScrollingEnabled="true" />
 
                         <TextView
+                            android:textAllCaps="true"
+                            
                             android:id="@+id/textView_advice"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -762,30 +823,33 @@
                             android:layout_marginTop="@dimen/margin_10"
                             android:text="Advice"
                             android:textColor="@color/colorBlack"
-                            android:textSize="@dimen/font_16"
+                            android:textSize="13sp"
                             android:textStyle="bold"
                             android:visibility="gone" />
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/pres_recycler_labtest"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_marginLeft="@dimen/margin_20"
                             android:layout_marginRight="@dimen/margin_20"
                             android:nestedScrollingEnabled="false"
                             android:visibility="visible" />
 
                         <TextView
+                           
                             android:id="@+id/textView_end_note"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginStart  ="@dimen/margin_20"
+
                             android:layout_marginTop="@dimen/margin_5"
-                            android:text=""
                             android:textColor="@color/colorBlack"
-                            android:textSize="@dimen/font_13" />
+                            android:textSize="13sp" />
 
                         <LinearLayout
+                            android:id="@+id/footer_docter_details"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom"
@@ -800,13 +864,15 @@
                                 android:orientation="vertical">
 
                                 <TextView
+                                    android:layout_marginTop   ="@dimen/margin_10"
+                                    
                                     android:id="@+id/textView_date"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
 
                                     android:text="Date: 25/05/2020"
-                                    android:textColor="@color/colorDarkGrey"
-                                    android:textSize="@dimen/font_13" />
+                                    android:textColor="@color/colorBlack"
+                                     android:textSize="11sp" />
 
 
                             </LinearLayout>
@@ -831,45 +897,58 @@
                                     android:layout_height="60dp" />
 
                                 <TextView
+                                    
                                     android:id="@+id/sig_text"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="Signature"
                                     android:textColor="@color/colorDarkGrey"
-                                    android:textSize="@dimen/font_13" />
+                                     android:textSize="11sp" />
                             </LinearLayout>
                         </LinearLayout>
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginStart="@dimen/margin_10"
-                            android:layout_marginLeft="@dimen/margin_10"
-                            android:layout_marginTop="@dimen/margin_10"
-                            android:layout_marginEnd="@dimen/margin_10"
-                            android:layout_marginRight="@dimen/margin_10"
-                            android:layout_marginBottom="@dimen/margin_2"
-                            android:background="#eeeeee" />
-
-                        <TextView
-                            android:id="@+id/page_no"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginBottom="@dimen/margin_12"
-                            android:layout_marginTop="@dimen/margin_10"
+                        <LinearLayout
                             android:gravity="center"
-                            android:text="Page No. 1"
-                            android:textSize="10sp" />
+                            android:layout_gravity="bottom"
+
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            >
+
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginStart="@dimen/margin_10"
+                                android:layout_marginLeft="@dimen/margin_10"
+                                android:layout_marginTop="@dimen/margin_10"
+                                android:layout_marginEnd="@dimen/margin_10"
+                                android:layout_marginRight="@dimen/margin_10"
+                                android:layout_marginBottom="@dimen/margin_2"
+                                android:background="@color/colorFaintWhite" />
+
+                            <TextView
+                                android:id="@+id/page_no"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:padding="@dimen/margin_5"
+                                android:gravity="center"
+                                android:text="Page No. 1"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+                    </LinearLayout>
 
                     </LinearLayout>
 
                 </androidx.core.widget.NestedScrollView>
 
+
             </FrameLayout>
 
         </LinearLayout>
-
+        </FrameLayout>
         <LinearLayout
             android:id="@+id/bottom_sheet"
             android:layout_width="match_parent"
@@ -897,7 +976,7 @@
                     android:gravity="center"
                     android:text="Share Via"
                     android:textColor="@color/colorDarkestBlue"
-                    android:textSize="@dimen/font_13"
+                     android:textSize="11sp"
                     android:textStyle="bold" />
 
                 <ImageView
@@ -913,8 +992,9 @@
                     android:layout_marginLeft="@dimen/margin_40"
                     android:layout_marginRight="@dimen/margin_40"
                     android:gravity="center_horizontal"
+                    
                     android:text="Kindly select mode for sharing the Prescription"
-                    android:textSize="@dimen/font_20" />
+                    android:textSize="14sp" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerView_bottom_sheet"

@@ -22,11 +22,11 @@
     android:layout_height="wrap_content">
 
     <TextView
+        android:fontFamily="@font/poppins"
         android:id="@+id/tv_ug_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:fontFamily="sans-serif"
         android:gravity="center"
         android:text="UG Name"
         android:textColor="@color/colorBlack"
@@ -35,13 +35,14 @@
         />
 
     <TextView
+        android:fontFamily="@font/poppins"
         android:visibility="gone"
         android:lines="1"
         android:maxLines="1"
         android:id="@+id/tv_ug_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
+
         android:textColor="@color/colorDarkGrey"
         android:textSize="13sp"
         android:textStyle="bold"

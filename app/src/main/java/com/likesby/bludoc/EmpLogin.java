@@ -623,6 +623,7 @@ public class EmpLogin extends AppCompatActivity implements GoogleApiClient.Conne
             if (response != null) {
                 if(response.getMessage().equalsIgnoreCase("Otp Sent"))
                 {
+                  //  Toast.makeText(mContext, ""+response.getOtp(), Toast.LENGTH_SHORT).show();
                     et_email.setText("");
                     frameLayoutProgressMainl.setVisibility(View.GONE);
                     login_verifyOTPLayout.setVisibility(View.VISIBLE);

@@ -76,7 +76,7 @@
         android:clickable="true"
         app:layout_anchor="@+id/imageView2"
         app:layout_anchorGravity="start|top"
-        android:src="@drawable/share"/>
+        android:src="@drawable/share_data"/>
 
 
 

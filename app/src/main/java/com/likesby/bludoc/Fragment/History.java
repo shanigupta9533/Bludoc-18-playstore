@@ -101,7 +101,7 @@ public class History  extends Fragment {
         iv_no_template = view.findViewById(R.id.iv_no_template);
         recyclerView =  view.findViewById(R.id.rv_template);
         searchBarMaterialMedicine = view.findViewById(R.id.medicine_searchview);
-        searchBarMaterialMedicine.setHint("Type here");
+        searchBarMaterialMedicine.setHint("Type here to search");
     //    btn_new_template.setVisibility(View.GONE);
         tv_no_template.setVisibility(View.GONE);
         iv_no_template.setVisibility(View.GONE);

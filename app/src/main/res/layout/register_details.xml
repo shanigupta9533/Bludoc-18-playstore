@@ -60,6 +60,7 @@
                             />
 
                         <TextView
+                            android:fontFamily="@font/poppinsmedium"
                             android:layout_gravity="center"
                             android:textSize="18sp"
                             android:textColor="@color/colorWhite"
@@ -116,7 +117,7 @@
             app:layout_constraintTop_toTopOf="parent"
             ads:adSize="BANNER"
 
-            ads:adUnitId="ca-app-pub-6756023122563497/9775804120">
+            ads:adUnitId="ca-app-pub-3940256099942544/6300978111">
         </com.google.android.gms.ads.AdView>
 
 
@@ -142,14 +143,13 @@
                 android:clickable="true"
                 android:layout_weight="1"
                 android:id="@+id/one_tv"
-
+                android:fontFamily="@font/poppins"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center|top"
                 android:layout_margin="@dimen/margin_10"
 
                 android:background="@drawable/blue_btn_gradient_new"
-                android:fontFamily="sans-serif"
                 android:gravity="center"
                 android:padding="@dimen/margin_5"
                 android:text="1"
@@ -171,7 +171,7 @@
                 android:layout_gravity="center|top"
                 android:layout_margin="@dimen/margin_10"
                 android:background="@drawable/white_btn_gradient"
-                android:fontFamily="sans-serif"
+                android:fontFamily="@font/poppins"
                 android:gravity="center"
                 android:padding="@dimen/margin_5"
                 android:text="2"
@@ -193,7 +193,7 @@
                 android:layout_gravity="center|top"
                 android:layout_margin="@dimen/margin_10"
                 android:background="@drawable/white_btn_gradient"
-                android:fontFamily="sans-serif"
+                android:fontFamily="@font/poppins"
                 android:gravity="center"
                 android:padding="@dimen/margin_5"
                 android:text="3"
@@ -216,7 +216,7 @@
                 android:layout_gravity="center|top"
                 android:layout_margin="@dimen/margin_10"
                 android:background="@drawable/white_btn_gradient"
-                android:fontFamily="sans-serif"
+                android:fontFamily="@font/poppins"
                 android:gravity="center"
                 android:padding="@dimen/margin_5"
                 android:text="4"
@@ -239,7 +239,7 @@
                 android:layout_gravity="center|top"
                 android:layout_margin="@dimen/margin_10"
                 android:background="@drawable/white_btn_gradient"
-                android:fontFamily="sans-serif"
+                android:fontFamily="@font/poppins"
                 android:gravity="center"
                 android:padding="@dimen/margin_5"
                 android:text="5"
@@ -277,15 +277,16 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|top"
                 android:layout_margin="@dimen/margin_10"
-                android:fontFamily="sans-serif"
+                android:fontFamily="@font/poppins"
                 android:gravity="center"
                 android:text="1/5"
                 android:textAllCaps="true"
                 android:textColor="@color/colorBlack"
-                android:textSize="16dp"
+                android:textSize="15sp"
                 android:textStyle="normal"/>
             <!--        Name       -->
             <TextView
+                android:fontFamily="@font/poppins"
                 android:id="@+id/textView_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -302,9 +303,15 @@
                 />
 
             <EditText
+                android:fontFamily="@font/poppins"
                 android:text="Dr. "
                 android:textSize="16sp"
-                android:padding="@dimen/margin_10"
+                 android:paddingLeft     ="@dimen/margin_10"
+                android:paddingStart    ="@dimen/margin_10"
+                android:paddingEnd      ="@dimen/margin_10"
+                android:paddingRight    ="@dimen/margin_10"
+                android:paddingTop      ="@dimen/margin_10"
+                android:paddingBottom   ="@dimen/margin_10"
                 android:inputType="text"
                 android:textColor="@color/colorBlack"
                 android:layout_marginLeft="@dimen/margin_20"
@@ -324,7 +331,7 @@
                 android:id="@+id/textView_mobile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
+                android:fontFamily="@font/poppins"
                 android:layout_marginLeft="@dimen/margin_30"
                 android:layout_marginRight="@dimen/margin_30"
                 android:layout_marginEnd="@dimen/margin_30"
@@ -343,8 +350,11 @@
                 android:layout_marginEnd="@dimen/margin_30"
                 android:layout_marginStart="@dimen/margin_30"
                 android:id="@+id/login_editTextInputMobile"
-                android:padding="@dimen/margin_10"
-
+                 android:paddingLeft     ="@dimen/margin_10"
+                android:paddingStart    ="@dimen/margin_10"
+                android:paddingEnd      ="@dimen/margin_10"
+                android:paddingRight    ="@dimen/margin_10"
+                android:fontFamily="@font/poppins"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:layout_gravity="center"
@@ -354,9 +364,13 @@
 
 
             <TextView
+                android:fontFamily="@font/poppins"
                 android:visibility="gone"
                 android:textSize="16sp"
-                android:padding="@dimen/margin_10"
+                 android:paddingLeft     ="@dimen/margin_10"
+                android:paddingStart    ="@dimen/margin_10"
+                android:paddingEnd      ="@dimen/margin_10"
+                android:paddingRight    ="@dimen/margin_10"
                 android:textColor="@color/colorBlack"
                 android:layout_marginLeft="@dimen/margin_20"
                 android:layout_marginRight="@dimen/margin_20"
@@ -382,7 +396,7 @@
                 android:layout_marginStart="@dimen/margin_30"
                 android:layout_marginTop="@dimen/margin_30"
 
-                android:fontFamily="sans-serif"
+                android:fontFamily="@font/poppins"
                 android:gravity="center"
                 android:text="@string/registered_email_id"
                 android:textColor="@color/colorDarkGrey"
@@ -397,10 +411,14 @@
                 android:layout_height="wrap_content"
                 >
                 <EditText
+                    android:fontFamily="@font/poppins"
                     android:enabled="false"
                     android:textSize="16sp"
                     android:editable="false"
-                    android:padding="@dimen/margin_10"
+                     android:paddingLeft     ="@dimen/margin_10"
+                android:paddingStart    ="@dimen/margin_10"
+                android:paddingEnd      ="@dimen/margin_10"
+                android:paddingRight    ="@dimen/margin_10"
                     android:inputType="textEmailAddress"
                     android:textColor="@color/colorBlack"
                     android:layout_marginLeft="@dimen/margin_20"
@@ -428,13 +446,17 @@
                         android:layout_height="@dimen/margin_40"
                         android:layout_gravity="center"
                         android:background="@drawable/white_back_gradient"
-                        android:padding="@dimen/margin_10"
+                         android:paddingLeft     ="@dimen/margin_10"
+                android:paddingStart    ="@dimen/margin_10"
+                android:paddingEnd      ="@dimen/margin_10"
+                android:paddingRight    ="@dimen/margin_10"
 
                         />
                 </FrameLayout>
             </FrameLayout>
 
             <Button
+                android:fontFamily="@font/poppinsmedium"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:textStyle="normal"
@@ -472,14 +494,15 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|top"
                 android:layout_margin="@dimen/margin_10"
-                android:fontFamily="sans-serif"
+                android:fontFamily="@font/poppins"
                 android:gravity="center"
                 android:text="2/5"
                 android:textAllCaps="true"
                 android:textColor="@color/colorBlack"
-                android:textSize="16dp"
+                android:textSize="15sp"
                 android:textStyle="normal"/>
             <TextView
+                android:fontFamily="@font/poppins"
                 android:id="@+id/textView_registration_no"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -496,9 +519,13 @@
                 />
 
             <EditText
+                android:fontFamily="@font/poppins"
                 android:hint="Eg. M-02928"
                 android:textSize="16sp"
-                android:padding="@dimen/margin_10"
+                 android:paddingLeft     ="@dimen/margin_10"
+                android:paddingStart    ="@dimen/margin_10"
+                android:paddingEnd      ="@dimen/margin_10"
+                android:paddingRight    ="@dimen/margin_10"
                 android:textColor="@color/colorBlack"
                 android:layout_marginLeft="@dimen/margin_20"
                 android:layout_marginRight="@dimen/margin_20"
@@ -522,6 +549,7 @@
 
             <!--        Name       -->
             <TextView
+                android:fontFamily="@font/poppins"
                 android:id="@+id/textView_speciality"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -553,10 +581,14 @@
                 android:textColorHint="#000000" />
 
             <EditText
+                android:fontFamily="@font/poppins"
                 android:visibility="visible"
                 android:textSize="16sp"
                 android:enabled="true"
-                android:padding="@dimen/margin_10"
+                 android:paddingLeft     ="@dimen/margin_10"
+                android:paddingStart    ="@dimen/margin_10"
+                android:paddingEnd      ="@dimen/margin_10"
+                android:paddingRight    ="@dimen/margin_10"
                 android:textColor="@color/colorBlack"
                 android:layout_marginLeft="@dimen/margin_20"
                 android:layout_marginRight="@dimen/margin_20"
@@ -584,7 +616,7 @@
                 android:layout_marginStart="@dimen/margin_30"
                 android:layout_marginTop="@dimen/margin_30"
 
-                android:fontFamily="sans-serif"
+                android:fontFamily="@font/poppins"
                 android:gravity="center"
                 android:text="@string/undergraduate_qualification"
                 android:textColor="@color/colorDarkGrey"
@@ -619,6 +651,7 @@
                 android:layout_marginTop="@dimen/margin_10"
                 android:height="30dp"
                 android:text="Select UG"
+                android:fontFamily="@font/poppins"
                 android:background="@drawable/blue_faint_btn_gradient2"
                 android:ellipsize="marquee"
                 android:minHeight="30dp"
@@ -640,7 +673,7 @@
                 android:layout_marginStart="@dimen/margin_30"
                 android:layout_marginTop="@dimen/margin_30"
 
-                android:fontFamily="sans-serif"
+                android:fontFamily="@font/poppins"
                 android:gravity="center"
                 android:text="@string/postgraduation_qualification"
                 android:textColor="@color/colorDarkGrey"
@@ -666,7 +699,10 @@
                 android:visibility="gone"
 
                 android:textSize="16sp"
-                android:padding="@dimen/margin_10"
+                 android:paddingLeft     ="@dimen/margin_10"
+                android:paddingStart    ="@dimen/margin_10"
+                android:paddingEnd      ="@dimen/margin_10"
+                android:paddingRight    ="@dimen/margin_10"
                 android:textColor="@color/colorBlack"
                 android:layout_marginLeft="@dimen/margin_20"
                 android:layout_marginRight="@dimen/margin_20"
@@ -675,7 +711,7 @@
                 android:layout_marginTop="@dimen/margin_10"
                 android:textColorHint="@color/colorDarkstGrey"
                 android:id="@+id/et_pg_qualificaation"
-
+                android:fontFamily="@font/poppins"
                 android:inputType="text"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/margin_40"
@@ -693,7 +729,7 @@
                 android:layout_marginStart="@dimen/margin_30"
                 android:layout_marginTop="@dimen/margin_30"
 
-                android:fontFamily="sans-serif"
+                android:fontFamily="@font/poppins"
                 android:gravity="center"
                 android:text="@string/additional_qualification_optional"
                 android:textColor="@color/colorDarkGrey"
@@ -704,7 +740,10 @@
             <EditText
 
                 android:textSize="16sp"
-                android:padding="@dimen/margin_10"
+                 android:paddingLeft     ="@dimen/margin_10"
+                android:paddingStart    ="@dimen/margin_10"
+                android:paddingEnd      ="@dimen/margin_10"
+                android:paddingRight    ="@dimen/margin_10"
                 android:textColor="@color/colorBlack"
                 android:layout_marginLeft="@dimen/margin_20"
                 android:layout_marginRight="@dimen/margin_20"
@@ -713,7 +752,7 @@
                 android:layout_marginTop="@dimen/margin_10"
                 android:textColorHint="@color/colorBlack"
                 android:id="@+id/et_add_qualification"
-
+                android:fontFamily="@font/poppins"
                 android:inputType="text"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/margin_40"
@@ -736,6 +775,7 @@
                 android:textSize="16sp"
                 android:background="@drawable/blue_btn_gradient_new"
                 android:text="Save"
+                android:fontFamily="@font/poppins"
                 android:textAllCaps="false"
                 android:textColor="@color/colorWhite"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -759,19 +799,19 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|top"
                     android:layout_margin="@dimen/margin_10"
-                    android:fontFamily="sans-serif"
+                    android:fontFamily="@font/poppins"
                     android:gravity="center"
                     android:text="3/5"
                     android:textAllCaps="true"
                     android:textColor="@color/colorBlack"
-                    android:textSize="16dp"
+                    android:textSize="15sp"
                     android:textStyle="normal"/>
 
                 <TextView
                     android:id="@+id/textView_alt_no"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
+                    android:fontFamily="@font/poppins"
                     android:layout_marginLeft="@dimen/margin_30"
                     android:layout_marginRight="@dimen/margin_30"
                     android:layout_marginEnd="@dimen/margin_30"
@@ -787,7 +827,10 @@
                 <EditText
 
                     android:textSize="16sp"
-                    android:padding="@dimen/margin_10"
+                     android:paddingLeft     ="@dimen/margin_10"
+                android:paddingStart    ="@dimen/margin_10"
+                android:paddingEnd      ="@dimen/margin_10"
+                android:paddingRight    ="@dimen/margin_10"
                     android:textColor="@color/colorBlack"
                     android:layout_marginLeft="@dimen/margin_20"
                     android:layout_marginRight="@dimen/margin_20"
@@ -796,7 +839,7 @@
                     android:layout_marginTop="@dimen/margin_10"
                     android:textColorHint="@color/colorBlack"
                     android:id="@+id/et_alt_no"
-
+                    android:fontFamily="@font/poppins"
                     android:inputType="phone"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/margin_40"
@@ -817,13 +860,17 @@
                     android:textColor="@color/colorDarkGrey"
                     android:textSize="12sp"
                     android:textStyle="bold"
+                    android:fontFamily="@font/poppins"
                     />
 
                 <EditText
                     android:textSize="16sp"
                     android:enabled="true"
 
-                    android:padding="@dimen/margin_10"
+                     android:paddingLeft     ="@dimen/margin_10"
+                android:paddingStart    ="@dimen/margin_10"
+                android:paddingEnd      ="@dimen/margin_10"
+                android:paddingRight    ="@dimen/margin_10"
                     android:textColor="@color/colorBlack"
                     android:layout_marginLeft="@dimen/margin_20"
                     android:layout_marginRight="@dimen/margin_20"
@@ -832,7 +879,7 @@
                     android:layout_marginTop="@dimen/margin_10"
                     android:textColorHint="@color/colorBlack"
                     android:id="@+id/et_alt_mail"
-
+                    android:fontFamily="@font/poppins"
                     android:inputType="textEmailAddress"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/margin_40"
@@ -850,7 +897,7 @@
                     android:layout_marginEnd="@dimen/margin_30"
                     android:layout_marginStart="@dimen/margin_30"
                     android:layout_marginTop="@dimen/margin_30"
-                    android:fontFamily="sans-serif"
+                    android:fontFamily="@font/poppins"
                     android:gravity="center"
                     android:text="@string/working_days"
                     android:textColor="@color/colorDarkGrey"
@@ -859,6 +906,7 @@
                     />
 
                 <ca.antonious.materialdaypicker.MaterialDayPicker
+
                     android:layout_marginLeft="@dimen/margin_25"
                     android:layout_marginRight="@dimen/margin_25"
                     android:layout_marginEnd="@dimen/margin_25"
@@ -904,7 +952,10 @@
                     android:visibility="gone"
                     android:textSize="16sp"
 
-                    android:padding="@dimen/margin_10"
+                     android:paddingLeft     ="@dimen/margin_10"
+                android:paddingStart    ="@dimen/margin_10"
+                android:paddingEnd      ="@dimen/margin_10"
+                android:paddingRight    ="@dimen/margin_10"
                     android:textColor="@color/colorBlack"
                     android:layout_marginLeft="@dimen/margin_20"
                     android:layout_marginRight="@dimen/margin_20"
@@ -913,7 +964,7 @@
                     android:layout_marginTop="@dimen/margin_10"
                     android:textColorHint="@color/colorBlack"
                     android:id="@+id/et_working_days"
-
+                    android:fontFamily="@font/poppins"
                     android:inputType="text"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/margin_40"
@@ -923,7 +974,7 @@
                     android:id="@+id/textView_timing"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif"
+                    android:fontFamily="@font/poppins"
                     android:gravity="center"
                     android:layout_gravity="center"
                     android:text="Working Timings I"
@@ -952,7 +1003,7 @@
                     android:layout_marginEnd="@dimen/margin_30"
                     android:layout_marginStart="@dimen/margin_30"
                     android:layout_marginTop="@dimen/margin_10"
-                    android:fontFamily="sans-serif"
+                    android:fontFamily="@font/poppins"
                     android:gravity="center"
                     android:text="@string/visit_hours_from"
                     android:textColor="@color/colorDarkGrey"
@@ -988,6 +1039,7 @@
                     android:textColorHint="@color/colorBlack"
                     android:id="@+id/et_visit_from1"
                     android:inputType="text"
+                    android:fontFamily="@font/poppins"
                     android:paddingLeft="@dimen/margin_5"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/margin_40"
@@ -998,7 +1050,10 @@
                     android:visibility="gone"
 
                     android:textSize="16sp"
-                    android:padding="@dimen/margin_10"
+                     android:paddingLeft     ="@dimen/margin_10"
+                android:paddingStart    ="@dimen/margin_10"
+                android:paddingEnd      ="@dimen/margin_10"
+                android:paddingRight    ="@dimen/margin_10"
                     android:textColor="@color/colorBlack"
                     android:layout_marginLeft="@dimen/margin_20"
                     android:layout_marginRight="@dimen/margin_20"
@@ -1007,7 +1062,7 @@
                     android:layout_marginTop="@dimen/margin_10"
                     android:textColorHint="@color/colorBlack"
                     android:id="@+id/et_visit_from"
-
+                    android:fontFamily="@font/poppins"
                     android:inputType="text"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/margin_40"
@@ -1031,7 +1086,7 @@
                         android:layout_marginStart="@dimen/margin_30"
                         android:layout_marginTop="@dimen/margin_10"
 
-                        android:fontFamily="sans-serif"
+                        android:fontFamily="@font/poppins"
                         android:gravity="center"
                         android:text="@string/visit_hours_to"
                         android:textColor="@color/colorDarkGrey"
@@ -1067,7 +1122,7 @@
                         android:layout_marginTop="@dimen/margin_10"
                         android:textColorHint="@color/colorBlack"
                         android:id="@+id/et_visit_to1"
-
+                        android:fontFamily="@font/poppins"
                         android:paddingLeft="@dimen/margin_5"
                         android:inputType="text"
                         android:layout_width="match_parent"
@@ -1077,9 +1132,12 @@
 
                     <EditText
                         android:visibility="gone"
-
+                        android:fontFamily="@font/poppins"
                         android:textSize="16sp"
-                        android:padding="@dimen/margin_10"
+                         android:paddingLeft     ="@dimen/margin_10"
+                android:paddingStart    ="@dimen/margin_10"
+                android:paddingEnd      ="@dimen/margin_10"
+                android:paddingRight    ="@dimen/margin_10"
                         android:textColor="@color/colorBlack"
                         android:layout_marginLeft="@dimen/margin_20"
                         android:layout_marginRight="@dimen/margin_20"
@@ -1102,7 +1160,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_20"
-                    android:fontFamily="sans-serif"
+                    android:fontFamily="@font/poppins"
                     android:gravity="center"
                     android:layout_gravity="center"
 
@@ -1134,7 +1192,7 @@
                             android:layout_marginEnd="@dimen/margin_30"
                             android:layout_marginStart="@dimen/margin_30"
                             android:layout_marginTop="@dimen/margin_10"
-                            android:fontFamily="sans-serif"
+                            android:fontFamily="@font/poppins"
                             android:gravity="center"
                             android:text="@string/visit_hours_from"
                             android:textColor="@color/colorDarkGrey"
@@ -1160,6 +1218,7 @@
                             android:textColorHint="#000000" />
 
                         <EditText
+                            android:fontFamily="@font/poppins"
                             android:textSize="16sp"
                             android:textColor="@color/colorBlack"
                             android:layout_marginLeft="@dimen/margin_20"
@@ -1181,7 +1240,10 @@
                             android:visibility="gone"
 
                             android:textSize="16sp"
-                            android:padding="@dimen/margin_10"
+                             android:paddingLeft     ="@dimen/margin_10"
+                android:paddingStart    ="@dimen/margin_10"
+                android:paddingEnd      ="@dimen/margin_10"
+                android:paddingRight    ="@dimen/margin_10"
                             android:textColor="@color/colorBlack"
                             android:layout_marginLeft="@dimen/margin_20"
                             android:layout_marginRight="@dimen/margin_20"
@@ -1190,7 +1252,7 @@
                             android:layout_marginTop="@dimen/margin_10"
                             android:textColorHint="@color/colorBlack"
                             android:id="@+id/et_visit_from2"
-
+                            android:fontFamily="@font/poppins"
                             android:inputType="text"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/margin_40"
@@ -1214,7 +1276,7 @@
                             android:layout_marginStart="@dimen/margin_30"
                             android:layout_marginTop="@dimen/margin_10"
 
-                            android:fontFamily="sans-serif"
+                            android:fontFamily="@font/poppins"
                             android:gravity="center"
                             android:text="@string/visit_hours_to"
                             android:textColor="@color/colorDarkGrey"
@@ -1250,9 +1312,12 @@
                             android:layout_marginTop="@dimen/margin_10"
                             android:textColorHint="@color/colorBlack"
                             android:id="@+id/et_visit_to21"
-                            android:padding="@dimen/margin_10"
+                             android:paddingLeft     ="@dimen/margin_10"
+                android:paddingStart    ="@dimen/margin_10"
+                android:paddingEnd      ="@dimen/margin_10"
+                android:paddingRight    ="@dimen/margin_10"
                             android:inputType="text"
-                            android:paddingLeft="@dimen/margin_5"
+                            android:fontFamily="@font/poppins"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/margin_40"
                             android:background="@drawable/blue_faint_btn_gradient2"
@@ -1260,9 +1325,12 @@
 
                         <EditText
                             android:visibility="gone"
-
+                            android:fontFamily="@font/poppins"
                             android:textSize="16sp"
-                            android:padding="@dimen/margin_10"
+                             android:paddingLeft     ="@dimen/margin_10"
+                android:paddingStart    ="@dimen/margin_10"
+                android:paddingEnd      ="@dimen/margin_10"
+                android:paddingRight    ="@dimen/margin_10"
                             android:textColor="@color/colorBlack"
                             android:layout_marginLeft="@dimen/margin_20"
                             android:layout_marginRight="@dimen/margin_20"
@@ -1292,7 +1360,7 @@
                     android:layout_marginStart="@dimen/margin_30"
                     android:layout_marginTop="@dimen/margin_30"
                     android:visibility="gone"
-                    android:fontFamily="sans-serif"
+                    android:fontFamily="@font/poppins"
                     android:gravity="center"
                     android:text="@string/closed_day"
                     android:textColor="@color/colorDarkGrey"
@@ -1332,7 +1400,10 @@
                     android:visibility="gone"
 
                     android:textSize="16sp"
-                    android:padding="@dimen/margin_10"
+                     android:paddingLeft     ="@dimen/margin_10"
+                android:paddingStart    ="@dimen/margin_10"
+                android:paddingEnd      ="@dimen/margin_10"
+                android:paddingRight    ="@dimen/margin_10"
                     android:textColor="@color/colorBlack"
                     android:layout_marginLeft="@dimen/margin_20"
                     android:layout_marginRight="@dimen/margin_20"
@@ -1341,7 +1412,7 @@
                     android:layout_marginTop="@dimen/margin_10"
                     android:textColorHint="@color/colorBlack"
                     android:id="@+id/et_closed_day"
-
+                    android:fontFamily="@font/poppins"
                     android:inputType="text"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/margin_40"
@@ -1364,6 +1435,7 @@
                     android:textSize="16sp"
                     android:background="@drawable/blue_btn_gradient_new"
                     android:text="Save"
+                    android:fontFamily="@font/poppins"
                     android:textAllCaps="false"
                     android:textColor="@color/colorWhite"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -1387,12 +1459,12 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|top"
                     android:layout_margin="@dimen/margin_10"
-                    android:fontFamily="sans-serif"
+                    android:fontFamily="@font/poppins"
                     android:gravity="center"
                     android:text="4/5"
                     android:textAllCaps="true"
                     android:textColor="@color/colorBlack"
-                    android:textSize="16dp"
+                    android:textSize="15sp"
                     android:textStyle="normal"/>
 
                 <TextView
@@ -1401,12 +1473,12 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|top"
                     android:layout_margin="@dimen/margin_10"
-                    android:fontFamily="sans-serif"
+                    android:fontFamily="@font/poppins"
                     android:gravity="center"
                     android:text="@string/upload_logo_of_your_brand"
                     android:textAllCaps="true"
                     android:textColor="@color/colorBlack"
-                    android:textSize="16dp"
+                    android:textSize="15sp"
                     android:textStyle="normal"/>
 
                 <RelativeLayout
@@ -1435,6 +1507,7 @@
                     android:src="@drawable/ic_close"
                     />
                 <TextView
+                    android:fontFamily="@font/poppins"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
@@ -1447,6 +1520,7 @@
 
 
                 <Button
+                    android:fontFamily="@font/poppins"
                     android:foreground="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
                     android:textStyle="normal"
@@ -1480,7 +1554,7 @@
                     android:layout_marginStart="@dimen/margin_30"
                     android:layout_marginTop="@dimen/margin_30"
 
-                    android:fontFamily="sans-serif"
+                    android:fontFamily="@font/poppins"
                     android:gravity="center"
                     android:text="@string/enter_your_clinic_hospital_name_if_any"
                     android:textColor="@color/colorDarkGrey"
@@ -1491,7 +1565,10 @@
                 <EditText
 
                     android:textSize="16sp"
-                    android:padding="@dimen/margin_10"
+                     android:paddingLeft     ="@dimen/margin_10"
+                android:paddingStart    ="@dimen/margin_10"
+                android:paddingEnd      ="@dimen/margin_10"
+                android:paddingRight    ="@dimen/margin_10"
                     android:textColor="@color/colorBlack"
                     android:layout_marginLeft="@dimen/margin_20"
                     android:layout_marginRight="@dimen/margin_20"
@@ -1500,7 +1577,7 @@
                     android:layout_marginTop="@dimen/margin_10"
                     android:textColorHint="@color/colorBlack"
                     android:id="@+id/et_Clinic_name"
-
+                    android:fontFamily="@font/poppins"
                     android:inputType="text"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/margin_40"
@@ -1516,7 +1593,7 @@
                     android:layout_marginEnd="@dimen/margin_30"
                     android:layout_marginStart="@dimen/margin_30"
                     android:layout_marginTop="@dimen/margin_30"
-                    android:fontFamily="sans-serif"
+                    android:fontFamily="@font/poppins"
                     android:gravity="center"
                     android:text="@string/address_of_your_clinic_hospital_if_any"
                     android:textColor="@color/colorDarkGrey"
@@ -1525,8 +1602,14 @@
                     />
 
                 <EditText
+                    android:fontFamily="@font/poppins"
                     android:textSize="16sp"
-                    android:padding="@dimen/margin_10"
+                     android:paddingLeft     ="@dimen/margin_10"
+                android:paddingStart    ="@dimen/margin_10"
+                android:paddingEnd      ="@dimen/margin_10"
+                android:paddingRight    ="@dimen/margin_10"
+                    android:paddingTop      ="@dimen/margin_10"
+                    android:paddingBottom   ="@dimen/margin_10"
                     android:textColor="@color/colorBlack"
                     android:layout_marginLeft="@dimen/margin_20"
                     android:layout_marginRight="@dimen/margin_20"
@@ -1557,6 +1640,7 @@
                     android:textSize="16sp"
                     android:background="@drawable/blue_btn_gradient_new"
                     android:text="Save"
+                    android:fontFamily="@font/poppins"
                     android:textAllCaps="false"
                     android:textColor="@color/colorWhite"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -1580,12 +1664,12 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|top"
                     android:layout_margin="@dimen/margin_10"
-                    android:fontFamily="sans-serif"
+                    android:fontFamily="@font/poppins"
                     android:gravity="center"
                     android:text="5/5"
                     android:textAllCaps="true"
                     android:textColor="@color/colorBlack"
-                    android:textSize="16dp"
+                    android:textSize="15sp"
                     android:textStyle="normal"/>
 
                 <TextView
@@ -1594,12 +1678,12 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|top"
                     android:layout_margin="@dimen/margin_10"
-                    android:fontFamily="sans-serif"
+                    android:fontFamily="@font/poppins"
                     android:gravity="center"
                     android:text="@string/create_your_digital_signature"
                     android:textAllCaps="true"
                     android:textColor="@color/colorBlack"
-                    android:textSize="16dp"
+                    android:textSize="15sp"
                     android:textStyle="normal"/>
 
 
@@ -1624,7 +1708,7 @@
                         android:id="@+id/tv_sign_will_appear_here"
                         android:layout_width="300dp"
                         android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif"
+                        android:fontFamily="@font/poppins"
                         android:gravity="center"
                         android:layout_gravity="center"
                         android:text="@string/your_digital_signature_nwill_appear_here"
@@ -1651,11 +1735,13 @@
                     android:background="@drawable/blue_btn_gradient_new"
                     android:text="Add Signature"
                     android:textAllCaps="false"
+                    android:fontFamily="@font/poppins"
                     android:textColor="@color/colorWhite"
                     app:layout_constraintEnd_toEndOf="parent"
                     tools:layout_editor_absoluteY="27dp" />
 
                 <Button
+                    android:fontFamily="@font/poppins"
                     android:foreground="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
                     android:focusable="true"
@@ -1693,6 +1779,7 @@
                     sign:penColor="#000000"/>-->
 
                 <Button
+                    android:fontFamily="@font/poppins"
                     android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/margin_35"
@@ -1708,7 +1795,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|top"
                     android:layout_margin="@dimen/margin_10"
-                    android:fontFamily="sans-serif"
+                    android:fontFamily="@font/poppins"
                     android:gravity="center"
                     android:text="@string/this_signature_will_be_present_at_every_prescription"
                     android:textAllCaps="false"
@@ -1732,6 +1819,7 @@
                     android:textSize="16sp"
                     android:background="@drawable/blue_btn_gradient_new"
                     android:text="Done"
+                    android:fontFamily="@font/poppins"
                     android:textAllCaps="false"
                     android:textColor="@color/colorWhite"
                     app:layout_constraintEnd_toEndOf="parent"

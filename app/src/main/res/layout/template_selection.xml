@@ -68,7 +68,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="My Templates"
-                            android:typeface="sans"
+                            android:fontFamily="@font/poppinsmedium"
                             />
 
                     </FrameLayout>
@@ -97,10 +97,12 @@
                 android:layout_height="wrap_content"
                 android:text="Medicines"
                 android:layout_weight="1"
+                android:fontFamily="@font/poppinsmedium"
                 />
 
 
             <TextView
+                android:fontFamily="@font/poppinsmedium"
                 android:id="@+id/tv_labtest"
                 android:textColor="@color/white"
                 android:background="@color/colorGrey"
@@ -141,18 +143,6 @@
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
 
-    <com.google.android.gms.ads.AdView
-        android:visibility="gone"
-        android:layout_margin="@dimen/margin_5"
-        android:layout_gravity="bottom"
-        xmlns:ads="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/adView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        ads:adSize="BANNER"
 
-        ads:adUnitId="ca-app-pub-6756023122563497/9775804120">
-    </com.google.android.gms.ads.AdView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

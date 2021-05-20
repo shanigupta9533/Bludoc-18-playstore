@@ -67,7 +67,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="History/Records"
-                            android:typeface="sans"
+                            android:fontFamily="@font/poppinsmedium"
                             />
 
                     </FrameLayout>
@@ -76,6 +76,12 @@
                 </FrameLayout>
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
 
         <LinearLayout
             android:orientation="vertical"
@@ -86,6 +92,8 @@
 
 
             <EditText
+
+                android:fontFamily="@font/poppins"
                 android:id="@+id/medicine_searchview"
                 style="@style/MaterialSearchBarLight"
                 android:layout_width="match_parent"
@@ -97,29 +105,17 @@
                 android:layout_marginRight="@dimen/margin_20"
                 android:layout_marginTop="@dimen/margin_10"
                 android:layout_marginBottom="@dimen/margin_10"
-                android:paddingLeft     ="@dimen/margin_4"
-                android:paddingStart    ="@dimen/margin_4"
-                android:paddingEnd      ="@dimen/margin_4"
-                android:paddingRight    ="@dimen/margin_4"
+                android:paddingBottom   ="@dimen/margin_8"
+                android:paddingLeft     ="@dimen/margin_8"
+                android:paddingStart    ="@dimen/margin_8"
+                android:paddingEnd      ="@dimen/margin_8"
+                android:paddingRight    ="@dimen/margin_8"
+                android:paddingTop      ="@dimen/margin_8"
                 android:background="@drawable/spinner_background"
                 android:focusableInTouchMode="true"
                 android:textStyle="bold" />
 
-            <com.google.android.gms.ads.AdView
-                android:visibility="gone"
-                android:layout_marginTop="10dp"
-                xmlns:ads="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/adView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                ads:adSize="BANNER"
 
-                ads:adUnitId="ca-app-pub-6756023122563497/9775804120">
-            </com.google.android.gms.ads.AdView>
 
 
 
@@ -147,6 +143,7 @@
 
 
             <TextView
+                android:fontFamily="@font/poppins"
                 android:id="@+id/tv_no_template"
                 android:layout_marginTop="@dimen/margin_10"
                 android:layout_gravity="center"
@@ -166,7 +163,22 @@
 
         </LinearLayout>
 
+<com.google.android.gms.ads.AdView
+    android:layout_gravity="bottom"
+                android:visibility="gone"
+                xmlns:ads="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/adView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                ads:adSize="BANNER"
 
+                ads:adUnitId="ca-app-pub-3940256099942544/6300978111">
+            </com.google.android.gms.ads.AdView>
+        </FrameLayout>
     </LinearLayout>
 
     <include layout="@layout/progress_bar_layout"/>

@@ -32,6 +32,7 @@
 
 
         <TextView
+            android:fontFamily="@font/poppinsmedium"
             android:id="@+id/tv_no_templatetitle"
             android:layout_marginTop="@dimen/margin_20"
             android:layout_gravity="center"
@@ -43,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAllCaps="false"
-            android:text="Desktop Version"
+            android:text="BluDoc Desktop Version"
             android:textColor="@color/colorDarkestBlue"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -51,6 +52,7 @@
             />
 
         <TextView
+            android:fontFamily="@font/poppins"
             android:id="@+id/tv_end_date"
             android:layout_marginTop="@dimen/margin_20"
             android:layout_gravity="center"
@@ -62,14 +64,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAllCaps="false"
-            android:text="Copy link and  send it to your mail and open this link in your laptop, desktop, tab, mac book etc to login with your registered mail id for desktop version"
+            android:text="Copy link and send it to your mail and open this link in your laptop, desktop, tab, mac book etc to login with your registered mail id for desktop version"
             android:textColor="@color/colorBlack"
-            android:textSize="15sp"
+            android:textSize="14sp"
             android:textStyle="normal"
             android:typeface="sans"
             />
 
         <Button
+            android:fontFamily="@font/poppins"
             android:foreground="?android:attr/selectableItemBackground"
             android:layout_marginLeft   ="@dimen/margin_20"
             android:layout_marginStart  ="@dimen/margin_20"
@@ -97,7 +100,8 @@
 
 
         <TextView
-            android:layout_marginTop="@dimen/margin_15"
+            android:fontFamily="@font/poppins"
+            android:layout_marginTop="@dimen/margin_10"
             android:layout_gravity="center"
             android:gravity="center"
             android:layout_marginLeft="@dimen/margin_20"
@@ -119,6 +123,7 @@
 
 
         <TextView
+            android:fontFamily="@font/poppins"
             android:autoLink="web"
             android:layout_marginTop="@dimen/margin_15"
             android:layout_gravity="center"
@@ -130,8 +135,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAllCaps="false"
-            android:text="Simply visit our website from your desktop\nwww.bludoc.in\nAnd click on ‘Get Desktop Version’ and login with your registered mail ID of BluDoc
-"
+            android:text="Simply visit our website from your desktop\nwww.bludoc.in\nAnd click on ‘Get Desktop Version’ and login with your registered mail ID of BluDoc"
             android:textColor="@color/colorBlack"
             android:textSize="15sp"
             android:textStyle="normal"
@@ -140,15 +144,16 @@
 
 
         <TextView
+            android:fontFamily="@font/poppins"
             android:layout_marginBottom="@dimen/margin_20"
             android:id="@+id/tv_no_template1"
             android:layout_marginTop="@dimen/margin_20"
             android:layout_gravity="center"
             android:gravity="center"
-            android:layout_marginLeft="@dimen/margin_20"
-            android:layout_marginStart="@dimen/margin_20"
-            android:layout_marginRight="@dimen/margin_20"
-            android:layout_marginEnd="@dimen/margin_20"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginStart="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
+            android:layout_marginEnd="@dimen/margin_10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAllCaps="false"

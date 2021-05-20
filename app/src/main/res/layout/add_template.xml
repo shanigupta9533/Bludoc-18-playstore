@@ -58,6 +58,8 @@
                             />
 
                         <TextView
+                            android:fontFamily="@font/poppinsmedium"
+
                             android:layout_gravity="center"
                             android:textSize="18sp"
                             android:textColor="@color/colorWhite"
@@ -65,7 +67,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Create Template"
-                            android:typeface="sans"
                             />
 
                     </FrameLayout>
@@ -467,6 +468,8 @@
                 android:layout_height="wrap_content">
 
                 <TextView
+                    android:fontFamily="@font/poppins"
+
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/margin_3"
@@ -495,12 +498,11 @@
                     <TextView
                         android:layout_marginTop   ="2dp"
                         android:background="@color/white"
-
+                        android:fontFamily="@font/poppins"
                         android:id="@+id/textView3_5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center|top"
-                        android:fontFamily="sans-serif"
                         android:includeFontPadding="false"
                         android:gravity="center"
                         android:text="3/5"
@@ -556,20 +558,39 @@
                             android:fontFamily="@font/poppinsmedium"
                             />
 
-                        <EditText
-                            android:textSize="16sp"
-                            android:padding="@dimen/margin_10"
-                            android:textColor="@color/colorBlack"
-                            android:id="@+id/templates_searchview"
-                            android:inputType="textCapSentences"
-                            android:hint="type here"
-                            android:maxLines="2"
-                            style="@style/MaterialSearchBarLight"
-                            android:layout_marginTop="@dimen/margin_8"
-                            android:textColorHint="#dcdcdc"
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/margin_40"
-                            android:background="@drawable/blue_faint_btn_gradient2"/>
+                            android:orientation="horizontal"
+                            android:layout_height="match_parent">
+
+                            <EditText
+                                android:fontFamily="@font/poppins"
+                                android:textSize="15sp"
+                                android:padding="@dimen/margin_10"
+                                android:textColor="@color/colorBlack"
+                                android:id="@+id/templates_searchview"
+                                android:inputType="textCapSentences"
+                                android:hint="@string/type_here"
+                                android:layout_weight="1"
+                                android:maxLines="2"
+                                android:digits="abcdefghijklmnopqrstuvwxyz0123456789 ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                                android:layout_marginTop="@dimen/margin_8"
+                                android:textColorHint="#dcdcdc"
+                                android:layout_width="0dp"
+                                android:layout_height="@dimen/margin_40"
+                                android:background="@drawable/blue_faint_btn_gradient2"/>
+
+                            <ImageView
+                                android:layout_width="27dp"
+                                android:layout_height="27dp"
+                                android:id="@+id/speech_voice"
+                                android:layout_marginTop="@dimen/margin_4"
+                                android:layout_marginStart="@dimen/margin_4"
+                                android:src="@drawable/ic_action_speech_voice"
+                                android:layout_gravity="center_vertical"
+                                />
+
+                        </LinearLayout>
 
                     </LinearLayout>
 
@@ -601,6 +622,7 @@
                             android:textColorHint="@color/colorBlack"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/margin_40"
+                            android:fontFamily="@font/poppins"
                             android:background="@drawable/blue_faint_btn_gradient2"/>
 
                     </LinearLayout>
@@ -645,7 +667,7 @@
                             android:layout_marginRight="@dimen/margin_30"
                             android:layout_marginEnd="@dimen/margin_30"
                             android:layout_marginStart="@dimen/margin_30"
-                            android:fontFamily="sans-serif"
+                            android:fontFamily="@font/poppinsmedium"
                             android:gravity="center"
                             android:text="Frequency"
                             android:textColor="@color/colorDarkGrey"
@@ -681,6 +703,7 @@
                             android:imeOptions="actionNext"
                             android:inputType="text"
                             android:padding="@dimen/margin_10"
+                            android:fontFamily="@font/poppins"
                             android:textColor="@color/colorBlack"
                             android:layout_marginLeft="@dimen/margin_20"
                             android:layout_marginRight="@dimen/margin_20"
@@ -702,6 +725,7 @@
                         android:orientation="vertical">
                         <!--        Org Name       -->
                         <TextView
+                            android:fontFamily="@font/poppinsmedium"
                             android:id="@+id/textView_Route"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -711,7 +735,6 @@
                             android:layout_marginEnd="@dimen/margin_30"
                             android:layout_marginStart="@dimen/margin_30"
 
-                            android:fontFamily="sans-serif"
                             android:gravity="center"
                             android:text="Route/Form"
                             android:textColor="@color/colorDarkGrey"
@@ -739,6 +762,7 @@
                             android:textColorHint="#000000" />
 
                         <EditText
+                            android:fontFamily="@font/poppins"
                             android:visibility="gone"
                             android:focusedByDefault="false"
                             android:textSize="16sp"
@@ -770,6 +794,7 @@
                         android:orientation="vertical">
                         <!--        Org Name       -->
                         <TextView
+                            android:fontFamily="@font/poppinsmedium"
                             android:id="@+id/textView_temp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -779,7 +804,7 @@
                             android:layout_marginEnd="@dimen/margin_30"
                             android:layout_marginStart="@dimen/margin_30"
                             android:layout_marginTop="@dimen/margin_30"
-                            android:fontFamily="sans-serif"
+
                             android:gravity="center"
                             android:text="Gender"
                             android:textColor="@color/colorDarkGrey"
@@ -811,6 +836,7 @@
                             android:focusedByDefault="false"
                             android:textSize="16sp"
                             android:maxLines="1"
+                            android:fontFamily="@font/poppins"
                             android:inputType="text"
                             android:imeOptions="actionNext"
                             android:padding="@dimen/margin_10"
@@ -845,6 +871,7 @@
                         android:orientation="vertical">
                         <!--        Org Name       -->
                         <TextView
+                            android:fontFamily="@font/poppinsmedium"
                             android:id="@+id/textView_days"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -853,7 +880,6 @@
                             android:layout_marginEnd="@dimen/margin_30"
                             android:layout_marginStart="@dimen/margin_30"
                             android:layout_marginTop="@dimen/margin_10"
-                            android:fontFamily="sans-serif"
                             android:gravity="center"
                             android:text="No. of days"
                             android:textColor="@color/colorDarkGrey"
@@ -873,6 +899,7 @@
                             android:imeOptions="actionNext"
                             android:inputType="number"
                             android:maxLength="3"
+                            android:fontFamily="@font/poppins"
                             android:textColor="@color/colorBlack"
                             android:layout_marginLeft="@dimen/margin_20"
                             android:layout_marginRight="@dimen/margin_20"
@@ -905,7 +932,7 @@
                             android:layout_marginEnd="@dimen/margin_30"
                             android:layout_marginStart="@dimen/margin_30"
                             android:layout_marginTop="@dimen/margin_10"
-                            android:fontFamily="sans-serif"
+                            android:fontFamily="@font/poppinsmedium"
                             android:gravity="center"
                             android:text="Instructions"
                             android:textColor="@color/colorDarkGrey"
@@ -933,6 +960,7 @@
                             android:textColorHint="#000000" />
 
                         <EditText
+                            android:fontFamily="@font/poppins"
                             android:visibility="gone"
                             android:textSize="16sp"
                             android:focusedByDefault="false"
@@ -965,15 +993,16 @@
                     android:layout_marginEnd="@dimen/margin_30"
                     android:layout_marginStart="@dimen/margin_30"
                     android:layout_marginTop="@dimen/margin_10"
-                    android:fontFamily="sans-serif"
                     android:gravity="center"
                     android:text="Additional comments"
                     android:textColor="@color/colorDarkGrey"
                     android:textSize="14sp"
                     android:textStyle="bold"
+                    android:fontFamily="@font/poppinsmedium"
                     />
 
                 <EditText
+                    android:fontFamily="@font/poppins"
                     android:focusedByDefault="false"
                     android:textSize="16sp"
                     android:paddingLeft     ="@dimen/margin_10"
@@ -1007,6 +1036,7 @@
 
 
                     <Button
+                        android:fontFamily="@font/poppinsmedium"
                         android:foreground="?android:attr/selectableItemBackground"
                         android:textStyle="normal"
                         android:id="@+id/btn_add"
@@ -1030,7 +1060,7 @@
                 </LinearLayout>
 
                 <Button
-
+                    android:fontFamily="@font/poppinsmedium"
                     android:textStyle="normal"
                     android:id="@+id/btn_save_template"
                     app:layout_constraintTop_toTopOf="parent"

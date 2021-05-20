@@ -58,6 +58,7 @@
                             />
 
                         <TextView
+                            android:fontFamily="@font/poppins"
                             android:layout_gravity="center"
                             android:textSize="18sp"
                             android:textColor="@color/colorWhite"
@@ -65,7 +66,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Template Detail"
-                            android:typeface="sans"
+
                             />
 
                     </FrameLayout>

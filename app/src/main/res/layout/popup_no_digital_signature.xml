@@ -21,6 +21,7 @@
 
 
         <TextView
+            android:fontFamily="@font/poppins"
             android:id="@+id/tv_no_template"
             android:layout_marginTop="@dimen/margin_10"
             android:layout_marginLeft="@dimen/margin_30"
@@ -34,7 +35,6 @@
             android:textColor="@color/colorBlack"
             android:textSize="14sp"
             android:textStyle="normal"
-            android:typeface="sans"
             />
 
         <RelativeLayout
@@ -88,18 +88,18 @@
             android:layout_marginTop="@dimen/margin_30"
             android:id="@+id/btn_clear"
             android:layout_width="260dp"
-            android:layout_height="35dp"
+            android:layout_height="40dp"
             android:layout_gravity="center"
 
             android:background="@drawable/grey_dark_round_btn_gradient"
             android:gravity="center"
-            android:textStyle="bold"
             android:text="Clear"
+            android:fontFamily="@font/poppinsmedium"
             android:textAllCaps="false"
             android:textColor="@color/colorWhite"
             android:textColorHint="@color/colorWhite"
             android:textSize="16sp"
-            android:typeface="sans" />
+           />
 
     <Button
         android:foreground="?attr/selectableItemBackgroundBorderless"
@@ -109,18 +109,18 @@
         android:layout_marginBottom="@dimen/margin_40"
         android:id="@+id/btn_upload"
         android:layout_width="260dp"
-        android:layout_height="35dp"
+        android:layout_height="40dp"
         android:layout_gravity="center"
 
         android:background="@drawable/blue_round_btn_gradient"
         android:gravity="center"
-        android:textStyle="bold"
+        android:fontFamily="@font/poppinsmedium"
         android:text="Upload"
         android:textAllCaps="false"
         android:textColor="@color/colorWhite"
         android:textColorHint="@color/colorWhite"
         android:textSize="16sp"
-        android:typeface="sans" />
+        />
 
 
 

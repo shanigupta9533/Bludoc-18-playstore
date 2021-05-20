@@ -97,15 +97,11 @@ public class PaymentGateway extends AppCompatActivity implements PaymentResultLi
         /*if (Utils.isConnectingToInternet(mContext)) {
 
             Random randomGenerator = new Random();
-
             int randomInt = randomGenerator.nextInt(1000);
-
             mLocationViewHolder.pay(Integer.parseInt(amount),"INR","RC_"+randomInt,"1")
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(responsePay);
-
-
         } else {
             Toast.makeText(mContext, "No Internet Connection", Toast.LENGTH_SHORT).show();
         }*/

@@ -17,6 +17,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -31,14 +32,18 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -46,8 +51,22 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import com.commit451.modalbottomsheetdialogfragment.ModalBottomSheetDialogFragment;
+import com.commit451.modalbottomsheetdialogfragment.Option;
+import com.commit451.modalbottomsheetdialogfragment.OptionRequest;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
+import com.google.android.gms.ads.rewarded.RewardItem;
+import com.google.android.gms.ads.rewarded.RewardedAd;
+import com.google.android.gms.ads.rewarded.RewardedAdCallback;
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 import com.hendrix.pdfmyxml.PdfDocument;
 import com.hendrix.pdfmyxml.viewRenderer.AbstractViewRenderer;
 import com.itextpdf.text.BadElementException;
@@ -55,9 +74,12 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Image;
 import com.likesby.bludoc.Adapter.BottomSheetAdapter;
-import com.likesby.bludoc.Adapter.Pres_LabTest_adapter;
+import com.likesby.bludoc.Adapter.Pres_LabTest_adapter_mobile;
 import com.likesby.bludoc.Adapter.Pres_adapter;
+import com.likesby.bludoc.Adapter.Pres_adapter_mobile;
 import com.likesby.bludoc.Adapter.SlidingImage_Adapter_GeneratedPrescription;
+import com.likesby.bludoc.AllPharmacistActivity;
+import com.likesby.bludoc.HomeActivity;
 import com.likesby.bludoc.ModelLayer.Entities.BottomSheetItem;
 import com.likesby.bludoc.ModelLayer.Entities.MedicinesItem;
 import com.likesby.bludoc.ModelLayer.Entities.PrescriptionJSON;
@@ -65,20 +87,30 @@ import com.likesby.bludoc.ModelLayer.Entities.ResponseSuccess;
 import com.likesby.bludoc.ModelLayer.NewEntities.LabTestItem;
 import com.likesby.bludoc.ModelLayer.NewEntities3.Doctor;
 import com.likesby.bludoc.ModelLayer.NewEntities3.PrescriptionItem;
+import com.likesby.bludoc.MultiplePharmacistActivity;
 import com.likesby.bludoc.R;
+import com.likesby.bludoc.RegisterDetails;
 import com.likesby.bludoc.SessionManager.SessionManager;
 import com.likesby.bludoc.constants.ApplicationConstant;
 import com.likesby.bludoc.databinding.GeneratePrescriptionBinding;
 import com.likesby.bludoc.utils.DateUtils;
 import com.likesby.bludoc.utils.ScreenSize;
+import com.likesby.bludoc.viewModels.AllPharmacistList;
+import com.likesby.bludoc.viewModels.AllPharmacistModels;
 import com.likesby.bludoc.viewModels.ApiViewHolder;
+import com.mannan.translateapi.Language;
+import com.mannan.translateapi.TranslateAPI;
 import com.squareup.picasso.Picasso;
 import com.viewpagerindicator.CirclePageIndicator;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.net.MalformedURLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Objects;
@@ -90,17 +122,21 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+import static android.app.Activity.RESULT_OK;
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.likesby.bludoc.Fragment.CreatePrescription.certificate_selection;
 
-public class GeneratePres extends Fragment {
+public class GeneratePres extends Fragment implements ModalBottomSheetDialogFragment.Listener,GeneratedPresBottomFragment.onClickListener {
     ArrayList<com.likesby.bludoc.ModelLayer.Entities.MedicinesItem> medicinesItemArrayListO = new ArrayList<>();
     Button generatePDF, back, btn_backbtn_edit_profile;
     Context mContext;
     Dialog dialog;
     Dialog dialog_data;
+    CoordinatorLayout coordinator_layout;
+    LinearLayout ll_menu;
     View v;
+    LinearLayout ll_invite_member;
     static RecyclerView rView, rViewlabtest;
     TextView textView_advice;
     static LinearLayoutManager lLayout, lLayout2;
@@ -115,6 +151,7 @@ public class GeneratePres extends Fragment {
     TextView textView_date, textView_add, textView_time, textView_contact, textView_email;
     SessionManager manager;
     LinearLayout scrollview_edit_profile;
+    NestedScrollView nestedScrollView;
     String definer, diagnosis_desc = "", end_note = "", definerTEMP, end_noteTEMP = "";
     private ApiViewHolder apiViewHolder;
     private CompositeDisposable mBag = new CompositeDisposable();
@@ -139,25 +176,132 @@ public class GeneratePres extends Fragment {
     ArrayList<String> stringArrayDESC;
     int width = 480;
     LinearLayout top_header_parent;
+    Dialog dialog_dataShareMenu;
 
     private GeneratePrescriptionBinding binding;
     private String yesOrNo;
+    private BottomSheetAdapter mAdapter;
+    private ArrayList<AbstractViewRenderer> pages=new ArrayList();
+    FrameLayout fl_main;
+    AdRequest adRequest;
+    private InterstitialAd mInterstitialAd;
+    private RewardedAd rewardedAd;
+    private boolean isVisible = true;
+    private boolean isFooterVisible = true;
+    private FragmentActivity fragmentActivity;
+    private boolean isClinicVisible=true;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getActivity();
         manager = new SessionManager();
+        if(manager.contains(mContext,"show_banner_ad")){
+             adRequest = new AdRequest.Builder()/*.addTestDevice("31B09DFC1F78AF28F2AFB1506F51B0BF")*/.build();
+        initInterstitialAd(adRequest);
+        if(manager.contains(mContext,"ad_count") && manager.getPreferences(mContext,"ad_count").equals("0")){
+            rewardedAd = createAndLoadRewardedAd();
+        }
+        }
+
+        fragmentActivity = (FragmentActivity) mContext;
+
+
+    }
+
+    public RewardedAd createAndLoadRewardedAd() {
+     //   rewardedAd = new RewardedAd(mContext,"ca-app-pub-9225891557304181/7053195953");// Live ad credentials
+        rewardedAd = new RewardedAd(mContext,"ca-app-pub-3940256099942544/5224354917");// Test ad credentials
+
+        RewardedAdLoadCallback adLoadCallback = new RewardedAdLoadCallback() {
+            @Override
+            public void onRewardedAdLoaded() {
+                // Ad successfully loaded.
+                Log.e("Rewarded","onRewardedAdLoaded");
+
+
+            }
+
+            @Override
+            public void onRewardedAdFailedToLoad(int errorCode) {
+                // Ad failed to load.
+                Log.e("Rewarded","onRewardedAdFailedToLoad");
+               // Toast.makeText(mContext, "RewardedAd FailedToLoad", Toast.LENGTH_SHORT).show();
+
+
+            }
+        };
+        rewardedAd.loadAd(new AdRequest.Builder().build(), adLoadCallback);
+       // rewardedAd.loadAd(new PublisherAdRequest.Builder().build(), adLoadCallback);
+        return rewardedAd;
+    }
+
+
+
+    private void initInterstitialAd(AdRequest adRequest){
+
+        mInterstitialAd = new InterstitialAd(mContext);
+        //  mInterstitialAd.setAdUnitId("ca-app-pub-9225891557304181/3105393849");//Live
+        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");//Test
+        mInterstitialAd.loadAd(this.adRequest);
+
+
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                // Code to be executed when an ad finishes loading.
+
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                // Code to be executed when an ad request fails.
+
+            }
+
+            @Override
+            public void onAdOpened() {
+                // Code to be executed when the ad is displayed.
+            }
+
+            @Override
+            public void onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                // Code to be executed when the user has left the app.
+            }
+
+            @Override
+            public void onAdClosed() {
+                // Code to be executed when the interstitial ad is closed.
+
+            }
+        });
+
+    }
+    public void setViewInInches(float width, float height, View v) {
+        DisplayMetrics metrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        int widthInches = Math.round(width * 300);
+        int heightInches = Math.round(height * 300);
+        Log.e("WH", "________________ " + widthInches+" : "+heightInches);
+
+        v.setLayoutParams(new CoordinatorLayout.LayoutParams(widthInches, heightInches));
+        v.requestLayout();
     }
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        //inflater.inflate(R.layout.state_frag, container, false);
+        //inflater.inflate(R.layout.generate_prescription, container, false);
         binding = GeneratePrescriptionBinding.inflate(inflater, container, false);
 
         v = binding.getRoot();
+       //
 
         width = ScreenSize.getDimensions(mContext)[0];
         initCalls(v);
@@ -183,6 +327,8 @@ public class GeneratePres extends Fragment {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+
                     CreatePrescription.backCheckerFlag = true;
 
                     FragmentManager fm = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
@@ -205,8 +351,7 @@ public class GeneratePres extends Fragment {
     private void openBusinessWhatsUpAndShare(File pdfWithMultipleImage) {
 
         boolean isWhatsappInstalled = whatsappInstalledOrNot("com.whatsapp.w4b");
-        if(isWhatsappInstalled)
-        {
+        if (isWhatsappInstalled) {
             //======================================================================
             PackageManager packageManager = mContext.getPackageManager();
             // Intent sendIntent = new Intent(Intent.ACTION_VIEW);
@@ -215,14 +360,14 @@ public class GeneratePres extends Fragment {
                 ArrayList<Uri> files = GeneratePres.getFiles();
 
                 String smsNumber = "9399104906";
-                smsNumber = smsNumber.replace("+","").trim(); // E164 format without '+' sign
-                if(!(smsNumber.contains("91")))
-                    smsNumber = "91"+smsNumber;
+                smsNumber = smsNumber.replace("+", "").trim(); // E164 format without '+' sign
+                if (!(smsNumber.contains("91")))
+                    smsNumber = "91" + smsNumber;
                 Intent sendIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
                 sendIntent.setType("application/pdf");
-                sendIntent.putExtra(Intent.EXTRA_TEXT, "Dear "+ GeneratePres.patient_item.getPName() + ", "+ manager.getPreferences(mContext, "name")+ " has sent you an E-prescription / Certificate via BluDoc");
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "Dear " + GeneratePres.patient_item.getPName() + ", " + manager.getPreferences(mContext, "name") + " has sent you an E-prescription / Certificate via BluDoc");
                 sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(pdfWithMultipleImage.getPath()));
-                sendIntent.putExtra("jid", ""+smsNumber + "@s.whatsapp.net"); //phone number without "+" prefix
+                sendIntent.putExtra("jid", "" + smsNumber + "@s.whatsapp.net"); //phone number without "+" prefix
                 sendIntent.setPackage("com.whatsapp.w4b");
                 if (sendIntent.resolveActivity(mContext.getPackageManager()) == null) {
                     Toast.makeText(mContext, "Error", Toast.LENGTH_SHORT).show();
@@ -231,15 +376,13 @@ public class GeneratePres extends Fragment {
 
                 if (sendIntent.resolveActivity(packageManager) != null) {
                     mContext.startActivity(sendIntent);
-                }
-                else
+                } else
                     Toast.makeText(mContext, "Resolve activity Null", Toast.LENGTH_SHORT).show();
-            } catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
-        }
-        else
+        } else
             Toast.makeText(mContext, "WhatsApp Not installed", Toast.LENGTH_SHORT).show();
 
     }
@@ -256,7 +399,72 @@ public class GeneratePres extends Fragment {
     }
 
 
-    public static Bitmap getBitmapFromView(View view) {
+
+    private void popupBottomMenu() {
+        dialog_dataShareMenu = new Dialog(mContext);
+        dialog_dataShareMenu.setCancelable(false);
+        dialog_dataShareMenu.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        Objects.requireNonNull(dialog_dataShareMenu.getWindow()).setGravity(Gravity.CENTER);
+        dialog_dataShareMenu.setContentView(R.layout.popup_share_menu);
+        WindowManager.LayoutParams lp_number_picker = new WindowManager.LayoutParams();
+        Window window = dialog_dataShareMenu.getWindow();
+        lp_number_picker.copyFrom(window.getAttributes());
+        lp_number_picker.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp_number_picker.height = WindowManager.LayoutParams.MATCH_PARENT;
+        window.setAttributes(lp_number_picker);
+
+        RecyclerView recyclerView = dialog_dataShareMenu.findViewById(R.id.recyclerView_bottom_sheet);
+        //Create new GridLayoutManager
+        @SuppressLint("WrongConstant") GridLayoutManager gridLayoutManagerr = new GridLayoutManager(mContext,
+                2,//span count no of items in single row
+                GridLayoutManager.VERTICAL,//Orientation
+                false);//reverse scrolling of recyclerview
+        //set layout manager as gridLayoutManager
+
+        recyclerView.setLayoutManager(gridLayoutManagerr);
+        ArrayList<BottomSheetItem> bottomSheetItemArrayList = new ArrayList<>();
+        BottomSheetItem bottomSheetItem = new BottomSheetItem();
+        bottomSheetItem.setMenuId("1");
+        bottomSheetItem.setMenuName("Email");
+        bottomSheetItem.setMenuImage("mail");
+        bottomSheetItemArrayList.add(bottomSheetItem);
+
+        bottomSheetItem = new BottomSheetItem();
+        bottomSheetItem.setMenuId("2");
+        bottomSheetItem.setMenuName("Download");
+        bottomSheetItem.setMenuImage("ic_download_");
+
+        bottomSheetItemArrayList.add(bottomSheetItem);
+
+        bottomSheetItem = new BottomSheetItem();
+        bottomSheetItem.setMenuId("3");
+        bottomSheetItem.setMenuName("Other");
+        bottomSheetItem.setMenuImage("ic_share__");
+        bottomSheetItemArrayList.add(bottomSheetItem);
+
+        bottomSheetItem = new BottomSheetItem();
+        bottomSheetItem.setMenuId("4");
+        bottomSheetItem.setMenuName("WhatsApp");
+        bottomSheetItem.setMenuImage("whatsapp");
+        bottomSheetItemArrayList.add(bottomSheetItem);
+
+        mAdapter = new BottomSheetAdapter(mContext, bottomSheetItemArrayList, fl_progress_bar, GeneratePres.this,null);
+        recyclerView.setAdapter(mAdapter);
+        ImageView iv_close = dialog_dataShareMenu.findViewById(R.id.iv_close);
+        iv_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog_dataShareMenu.dismiss();
+                /*assert getFragmentManager() != null;
+                getFragmentManager().popBackStackImmediate();*/
+            }
+        });
+        dialog_dataShareMenu.show();
+    }
+
+
+
+    public Bitmap getBitmapFromView(View view) {
         //Define a bitmap with the same size as the view
 
         view.setDrawingCacheEnabled(true);
@@ -274,11 +482,13 @@ public class GeneratePres extends Fragment {
             canvas.drawColor(Color.WHITE);
         // draw the view on the canvas
         view.draw(canvas);
-        //return the bitmap
         return returnedBitmap;
     }
 
     private void popupCreatingPrescription() {
+        if(dialog_data!=null && dialog_data.isShowing())
+            dialog_data.dismiss();
+
         dialog_data = new Dialog(mContext);
         dialog_data.setCancelable(false);
         dialog_data.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -288,7 +498,7 @@ public class GeneratePres extends Fragment {
         Window window = dialog_data.getWindow();
         lp_number_picker.copyFrom(window.getAttributes());
         lp_number_picker.width = WindowManager.LayoutParams.MATCH_PARENT;
-        lp_number_picker.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp_number_picker.height = WindowManager.LayoutParams.MATCH_PARENT;
         window.setAttributes(lp_number_picker);
         dialog_data.show();
     }
@@ -299,10 +509,23 @@ public class GeneratePres extends Fragment {
         ConstraintLayout root = (ConstraintLayout) inflater.inflate(R.layout.activity_main, null); //RelativeLayout is root view of my UI(xml) file.
         root.setDrawingCacheEnabled(true);
 
-        lLayout = new LinearLayoutManager(mContext);
+        //lLayout = new LinearLayoutManager(mContext);
+        //Create new GridLayoutManager
+        @SuppressLint("WrongConstant") GridLayoutManager gridLayoutManagerr = new GridLayoutManager(mContext,
+                1,//span count no of items in single row
+                GridLayoutManager.VERTICAL,//Orientation
+                false);//reverse scrolling of recyclerview
+        //set layout manager as gridLayoutManager
+
         lLayout2 = new LinearLayoutManager(mContext);
+
+        ll_invite_member = view.findViewById(R.id.ll_invite_member);
+        fl_main = view.findViewById(R.id.fl_main);
+      //  fl_main.setLayoutParams(new FrameLayout.LayoutParams(1800,2300));
+        coordinator_layout = view.findViewById(R.id.coordinator_layout);
+
         rView = view.findViewById(R.id.pres_recycler);
-        rView.setLayoutManager(lLayout);
+        rView.setLayoutManager(gridLayoutManagerr);
         top_header_parent = view.findViewById(R.id.top_header_parent);
         ll_patient_name = view.findViewById(R.id.ll_patient_name);
         textView_medical_cert = view.findViewById(R.id.textView_medical_certificate);
@@ -342,11 +565,32 @@ public class GeneratePres extends Fragment {
         textView_time = view.findViewById(R.id.textView_time);
         textView_contact = view.findViewById(R.id.textView_contact);
         scrollview_edit_profile = view.findViewById(R.id.saveBitmapFromImage);
+        nestedScrollView = view.findViewById(R.id.scrollview_edit_profile);
         //  textView_closed_day=  view.findViewById(R.id.textView_closed_day);
         textView_email = view.findViewById(R.id.textView_email);
         title = view.findViewById(R.id.title);
         generatePDF = view.findViewById(R.id.generatePDF);
         sig_text = view.findViewById(R.id.sig_text);
+
+        binding.settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                GeneratedPresBottomFragment generatedPresBottomFragment=new GeneratedPresBottomFragment();
+
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("isDoctorDetails",isVisible);
+                bundle.putBoolean("isClinic",isClinicVisible);
+                bundle.putBoolean("isFooter",isFooterVisible);
+
+                generatedPresBottomFragment.setArguments(bundle);
+
+                generatedPresBottomFragment.show(fragmentActivity.getSupportFragmentManager(), "generatedBottomFragment");
+                generatedPresBottomFragment.SetOnClickListener(GeneratePres.this::onChangeResult);
+
+            }
+        });
+
         bundle = getArguments();
         if (bundle != null) {
             Log.e("prescriptionItem", "________________" + prescriptionItem.toString());
@@ -354,21 +598,79 @@ public class GeneratePres extends Fragment {
             labTestItem = bundle.getParcelableArrayList("defaultAttributeIdLabTest");
             definer = bundle.getString("definer");
             end_note = bundle.getString("end_note");
-            yesOrNo = bundle.getString("yesOrNo");
+            if(bundle.getString(yesOrNo) !=null){
+                yesOrNo = bundle.getString("yesOrNo");
 
-            if (yesOrNo.equals("Yes"))
-                binding.topHeaderParent.setVisibility(View.VISIBLE);
-            else
-                binding.topHeaderParent.setVisibility(View.GONE);
+                if (yesOrNo.equals("Yes"))
+                    binding.topHeaderParent.setVisibility(View.VISIBLE);
+                else
+                    binding.topHeaderParent.setVisibility(View.GONE);
 
+            }
 
             prescriptionItemTEMP = prescriptionItem;
             labTestItemTEMP = labTestItem;
             definerTEMP = definer;
             end_noteTEMP = end_note;
             initViews();
+
+            generatePDF.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                String state = Environment.getExternalStorageState();
+                if (Environment.MEDIA_MOUNTED.equals(state)) {
+                    if (Build.VERSION.SDK_INT >= 23) {
+                        if (checkPermission()) {
+                           // GenratePres();
+                            popupSelection();
+                        } else {
+                            requestPermission(); // Code for permission
+                        }
+                    } else {
+                       // GenratePres();
+                        popupSelection();
+                    }
+                }
+
+                }
+            });
+           /* rView.setLayoutParams(new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    2000));*/
+           /* int line = 0;
+            String[] lines = null;
+            String[] details = diagnosis_desc.split(Pattern.quote("|"));
+
+            for (String strr : details
+            ) {
+                line = line + strr.length();
+            }
+            Toast.makeText(mContext, ""+lines, Toast.LENGTH_SHORT).show();
+            if(line>300){
+                rView.setLayoutParams(new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        2000));
+            }
+            else {
+                rView.setLayoutParams(new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        2300));
+            }*/
+
         }
 
+       /* ll_invite_member.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                2300));*/
+
+        /*RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 2500);
+
+
+        fl_main.setLayoutParams(params);*/
+
+      /*  rView.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                2500));*/
         initViewHolder();
         onclick();
         BottomSheet(view);
@@ -376,13 +678,227 @@ public class GeneratePres extends Fragment {
     }
 
 
+    private  void popupSelection()
+    {
+        final Dialog dialog_data = new Dialog(mContext);
+        dialog_data.setCancelable(true);
+
+        dialog_data.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        Objects.requireNonNull(dialog_data.getWindow()).setGravity(Gravity.CENTER);
+
+        dialog_data.setContentView(R.layout.popup_selection);
+
+        WindowManager.LayoutParams lp_number_picker = new WindowManager.LayoutParams();
+        Window window = dialog_data.getWindow();
+        lp_number_picker.copyFrom(window.getAttributes());
+
+        lp_number_picker.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp_number_picker.height = WindowManager.LayoutParams.MATCH_PARENT;
+
+        //window.setGravity(Gravity.CENTER);
+        window.setAttributes(lp_number_picker);
+
+        Button btn_mobile = dialog_data.findViewById(R.id.btn_mobile);
+        Button btn_a4_size = dialog_data.findViewById(R.id.btn_a_size);
+        ImageView btn_close = dialog_data.findViewById(R.id.btn_close);
+
+
+        btn_mobile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog_data.dismiss();
+                if (manager.contains(mContext, "show_banner_ad")) {
+                    if (manager.contains(mContext, "ad_show_time")) {
+
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy, HH:mm");
+                        Log.e("DIFF","ad_show_time ____________________ "+DateUtils.getDateDiff(dateFormat,manager.getPreferences(mContext,"ad_show_time"),DateUtils.currentDateTime()));
+
+                        if (DateUtils.getDateDiff(dateFormat, manager.getPreferences(mContext, "ad_show_time"), DateUtils.currentDateTime()) > 10) {
+
+                            if (manager.contains(mContext, "ad_count")) {
+                                if (manager.getPreferences(mContext, "ad_count").equals("0")) {
+                                    if(rewardedAd!=null && rewardedAd.isLoaded())
+                                    {
+                                        manager.setPreferences(mContext, "ad_count", "5");
+
+
+                                        rewardedAd.show(getActivity(), new RewardedAdCallback() {
+                                            @Override
+                                            public void onRewardedAdOpened() {
+                                                super.onRewardedAdOpened();
+                                            }
+
+                                            @Override
+                                            public void onRewardedAdClosed() {
+                                                super.onRewardedAdClosed();
+                                                // rewardedAd = createAndLoadRewardedAd();
+                                            }
+
+                                            @Override
+                                            public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+                                                // rewardedAd = createAndLoadRewardedAd();
+                                                //   Toast.makeText(mContext, "Congratulations!! You won "+rewardItem.getAmount()+" "+rewardItem.getType(), Toast.LENGTH_SHORT).show();
+                                            }
+                                            @Override
+                                            public void onRewardedAdFailedToShow(int i) {
+                                                super.onRewardedAdFailedToShow(i);
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        if (mInterstitialAd != null && mInterstitialAd.isLoaded())
+                                            mInterstitialAd.show();
+                                    }
+                                } else {
+                                    int count = Integer.parseInt(manager.getPreferences(mContext, "ad_count"));
+                                    manager.setPreferences(mContext, "ad_count", ""+(count-1));
+                                    if (mInterstitialAd != null && mInterstitialAd.isLoaded())
+                                        mInterstitialAd.show();
+                                }
+                            } else {
+                                manager.setPreferences(mContext, "ad_count", "5");
+                                if (mInterstitialAd != null && mInterstitialAd.isLoaded())
+                                    mInterstitialAd.show();
+                            }
+                        }
+                        else {
+                            if (mInterstitialAd != null && mInterstitialAd.isLoaded())
+                                mInterstitialAd.show();
+                        }
+                    }
+                    else {
+                        manager.setPreferences(mContext, "ad_count", "5");
+                        manager.setPreferences(mContext, "ad_show_time", DateUtils.currentDateTime());
+                        if (mInterstitialAd != null && mInterstitialAd.isLoaded())
+                            mInterstitialAd.show();
+                    }
+                }
+
+                GenratePres();
+            }
+        });
+
+        btn_a4_size.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog_data.dismiss();
+
+                if (manager.contains(mContext, "show_banner_ad")) {
+                    if (manager.contains(mContext, "ad_show_time")) {
+
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy, HH:mm");
+                        Log.e("DIFF","ad_show_time ____________________ "+DateUtils.getDateDiff(dateFormat,manager.getPreferences(mContext,"ad_show_time"),DateUtils.currentDateTime()));
+
+                        if (DateUtils.getDateDiff(dateFormat, manager.getPreferences(mContext, "ad_show_time"), DateUtils.currentDateTime()) > 10) {
+
+                            if (manager.contains(mContext, "ad_count")) {
+                                if (manager.getPreferences(mContext, "ad_count").equals("0")) {
+                                    if(rewardedAd!=null && rewardedAd.isLoaded())
+                                    {
+                                        manager.setPreferences(mContext, "ad_count", "5");
+
+
+                                        rewardedAd.show(getActivity(), new RewardedAdCallback() {
+                                            @Override
+                                            public void onRewardedAdOpened() {
+                                                super.onRewardedAdOpened();
+                                            }
+
+                                            @Override
+                                            public void onRewardedAdClosed() {
+                                                super.onRewardedAdClosed();
+                                                // rewardedAd = createAndLoadRewardedAd();
+                                            }
+
+                                            @Override
+                                            public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+                                                // rewardedAd = createAndLoadRewardedAd();
+                                                //   Toast.makeText(mContext, "Congratulations!! You won "+rewardItem.getAmount()+" "+rewardItem.getType(), Toast.LENGTH_SHORT).show();
+                                            }
+                                            @Override
+                                            public void onRewardedAdFailedToShow(int i) {
+                                                super.onRewardedAdFailedToShow(i);
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        if (mInterstitialAd != null && mInterstitialAd.isLoaded())
+                                            mInterstitialAd.show();
+                                    }
+                                } else {
+                                    int count = Integer.parseInt(manager.getPreferences(mContext, "ad_count"));
+                                    manager.setPreferences(mContext, "ad_count", ""+(count-1));
+                                    if (mInterstitialAd != null && mInterstitialAd.isLoaded())
+                                        mInterstitialAd.show();
+                                }
+                            } else {
+                                manager.setPreferences(mContext, "ad_count", "5");
+                                if (mInterstitialAd != null && mInterstitialAd.isLoaded())
+                                    mInterstitialAd.show();
+                            }
+                        }
+                        else {
+                            if (mInterstitialAd != null && mInterstitialAd.isLoaded())
+                                mInterstitialAd.show();
+                        }
+                    }
+                    else {
+                        manager.setPreferences(mContext, "ad_count", "5");
+                        manager.setPreferences(mContext, "ad_show_time", DateUtils.currentDateTime());
+                        if (mInterstitialAd != null && mInterstitialAd.isLoaded())
+                            mInterstitialAd.show();
+                    }
+                }
+
+                generatePDF.setVisibility(View.GONE);
+                GeneratePresNew myFragment = new GeneratePresNew();
+
+                if(binding.topDoctorDetails.getVisibility()==View.VISIBLE)
+                    bundle.putString("top_doctor_details","true");
+                else
+                    bundle.putString("top_doctor_details","false");
+
+                if(binding.footerDocterDetails.getVisibility()==View.VISIBLE)
+                    bundle.putString("footer_doctor_details","true");
+                else
+                    bundle.putString("footer_doctor_details","false");
+
+                if(binding.textViewClinicName.getVisibility()==View.VISIBLE)
+                    bundle.putString("clinic_name","true");
+                else
+                    bundle.putString("clinic_name","false");
+
+
+                myFragment.setArguments(bundle);
+
+                FragmentManager fragmentManager = ((FragmentActivity) mContext).getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.homePageContainer, myFragment, "first").addToBackStack(null).commit();
+
+            }
+        });
+
+
+        btn_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog_data.dismiss();
+
+            }
+        });
+        dialog_data.show();
+    }
+
+
+
+
     private void BottomSheet(View view) {
         View bottomSheet = view.findViewById(R.id.bottom_sheet);
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView_bottom_sheet);
         //Create new GridLayoutManager
         @SuppressLint("WrongConstant") GridLayoutManager gridLayoutManagerr = new GridLayoutManager(mContext,
-                1,//span count no of items in single row
-                GridLayoutManager.HORIZONTAL,//Orientation
+                2,//span count no of items in single row
+                GridLayoutManager.VERTICAL,//Orientation
                 false);//reverse scrolling of recyclerview
         //set layout manager as gridLayoutManager
 
@@ -396,8 +912,8 @@ public class GeneratePres extends Fragment {
 
         bottomSheetItem = new BottomSheetItem();
         bottomSheetItem.setMenuId("2");
-        bottomSheetItem.setMenuName("WhatsApp");
-        bottomSheetItem.setMenuImage("whatsapp");
+        bottomSheetItem.setMenuName("Download");
+        bottomSheetItem.setMenuImage("ic_download_");
         bottomSheetItemArrayList.add(bottomSheetItem);
 
         bottomSheetItem = new BottomSheetItem();
@@ -406,13 +922,13 @@ public class GeneratePres extends Fragment {
         bottomSheetItem.setMenuImage("ic_share__");
         bottomSheetItemArrayList.add(bottomSheetItem);
 
-         /* bottomSheetItem = new BottomSheetItem();
+          bottomSheetItem = new BottomSheetItem();
         bottomSheetItem.setMenuId("4");
-        bottomSheetItem.setMenuName("Share");
-        bottomSheetItem.setMenuImage("ic_share_");
-        bottomSheetItemArrayList.add(bottomSheetItem);*/
+        bottomSheetItem.setMenuName("WhatsApp");
+        bottomSheetItem.setMenuImage("whatsapp");
+        bottomSheetItemArrayList.add(bottomSheetItem);
 
-        BottomSheetAdapter mAdapter = new BottomSheetAdapter(mContext, bottomSheetItemArrayList, fl_progress_bar);
+        mAdapter = new BottomSheetAdapter(mContext, bottomSheetItemArrayList, fl_progress_bar,GeneratePres.this,null);
         recyclerView.setAdapter(mAdapter);
 
         behavior = BottomSheetBehavior.from(bottomSheet);
@@ -434,7 +950,8 @@ public class GeneratePres extends Fragment {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 /*if (newState == BottomSheetBehavior.STATE_DRAGGING) {
-                    behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    popupBottomMenu();
+// behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 }
                 else if(newState==BottomSheetBehavior.PEEK_HEIGHT_AUTO)
                 {
@@ -457,12 +974,14 @@ public class GeneratePres extends Fragment {
 
                         // iv_switch.startAnimation(slide_down);
 
-                        // behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                        // popupBottomMenu();
+// behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                     }
                     break;
                     case BottomSheetBehavior.STATE_DRAGGING:
                         if (behavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
-                            behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                            popupBottomMenu();
+// behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                             //  iv_switch.setVisibility(View.GONE);
                         } else {
                             behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
@@ -506,12 +1025,12 @@ public class GeneratePres extends Fragment {
     }
 
     private void requestPermission() {
-        if (shouldShowRequestPermissionRationale(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+        /*if (shouldShowRequestPermissionRationale(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             Toast.makeText(mContext, "Write External Storage permission allows us to save files. Please allow this permission in App Settings.", Toast.LENGTH_LONG).show();
-        } else {
+        } else {*/
             requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE
             }, PERMISSION_REQUEST_CODE);
-        }
+        //}
     }
 
     @Override
@@ -519,7 +1038,8 @@ public class GeneratePres extends Fragment {
         switch (requestCode) {
             case PERMISSION_REQUEST_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    GenratePres();
+                   // GenratePres();
+                    popupSelection();
                     Log.e("value", "Permission Granted, Now you can use local drive .");
                 } else {
                     Log.e("value", "Permission Denied, You cannot use local drive .");
@@ -558,26 +1078,11 @@ public class GeneratePres extends Fragment {
             generatePDF.setText("Approve & Share");
             back.setText("Edit");
         }
-        generatePDF.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String state = Environment.getExternalStorageState();
-                if (Environment.MEDIA_MOUNTED.equals(state)) {
-                    if (Build.VERSION.SDK_INT >= 23) {
-                        if (checkPermission()) {
-                            GenratePres();
-                        } else {
-                            requestPermission(); // Code for permission
-                        }
-                    } else {
-                        GenratePres();
-                    }
-                }
-            }
-        });
     }
 
     public void GenratePres() {
+       // setViewInInches(9f, 11.7f, fl_main);
+
         if (("history").equalsIgnoreCase(definer)) {
 //                textView_medical_cert.setVisibility(View.GONE);
 //                textView_medical_cert_desc.setVisibility(View.GONE);
@@ -618,14 +1123,15 @@ public class GeneratePres extends Fragment {
                 Gson gson = new Gson();
                 String json = gson.toJson(prescriptionJSON);
                 fl_progress_bar.setVisibility(View.VISIBLE);
-                if (prescriptionItem.getMedicines() != null)
-                    if (prescriptionItem.getMedicines().size() > 5) {
+               /* if (prescriptionItem.getMedicines() != null)
+                    if (prescriptionItem.getMedicines().size() > 3) {
                         popupCreatingPrescription();
                     } else if (labTestItem != null)
-                        if (labTestItem.size() > 5) {
-                            popupCreatingPrescription();
-                        }
+                        if (labTestItem.size() > 3) {
 
+                        }*/
+
+                popupCreatingPrescription();
                 apiViewHolder.Prescription(json)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -634,8 +1140,6 @@ public class GeneratePres extends Fragment {
                 genInv();
             }
         }
-
-
     }
 
     public static ArrayList<Uri> getFiles() {
@@ -643,105 +1147,74 @@ public class GeneratePres extends Fragment {
     }
 
 
-    public void genInv() { ;
+    public void genInv() {
+
 
         popupCreatingPrescription();
         rViewlabtest.setVisibility(View.GONE);
         textView_advice.setVisibility(View.GONE);
         try {
-            final ArrayList<Uri> files = new ArrayList<Uri>();
+            count = true;
+            boolean checker = false;
+            generatePDF.setText("Share");
+            back.setVisibility(View.GONE);
+            btn_backbtn_edit_profile.setVisibility(View.VISIBLE);
+            try {
+                final ArrayList<Uri> files = new ArrayList<Uri>();
+                final int[] p = {0};
+                int line = 0;
+                String[] lines = null;
+                String[] details = diagnosis_desc.split(Pattern.quote("|"));
 
-            final int[] p = {0};
-            int line = 0;
-            String[] lines = null;
-            String[] details = diagnosis_desc.split(Pattern.quote("|"));
+                for (String strr : details
+                ) {
+                    line = line + strr.length();
+                }
+                // Toast.makeText(mContext, "Lines = "+line, Toast.LENGTH_SHORT).show();
+                int field_active = 0;
+                for (String str : details) {
+                    if (!str.trim().equals(""))
+                        field_active = field_active + 1;
+                }
+                textView_end_note.setVisibility(View.GONE);
 
-            for (String strr : details
-            ) {
-                line = line + strr.length();
-            }
+                Log.e(TAG, "------------------------------------   LINE   === " + line);
 
-            int field_active = 0;
-            for (String str : details) {
-                if (!str.trim().equals(""))
-                    field_active = field_active + 1;
-            }
-            if (line > 210) {
 
-                rView.setVisibility(View.GONE);
-                rViewlabtest.setVisibility(View.GONE);
-                fl_medicines_symbol.setVisibility(View.GONE);
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
+                if (line > 400) {
+                    checker = true;
+                    rView.setVisibility(View.GONE);
+                    rViewlabtest.setVisibility(View.GONE);
+                    fl_medicines_symbol.setVisibility(View.GONE);
+                    textView_advice.setVisibility(View.GONE);
+                    textView_end_note.setVisibility(View.GONE);
 
-                                               /* if(prescriptionItem.getMedicines()!=null)
-                                                if (prescriptionItem.getMedicines().size() > 4)
-                                                page_no.setText("1/"+(prescriptionItem.getMedicines().size()/4)+1);*/
-                        // Do something after 4s = 4000ms
-
-                        page_no.setText("Page No. " + page_no_count);
-                        Bitmap screen = getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
-                        files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
-
-                        filesGlobal = files;
-                        page_no_count = page_no_count + 1;
-                        textView_chief_complaint.setVisibility(View.GONE);
-                        textView_history.setVisibility(View.GONE);
-                        binding.textviewTemprature.setVisibility(View.GONE);
-                        binding.textviewHeight.setVisibility(View.GONE);
-                        binding.textviewWeight.setVisibility(View.GONE);
-                        binding.textviewPulse.setVisibility(View.GONE);
-                        binding.textviewBloodPressure.setVisibility(View.GONE);
-                        binding.textviewBloodSugar.setVisibility(View.GONE);
-                        binding.textviewHemoglobing.setVisibility(View.GONE);
-                        binding.textviewSpo2.setVisibility(View.GONE);
-                        binding.textviewRespirationRate.setVisibility(View.GONE);
-                        binding.textviewAllergy.setVisibility(View.GONE);
-                        textView_findings.setVisibility(View.GONE);
-                        textView_treatment_advice.setVisibility(View.GONE);
-                        textView_diagnosis.setVisibility(View.GONE);
-                        rView.setVisibility(View.VISIBLE);
-                        fl_medicines_symbol.setVisibility(View.VISIBLE);
+                    if(prescriptionItem.getMedicines()==null){
+                        rViewlabtest.setVisibility(View.VISIBLE);
+                        textView_advice.setVisibility(View.VISIBLE);
+                        textView_end_note.setVisibility(View.VISIBLE);
                     }
-                }, 1);
-            }
-
-            if (prescriptionItem != null) {
-
-                rView.setVisibility(View.VISIBLE);
-                fl_progress_bar.setVisibility(View.VISIBLE);
-                if (prescriptionItem.getMedicines().size() >= 5) {
-                    top_header_parent.setVisibility(View.GONE);
-                    // Toast.makeText(mContext, ""+DELAY_TIME_MULTIPLIER, Toast.LENGTH_SHORT).show();
-
-                    ArrayList<MedicinesItem> medicineList = new ArrayList<>();
-                    for (int i = 0; i < 5; i++) {
-                        if (prescriptionItem.getMedicines().size() > p[0]) {
-                            medicineList.add(medicinesItemArrayListO.get(p[0]));
-                            p[0] = p[0] + 1;
-                        }
-                    }
-
-                    Pres_adapter templateAdapter = new Pres_adapter(medicineList, mContext);
-                    rView.setAdapter(templateAdapter);
-
                     final Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            // Do something after 4s = 4000ms
-                            page_no.setText("Page No. " + page_no_count);
 
+                                               /* if(prescriptionItem.getMedicines()!=null)
+                                                if (prescriptionItem.getMedicines().size() > 4)
+                                                page_no.setText("1/"+(prescriptionItem.getMedicines().size()/4)+1);*/
+                            // Do something after 4s = 4000ms
+
+                            page_no.setText("Page No. " + page_no_count);
                             Bitmap screen = getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
                             files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
-                            patient_item = prescriptionItem;
+                            filesGlobal = files;
+                            page_no_count = page_no_count + 1;
                             textView_chief_complaint.setVisibility(View.GONE);
                             textView_history.setVisibility(View.GONE);
                             textView_findings.setVisibility(View.GONE);
                             textView_treatment_advice.setVisibility(View.GONE);
                             textView_diagnosis.setVisibility(View.GONE);
+                            rView.setVisibility(View.VISIBLE);
                             binding.textviewTemprature.setVisibility(View.GONE);
                             binding.textviewHeight.setVisibility(View.GONE);
                             binding.textviewWeight.setVisibility(View.GONE);
@@ -750,30 +1223,297 @@ public class GeneratePres extends Fragment {
                             binding.textviewBloodSugar.setVisibility(View.GONE);
                             binding.textviewHemoglobing.setVisibility(View.GONE);
                             binding.textviewSpo2.setVisibility(View.GONE);
+                            binding.textviewBloodGroup.setVisibility(View.GONE);
+                            binding.textViewHosAddress.setVisibility(View.GONE);
                             binding.textviewRespirationRate.setVisibility(View.GONE);
                             binding.textviewAllergy.setVisibility(View.GONE);
-                            Log.e(TAG, "-------------------------------------------- p[0] - 608 = " + p[0]);
-                            temp(p[0], files);
-
+                            fl_medicines_symbol.setVisibility(View.VISIBLE);
+                            top_header_parent.setVisibility(View.GONE);
+                            textView_end_note.setVisibility(View.GONE);
                         }
-                    }, DELAY_TIME);
+                    }, 1);
+                }
+                //==========================================================================
+                if (prescriptionItem != null) {
+
+                    generatePDF.setVisibility(View.GONE);
+                    if (prescriptionItem.getMedicines() != null) {
+                        if (prescriptionItem.getMedicines().size() != 0) {
+                            int sizee = 8;
+                                   /* if (width < 520)
+                                        sizee = 5;
+                                    else if (width < 820)
+                                        sizee = 6;
+
+                                    if (line == 0) {
+
+                                        sizee = 6;
+                                    }*/
+
+                            if (prescriptionItem.getMedicines().size() >= sizee) {
+                                rViewlabtest.setVisibility(View.GONE);
+                                textView_advice.setVisibility(View.GONE);
+
+                                ArrayList<MedicinesItem> medicineList = new ArrayList<>();
+                                for (int i = 0; i < sizee; i++) {
+                                    if (prescriptionItem.getMedicines().size() > p[0]) {
+                                        medicineList.add(medicinesItemArrayListO.get(p[0]));
+                                        p[0] = p[0] + 1;
+                                    }
+                                }
+
+                                Pres_adapter_mobile templateAdapter = new Pres_adapter_mobile(medicineList, mContext);
+                                rView.setAdapter(templateAdapter);
+
+                                final Handler handler = new Handler();
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                               /* if(prescriptionItem.getMedicines()!=null)
+                                                if (prescriptionItem.getMedicines().size() > 4)
+                                                page_no.setText("1/"+(prescriptionItem.getMedicines().size()/4)+1);*/
+                                        // Do something after 4s = 4000ms
+                                        page_no.setText("Page No. " + page_no_count);
+                                        Bitmap screen = getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
+                                        files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
+
+                                               /* if(prescriptionItem.getMedicines()!=null)
+                                                    if (prescriptionItem.getMedicines().size() > 4)
+                                                        page_no.setText("2/"+(prescriptionItem.getMedicines().size()/4)+1);*/
+
+                                        patient_item = prescriptionItem;
+                                        textView_chief_complaint.setVisibility(View.GONE);
+                                        textView_history.setVisibility(View.GONE);
+                                        textView_findings.setVisibility(View.GONE);
+                                        textView_treatment_advice.setVisibility(View.GONE);
+                                        textView_diagnosis.setVisibility(View.GONE);
+                                        binding.textviewTemprature.setVisibility(View.GONE);
+                                        binding.textviewHeight.setVisibility(View.GONE);
+                                        binding.textviewWeight.setVisibility(View.GONE);
+                                        binding.textviewPulse.setVisibility(View.GONE);
+                                        binding.textviewBloodPressure.setVisibility(View.GONE);
+                                        binding.textviewBloodSugar.setVisibility(View.GONE);
+                                        binding.textviewHemoglobing.setVisibility(View.GONE);
+                                        binding.textviewSpo2.setVisibility(View.GONE);
+                                        binding.textviewBloodGroup.setVisibility(View.GONE);
+                                        binding.textviewRespirationRate.setVisibility(View.GONE);
+                                        binding.textViewHosAddress.setVisibility(View.GONE);
+                                        binding.textviewAllergy.setVisibility(View.GONE);
+                                        Log.e(TAG, "--------------------------------------------p[0] - 1199 = " + p[0]);
+
+                                        temp(p[0], files);
+                                        filesGlobal = files;
+
+                                    }
+                                }, DELAY_TIME);
+
+                            } else {
+                                       /* if(!checker){
+                                            fl_medicines_symbol.setVisibility(View.VISIBLE);
+                                            if(prescriptionItem.getMedicines().size()!=0)
+                                                rView.setVisibility(View.VISIBLE);
+                                            page_no_count = page_no_count + 1;
+                                            textView_chief_complaint.setVisibility(View.GONE);
+                                            textView_history.setVisibility(View.GONE);
+                                            textView_findings.setVisibility(View.GONE);
+                                            textView_treatment_advice.setVisibility(View.GONE);
+                                            textView_diagnosis.setVisibility(View.GONE);
+                                            binding.textviewTemprature.setVisibility(View.GONE);
+                                            binding.textviewHeight.setVisibility(View.GONE);
+                                            binding.textviewWeight.setVisibility(View.GONE);
+                                            binding.textviewPulse.setVisibility(View.GONE);
+                                            binding.textviewBloodPressure.setVisibility(View.GONE);
+                                            binding.textviewBloodSugar.setVisibility(View.GONE);
+                                            binding.textviewHemoglobing.setVisibility(View.GONE);
+                                            binding.textviewSpo2.setVisibility(View.GONE);
+                                            binding.textviewBloodGroup.setVisibility(View.GONE);
+                                            binding.textViewHosAddress.setVisibility(View.GONE);
+                                            binding.textviewRespirationRate.setVisibility(View.GONE);
+                                            binding.textviewAllergy.setVisibility(View.GONE);
+                                           top_header_parent.setVisibility(View.GONE);
+                                        }*/
+
+
+                                textView_end_note.setVisibility(View.VISIBLE);
+                                page_no.setText("Page No. " + page_no_count);
+
+                                Bitmap screen = getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
+
+                                files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
+                                patient_item = prescriptionItem;
+                                filesGlobal = files;
+                                        /*Intent intent = new Intent();
+                                        intent.setAction(Intent.ACTION_SEND_MULTIPLE);
+                                        intent.putExtra(Intent.EXTRA_SUBJECT, "E-prescription from "+ manager.getPreferences(mContext, "name"));
+                                        intent.putExtra(Intent.EXTRA_TEXT, "Dear "+prescriptionItem.getPName()+ ", Dr. "+ manager.getPreferences(mContext, "name")+ " has sent you an E-prescription via BluDoc");
+                                        intent.setType("image/jpeg"); *//* This example is sharing jpeg images. *//*
+                                        intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
+                                        Intent shareIntent = Intent.createChooser(intent, null);
+                                        startActivity(shareIntent);*/
+                                popupBottomMenu();
+                                fl_progress_bar.setVisibility(View.GONE);
+                                if (dialog_data != null)
+                                    dialog_data.dismiss();
+                            }
+                        }
+                    } else if (labTestItem != null) {
+                        fl_medicines_symbol.setVisibility(View.GONE);
+                        if(checker && prescriptionItem.getMedicines()==null){
+                            patient_item = prescriptionItem;
+                        }
+                        else {
+                            textView_end_note.setVisibility(View.VISIBLE);
+                            rViewlabtest.setVisibility(View.VISIBLE);
+                            textView_advice.setVisibility(View.VISIBLE);
+
+                            final Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Bitmap screen = getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
+
+                                    files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
+                                    patient_item = prescriptionItem;
+                                    filesGlobal = files;
+                                }},1);
+                        }
+
+                                /*Intent intent = new Intent();
+                                intent.setAction(Intent.ACTION_SEND_MULTIPLE);
+                                intent.putExtra(Intent.EXTRA_SUBJECT, "E-prescription from "+ manager.getPreferences(mContext, "name"));
+                                intent.putExtra(Intent.EXTRA_TEXT, "Dear "+prescriptionItem.getPName()+ ", Dr. "+ manager.getPreferences(mContext, "name")+ " has sent you an E-prescription via BluDoc");
+                                intent.setType("image/jpeg"); *//* This example is sharing jpeg images. *//*
+                                intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
+                                Intent shareIntent = Intent.createChooser(intent, null);
+                                startActivity(shareIntent);*/
+                        popupBottomMenu();
+// behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                        fl_progress_bar.setVisibility(View.GONE);
+                        if (dialog_data != null)
+                            dialog_data.dismiss();
+                    } else {
+                        fl_medicines_symbol.setVisibility(View.GONE);
+                        if(checker ){
+                            patient_item = prescriptionItem;
+                        }
+                        else {
+                            textView_end_note.setVisibility(View.VISIBLE);
+                            Bitmap screen = getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
+                            rViewlabtest.setVisibility(View.GONE);
+                            textView_advice.setVisibility(View.GONE);
+
+                            files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
+                            patient_item = prescriptionItem;
+                            filesGlobal = files;
+                        }
+
+
+                                /*Intent intent = new Intent();
+                                intent.setAction(Intent.ACTION_SEND_MULTIPLE);
+                                intent.putExtra(Intent.EXTRA_SUBJECT, "E-prescription from "+ manager.getPreferences(mContext, "name"));
+                                intent.putExtra(Intent.EXTRA_TEXT, "Dear "+prescriptionItem.getPName()+ ", Dr. "+ manager.getPreferences(mContext, "name")+ " has sent you an E-prescription via BluDoc");
+                                intent.setType("image/jpeg"); *//* This example is sharing jpeg images. *//*
+                                intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
+                                Intent shareIntent = Intent.createChooser(intent, null);
+                                startActivity(shareIntent);*/
+                        popupBottomMenu();
+// behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                        fl_progress_bar.setVisibility(View.GONE);
+                        if (dialog_data != null)
+                            dialog_data.dismiss();
+
+//                                String myString = textView_medical_cert_desc.getText().toString().trim();
+//                                String [] arr = myString.split("\\s+");
+//                                //Splits words & assign to the arr[]  ex : arr[0] -> Copying ,arr[1] -> first
+//                                if (arr != null) {
+//
+//
+//                                    double length_desc = Math.ceil(arr.length/250);
+//                                    int N=250; // NUMBER OF WORDS THAT YOU NEED
+//                                    int z=0;
+//                                    String nWords="";
+//
+//                                    // concatenating number of words that you required
+//                                    stringArrayDESC = new ArrayList<>();
+//                                    for(int k=0; k<length_desc ; k++) {
+//                                        for (int i = z; i < N+z; i++) {
+//                                            nWords = nWords + " " + arr[i];
+//
+//                                        }
+//                                        z= z+250;
+//                                        stringArrayDESC.add(nWords);
+//                                        nWords="";
+//                                    }
+//                                    //String upToNCharacters = textView_medical_cert_desc.getText().toString().trim().substring(0, Math.min(length_desc, 1000));
+//
+//                                }
+//
+//                                final Handler handler = new Handler();
+//                                handler.postDelayed(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        textView_medical_cert_desc.setText(stringArrayDESC.get(0).trim());
+//                                               /* if(prescriptionItem.getMedicines()!=null)
+//                                                if (prescriptionItem.getMedicines().size() > 4)
+//                                                page_no.setText("1/"+(prescriptionItem.getMedicines().size()/4)+1);*/
+//                                        // Do something after 4s = 4000ms
+//                                        page_no.setText("Page No. "+page_no_count);
+//                                        Bitmap screen = getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
+//                                        files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
+//
+//                                               /* if(prescriptionItem.getMedicines()!=null)
+//                                                    if (prescriptionItem.getMedicines().size() > 4)
+//                                                        page_no.setText("2/"+(prescriptionItem.getMedicines().size()/4)+1);*/
+//
+//                                        patient_item = prescriptionItem;
+//                                        textView_chief_complaint.setVisibility(View.GONE);
+//                                        textView_history.setVisibility(View.GONE);
+//                                        textView_findings.setVisibility(View.GONE);
+//                                        textView_treatment_advice.setVisibility(View.GONE);
+//                                        textView_diagnosis.setVisibility(View.GONE);
+//                                        Log.e(TAG,"MEDICAL CERTIFICATE WITH DESC --------------------------------------------p[0] - 1310 = ");
+//                                        if(stringArrayDESC.size() >1) {
+//                                            tempMEDICAL_CERT(1, files);
+//
+//                                        }
+//
+//
+//
+//                                    }
+//                                }, DELAY_TIME);
+                    }
+
 
                 } else {
-
-                    page_no.setText("Page No. " + page_no_count);
+                    textView_end_note.setVisibility(View.VISIBLE);
                     Bitmap screen = getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
+                    rViewlabtest.setVisibility(View.GONE);
+                    textView_advice.setVisibility(View.GONE);
                     files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
                     patient_item = prescriptionItem;
                     filesGlobal = files;
-                    rViewlabtest.setVisibility(View.VISIBLE);
-                    textView_advice.setVisibility(View.VISIBLE);
-                    behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                                /*Intent intent = new Intent();
+                                intent.setAction(Intent.ACTION_SEND_MULTIPLE);
+                                intent.putExtra(Intent.EXTRA_SUBJECT, "E-prescription from "+ manager.getPreferences(mContext, "name"));
+                                intent.putExtra(Intent.EXTRA_TEXT, "Dear "+prescriptionItem.getPName()+ ", Dr. "+ manager.getPreferences(mContext, "name")+ " has sent you an E-prescription via BluDoc");
+                                intent.setType("image/jpeg"); *//* This example is sharing jpeg images. *//*
+                                intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
+                                Intent shareIntent = Intent.createChooser(intent, null);
+                                startActivity(shareIntent);*/
+                    popupBottomMenu();
+// behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                     fl_progress_bar.setVisibility(View.GONE);
-                    if (dialog_data != null) {
+                    if (dialog_data != null)
                         dialog_data.dismiss();
-
-                    }
                 }
+                       /* else {
+                        fl_progress_bar.setVisibility(View.GONE);
+                    }*/
+            } catch (Exception e) {
+                fl_progress_bar.setVisibility(View.GONE);
+                if (dialog_data != null)
+                    dialog_data.dismiss();
+                        e.printStackTrace();
             }
         } catch (Exception e) {
             fl_progress_bar.setVisibility(View.GONE);
@@ -787,14 +1527,14 @@ public class GeneratePres extends Fragment {
 
     public void temp(int p, final ArrayList<Uri> files) {
         top_header_parent.setVisibility(View.GONE);
-        if(prescriptionItem.getMedicines()!=null )
-        Log.e(TAG, "--------------------------------------------prescriptionItem.getMedicines().size()   = " + prescriptionItem.getMedicines().size() );
+        if (prescriptionItem.getMedicines() != null)
+            Log.e(TAG, "--------------------------------------------prescriptionItem.getMedicines().size()   = " + prescriptionItem.getMedicines().size());
 
         if (prescriptionItem.getMedicines().size() > p) {
             int diff_size = prescriptionItem.getMedicines().size() - p;
             Log.e(TAG, "--------------------------------------------diff_size - 701 = " + diff_size);
 
-            if (diff_size < 3) {
+            if (diff_size < 5) {
                 textView_end_note.setVisibility(View.VISIBLE);
                 if (rViewlabtest.getVisibility() == View.VISIBLE)
                     rViewlabtest.setVisibility(View.GONE);
@@ -810,12 +1550,12 @@ public class GeneratePres extends Fragment {
                     }
                 }
 
-                Pres_adapter templateAdapter1 = new Pres_adapter(medicineList1, mContext);
+                Pres_adapter_mobile templateAdapter1 = new Pres_adapter_mobile(medicineList1, mContext);
                 rView.setAdapter(templateAdapter1);
 
                 if (labTestItem != null) {
                     if (labTestItem.size() > 0) {
-                        Pres_LabTest_adapter pres_labTest_adapter = new Pres_LabTest_adapter(labTestItem, mContext);
+                        Pres_LabTest_adapter_mobile pres_labTest_adapter = new Pres_LabTest_adapter_mobile(labTestItem, mContext);
                         rViewlabtest.setAdapter(pres_labTest_adapter);
                         rViewlabtest.setVisibility(View.VISIBLE);
                         textView_advice.setVisibility(View.VISIBLE);
@@ -861,11 +1601,12 @@ public class GeneratePres extends Fragment {
                         // temp1(finalP, files);
                         filesGlobal = files;
                         fl_progress_bar.setVisibility(View.GONE);
-                        behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                        popupBottomMenu();
+// behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
                         if (dialog_data != null) {
                             dialog_data.dismiss();
-                            PopupGeneratedImages();
+                           // PopupGeneratedImages();
                         }
 
 
@@ -880,11 +1621,11 @@ public class GeneratePres extends Fragment {
                     textView_advice.setVisibility(View.GONE);
 
                 ArrayList<MedicinesItem> medicineList1 = new ArrayList<>();
-                int sizee = 7;
-                if (width < 520)
-                    sizee = 7;
+                int sizee = 8;
+                /*if (width < 520)
+                    sizee = 5;
                 else if (width < 820)
-                    sizee = 7;
+                    sizee = 6;*/
 
                 for (int i = 0; i < sizee; i++) {
                     if (prescriptionItem.getMedicines().size() > p) {
@@ -893,7 +1634,7 @@ public class GeneratePres extends Fragment {
                     }
                 }
 
-                Pres_adapter templateAdapter1 = new Pres_adapter(medicineList1, mContext);
+                Pres_adapter_mobile templateAdapter1 = new Pres_adapter_mobile(medicineList1, mContext);
                 rView.setAdapter(templateAdapter1);
 
 
@@ -901,8 +1642,10 @@ public class GeneratePres extends Fragment {
                 final int finalP = p;
                 Log.e(TAG, "--------------------------------------------finalP  = " + finalP);
 
-                if(finalP==prescriptionItem.getMedicines().size())
+                /*if (finalP == prescriptionItem.getMedicines().size())
                     textView_end_note.setVisibility(View.VISIBLE);
+                else
+                    textView_end_note.setVisibility(View.GONE);*/
 
                 handler.postDelayed(new Runnable() {
                     @Override
@@ -949,12 +1692,13 @@ public class GeneratePres extends Fragment {
         } else if (labTestItem != null) {
             page_no_count = page_no_count + 1;
             page_no.setText("Page No. " + page_no_count);
-//            rView.setVisibility(View.GONE);
+            rView.setVisibility(View.GONE);
+            fl_medicines_symbol.setVisibility(View.GONE);
             textView_end_note.setVisibility(View.VISIBLE);
             if (labTestItem.size() > 0) {
 //                rView.setVisibility(View.GONE);
 
-                Pres_LabTest_adapter pres_labTest_adapter = new Pres_LabTest_adapter(labTestItem, mContext);
+                Pres_LabTest_adapter_mobile pres_labTest_adapter = new Pres_LabTest_adapter_mobile(labTestItem, mContext);
                 rViewlabtest.setAdapter(pres_labTest_adapter);
                 rViewlabtest.setVisibility(View.VISIBLE);
                 textView_advice.setVisibility(View.VISIBLE);
@@ -995,12 +1739,13 @@ public class GeneratePres extends Fragment {
 
                         filesGlobal = files;
 
-                        behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                        popupBottomMenu();
+// behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
                         fl_progress_bar.setVisibility(View.GONE);
                         if (dialog_data != null) {
                             dialog_data.dismiss();
-                            PopupGeneratedImages();
+                           // PopupGeneratedImages();
                         }
                     }
                 }, DELAY_TIME);
@@ -1009,6 +1754,13 @@ public class GeneratePres extends Fragment {
 //                rView.setVisibility(View.GONE);
                 textView_advice.setVisibility(View.GONE);
                 rViewlabtest.setVisibility(View.GONE);
+                rViewlabtest.setVisibility(View.GONE);
+                popupBottomMenu();
+
+                if (dialog_data != null) {
+                    dialog_data.dismiss();
+                    // PopupGeneratedImages();
+                }
             }
 
 
@@ -1038,12 +1790,13 @@ public class GeneratePres extends Fragment {
                 intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
                 Intent shareIntent = Intent.createChooser(intent, null);
                 startActivity(shareIntent);*/
-            behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            popupBottomMenu();
+// behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
             fl_progress_bar.setVisibility(View.GONE);
             if (dialog_data != null) {
                 dialog_data.dismiss();
-                PopupGeneratedImages();
+              //  PopupGeneratedImages();
             }
         }
     }
@@ -1056,14 +1809,14 @@ public class GeneratePres extends Fragment {
             if (textView_advice.getVisibility() == View.VISIBLE)
                 textView_advice.setVisibility(View.GONE);
             ArrayList<MedicinesItem> medicineList1 = new ArrayList<>();
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 12; i++) {
                 if (prescriptionItem.getMedicines().size() > p) {
                     medicineList1.add(medicinesItemArrayListO.get(p));
                     p = p + 1;
                 }
             }
             Log.e(TAG, "--------------------------------------------p - 940 = " + p);
-            Pres_adapter templateAdapter1 = new Pres_adapter(medicineList1, mContext);
+            Pres_adapter_mobile templateAdapter1 = new Pres_adapter_mobile(medicineList1, mContext);
             rView.setAdapter(templateAdapter1);
 
             final Handler handler = new Handler();
@@ -1086,11 +1839,12 @@ public class GeneratePres extends Fragment {
                     intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
                     Intent shareIntent = Intent.createChooser(intent, null);
                     startActivity(shareIntent);*/
-                    behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    popupBottomMenu();
+// behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                     fl_progress_bar.setVisibility(View.GONE);
                     if (dialog_data != null) {
                         dialog_data.dismiss();
-                        PopupGeneratedImages();
+                       // PopupGeneratedImages();
                     }
                 }
             }, DELAY_TIME);
@@ -1108,14 +1862,15 @@ public class GeneratePres extends Fragment {
             Intent shareIntent = Intent.createChooser(intent, null);
             startActivity(shareIntent);*/
 
-            behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            popupBottomMenu();
+// behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
             if (labTestItem != null) {
                 if (labTestItem.size() > 0) {
                     page_no_count = page_no_count + 1;
                     page_no.setText("Page No. " + page_no_count);
 
-                    Pres_LabTest_adapter pres_labTest_adapter = new Pres_LabTest_adapter(labTestItem, mContext);
+                    Pres_LabTest_adapter_mobile pres_labTest_adapter = new Pres_LabTest_adapter_mobile(labTestItem, mContext);
                     rViewlabtest.setAdapter(pres_labTest_adapter);
                     rViewlabtest.setVisibility(View.VISIBLE);
                     textView_advice.setVisibility(View.VISIBLE);
@@ -1136,11 +1891,12 @@ public class GeneratePres extends Fragment {
                     intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
                     Intent shareIntent = Intent.createChooser(intent, null);
                     startActivity(shareIntent);*/
-                            behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                            popupBottomMenu();
+// behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                             fl_progress_bar.setVisibility(View.GONE);
                             if (dialog_data != null) {
                                 dialog_data.dismiss();
-                                PopupGeneratedImages();
+                              //  PopupGeneratedImages();
                             }
                         }
                     }, DELAY_TIME);
@@ -1149,21 +1905,23 @@ public class GeneratePres extends Fragment {
                     textView_advice.setVisibility(View.GONE);
                     rViewlabtest.setVisibility(View.GONE);
 
-                    behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    popupBottomMenu();
+// behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                     fl_progress_bar.setVisibility(View.GONE);
                     if (dialog_data != null) {
                         dialog_data.dismiss();
-                        PopupGeneratedImages();
+                       // PopupGeneratedImages();
                     }
                 }
             } else {
                 textView_advice.setVisibility(View.GONE);
                 rViewlabtest.setVisibility(View.GONE);
-                behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                popupBottomMenu();
+// behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 fl_progress_bar.setVisibility(View.GONE);
                 if (dialog_data != null) {
                     dialog_data.dismiss();
-                    PopupGeneratedImages();
+                  //  PopupGeneratedImages();
                 }
             }
 
@@ -1212,6 +1970,7 @@ public class GeneratePres extends Fragment {
                 } else if (response.getMessage().equals("Prescription Added")) {
                     // Toast.makeText(mContext, "Prescription Added", Toast.LENGTH_SHORT).show();
                     count = true;
+                    boolean checker = false;
                     generatePDF.setText("Share");
                     back.setVisibility(View.GONE);
                     btn_backbtn_edit_profile.setVisibility(View.VISIBLE);
@@ -1234,10 +1993,22 @@ public class GeneratePres extends Fragment {
                         }
                         textView_end_note.setVisibility(View.GONE);
 
-                        if (line > 200) {
+                        Log.e(TAG, "------------------------------------   LINE   === " + line);
+
+
+                        if (line > 400) {
+                            checker = true;
                             rView.setVisibility(View.GONE);
                             rViewlabtest.setVisibility(View.GONE);
                             fl_medicines_symbol.setVisibility(View.GONE);
+                            textView_advice.setVisibility(View.GONE);
+                            textView_end_note.setVisibility(View.GONE);
+
+                            if(prescriptionItem.getMedicines()==null){
+                                rViewlabtest.setVisibility(View.VISIBLE);
+                                textView_advice.setVisibility(View.VISIBLE);
+                                textView_end_note.setVisibility(View.VISIBLE);
+                            }
                             final Handler handler = new Handler();
                             handler.postDelayed(new Runnable() {
                                 @Override
@@ -1271,25 +2042,28 @@ public class GeneratePres extends Fragment {
                                     binding.textViewHosAddress.setVisibility(View.GONE);
                                     binding.textviewRespirationRate.setVisibility(View.GONE);
                                     binding.textviewAllergy.setVisibility(View.GONE);
+                                    fl_medicines_symbol.setVisibility(View.VISIBLE);
+                                    top_header_parent.setVisibility(View.GONE);
+                                    textView_end_note.setVisibility(View.GONE);
                                 }
                             }, 1);
                         }
                         //==========================================================================
                         if (prescriptionItem != null) {
+
                             generatePDF.setVisibility(View.GONE);
                             if (prescriptionItem.getMedicines() != null) {
                                 if (prescriptionItem.getMedicines().size() != 0) {
-                                    int sizee = 7;
-                                    if (width < 520)
-                                        sizee = 7;
+                                    int sizee = 8;
+                                   /* if (width < 520)
+                                        sizee = 5;
                                     else if (width < 820)
-                                        sizee = 7;
+                                        sizee = 6;
 
-                                    if(line==0){
+                                    if (line == 0) {
 
-                                        sizee=8;
-
-                                    }
+                                        sizee = 6;
+                                    }*/
 
                                     if (prescriptionItem.getMedicines().size() >= sizee) {
                                         rViewlabtest.setVisibility(View.GONE);
@@ -1303,7 +2077,7 @@ public class GeneratePres extends Fragment {
                                             }
                                         }
 
-                                        Pres_adapter templateAdapter = new Pres_adapter(medicineList, mContext);
+                                        Pres_adapter_mobile templateAdapter = new Pres_adapter_mobile(medicineList, mContext);
                                         rView.setAdapter(templateAdapter);
 
                                         final Handler handler = new Handler();
@@ -1349,6 +2123,32 @@ public class GeneratePres extends Fragment {
                                         }, DELAY_TIME);
 
                                     } else {
+                                       /* if(!checker){
+                                            fl_medicines_symbol.setVisibility(View.VISIBLE);
+                                            if(prescriptionItem.getMedicines().size()!=0)
+                                                rView.setVisibility(View.VISIBLE);
+                                            page_no_count = page_no_count + 1;
+                                            textView_chief_complaint.setVisibility(View.GONE);
+                                            textView_history.setVisibility(View.GONE);
+                                            textView_findings.setVisibility(View.GONE);
+                                            textView_treatment_advice.setVisibility(View.GONE);
+                                            textView_diagnosis.setVisibility(View.GONE);
+                                            binding.textviewTemprature.setVisibility(View.GONE);
+                                            binding.textviewHeight.setVisibility(View.GONE);
+                                            binding.textviewWeight.setVisibility(View.GONE);
+                                            binding.textviewPulse.setVisibility(View.GONE);
+                                            binding.textviewBloodPressure.setVisibility(View.GONE);
+                                            binding.textviewBloodSugar.setVisibility(View.GONE);
+                                            binding.textviewHemoglobing.setVisibility(View.GONE);
+                                            binding.textviewSpo2.setVisibility(View.GONE);
+                                            binding.textviewBloodGroup.setVisibility(View.GONE);
+                                            binding.textViewHosAddress.setVisibility(View.GONE);
+                                            binding.textviewRespirationRate.setVisibility(View.GONE);
+                                            binding.textviewAllergy.setVisibility(View.GONE);
+                                           top_header_parent.setVisibility(View.GONE);
+                                        }*/
+
+
                                         textView_end_note.setVisibility(View.VISIBLE);
                                         page_no.setText("Page No. " + page_no_count);
 
@@ -1365,21 +2165,34 @@ public class GeneratePres extends Fragment {
                                         intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
                                         Intent shareIntent = Intent.createChooser(intent, null);
                                         startActivity(shareIntent);*/
-                                        behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                                        popupBottomMenu();
                                         fl_progress_bar.setVisibility(View.GONE);
                                         if (dialog_data != null)
                                             dialog_data.dismiss();
                                     }
                                 }
                             } else if (labTestItem != null) {
-                                textView_end_note.setVisibility(View.VISIBLE);
-                                Bitmap screen = getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
+                                fl_medicines_symbol.setVisibility(View.GONE);
+                                if(checker && prescriptionItem.getMedicines()==null){
+                                    patient_item = prescriptionItem;
+                                }
+                                else {
+                                     textView_end_note.setVisibility(View.VISIBLE);
                                 rViewlabtest.setVisibility(View.VISIBLE);
                                 textView_advice.setVisibility(View.VISIBLE);
 
-                                files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
-                                patient_item = prescriptionItem;
-                                filesGlobal = files;
+                                final Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Bitmap screen = getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
+
+                                    files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
+                                    patient_item = prescriptionItem;
+                                    filesGlobal = files;
+                                }},1);
+                                }
+
                                 /*Intent intent = new Intent();
                                 intent.setAction(Intent.ACTION_SEND_MULTIPLE);
                                 intent.putExtra(Intent.EXTRA_SUBJECT, "E-prescription from "+ manager.getPreferences(mContext, "name"));
@@ -1388,19 +2201,28 @@ public class GeneratePres extends Fragment {
                                 intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
                                 Intent shareIntent = Intent.createChooser(intent, null);
                                 startActivity(shareIntent);*/
-                                behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                                popupBottomMenu();
+// behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                                 fl_progress_bar.setVisibility(View.GONE);
                                 if (dialog_data != null)
                                     dialog_data.dismiss();
                             } else {
-                                textView_end_note.setVisibility(View.VISIBLE);
-                                Bitmap screen = getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
-                                rViewlabtest.setVisibility(View.GONE);
-                                textView_advice.setVisibility(View.GONE);
+                                fl_medicines_symbol.setVisibility(View.GONE);
+                                if(checker ){
+                                    patient_item = prescriptionItem;
+                                }
+                                else {
+                                    textView_end_note.setVisibility(View.VISIBLE);
+                                    Bitmap screen = getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
+                                    rViewlabtest.setVisibility(View.GONE);
+                                    textView_advice.setVisibility(View.GONE);
 
-                                files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
-                                patient_item = prescriptionItem;
-                                filesGlobal = files;
+                                    files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
+                                    patient_item = prescriptionItem;
+                                    filesGlobal = files;
+                                }
+
+
                                 /*Intent intent = new Intent();
                                 intent.setAction(Intent.ACTION_SEND_MULTIPLE);
                                 intent.putExtra(Intent.EXTRA_SUBJECT, "E-prescription from "+ manager.getPreferences(mContext, "name"));
@@ -1409,7 +2231,8 @@ public class GeneratePres extends Fragment {
                                 intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
                                 Intent shareIntent = Intent.createChooser(intent, null);
                                 startActivity(shareIntent);*/
-                                behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                                popupBottomMenu();
+// behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                                 fl_progress_bar.setVisibility(View.GONE);
                                 if (dialog_data != null)
                                     dialog_data.dismiss();
@@ -1492,7 +2315,8 @@ public class GeneratePres extends Fragment {
                                 intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
                                 Intent shareIntent = Intent.createChooser(intent, null);
                                 startActivity(shareIntent);*/
-                            behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                            popupBottomMenu();
+// behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                             fl_progress_bar.setVisibility(View.GONE);
                             if (dialog_data != null)
                                 dialog_data.dismiss();
@@ -1503,14 +2327,13 @@ public class GeneratePres extends Fragment {
                     } catch (Exception e) {
                         fl_progress_bar.setVisibility(View.GONE);
                         if (dialog_data != null)
-                            if (dialog_data != null)
-                                e.printStackTrace();
+                            dialog_data.dismiss();
+                        e.printStackTrace();
                     }
                 } else {
                     fl_progress_bar.setVisibility(View.GONE);
                     if (dialog_data != null)
                         dialog_data.dismiss();
-
 
                 }
 
@@ -1579,6 +2402,25 @@ public class GeneratePres extends Fragment {
                 }
             }
         }, DELAY_TIME);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+
+            if (requestCode == 510 && data != null) {
+
+               ArrayList<AllPharmacistList> allPharmacistListArrayList=data.getParcelableArrayListExtra("arraylist_of_details");
+
+                Log.i(TAG, "onActivityResult: "+allPharmacistListArrayList.toString());
+
+            }
+
+        }
+
+
     }
 
     private void PopupGeneratedImages() {
@@ -1696,7 +2538,7 @@ public class GeneratePres extends Fragment {
     }
 
     private void initViews() {
-
+            int counter =0;
 
         if (certificate_selection) {
             page_no.setVisibility(View.GONE);
@@ -1832,6 +2674,24 @@ public class GeneratePres extends Fragment {
             binding.textviewRespirationRate.setVisibility(View.GONE);
             binding.textviewAllergy.setVisibility(View.GONE);
             String[] details = diagnosis_desc.split(Pattern.quote("|"));
+           // Toast.makeText(mContext, "details = "+details.length, Toast.LENGTH_SHORT).show();
+            int lineCounter = 0;
+            for (String strr:details
+                 ) {
+                if(!strr.equals("")){
+                    int multiplier = 1;
+                    if(strr.length()>90){
+                        multiplier = (strr.length()/90);
+                    }
+                    Log.e("multiplier"," ====== "+multiplier);
+
+                    lineCounter = lineCounter +multiplier;
+                }
+            }
+            Log.e("details"," ======-------------------------------------------------- ");
+            Log.e("details"," ====== "+diagnosis_desc);
+            Log.e("lineCounter"," ====== "+lineCounter);
+            Log.e("details"," ======-------------------------------------------------- ");
 
             if (details.length != 0) {
                 int line = 0;
@@ -1840,7 +2700,6 @@ public class GeneratePres extends Fragment {
                 ) {
                     line = line + strr.length();
                 }
-                // Toast.makeText(mContext, "Lines = "+line, Toast.LENGTH_SHORT).show();
                 if (details[0] != null)
                     if (details[0].equals(""))
                         textView_chief_complaint.setVisibility(View.GONE);
@@ -2113,6 +2972,7 @@ public class GeneratePres extends Fragment {
             textView_days.setText("Working : " + work_days);
         } else {
             textView_days.setVisibility(View.GONE);
+            counter = counter +1;
         }
 
         if (TextUtils.isEmpty(binding.textViewDays.getText().toString()) &&
@@ -2120,7 +2980,7 @@ public class GeneratePres extends Fragment {
                 TextUtils.isEmpty(binding.textViewContact.getText().toString()) &&
                 TextUtils.isEmpty(binding.textViewEmail.getText().toString()) &&
                 TextUtils.isEmpty(binding.textViewAdd.getText().toString()))
-                      binding.lineOfSingle.setVisibility(View.GONE); // hide line when data is empty todo
+            binding.lineOfSingle.setVisibility(View.GONE); // hide line when data is empty todo
 
         if (("history").equalsIgnoreCase(definer)) {
 
@@ -2130,6 +2990,10 @@ public class GeneratePres extends Fragment {
                 textView_time.setText("Time : " + visiting_hr_from_details[0].toLowerCase().trim() + " - " + visiting_hr_to_details[0].toLowerCase().trim() + ", " + visiting_hr_from_details[1].toLowerCase().trim() + " - " + visiting_hr_to_details[1].toLowerCase().trim());
             else
                 textView_time.setText("Time : " + visiting_hr_from_details[0].toLowerCase().trim() + " - " + visiting_hr_to_details[0].toLowerCase().trim());
+
+                if(visiting_hr_from_details.length==1 && visiting_hr_from_details[0].equals(""))
+                if(visiting_hr_to_details.length==1 && visiting_hr_to_details[0].equals(""))
+                    textView_time.setVisibility(View.GONE);
         } else if (!("").equalsIgnoreCase(doctor.getVisitingHrFrom())) {
             String[] visiting_hr_from_details = manager.getPreferences(mContext, "visiting_hr_from").split(Pattern.quote("|"));
             ;
@@ -2140,24 +3004,33 @@ public class GeneratePres extends Fragment {
             else
                 textView_time.setText("Time : " + visiting_hr_from_details[0].toLowerCase().trim() + " - " + visiting_hr_to_details[0].toLowerCase().trim());
             //  textView_time.setText("Time : " + doctor.getVisitingHrFrom() + " to " + doctor.getVisitingHrTo());
+
+            if(visiting_hr_from_details.length==1 && visiting_hr_from_details[0].equals(""))
+                if(visiting_hr_to_details.length==1 && visiting_hr_to_details[0].equals(""))
+                    textView_time.setVisibility(View.GONE);
         } else {
-//            textView_time.setVisibility(View.GONE);
+           textView_time.setVisibility(View.GONE);
+            counter = counter +1;
         }
         if (!("").equalsIgnoreCase(doctor.getMobileLetterHead())) {
             textView_contact.setText("Contact : " + doctor.getMobileLetterHead());
         } else {
-//            textView_contact.setVisibility(View.GONE);
+            textView_contact.setVisibility(View.GONE);
+            counter = counter +1;
         }
         if (!("").equalsIgnoreCase(doctor.getEmailLetterHead())) {
             textView_email.setText("Mail Id : " + doctor.getEmailLetterHead());
         } else {
-//            textView_email.setVisibility(View.GONE);
+            textView_email.setVisibility(View.GONE);
+            counter = counter +1;
         }
         if (!("").equalsIgnoreCase(doctor.getClinicAddress())) {
             textView_add.setText("Address : " + doctor.getClinicAddress());
         } else {
-//            textView_add.setVisibility(View.GONE);
+            textView_add.setVisibility(View.GONE);
+            counter = counter +1;
         }
+
 
 
         if (!("").equalsIgnoreCase(doctor.getImage())) {
@@ -2202,25 +3075,221 @@ public class GeneratePres extends Fragment {
         Log.e(TAG, ">>11>> " + medicinesItemArrayListO.toString());
 
         if (prescriptionItem != null) {
-            Pres_adapter templateAdapter = new Pres_adapter(medicinesItemArrayListO, mContext);
+            Pres_adapter_mobile templateAdapter = new Pres_adapter_mobile(medicinesItemArrayListO, mContext);
             rView.setAdapter(templateAdapter);
         } else
             rView.setAdapter(null);
 
         if (labTestItem != null) {
             if (labTestItem.size() > 0) {
-                Pres_LabTest_adapter pres_labTest_adapter = new Pres_LabTest_adapter(labTestItem, mContext);
+                Pres_LabTest_adapter_mobile pres_labTest_adapter = new Pres_LabTest_adapter_mobile(labTestItem, mContext);
                 rViewlabtest.setAdapter(pres_labTest_adapter);
                 textView_advice.setVisibility(View.VISIBLE);
             } else {
                 textView_advice.setVisibility(View.GONE);
                 rViewlabtest.setAdapter(null);
             }
+        }
 
+        if(counter==5)
+            binding.lineOfSingle.setVisibility(View.GONE);
+
+    }
+    @Override
+    public void onModalOptionSelected(@org.jetbrains.annotations.Nullable String s, @NotNull Option option) {
+
+        switch (option.getId()) {
+
+            case 5:
+                setLanguageOnBlueDoc();
+                break;
 
         }
 
+    }
+
+    public void setOnDataViaTranslation(){
+
+        String translatedString = toJSON(prescriptionItem.getMedicines());
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        JsonParser jp = new JsonParser();
+        String translatedStringJson = gson.toJson(jp.parse(translatedString));
+
+        Log.i(TAG, "setOnDataViaTranslation: "+translatedStringJson);
+
+        TranslateAPI translateAPI = new TranslateAPI(
+                Language.ENGLISH,   //Source Language
+                Language.HINDI,        //Target Language
+                translatedStringJson);         //Query Text
+
+        translateAPI.setTranslateListener(new TranslateAPI.TranslateListener() {
+            @Override
+            public void onSuccess(String translatedText) {
+                getTranslateOnDiffrentLanguage(translatedText.trim());
+            }
+
+            @Override
+            public void onFailure(String ErrorText) {
+                Log.d(TAG, "onFailure: "+ErrorText);
+            }
+        });
 
     }
 
+    String toJSON(ArrayList<com.likesby.bludoc.ModelLayer.NewEntities3.MedicinesItem> list) {
+
+        Gson gson = new Gson();
+        return gson.toJson(list, new TypeToken<ArrayList<com.likesby.bludoc.ModelLayer.NewEntities3.MedicinesItem>>() {}.getType());
+    }
+
+    private void getTranslateOnDiffrentLanguage(final String medicinesJoin) {
+
+        Gson gson = new Gson();
+        Type type = new TypeToken<ArrayList<com.likesby.bludoc.ModelLayer.NewEntities3.MedicinesItem>>(){}.getType();
+        ArrayList<com.likesby.bludoc.ModelLayer.NewEntities3.MedicinesItem> contactList = null;
+        try {
+            contactList = gson.fromJson(medicinesJoin, type);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        prescriptionItem.setMedicines(contactList);
+//        prescriptionItem.setLabTest(labTestItem);
+//
+//        if(labTestItem!=null) {
+//            labTestItem.clear();
+//            labTestItem.addAll(labTestItemsList);
+//        }
+
+        Bundle bundle=new Bundle();
+        bundle.putParcelable("defaultAttributeId",prescriptionItem);
+        bundle.putParcelableArrayList("defaultAttributeIdLabTest",labTestItem);
+        bundle.putString("definer",definer);
+        bundle.putString("end_note",end_note);
+        bundle.putString("yesOrNo",yesOrNo);
+
+        this.setArguments(bundle);
+
+        fragmentActivity.getSupportFragmentManager()
+                .beginTransaction()
+                .detach(this)
+                .attach(this)
+                .commit();
+
+    }
+
+    private String checkNull(@Nullable String s) {
+
+        if(TextUtils.isEmpty(s))
+            return "";
+        else if(!TextUtils.isEmpty(s) && s!=null)
+            return s.replace("0000000","");
+
+        return "";
+
+    }
+
+    private void setLanguageOnBlueDoc() {
+
+        ModalBottomSheetDialogFragment.Builder builder =
+                new ModalBottomSheetDialogFragment.Builder(); //custom option, without needing menu XML
+
+        builder.add(new OptionRequest(6, "Hindi", R.drawable.ic_action_language));
+        builder.add(new OptionRequest(7, "English", R.drawable.ic_action_language));
+        builder.add(new OptionRequest(8, "Chinese", R.drawable.ic_action_language));
+        builder.add(new OptionRequest(9, "Spanish", R.drawable.ic_action_language));
+        builder.add(new OptionRequest(10, "French", R.drawable.ic_action_language));
+        builder.add(new OptionRequest(11, "Bengali", R.drawable.ic_action_language));
+        builder.add(new OptionRequest(12, "German", R.drawable.ic_action_language));
+        builder.add(new OptionRequest(13, "italian", R.drawable.ic_action_language));
+        builder.add(new OptionRequest(14, "Dutch", R.drawable.ic_action_language));
+        builder.add(new OptionRequest(15, "Polish", R.drawable.ic_action_language));
+        builder.add(new OptionRequest(16, "Indonesian", R.drawable.ic_action_language));
+        builder.add(new OptionRequest(17, "Danish", R.drawable.ic_action_language));
+        builder.add(new OptionRequest(17, "Swedish", R.drawable.ic_action_language));
+        builder.add(new OptionRequest(17, "Turkish", R.drawable.ic_action_language));
+
+
+        builder.layout(R.layout.item_customs_languages);
+        builder.show(getChildFragmentManager(), "Custom_languages");
+
+    }
+
+    private void hideAndShowDoctarDetails(boolean value) {
+
+        if (!value) {
+            binding.topDoctorDetails.setVisibility(View.GONE);
+            binding.topHeaderParent.setVisibility(View.GONE);
+        } else {
+            binding.topDoctorDetails.setVisibility(View.VISIBLE);
+            binding.topHeaderParent.setVisibility(View.VISIBLE);
+        }
+
+        isVisible=value;
+
+    }
+
+    private void hideAndShowClinicName(boolean value) {
+
+        if (!value) {
+            binding.textViewClinicName.setVisibility(View.GONE);
+        } else {
+            binding.textViewClinicName.setVisibility(View.VISIBLE);
+        }
+
+        isClinicVisible=value;
+
+    }
+
+    private void hideAndShowFooterDetails(boolean value) {
+
+        if (!value) {
+            binding.footerDocterDetails.setVisibility(View.GONE);
+        } else {
+            binding.footerDocterDetails.setVisibility(View.VISIBLE);
+        }
+
+        isFooterVisible=value;
+
+    }
+
+    @Override
+    public void onChangeResult(int ids, boolean value) {
+
+        switch (ids){
+
+            case 1:
+
+                hideAndShowDoctarDetails(value);
+
+                break;
+
+            case 2:
+
+                hideAndShowClinicName(value);
+
+                break;
+
+            case 3:
+
+                hideAndShowFooterDetails(value);
+
+                break;
+
+            case 4:
+                startActivity(new Intent(mContext, AllPharmacistActivity.class));
+                break;
+
+            case 5:
+                startActivityForResult(new Intent(mContext, MultiplePharmacistActivity.class), 510);
+                break;
+
+            case 6:
+                setLanguageOnBlueDoc();
+                break;
+
+        }
+
+    }
 }

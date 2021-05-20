@@ -6,6 +6,7 @@ import com.likesby.bludoc.ModelLayer.NetworkLayer.BasicAuthInterceptor;
 import com.likesby.bludoc.ServerConnect.ServerConnect;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.likesby.bludoc.constants.ApplicationConstant;
 
 import java.io.IOException;
 
@@ -47,9 +48,14 @@ public class RetrofitClient {
                     return chain.proceed(requestBuilder.build());
                 }
             });
-            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+            if (ApplicationConstant.DEBUG) {
+                loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+                httpClientBuilder.addInterceptor(loggingInterceptor);
+            }
+
             httpClientBuilder.addInterceptor(new BasicAuthInterceptor());
-            httpClientBuilder.addInterceptor(loggingInterceptor);
+
 
             OkHttpClient httpClient = httpClientBuilder.build();
 

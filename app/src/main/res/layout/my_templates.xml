@@ -35,6 +35,7 @@
             android:background="#fff"/>
 
         <Button
+            android:fontFamily="@font/poppinsmedium"
             android:layout_margin="@dimen/margin_10"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/margin_40"
@@ -63,6 +64,7 @@
 
 
                     <TextView
+                        android:fontFamily="@font/poppins"
                         android:id="@+id/tv_no_template"
                         android:layout_marginTop="@dimen/margin_30"
                         android:layout_gravity="center"

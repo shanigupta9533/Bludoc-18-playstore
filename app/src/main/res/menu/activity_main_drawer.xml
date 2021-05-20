@@ -4,7 +4,7 @@
     tools:showIn="@layout/home_fragment">
 
     <group android:checkableBehavior="single">
-        <item
+        <item xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/Profile"
             android:icon="@drawable/profile"
             android:title="Profile" />

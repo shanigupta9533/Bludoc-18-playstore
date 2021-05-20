@@ -45,7 +45,7 @@ public class UGAdapter extends RecyclerView.Adapter<UGAdapter.ViewHolder> implem
     public UGAdapter(Context context,
                      ArrayList<UGItem> objects, String ug_name, ApiViewHolder apiViewHolder, CompositeDisposable mBag, Dialog dialog_data, RegisterDetails registerDetails) {
         mArryUG = objects;
-        mFilteredList = mArryUG;
+        mFilteredList = objects;
         this.context = context;
         this.ug_name = ug_name;
         this.apiViewHolder = apiViewHolder;

@@ -24,6 +24,7 @@
         />
 
     <TextView
+        android:fontFamily="@font/poppinsmedium"
         android:paddingStart="@dimen/margin_5"
         android:paddingLeft="@dimen/margin_5"
         android:paddingEnd="@dimen/margin_5"
@@ -38,6 +39,7 @@
         />
 
     <TextView
+        android:fontFamily="@font/poppins"
         android:paddingEnd="@dimen/margin_5"
         android:paddingRight="@dimen/margin_5"
         android:paddingStart="@dimen/margin_5"

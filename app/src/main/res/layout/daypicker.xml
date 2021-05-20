@@ -14,6 +14,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
     <ToggleButton
+        android:fontFamily="@font/poppins"
         android:id="@+id/Mon"
         android:layout_width="35dp"
         android:layout_height="35dp"
@@ -25,6 +26,7 @@
         style="@style/toggleButton"
         android:background="@drawable/toggle_bg" />
     <ToggleButton
+        android:fontFamily="@font/poppins"
         android:id="@+id/Tue"
         android:layout_marginLeft="@dimen/margin_5"
         android:layout_marginRight="@dimen/margin_5"
@@ -37,6 +39,7 @@
         android:background="@drawable/toggle_bg" />
 
     <ToggleButton
+        android:fontFamily="@font/poppins"
         android:id="@+id/Wed"
         android:layout_marginLeft="@dimen/margin_5"
         android:layout_marginRight="@dimen/margin_5"
@@ -49,6 +52,7 @@
         android:background="@drawable/toggle_bg" />
 
     <ToggleButton
+        android:fontFamily="@font/poppins"
         android:id="@+id/Thu"
         android:layout_marginLeft="@dimen/margin_5"
         android:layout_marginRight="@dimen/margin_5"
@@ -61,6 +65,7 @@
         android:background="@drawable/toggle_bg" />
 
     <ToggleButton
+        android:fontFamily="@font/poppins"
         android:id="@+id/Fri"
         android:layout_marginLeft="@dimen/margin_5"
         android:layout_marginRight="@dimen/margin_5"
@@ -73,6 +78,7 @@
         android:background="@drawable/toggle_bg" />
 
     <ToggleButton
+        android:fontFamily="@font/poppins"
         android:id="@+id/Sat"
         android:layout_marginLeft="@dimen/margin_5"
         android:layout_marginRight="@dimen/margin_5"
@@ -85,6 +91,7 @@
         android:background="@drawable/toggle_bg" />
 
     <ToggleButton
+        android:fontFamily="@font/poppins"
         android:id="@+id/Sun"
         android:layout_marginLeft="@dimen/margin_5"
         android:layout_marginRight="@dimen/margin_5"

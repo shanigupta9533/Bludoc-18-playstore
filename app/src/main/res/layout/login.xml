@@ -53,6 +53,7 @@
 
             >
             <TextView
+                android:fontFamily="@font/poppinsbold"
                 android:textAllCaps="false"
                 android:textStyle="bold"
                 android:layout_width="wrap_content"
@@ -63,6 +64,7 @@
                 android:text="Blu"/>
 
             <TextView
+                android:fontFamily="@font/poppinsbold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -78,6 +80,7 @@
 
 
     <TextView
+        android:fontFamily="@font/poppins"
         android:padding="@dimen/margin_12"
         android:id="@+id/tv_please_otp"
         android:gravity="center"
@@ -85,7 +88,7 @@
         android:textColor="@color/colorBlack"
         android:textSize="12sp"
         android:background="@drawable/faint_white_round"
-        android:layout_width="250dp"
+        android:layout_width="270dp"
         android:layout_height="wrap_content"
         android:text="Kindly enter the mail ID you wish to use.\n\n You will receive an OTP to login &amp; verify with the mail ID provided by you"
         />
@@ -113,7 +116,7 @@
 
 
             <EditText
-
+                android:fontFamily="@font/poppins"
                 android:textCursorDrawable="@color/colorBlack"
                 android:visibility="visible"
                 android:textAlignment="center"
@@ -132,7 +135,6 @@
                     android:textColorHint="@color/colorDarkstGrey"
                     android:textSize="12sp"
                 android:hint="@string/type_here_mail_id"
-                    android:typeface="sans"
                 />
 
             <View
@@ -146,6 +148,7 @@
                 />
 
         <TextView
+            android:fontFamily="@font/poppinsmedium"
             android:layout_gravity="center"
             android:gravity="center"
             android:layout_width="120dp"
@@ -201,19 +204,21 @@
 
 
                     <TextView
+                        android:fontFamily="@font/poppins"
                         android:padding="@dimen/margin_12"
                         android:id="@+id/login_textView_ot"
                         android:gravity="center"
                         android:layout_gravity="center"
                         android:textColor="@color/colorBlack"
                         android:textSize="12sp"
-                        android:layout_width="280dp"
+                        android:layout_width="290dp"
                         android:layout_height="wrap_content"
                         android:text="Please enter the OTP sent to your mail ID -"
 
                         android:layout_centerHorizontal="true"/>
 
                     <TextView
+                        android:fontFamily="@font/poppins"
                         android:visibility="gone"
                         android:paddingBottom   ="@dimen/margin_10"
                         android:paddingLeft     ="@dimen/margin_12"
@@ -238,13 +243,13 @@
 
 
                     <TextView
-
+                        android:fontFamily="@font/poppinsmedium"
                         android:layout_below="@id/ll_ll"
                         android:visibility="gone"
                         android:layout_centerInParent="true"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:layout_width="120dp"
+                        android:layout_width="140dp"
                         android:layout_height="wrap_content"
                         android:id="@+id/submit_resend"
                         android:layout_marginTop="@dimen/margin_5"
@@ -258,6 +263,7 @@
                         android:background="@drawable/faint_white_round"/>
 
                     <com.chaos.view.PinView
+                        android:fontFamily="@font/poppins"
                         android:id="@+id/login_editTextOTP"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -297,13 +303,14 @@
                         android:layout_height="35dp"
                         android:id="@+id/login_buttonVerify"
                         android:layout_marginTop="@dimen/margin_15"
-
+                        android:fontFamily="@font/poppinsmedium"
                         android:text="@string/verify"
                         android:textColor="@color/colorBlack"
                         android:background="@drawable/blue_round"/>
 
 
                     <TextView
+                        android:fontFamily="@font/poppinsmedium"
                         android:layout_centerHorizontal="true"
                         android:layout_below="@+id/login_buttonVerify"
                         android:visibility="visible"
@@ -344,9 +351,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/phone_number"
+            android:fontFamily="@font/poppins"
             />
 
         <TextView
+            android:fontFamily="@font/poppins"
             android:layout_marginTop="@dimen/margin_10"
             android:gravity="center"
             android:layout_gravity="center"
@@ -380,6 +389,7 @@
 
 
             <com.lamudi.phonefield.PhoneEditText
+                android:fontFamily="@font/poppins"
                 android:id="@+id/login_editTextInputMobile"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
@@ -389,6 +399,7 @@
                 />
 
             <TextView
+                android:fontFamily="@font/poppinsmedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/submit_phone"
