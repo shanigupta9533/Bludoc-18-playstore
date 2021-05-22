@@ -149,6 +149,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/send_to_pharmacist"
+            android:visibility="gone"
             android:orientation="horizontal"
             android:padding="16dp">
 

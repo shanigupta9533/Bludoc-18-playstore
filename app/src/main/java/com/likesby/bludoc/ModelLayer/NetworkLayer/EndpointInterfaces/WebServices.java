@@ -115,6 +115,14 @@ public interface WebServices {
     Call<ResultOfApi> deletePharmacist(@Field("pharmacist_id") String pharmacist_id);
 
     @FormUrlEncoded
+    @POST("SendPresciption")
+    Call<ResultOfApi> sendPresciption(@Field("pharmacist_id") String pharmacist_id,@Field("presb_patient_id") String presb_patient_id);
+
+    @FormUrlEncoded
+    @POST("Phamalist")
+    Call<ResultOfApi> sendPharmacistById(@Field("pharmacist_id") String pharmacist_id);
+
+    @FormUrlEncoded
     @POST("UpdateProfile")
     Single<UserResponse> updateUser(@Field("customer_id") String customer_id,
                                     @Field("customer_name") String customer_name,

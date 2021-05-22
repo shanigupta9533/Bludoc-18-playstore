@@ -11,8 +11,19 @@ public class ResponseSuccess {
         private String message;
 
 
+    @SerializedName("presb_patient_id")
+    private String prescriptionId;
 
-//	@SerializedName("subscription_history")
+    public String getPrescriptionId() {
+        return prescriptionId;
+    }
+
+    public void setPrescriptionId(String prescriptionId) {
+        this.prescriptionId = prescriptionId;
+    }
+
+
+    //	@SerializedName("subscription_history")
 //	private ArrayList<SubscriptionHistoryItem> subscriptionHistory;
 
         public void setSuccess(String success){
@@ -33,13 +44,13 @@ public class ResponseSuccess {
         }
 
 
-        @Override
-        public String toString(){
-            return
-                    "ResponseSuccess{" +
-                            "success = '" + success + '\'' +
-                            ",message = '" + message + '\'' +
-                            "}";
-        }
+    @Override
+    public String toString() {
+        return "ResponseSuccess{" +
+                "success='" + success + '\'' +
+                ", message='" + message + '\'' +
+                ", prescriptionId='" + prescriptionId + '\'' +
+                '}';
+    }
 }
 

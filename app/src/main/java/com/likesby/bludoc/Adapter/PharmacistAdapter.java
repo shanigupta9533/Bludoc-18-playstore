@@ -7,12 +7,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.likesby.bludoc.AddAPharmacistActivity;
@@ -20,7 +22,6 @@ import com.likesby.bludoc.R;
 import com.likesby.bludoc.viewModels.AllPharmacistList;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static android.content.ContentValues.TAG;
 
@@ -30,6 +31,7 @@ public class PharmacistAdapter  extends RecyclerView.Adapter<PharmacistAdapter.v
     private final ArrayList<AllPharmacistList> pharmacistList;
     private ArrayList<AllPharmacistList> listFilter;
     private OnClickListener onClickListener;
+    private ArrayList<String> switch_ids=new ArrayList<>();
 
     public PharmacistAdapter(ArrayList<AllPharmacistList> pharmacistList, Context context) {
         this.pharmacistList = pharmacistList;
@@ -43,6 +45,12 @@ public class PharmacistAdapter  extends RecyclerView.Adapter<PharmacistAdapter.v
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.pharmacist_adapter_layout, parent, false);
         return new viewHolder(view);
+    }
+
+    public String getAllIds() {
+
+       return TextUtils.join(",",switch_ids);
+
     }
 
     public interface OnClickListener{
@@ -65,6 +73,18 @@ public class PharmacistAdapter  extends RecyclerView.Adapter<PharmacistAdapter.v
         viewHolder.email_id.setText(s.getPharmacist_email());
         viewHolder.mobile_number.setText(s.getPharmacist_mobile());
         viewHolder.tv_pharmacist_name.setText(s.getPharmacist_name());
+
+        viewHolder.switch_ids.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if(isChecked)
+                    switch_ids.add(s.getPharmacist_id());
+                else
+                    switch_ids.remove(s.getPharmacist_id());
+
+            }
+        });
 
         if(TextUtils.isEmpty(s.getPharmacist_email()))
             viewHolder.email_id.setText("____");
@@ -141,6 +161,7 @@ public class PharmacistAdapter  extends RecyclerView.Adapter<PharmacistAdapter.v
 
         private TextView tv_pharmacist_name,email_id,mobile_number;
         private ImageView patient_edit,patient_delete;
+        private CheckBox switch_ids;
 
         public viewHolder(View view) {
             super(view);
@@ -150,6 +171,7 @@ public class PharmacistAdapter  extends RecyclerView.Adapter<PharmacistAdapter.v
             mobile_number = itemView.findViewById(R.id.mobile_number);
             patient_edit = itemView.findViewById(R.id.patient_edit);
             patient_delete = itemView.findViewById(R.id.patient_delete);
+            switch_ids=itemView.findViewById(R.id.switch_ids);
 
         }
     }

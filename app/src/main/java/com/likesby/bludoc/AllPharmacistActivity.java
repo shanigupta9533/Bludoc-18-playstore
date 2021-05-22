@@ -34,8 +34,6 @@ import com.yalantis.phoenix.PullToRefreshView;
 
 import java.util.ArrayList;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
@@ -62,6 +60,16 @@ public class AllPharmacistActivity extends AppCompatActivity {
         message = findViewById(R.id.message);
 
         pullToRefresh = findViewById(R.id.pullToRefresh);
+
+        findViewById(R.id.send_ids).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String allIds = pharmacistAdapter.getAllIds();
+
+            }
+        });
+
 
         findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,6 +103,20 @@ public class AllPharmacistActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 startActivity(new Intent(AllPharmacistActivity.this, AddAPharmacistActivity.class));
+
+            }
+        });
+
+        findViewById(R.id.send_ids).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String allIds = pharmacistAdapter.getAllIds();
+
+                if (!TextUtils.isEmpty(allIds))
+                    sendIdsOnServer(allIds);
+                else
+                    Toast.makeText(AllPharmacistActivity.this, "Checked min. 1 pharmacist", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -136,7 +158,7 @@ public class AllPharmacistActivity extends AppCompatActivity {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                    pharmacistAdapter.getFilter().filter(s);
+                pharmacistAdapter.getFilter().filter(s);
 
             }
 
@@ -153,15 +175,59 @@ public class AllPharmacistActivity extends AppCompatActivity {
 
     }
 
+    private void sendIdsOnServer(String allIds) {
+
+        if (Utils.isConnectingToInternet(this)) {
+
+            progressBar.setVisibility(View.VISIBLE);
+            Retrofit retrofit = RetrofitClient.getInstance();
+
+            final WebServices request = retrofit.create(WebServices.class);
+
+
+            Call<ResultOfApi> call = request.sendPharmacistById(allIds);
+
+            call.enqueue(new Callback<ResultOfApi>() {
+                @Override
+                public void onResponse(@NonNull Call<ResultOfApi> call, @NonNull retrofit2.Response<ResultOfApi> response) {
+                    ResultOfApi jsonResponse = response.body();
+                    assert jsonResponse != null;
+                    progressBar.setVisibility(View.GONE);
+
+                    if(jsonResponse.getSuccess().equals("success")){
+
+                        Toast.makeText(AllPharmacistActivity.this, "Upload Ids Successfully", Toast.LENGTH_SHORT).show();
+
+                    } else {
+
+                        Toast.makeText(AllPharmacistActivity.this, "Something Went Wrong!", Toast.LENGTH_SHORT).show();
+
+                    }
+
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<ResultOfApi> call, @NonNull Throwable t) {
+                    progressBar.setVisibility(View.GONE);
+                    Log.e("Error  ***", t.getMessage());
+                    Toast.makeText(AllPharmacistActivity.this, "Profile Update Error", Toast.LENGTH_SHORT).show();
+
+                }
+            });
+        } else {
+            Toast.makeText(this, "No Internet Connection", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
     public void AllGetPharmacist() {
 
         if (Utils.isConnectingToInternet(this)) {
 
             progressBar.setVisibility(View.VISIBLE);
             Retrofit retrofit = RetrofitClient.getInstance();
-            ;
+
             final WebServices request = retrofit.create(WebServices.class);
-            ;
 
             Call<AllPharmacistModels> call = request.allPharmacist(manager.getPreferences(AllPharmacistActivity.this, "doctor_id"));
 
@@ -207,9 +273,9 @@ public class AllPharmacistActivity extends AppCompatActivity {
 
             progressBar.setVisibility(View.VISIBLE);
             Retrofit retrofit = RetrofitClient.getInstance();
-            ;
+
             final WebServices request = retrofit.create(WebServices.class);
-            ;
+
 
             Call<ResultOfApi> call = request.deletePharmacist(pharmacist_id);
 
@@ -251,10 +317,10 @@ public class AllPharmacistActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        if(manager.getPreferences(AllPharmacistActivity.this,"uploadPharmacist").equals("true")){
+        if (manager.getPreferences(AllPharmacistActivity.this, "uploadPharmacist").equals("true")) {
 
             AllGetPharmacist();
-            manager.setPreferences(AllPharmacistActivity.this,"uploadPharmacist","false");
+            manager.setPreferences(AllPharmacistActivity.this, "uploadPharmacist", "false");
 
         }
 

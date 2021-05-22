@@ -2,6 +2,7 @@ package com.likesby.bludoc.Fragment;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -34,6 +35,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,6 +66,8 @@ import com.likesby.bludoc.ModelLayer.Entities.BottomSheetItem;
 import com.likesby.bludoc.ModelLayer.Entities.MedicinesItem;
 import com.likesby.bludoc.ModelLayer.Entities.PrescriptionJSON;
 import com.likesby.bludoc.ModelLayer.Entities.ResponseSuccess;
+import com.likesby.bludoc.ModelLayer.NetworkLayer.EndpointInterfaces.WebServices;
+import com.likesby.bludoc.ModelLayer.NetworkLayer.Helpers.RetrofitClient;
 import com.likesby.bludoc.ModelLayer.NewEntities.LabTestItem;
 import com.likesby.bludoc.ModelLayer.NewEntities3.Doctor;
 import com.likesby.bludoc.ModelLayer.NewEntities3.PrescriptionItem;
@@ -74,7 +78,9 @@ import com.likesby.bludoc.databinding.GeneratePrescriptionNewBinding;
 import com.likesby.bludoc.utils.DateUtils;
 import com.likesby.bludoc.utils.FileUtils;
 import com.likesby.bludoc.utils.ScreenSize;
+import com.likesby.bludoc.utils.Utils;
 import com.likesby.bludoc.viewModels.ApiViewHolder;
+import com.likesby.bludoc.viewModels.ResultOfApi;
 import com.squareup.picasso.Picasso;
 import com.viewpagerindicator.CirclePageIndicator;
 
@@ -99,6 +105,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Retrofit;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.likesby.bludoc.Fragment.CreatePrescription.certificate_selection;
@@ -159,6 +168,7 @@ public class GeneratePresNew extends Fragment {
     private BottomSheetAdapter mAdapter;
     private ArrayList<AbstractViewRenderer> pages=new ArrayList();
     ConstraintLayout fl_main;
+    private String prescriptionId;
 
 
     @Override
@@ -324,6 +334,49 @@ public class GeneratePresNew extends Fragment {
         dialog_data.show();
     }
 
+    public void sendIdAndPresIdOnServer() {
+
+        if (Utils.isConnectingToInternet(mContext)) {
+
+            ProgressDialog progressDialog=new ProgressDialog(mContext);
+            progressDialog.setMessage("Sending Pharmacist...");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+            Retrofit retrofit = RetrofitClient.getInstance();
+
+            final WebServices request = retrofit.create(WebServices.class);
+
+            Call<ResultOfApi> call = request.sendPresciption("19,20,21",prescriptionId);
+
+            call.enqueue(new Callback<ResultOfApi>() {
+                @Override
+                public void onResponse(@NonNull Call<ResultOfApi> call, @NonNull retrofit2.Response<ResultOfApi> response) {
+                    ResultOfApi jsonResponse = response.body();
+                    progressDialog.dismiss();
+                    if (jsonResponse!=null && jsonResponse.getSuccess().equalsIgnoreCase("Success")) {
+
+                        Toast.makeText(mContext, "Send Pharmacist Successfully", Toast.LENGTH_SHORT).show();
+
+                    } else {
+                        Toast.makeText(mContext, "Profile Update Error", Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<ResultOfApi> call, @NonNull Throwable t) {
+                    progressDialog.dismiss();
+                    Log.e("Error  ***", t.getMessage());
+                    Toast.makeText(mContext, "Profile Update Error", Toast.LENGTH_SHORT).show();
+
+                }
+            });
+        } else {
+            Toast.makeText(mContext, "No Internet Connection", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
     private void popupBottomMenu() {
         dialog_dataShareMenu = new Dialog(mContext);
         dialog_dataShareMenu.setCancelable(false);
@@ -338,9 +391,21 @@ public class GeneratePresNew extends Fragment {
         window.setAttributes(lp_number_picker);
 
         Button  btn_mobile = dialog_dataShareMenu.findViewById(R.id.btn_mobile);
+        TextView __bottom_sheet_name=dialog_dataShareMenu.findViewById(R.id.__bottom_sheet_name);
         btn_mobile.setBackground(mContext.getResources().getDrawable(R.drawable.green_faint_round_btn_gradient2));
+        __bottom_sheet_name.setTextColor(mContext.getResources().getColor(R.color.guidee));
+        __bottom_sheet_name.setBackground(mContext.getResources().getDrawable(R.drawable.faint_white_round_border_green));
         btn_mobile.setTextColor(mContext.getResources().getColor(R.color.colorDarkBlue));
         btn_mobile.setText("A4 Size View");
+
+        __bottom_sheet_name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                sendIdAndPresIdOnServer();
+
+            }
+        });
 
          RecyclerView recyclerView = dialog_dataShareMenu.findViewById(R.id.recyclerView_bottom_sheet);
         //Create new GridLayoutManager
@@ -2332,6 +2397,9 @@ public class GeneratePresNew extends Fragment {
                         dialog_data.dismiss();
 
                 } else if (response.getMessage().equals("Prescription Added")) {
+
+                    prescriptionId = response.getPrescriptionId();
+
                     // Toast.makeText(mContext, "Prescription Added", Toast.LENGTH_SHORT).show();
                     count = true;
                     generatePDF.setText("Share");

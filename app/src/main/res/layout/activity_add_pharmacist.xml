@@ -9,7 +9,6 @@
     android:layout_height="match_parent"
     tools:context=".AllPharmacistActivity">
 
-
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:background="@android:color/white"
@@ -81,11 +80,27 @@
         android:background="@drawable/spinner_background_white"
         android:textStyle="bold" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_20"
+        android:layout_marginEnd="@dimen/margin_20"
+        android:layout_below="@+id/add_pharmacist_serachView"
+        android:fontFamily="@font/poppins"
+        android:gravity="center"
+        android:id="@+id/text_notice"
+        android:text="Prescription will be send to selected pharmacist"
+        android:layout_centerHorizontal="true"
+        android:alpha="0.7"
+        android:textColor="@color/colorBlack"
+        android:textSize="14dp" />
+
     <com.yalantis.phoenix.PullToRefreshView
         android:id="@+id/pullToRefresh"
         android:layout_width="match_parent"
-        android:layout_below="@+id/add_pharmacist_serachView"
-        android:layout_above="@+id/add_a_parmacist"
+        android:layout_marginBottom="50dp"
+        android:layout_below="@+id/text_notice"
+        android:layout_marginTop="@dimen/margin_5"
         android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -96,29 +111,54 @@
 
     </com.yalantis.phoenix.PullToRefreshView>
 
-    <Button
-        android:visibility="visible"
-        android:id="@+id/add_a_parmacist"
-        android:textSize="14sp"
-        android:layout_margin="@dimen/margin_10"
-        android:layout_gravity="center|bottom"
-        android:gravity="center"
-        android:fontFamily="@font/poppins"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:layout_width="220dp"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
         android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/font_10"
         android:layout_centerInParent="true"
-        android:layout_height="@dimen/margin_40"
-        android:text="@string/add_a_pharmacist"
-        android:background="@drawable/blue_round_btn_gradient"
-        />
+        android:layout_height="wrap_content">
+
+        <Button
+            android:visibility="visible"
+            android:id="@+id/add_a_parmacist"
+            android:textSize="13sp"
+            android:layout_gravity="center|bottom"
+            android:gravity="center"
+            android:fontFamily="@font/poppins"
+            android:layout_marginStart="@dimen/font_16"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:layout_width="180dp"
+            android:layout_height="@dimen/margin_40"
+            android:text="@string/add_a_pharmacist"
+            android:background="@drawable/blue_round_btn_gradient"
+            />
+
+        <Button
+            android:visibility="visible"
+            android:textSize="13sp"
+            android:layout_gravity="center|bottom"
+            android:gravity="center"
+            android:id="@+id/send_ids"
+            android:fontFamily="@font/poppins"
+            android:layout_marginStart="@dimen/font_12"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:layout_width="140dp"
+            android:layout_height="@dimen/margin_40"
+            android:text="Add to Send List"
+            android:background="@drawable/blue_round_btn_gradient_red"
+            />
+
+    </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:id="@+id/message"
+        android:visibility="gone"
         android:fontFamily="@font/poppins"
         android:text="@string/refresh_to_load"
         android:textColor="@color/colorBlack"

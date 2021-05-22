@@ -61,7 +61,7 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
 
     private ArrayList<BottomSheetItem> mArryCountries,mFilteredList;
     private Context mContext;
-    int[] image_array = new int[] { R.drawable.mail, R.drawable.ic_download_ ,R.drawable.ic_share__ ,R.drawable.whatsapp  };
+    int[] image_array = new int[] { R.drawable.mail, R.drawable.ic_download_ ,R.drawable.ic_share__ ,R.drawable.whatsapp,R.drawable.ic_pharmacist_doctor  };
     SessionManager manager;
     FrameLayout fl_progress_bar;
     private ArrayList<AbstractViewRenderer> pages;

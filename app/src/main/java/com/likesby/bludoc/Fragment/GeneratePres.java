@@ -2,6 +2,7 @@ package com.likesby.bludoc.Fragment;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -84,6 +85,8 @@ import com.likesby.bludoc.ModelLayer.Entities.BottomSheetItem;
 import com.likesby.bludoc.ModelLayer.Entities.MedicinesItem;
 import com.likesby.bludoc.ModelLayer.Entities.PrescriptionJSON;
 import com.likesby.bludoc.ModelLayer.Entities.ResponseSuccess;
+import com.likesby.bludoc.ModelLayer.NetworkLayer.EndpointInterfaces.WebServices;
+import com.likesby.bludoc.ModelLayer.NetworkLayer.Helpers.RetrofitClient;
 import com.likesby.bludoc.ModelLayer.NewEntities.LabTestItem;
 import com.likesby.bludoc.ModelLayer.NewEntities3.Doctor;
 import com.likesby.bludoc.ModelLayer.NewEntities3.PrescriptionItem;
@@ -95,7 +98,9 @@ import com.likesby.bludoc.constants.ApplicationConstant;
 import com.likesby.bludoc.databinding.GeneratePrescriptionBinding;
 import com.likesby.bludoc.utils.DateUtils;
 import com.likesby.bludoc.utils.ScreenSize;
+import com.likesby.bludoc.utils.Utils;
 import com.likesby.bludoc.viewModels.ApiViewHolder;
+import com.likesby.bludoc.viewModels.ResultOfApi;
 import com.mannan.translateapi.Language;
 import com.mannan.translateapi.TranslateAPI;
 import com.squareup.picasso.Picasso;
@@ -119,6 +124,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Retrofit;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 import static com.facebook.FacebookSdk.getApplicationContext;
@@ -187,6 +195,7 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
     private boolean isFooterVisible = true;
     private FragmentActivity fragmentActivity;
     private boolean isClinicVisible=true;
+    private String prescriptionId;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -395,6 +404,47 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
         return app_installed;
     }
 
+    public void sendIdAndPresIdOnServer() {
+
+        if (Utils.isConnectingToInternet(mContext)) {
+
+            ProgressDialog progressDialog=new ProgressDialog(mContext);
+            progressDialog.setMessage("Sending Pharmacist...");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+            Retrofit retrofit = RetrofitClient.getInstance();
+
+            final WebServices request = retrofit.create(WebServices.class);
+
+            Call<ResultOfApi> call = request.sendPresciption("19,20,21",prescriptionId);
+
+            call.enqueue(new Callback<ResultOfApi>() {
+                @Override
+                public void onResponse(@NonNull Call<ResultOfApi> call, @NonNull retrofit2.Response<ResultOfApi> response) {
+                    ResultOfApi jsonResponse = response.body();
+                    progressDialog.dismiss();
+                    if (jsonResponse!=null && jsonResponse.getSuccess().equalsIgnoreCase("Success")) {
+
+                        Toast.makeText(mContext, "Send Pharmacist Successfully", Toast.LENGTH_SHORT).show();
+
+                    } else {
+                        Toast.makeText(mContext, "Profile Update Error", Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<ResultOfApi> call, @NonNull Throwable t) {
+                    progressDialog.dismiss();
+                    Log.e("Error  ***", t.getMessage());
+                    Toast.makeText(mContext, "Profile Update Error", Toast.LENGTH_SHORT).show();
+
+                }
+            });
+        } else {
+            Toast.makeText(mContext, "No Internet Connection", Toast.LENGTH_SHORT).show();
+        }
+    }
 
 
     private void popupBottomMenu() {
@@ -409,6 +459,17 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
         lp_number_picker.width = WindowManager.LayoutParams.MATCH_PARENT;
         lp_number_picker.height = WindowManager.LayoutParams.MATCH_PARENT;
         window.setAttributes(lp_number_picker);
+
+        TextView __bottom_sheet_name=dialog_dataShareMenu.findViewById(R.id.__bottom_sheet_name);
+
+        __bottom_sheet_name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                sendIdAndPresIdOnServer();
+
+            }
+        });
 
         RecyclerView recyclerView = dialog_dataShareMenu.findViewById(R.id.recyclerView_bottom_sheet);
         //Create new GridLayoutManager
@@ -1965,6 +2026,9 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
                         dialog_data.dismiss();
 
                 } else if (response.getMessage().equals("Prescription Added")) {
+
+                    prescriptionId = response.getPrescriptionId();
+
                     // Toast.makeText(mContext, "Prescription Added", Toast.LENGTH_SHORT).show();
                     count = true;
                     boolean checker = false;

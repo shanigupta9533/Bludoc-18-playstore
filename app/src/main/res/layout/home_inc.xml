@@ -212,10 +212,6 @@
                             style="@style/viewParent.headerText"
                             android:textSize="12sp"/>
 
-
-
-
-
                     </LinearLayout>
 
 
