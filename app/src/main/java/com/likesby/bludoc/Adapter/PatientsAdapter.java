@@ -6,8 +6,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
-import android.os.CountDownTimer;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
@@ -26,12 +26,10 @@ import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
-import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,27 +37,27 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdLoader;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.LoadAdError;
-import com.google.android.gms.ads.VideoController;
-import com.google.android.gms.ads.formats.MediaView;
-import com.google.android.gms.ads.formats.NativeAdOptions;
 import com.google.android.gms.ads.formats.UnifiedNativeAd;
 import com.google.android.gms.ads.formats.UnifiedNativeAdView;
+import com.likesby.bludoc.AllPharmacistActivity;
 import com.likesby.bludoc.Fragment.CreatePrescription;
 import com.likesby.bludoc.ModelLayer.Entities.PatientsItem;
 import com.likesby.bludoc.ModelLayer.Entities.ResponsePatients;
 import com.likesby.bludoc.ModelLayer.Entities.ResponseSuccess;
+import com.likesby.bludoc.ModelLayer.NetworkLayer.EndpointInterfaces.WebServices;
+import com.likesby.bludoc.ModelLayer.NetworkLayer.Helpers.RetrofitClient;
 import com.likesby.bludoc.R;
 import com.likesby.bludoc.SessionManager.SessionManager;
 import com.likesby.bludoc.SplashActivity;
 import com.likesby.bludoc.constants.ApplicationConstant;
 import com.likesby.bludoc.utils.DateUtils;
+import com.likesby.bludoc.utils.Utils;
+import com.likesby.bludoc.viewModels.AllPharmacistList;
+import com.likesby.bludoc.viewModels.AllPharmacistModels;
 import com.likesby.bludoc.viewModels.ApiViewHolder;
 
 import java.text.SimpleDateFormat;
@@ -73,12 +71,17 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Retrofit;
 
+import static android.content.ContentValues.TAG;
 import static com.likesby.bludoc.Fragment.CreatePrescription.certificate_selection;
 import static com.likesby.bludoc.Fragment.CreatePrescription.patient_id;
 import static com.likesby.bludoc.Fragment.CreatePrescription.pos;
 
 public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHolder> implements Filterable {
+    private final FragmentActivity fragmentActivity;
     private ArrayList<PatientsItem> mArrayList = new ArrayList<>();
     private ArrayList<PatientsItem> mFilteredList = new ArrayList<>();
     private Context mContext;
@@ -91,7 +94,7 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
     ApiViewHolder apiViewHolder;
     CompositeDisposable mBag;
     String gender_ = "";
-    SessionManager manager;
+    SessionManager manager=new SessionManager();
     FrameLayout fl_progress_bar;
     LinearLayout ll_medicinal_lab, ll_medicine_product, ll_end_note, ll_certificate;
     LinearLayout ll_main_medicine_details, ll_main_lab_test_details, ll_main_end_note_details, ll_main_certificate_details;
@@ -100,9 +103,14 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
     Boolean showNativeAdFlag;
     private boolean isConstant;
     TextView header;
+    private boolean isOnPrescribe;
+    private Dialog dialog_data;
+    private RelativeLayout progress_bar;
+    private boolean isOnCertificate;
+    private onClickListener onClickLsitener;
 
     public PatientsAdapter(ArrayList<PatientsItem> arrayList, LinearLayout ll_patients_view, LinearLayout ll_prescription_view, RelativeLayout top_view,
-                           Button btn_create_patient, TextView patientdetails, ApiViewHolder apiViewHolder, CompositeDisposable mBag, FrameLayout fl_progress_bar, LinearLayout ll_medicinal_lab, LinearLayout ll_medicine_product, LinearLayout ll_end_note, LinearLayout ll_certificate, LinearLayout ll_main_medicine_details, LinearLayout ll_main_lab_test_details, LinearLayout ll_main_end_note_details, LinearLayout ll_main_certificate_details, CreatePrescription createPrescription, boolean showNativeAdFlag, TextView header) {
+                           Button btn_create_patient, TextView patientdetails, ApiViewHolder apiViewHolder, CompositeDisposable mBag, FrameLayout fl_progress_bar, LinearLayout ll_medicinal_lab, LinearLayout ll_medicine_product, LinearLayout ll_end_note, LinearLayout ll_certificate, LinearLayout ll_main_medicine_details, LinearLayout ll_main_lab_test_details, LinearLayout ll_main_end_note_details, LinearLayout ll_main_certificate_details, CreatePrescription createPrescription, boolean showNativeAdFlag, TextView header, Context context) {
         mArrayList = arrayList;
         mFilteredList = arrayList;
         this.header = header;
@@ -125,9 +133,23 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
         this.ll_main_end_note_details = ll_main_end_note_details;
         this.ll_main_certificate_details = ll_main_certificate_details;
 
-
+        fragmentActivity= (FragmentActivity) context;
         this.fl_progress_bar = fl_progress_bar;
-        manager = new SessionManager();
+    }
+
+    public interface onClickListener{
+
+        void onClick();
+        void onDestroy();
+        void onLoadCertificated();
+        void onLoadPrescribe();
+
+    }
+
+    public void setOnClickLsitener(onClickListener onClickLsitener){
+
+        this.onClickLsitener=onClickLsitener;
+
     }
 
     @NonNull
@@ -141,6 +163,8 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int i) {
+
+        PatientsItem patientsItem = mFilteredList.get(i);
 
         viewHolder.PATIENT_NAME.setText(mFilteredList.get(i).getPName());
         viewHolder.PATIENT_ID.setText(mFilteredList.get(i).getPatientId());
@@ -173,9 +197,85 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
             viewHolder.blood_group.setText(mFilteredList.get(i).getpBloodGrp());
         }
 
+        viewHolder.prescribe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                manager.setPreferences(mContext,"isOnPrescribe","true");
+
+                patient_id = viewHolder.PATIENT_ID.getText().toString().trim();
+                pos=findBypatientId(patientsItem.getPatientId());
+                btn_create_patient.setVisibility(View.GONE);
+                ll_patients_view.setVisibility(View.GONE);
+                ll_prescription_view.setVisibility(View.VISIBLE);
+                top_view.setVisibility(View.VISIBLE);
+                ll_certificate.setVisibility(View.GONE);
+                ll_main_certificate_details.setVisibility(View.GONE);
+                ll_medicinal_lab.setVisibility(View.VISIBLE);
+                ll_main_lab_test_details.setVisibility(View.GONE);
+                ll_medicine_product.setVisibility(View.VISIBLE);
+                ll_main_medicine_details.setVisibility(View.GONE);
+                ll_end_note.setVisibility(View.VISIBLE);
+                ll_main_end_note_details.setVisibility(View.VISIBLE);
+                certificate_selection = false;
+                patientdetails.setText(patientsItem.getPName() + " - " + patientsItem.getGender() + " / " + patientsItem.getAge());
+
+                if(onClickLsitener!=null)
+                    onClickLsitener.onLoadPrescribe();
+
+            }
+        });
+
+        viewHolder.certificate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                isOnCertificate=true;
+                manager.setPreferences(mContext,"isOnCertificate","true");
+                patient_id = viewHolder.PATIENT_ID.getText().toString().trim();
+                pos=findBypatientId(patientsItem.getPatientId());
+                btn_create_patient.setVisibility(View.GONE);
+                ll_patients_view.setVisibility(View.GONE);
+                ll_prescription_view.setVisibility(View.VISIBLE);
+                top_view.setVisibility(View.VISIBLE);
+                ll_certificate.setVisibility(View.VISIBLE);
+                ll_main_certificate_details.setVisibility(View.VISIBLE);
+                ll_medicinal_lab.setVisibility(View.GONE);
+                ll_main_lab_test_details.setVisibility(View.GONE);
+                ll_medicine_product.setVisibility(View.GONE);
+                ll_main_medicine_details.setVisibility(View.GONE);
+                ll_end_note.setVisibility(View.GONE);
+                ll_main_end_note_details.setVisibility(View.GONE);
+                certificate_selection = true;
+                patientdetails.setText(patientsItem.getPName() + " - " + patientsItem.getGender() + " / " + patientsItem.getAge());
+
+                if(onClickLsitener!=null)
+                    onClickLsitener.onLoadCertificated();
+
+
+            }
+        });
+
         // viewHolder.PATIENT_CREATED.setText(formattedDate);
         viewHolder.PATIENT_CREATED.setText(DateUtils.outFormatsetMMM(mFilteredList.get(i).getCreated().trim()));
         viewHolder.PATIENT_MODIFIED.setText(mFilteredList.get(i).getModified());
+    }
+
+    private int findBypatientId(String patientId) {
+
+        for (int i = 0; i < mArrayList.size(); i++) {
+
+            if(patientId.equalsIgnoreCase(mArrayList.get(i).getPatientId())){
+
+                return i;
+
+            }
+
+        }
+
+
+        return 0;
+
     }
 
     @Override
@@ -189,7 +289,6 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
         return mFilteredList.size();
     }
 
-
     @Override
     public Filter getFilter() {
         return new Filter() {
@@ -197,17 +296,14 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
             protected FilterResults performFiltering(CharSequence charSequence) {
 
                 String charString = charSequence.toString();
-
                 if (charString.isEmpty()) {
                     mFilteredList = mArrayList;
                 } else {
-
                     ArrayList<PatientsItem> filteredList = new ArrayList<>();
-
-                    for (PatientsItem categories : mArrayList) {
-
-                        if (categories.getPName().toLowerCase().contains(charString.toLowerCase())) {
-                            filteredList.add(categories);
+                    for (PatientsItem row : mArrayList) {
+                        if (row.getPName().toLowerCase().contains(charString.toLowerCase())) {
+                            Log.d(TAG, "performFiltering: " + charString + " == " + row);
+                            filteredList.add(row);
                         }
                     }
 
@@ -221,15 +317,76 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                mFilteredList = (ArrayList<PatientsItem>) filterResults.values;
+
+                mFilteredList= (ArrayList<PatientsItem>) filterResults.values;
                 notifyDataSetChanged();
+
             }
         };
     }
 
+    public void onBackPressedHappen() {
+
+        if(manager.getPreferences(fragmentActivity,"isOnPrescribe").equalsIgnoreCase("true")){
+
+            btn_create_patient.setVisibility(View.VISIBLE);
+            ll_patients_view.setVisibility(View.VISIBLE);
+            ll_prescription_view.setVisibility(View.GONE);
+            top_view.setVisibility(View.GONE);
+            ll_certificate.setVisibility(View.VISIBLE);
+            ll_main_certificate_details.setVisibility(View.VISIBLE);
+            ll_medicinal_lab.setVisibility(View.GONE);
+            ll_main_lab_test_details.setVisibility(View.VISIBLE);
+            ll_medicine_product.setVisibility(View.GONE);
+            ll_main_medicine_details.setVisibility(View.VISIBLE);
+            ll_end_note.setVisibility(View.GONE);
+            ll_main_end_note_details.setVisibility(View.VISIBLE);
+
+            manager.setPreferences(fragmentActivity,"isOnPrescribe","false");
+
+            if(onClickLsitener!=null){
+                onClickLsitener.onClick();
+            }
+
+
+
+        } else if(manager.getPreferences(fragmentActivity,"isOnCertificate").equalsIgnoreCase("true")){
+
+            btn_create_patient.setVisibility(View.VISIBLE);
+            ll_patients_view.setVisibility(View.VISIBLE);
+            ll_prescription_view.setVisibility(View.GONE);
+            top_view.setVisibility(View.GONE);
+            ll_certificate.setVisibility(View.VISIBLE);
+            ll_main_certificate_details.setVisibility(View.VISIBLE);
+            ll_medicinal_lab.setVisibility(View.GONE);
+            ll_main_lab_test_details.setVisibility(View.VISIBLE);
+            ll_medicine_product.setVisibility(View.GONE);
+            ll_main_medicine_details.setVisibility(View.VISIBLE);
+            ll_end_note.setVisibility(View.GONE);
+            ll_main_end_note_details.setVisibility(View.VISIBLE);
+
+            manager.setPreferences(fragmentActivity,"isOnCertificate","false");
+
+            if(onClickLsitener!=null){
+                onClickLsitener.onClick();
+            }
+
+        } else  {
+
+            try {
+
+                onClickLsitener.onDestroy();
+
+            } catch (IllegalStateException e){
+                Log.i("TAG", "onBackPressedHappen: "+e.getMessage());
+            }
+        }
+
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView PATIENT_NAME, PATIENT_ID, PATIENT_MOB, date_of_birth,
-                PATIENT_EMAIL, PATIENT_CREATED, PATIENT_AGE, PATIENT_MODIFIED, blood_group;
+                PATIENT_EMAIL, PATIENT_CREATED, PATIENT_AGE, PATIENT_MODIFIED, blood_group,prescribe,certificate;
         // FrameLayout fl;
         ProgressBar pb;
         ImageView patient_prescribe;
@@ -238,6 +395,7 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
 
         public ViewHolder(View view) {
             super(view);
+
             mContext = view.getContext();
 
             PATIENT_NAME = view.findViewById(R.id.tv_patient_name);
@@ -253,6 +411,8 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
             patient_delete = view.findViewById(R.id.patient_delete);
             blood_group = view.findViewById(R.id.blood_group);
             patient_prescribe = view.findViewById(R.id.patient_prescribe);
+            prescribe = view.findViewById(R.id.prescribe);
+            certificate = view.findViewById(R.id.certificate);
 
 
             patient_prescribe.setOnClickListener(new View.OnClickListener() {
@@ -269,139 +429,12 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
                 }
             });
 
+
+
             ll_main_patient_view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final Dialog dialog_data = new Dialog(mContext);
-                    dialog_data.setCancelable(false);
 
-                    dialog_data.requestWindowFeature(Window.FEATURE_NO_TITLE);
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                        Objects.requireNonNull(dialog_data.getWindow()).setGravity(Gravity.CENTER);
-                    }
-
-                    dialog_data.setContentView(R.layout.popup_diagnosis);
-
-                    WindowManager.LayoutParams lp_number_picker = new WindowManager.LayoutParams();
-                    Window window = dialog_data.getWindow();
-                    lp_number_picker.copyFrom(window.getAttributes());
-
-                    lp_number_picker.width = WindowManager.LayoutParams.MATCH_PARENT;
-                    lp_number_picker.height = WindowManager.LayoutParams.WRAP_CONTENT;
-
-                    //window.setGravity(Gravity.CENTER);
-                    window.setAttributes(lp_number_picker);
-
-                    ProgressBar pb = dialog_data.findViewById(R.id.pb);
-
-
-                    final RadioButton rb_prescription = dialog_data.findViewById(R.id.rb_prescription);
-                    final RadioButton rb_certificate = dialog_data.findViewById(R.id.rb_certificate);
-
-                    rb_prescription.setChecked(true);
-                    rb_prescription.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                            if (isChecked)
-                                rb_certificate.setChecked(false);
-                        }
-                    });
-
-                    rb_certificate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                            if (isChecked)
-                                rb_prescription.setChecked(false);
-                        }
-                    });
-                    FrameLayout fl_layout = dialog_data.findViewById(R.id.fl_layout);
-                    final Button btnProceed = dialog_data.findViewById(R.id.btn_proceed);
-                    final Button btnCancel = dialog_data.findViewById(R.id.btn_cancel);
-                   /* if (showNativeAdFlag) {
-                        NativeAd(dialog_data, pb, btnProceed, btnCancel);
-
-                    } else {
-                        btnProceed.setVisibility(View.VISIBLE);
-                        btnCancel.setVisibility(View.VISIBLE);
-                        fl_layout.setVisibility(View.GONE);
-                    }
-                    CountDownTimer countDownTimer = new CountDownTimer(2000, 2000) {
-                        @Override
-                        public void onTick(long millisUntilFinished) {
-
-                        }
-
-                        @Override
-                        public void onFinish() {
-                            btnCancel.setVisibility(View.VISIBLE);
-                            btnProceed.setVisibility(View.VISIBLE);
-                        }
-                    };
-                    countDownTimer.start();*/
-
-                    btnProceed.setVisibility(View.VISIBLE);
-                    btnCancel.setVisibility(View.VISIBLE);
-                    fl_layout.setVisibility(View.GONE);
-                    btnProceed.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            header.setText("Create Prescription");
-                            if (rb_prescription.isChecked()) {
-                                patient_id = PATIENT_ID.getText().toString().trim();
-                                pos = getAdapterPosition();
-                                btn_create_patient.setVisibility(View.GONE);
-
-                                ll_patients_view.setVisibility(View.GONE);
-                                ll_prescription_view.setVisibility(View.VISIBLE);
-                                top_view.setVisibility(View.VISIBLE);
-                                ll_certificate.setVisibility(View.GONE);
-                                ll_main_certificate_details.setVisibility(View.GONE);
-
-                                ll_medicinal_lab.setVisibility(View.VISIBLE);
-                                ll_main_lab_test_details.setVisibility(View.GONE);
-
-                                ll_medicine_product.setVisibility(View.VISIBLE);
-                                ll_main_medicine_details.setVisibility(View.GONE);
-
-                                ll_end_note.setVisibility(View.VISIBLE);
-                                ll_main_end_note_details.setVisibility(View.VISIBLE);
-
-                                certificate_selection = false;
-                                patientdetails.setText(mFilteredList.get(pos).getPName() + " - " + mFilteredList.get(pos).getGender() + " / " + mFilteredList.get(pos).getAge());
-                            } else {
-                                patient_id = PATIENT_ID.getText().toString().trim();
-                                pos = getAdapterPosition();
-                                btn_create_patient.setVisibility(View.GONE);
-                                ll_patients_view.setVisibility(View.GONE);
-                                ll_prescription_view.setVisibility(View.VISIBLE);
-                                top_view.setVisibility(View.VISIBLE);
-                                ll_certificate.setVisibility(View.VISIBLE);
-                                ll_main_certificate_details.setVisibility(View.VISIBLE);
-                                ll_medicinal_lab.setVisibility(View.GONE);
-                                ll_main_lab_test_details.setVisibility(View.GONE);
-                                ll_medicine_product.setVisibility(View.GONE);
-                                ll_main_medicine_details.setVisibility(View.GONE);
-                                ll_end_note.setVisibility(View.GONE);
-                                ll_main_end_note_details.setVisibility(View.GONE);
-                                certificate_selection = true;
-                                patientdetails.setText(mFilteredList.get(pos).getPName() + " - " + mFilteredList.get(pos).getGender() + " / " + mFilteredList.get(pos).getAge());
-                            }
-
-
-                            dialog_data.dismiss();
-
-                        }
-                    });
-
-                    btnCancel.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            dialog_data.dismiss();
-                        }
-                    });
-
-                    dialog_data.show();
                 }
             });
 
@@ -411,9 +444,8 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
                 @Override
                 public void onClick(View v) {
 
-                    final Dialog dialog_data = new Dialog(mContext);
+                    dialog_data = new Dialog(mContext);
                     dialog_data.setCancelable(false);
-
                    dialog_data.setOnKeyListener(new DialogInterface.OnKeyListener() {
 
                        @Override
@@ -449,6 +481,8 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
                     window.setAttributes(lp_number_picker);
 
                     final EditText et_name = dialog_data.findViewById(R.id.et_name);
+
+                    progress_bar = dialog_data.findViewById(R.id.progress_bar);
 
                     final ImageView cancel_action=dialog_data.findViewById(R.id.cancel_action);
                     cancel_action.setVisibility(View.GONE);
@@ -491,13 +525,18 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
                         @Override
                         public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                            if(s.length()>0){
+                            if (s.length() > 0) {
 
                                 cancel_action.setVisibility(View.VISIBLE);
+                                rb_month.setEnabled(false);
+                                et_age.setEnabled(false);
 
                             } else {
 
                                 cancel_action.setVisibility(View.GONE);
+                                rb_month.setEnabled(true);
+                                et_age.setEnabled(true);
+                                et_age.setText("");
 
                             }
 
@@ -522,7 +561,7 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
                                     myCalendar.set(Calendar.MONTH, monthOfYear);
                                     myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-                                    String myFormat = "yyyy-MM-dd"; // your format
+                                    String myFormat = "dd-MM-yyyy"; // your format
                                     SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
 
                                     date_f_birth.setText(sdf.format(myCalendar.getTime()));
@@ -768,13 +807,11 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
                                                 fl_progress_bar.setVisibility(View.VISIBLE);
                                                 et_name.getText().toString().trim();
 
-                                                apiViewHolder.PatientUpdate(patientsItem.getPatientId(), et_name.getText().toString().trim(),
+                                                editPatients(patientsItem.getPatientId(), et_name.getText().toString().trim(),
                                                         et_age.getText().toString().trim() + " " + age_type[0], gender_,
-                                                        et_whtsapp.getText().toString().trim(), et_mail.getText().toString().trim(), address.getText().toString().trim(), blood_group.getText().toString().trim(), date_f_birth.getText().toString())
-                                                        .subscribeOn(Schedulers.io())
-                                                        .observeOn(AndroidSchedulers.mainThread())
-                                                        .subscribe(responsePatientUpdate);
-                                                dialog_data.dismiss();
+                                                        et_whtsapp.getText().toString().trim(), et_mail.getText().toString().trim(), address.getText().toString().trim(), blood_group.getText().toString().trim(), date_f_birth.getText().toString());
+
+                                                progress_bar.setVisibility(View.VISIBLE);
 
                                             } else if (age_type[0].equals("month") || age_type[0].equals("months")) {
                                                 et_age.setText("" + num);
@@ -786,13 +823,12 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
                                                         age_type[0] = "month";
 
 
-                                                apiViewHolder.PatientUpdate(patientsItem.getPatientId(), et_name.getText().toString().trim(),
+                                                editPatients(patientsItem.getPatientId(), et_name.getText().toString().trim(),
                                                         et_age.getText().toString().trim() + " " + age_type[0], gender_,
-                                                        et_whtsapp.getText().toString().trim(), et_mail.getText().toString().trim(), address.getText().toString().trim(), blood_group.getText().toString().trim(), date_f_birth.getText().toString())
-                                                        .subscribeOn(Schedulers.io())
-                                                        .observeOn(AndroidSchedulers.mainThread())
-                                                        .subscribe(responsePatientUpdate);
-                                                dialog_data.dismiss();
+                                                        et_whtsapp.getText().toString().trim(), et_mail.getText().toString().trim(), address.getText().toString().trim(), blood_group.getText().toString().trim(), date_f_birth.getText().toString());
+
+                                                progress_bar.setVisibility(View.VISIBLE);
+
                                             } else {
                                                 et_age.setFocusable(true);
                                                 et_age.setError("Age not allowed");
@@ -830,10 +866,8 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
                                 public void onClick(DialogInterface dialog, int id) {
                                     fl_progress_bar.setVisibility(View.VISIBLE);
                                     //manager.getPreferences(Registration_.this, "service_provider");
-                                    apiViewHolder.deletePatient(PATIENT_ID.getText().toString().trim())
-                                            .subscribeOn(Schedulers.io())
-                                            .observeOn(AndroidSchedulers.mainThread())
-                                            .subscribe(responseProfile);
+
+                                    deletePatients(PATIENT_ID.getText().toString().trim());
 
                                 }
                             })
@@ -846,6 +880,170 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
                     alert.show();
                 }
             });
+        }
+    }
+
+    public void deletePatients(String patientsId) {
+
+        if (Utils.isConnectingToInternet(mContext)) {
+
+            fl_progress_bar.setVisibility(View.VISIBLE);
+            Retrofit retrofit = RetrofitClient.getInstance();
+
+            final WebServices request = retrofit.create(WebServices.class);
+
+            Call<ResponseSuccess> call = request.deletePatientFromApi(patientsId);
+
+            call.enqueue(new Callback<ResponseSuccess>() {
+                @Override
+                public void onResponse(@NonNull Call<ResponseSuccess> call, @NonNull retrofit2.Response<ResponseSuccess> response) {
+                    ResponseSuccess jsonResponse = response.body();
+                    fl_progress_bar.setVisibility(View.GONE);
+                    if (jsonResponse!=null && jsonResponse.getSuccess().equalsIgnoreCase("Success")) {
+
+                        Toast.makeText(mContext, "Delete SuccessFully", Toast.LENGTH_SHORT).show();
+
+                        AllGetPatients();
+
+                    } else if(jsonResponse!=null) {
+
+                        Toast.makeText(mContext, ""+jsonResponse.getMessage(), Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<ResponseSuccess> call, @NonNull Throwable t) {
+                    fl_progress_bar.setVisibility(View.GONE);
+                    Log.e("Error  ***", t.getMessage());
+                    Toast.makeText(mContext, "Profile Update Error", Toast.LENGTH_SHORT).show();
+
+                }
+            });
+        } else {
+            Toast.makeText(mContext, "No Internet Connection", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void editPatients(String patient_id, String p_name, String age, String gender,
+                             String p_mobile, String p_email,String address,String bloud_group,String dob) {
+
+        if (Utils.isConnectingToInternet(mContext)) {
+
+            Retrofit retrofit = RetrofitClient.getInstance();
+
+            final WebServices request = retrofit.create(WebServices.class);
+
+            Call<ResponseSuccess> call = request.PatientUpdateFromApi( patient_id, p_name,  age,  gender, p_mobile,  p_email,address,bloud_group,dob);
+
+            call.enqueue(new Callback<ResponseSuccess>() {
+                @Override
+                public void onResponse(@NonNull Call<ResponseSuccess> call, @NonNull retrofit2.Response<ResponseSuccess> response) {
+
+                    if(progress_bar!=null && dialog_data!=null) {
+                        progress_bar.setVisibility(View.GONE);
+                        dialog_data.dismiss();
+                    }
+
+                    ResponseSuccess jsonResponse = response.body();
+                    if (jsonResponse!=null && jsonResponse.getSuccess().equalsIgnoreCase("Success")) {
+
+                        Toast.makeText(mContext, "Updated Successfully", Toast.LENGTH_SHORT).show();
+
+                        AllGetPatients();
+
+                    } else if(jsonResponse!=null) {
+
+                        Toast.makeText(mContext, ""+jsonResponse.getMessage(), Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<ResponseSuccess> call, @NonNull Throwable t) {
+                    Log.e("Error  ***", t.getMessage());
+                    Toast.makeText(mContext, "Profile Update Error", Toast.LENGTH_SHORT).show();
+
+                }
+            });
+        } else {
+            Toast.makeText(mContext, "No Internet Connection", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void AllGetPatients() {
+
+        if (Utils.isConnectingToInternet(mContext)) {
+
+            fl_progress_bar.setVisibility(View.VISIBLE);
+            Retrofit retrofit = RetrofitClient.getInstance();
+
+            final WebServices request = retrofit.create(WebServices.class);
+
+            Call<ResponsePatients> call = request.getPatients2(manager.getPreferences(mContext, "doctor_id"));
+
+            call.enqueue(new Callback<ResponsePatients>() {
+                @Override
+                public void onResponse(@NonNull Call<ResponsePatients> call, @NonNull retrofit2.Response<ResponsePatients> response) {
+
+                    ResponsePatients responsePatients = response.body();
+
+                    if (responsePatients != null) {
+
+                        if (responsePatients.getMessage() != null) {
+                            if (responsePatients.getMessage().equals("patients")) {
+
+                                try {
+
+                                    SplashActivity splashActivity = new SplashActivity();
+                                    splashActivity.setPatients(responsePatients.getPatients());
+
+                                    FragmentManager manager = ((AppCompatActivity) mContext).getSupportFragmentManager();
+                                    manager.popBackStack();
+
+                                    CreatePrescription myFragment = new CreatePrescription();
+                                    manager.beginTransaction().replace(R.id.homePageContainer, myFragment, "prescription").addToBackStack(null).commit();
+
+                                } catch (IllegalStateException e){
+
+                                    Log.i("TAG", "onSuccess: "+e.getMessage());
+
+                                }
+
+                            } else if (responsePatients.getMessage().equals("Data not available")) {
+
+                                try {
+
+                                    SplashActivity splashActivity = new SplashActivity();
+                                    splashActivity.setPatients(null);
+
+                                    FragmentManager manager = ((AppCompatActivity) mContext).getSupportFragmentManager();
+                                    manager.popBackStack();
+
+                                    CreatePrescription myFragment = new CreatePrescription();
+                                    manager.beginTransaction().replace(R.id.homePageContainer, myFragment, "prescription").addToBackStack(null).commit();
+
+                                }catch (IllegalStateException e){
+
+                                    Log.i("TAG", "onSuccess: "+e.getMessage());
+
+                                }
+                            }
+                        }
+                    }
+
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<ResponsePatients> call, @NonNull Throwable t) {
+                    fl_progress_bar.setVisibility(View.GONE);
+                    Log.e("Error  ***", t.getMessage());
+                    Toast.makeText(mContext, "Profile Update Error", Toast.LENGTH_SHORT).show();
+
+                }
+            });
+        } else {
+            Toast.makeText(mContext, "No Internet Connection", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -877,10 +1075,15 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
 
         @Override
         public void onSuccess(ResponseSuccess response) {
+
+            fl_progress_bar.setVisibility(View.GONE);
+
             if (response != null) {
-                fl_progress_bar.setVisibility(View.GONE);
                 if (response.getMessage() == null) {
                 } else if (response.getMessage().equals("Patient Deleted")) {
+
+                    Toast.makeText(fragmentActivity, "delete successfully", Toast.LENGTH_SHORT).show();
+
                     fl_progress_bar.setVisibility(View.GONE);
                     apiViewHolder.getPatients(manager.getPreferences(mContext, "doctor_id"))
                             .subscribeOn(Schedulers.io())
@@ -910,10 +1113,21 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
 
         @Override
         public void onSuccess(ResponseSuccess response) {
+
+            if(progress_bar!=null){
+                progress_bar.setVisibility(View.GONE);
+            }
+
             if (response != null) {
 
                 if (response.getMessage() == null) {
                 } else if (response.getMessage().equals("Patient Updated")) {
+
+                    Toast.makeText(fragmentActivity, "Updated successfully", Toast.LENGTH_SHORT).show();
+
+                    if(dialog_data!=null) {
+                        dialog_data.dismiss();
+                    }
 
                     apiViewHolder.getPatients(manager.getPreferences(mContext, "doctor_id"))
                             .subscribeOn(Schedulers.io())
@@ -962,28 +1176,44 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
         public void onSuccess(ResponsePatients response) {
             if (response != null) {
 
-
                 if (response.getMessage() != null) {
                     if (response.getMessage().equals("patients")) {
 
+                        try {
 
-                        SplashActivity splashActivity = new SplashActivity();
-                        splashActivity.setPatients(response.getPatients());
+                            SplashActivity splashActivity = new SplashActivity();
+                            splashActivity.setPatients(response.getPatients());
 
-                        FragmentManager manager = ((AppCompatActivity) mContext).getSupportFragmentManager();
-                        manager.popBackStack();
+                            FragmentManager manager = ((AppCompatActivity) mContext).getSupportFragmentManager();
+                            manager.popBackStack();
 
-                        CreatePrescription myFragment = new CreatePrescription();
-                        manager.beginTransaction().replace(R.id.homePageContainer, myFragment, "prescription").addToBackStack(null).commit();
+                            CreatePrescription myFragment = new CreatePrescription();
+                            manager.beginTransaction().replace(R.id.homePageContainer, myFragment, "prescription").addToBackStack(null).commit();
+
+                        } catch (IllegalStateException e){
+
+                            Log.i("TAG", "onSuccess: "+e.getMessage());
+
+                        }
+
                     } else if (response.getMessage().equals("Data not available")) {
-                        SplashActivity splashActivity = new SplashActivity();
-                        splashActivity.setPatients(null);
 
-                        FragmentManager manager = ((AppCompatActivity) mContext).getSupportFragmentManager();
-                        manager.popBackStack();
+                        try {
 
-                        CreatePrescription myFragment = new CreatePrescription();
-                        manager.beginTransaction().replace(R.id.homePageContainer, myFragment, "prescription").addToBackStack(null).commit();
+                            SplashActivity splashActivity = new SplashActivity();
+                            splashActivity.setPatients(null);
+
+                            FragmentManager manager = ((AppCompatActivity) mContext).getSupportFragmentManager();
+                            manager.popBackStack();
+
+                            CreatePrescription myFragment = new CreatePrescription();
+                            manager.beginTransaction().replace(R.id.homePageContainer, myFragment, "prescription").addToBackStack(null).commit();
+
+                        }catch (IllegalStateException e){
+
+                            Log.i("TAG", "onSuccess: "+e.getMessage());
+
+                        }
                     }
                 }
             }

@@ -1,5 +1,7 @@
 package com.likesby.bludoc;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -12,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
+import com.likesby.bludoc.Fragment.EmailNotifyDialogFragment;
 import com.likesby.bludoc.ModelLayer.NetworkLayer.EndpointInterfaces.WebServices;
 import com.likesby.bludoc.ModelLayer.NetworkLayer.Helpers.RetrofitClient;
 import com.likesby.bludoc.SessionManager.SessionManager;
@@ -48,6 +51,26 @@ public class AddAPharmacistActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.notify_dialog).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(AddAPharmacistActivity.this, R.style.AlertDialog);
+                alertDialogBuilder.setCancelable(false);
+
+                alertDialogBuilder.setMessage("Copy of prescription to pharmacy will be sent on this mail id.");
+
+                alertDialogBuilder.setPositiveButton("Okay",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface arg0, int arg1) {
+                            }
+                        });
+                alertDialogBuilder.show();
+
+            }
+        });
+
         Intent intent = getIntent();
         if (intent != null) {
 
@@ -59,6 +82,9 @@ public class AddAPharmacistActivity extends AppCompatActivity {
 
                 activity.etName.setText(pharmacist.getPharmacist_name());
                 activity.emailId.setText(pharmacist.getPharmacist_email());
+
+                activity.titleOnToolbar.setText("Edit Pharmacy");
+                activity.submit.setText("Update Pharmacy");
 
                 if(!TextUtils.isEmpty(pharmacist.getPharmacist_mobile()) && !pharmacist.getPharmacist_mobile().equals("0") )
                 activity.whatsnumber.setText(pharmacist.getPharmacist_mobile());
@@ -76,11 +102,16 @@ public class AddAPharmacistActivity extends AppCompatActivity {
                     activity.etName.setError("Name is Required*");
                     activity.etName.requestFocus();
 
+                } else if(TextUtils.isEmpty(activity.emailId.getText().toString())){
+
+                    activity.emailId.setError("Email is Required*");
+                    activity.emailId.requestFocus();
+
                 } else {
 
-                    if (isEdit)
+                    if (isEdit) {
                         editPharmacistDetails(pharmacist.getPharmacist_id());
-                    else
+                    } else
                         UploadPharmicistDetails();
 
                 }
@@ -115,7 +146,10 @@ public class AddAPharmacistActivity extends AppCompatActivity {
                         activity.etName.setText("");
                         activity.emailId.setText("");
 
-                        Toast.makeText(AddAPharmacistActivity.this, "Pharmacist Added", Toast.LENGTH_SHORT).show();
+                        manager.setPreferences(AddAPharmacistActivity.this,"uploadPharmacist","true");
+                        onBackPressed();
+
+                        Toast.makeText(AddAPharmacistActivity.this, "Pharmacy Updated Successfully", Toast.LENGTH_SHORT).show();
 
                     } else {
                         Toast.makeText(AddAPharmacistActivity.this, "Profile Update Error", Toast.LENGTH_SHORT).show();
@@ -162,7 +196,7 @@ public class AddAPharmacistActivity extends AppCompatActivity {
                         activity.etName.setText("");
                         activity.emailId.setText("");
 
-                        Toast.makeText(AddAPharmacistActivity.this, "Pharmacist Added Successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddAPharmacistActivity.this, "Pharmacy Added Successfully", Toast.LENGTH_SHORT).show();
                         manager.setPreferences(AddAPharmacistActivity.this,"uploadPharmacist","true");
                         onBackPressed();
 

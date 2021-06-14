@@ -45,6 +45,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -60,6 +61,8 @@ import com.google.android.gms.ads.formats.MediaView;
 import com.google.android.gms.ads.formats.NativeAdOptions;
 import com.google.android.gms.ads.formats.UnifiedNativeAd;
 import com.google.android.gms.ads.formats.UnifiedNativeAdView;
+import com.likesby.bludoc.AddAPharmacistActivity;
+import com.likesby.bludoc.HomeActivity;
 import com.likesby.bludoc.ModelLayer.Entities.ResponseAddPatient;
 import com.likesby.bludoc.ModelLayer.Entities.ResponsePatients;
 import com.likesby.bludoc.ModelLayer.NewEntities.ResponseProfileDetails;
@@ -71,6 +74,8 @@ import com.likesby.bludoc.constants.ApplicationConstant;
 import com.likesby.bludoc.utils.DateUtils;
 import com.likesby.bludoc.utils.Utils;
 import com.likesby.bludoc.viewModels.ApiViewHolder;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -123,12 +128,24 @@ public class PatientRegistration extends Fragment {
     private TextView date_f_birth;
     private boolean isMonth;
     private ImageView cancel_action;
+    private FragmentActivity fragmentActivity;
+    private boolean isFromHome;
+    private HomeActivity backButtonHandler;
+    private EditText et_patient_dob;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getActivity();
         manager = new SessionManager();
+    }
+
+    @Override
+    public void onAttach(@NonNull @NotNull Context context) {
+        super.onAttach(context);
+
+        fragmentActivity= (FragmentActivity) context;
+
     }
 
     @Nullable
@@ -145,6 +162,24 @@ public class PatientRegistration extends Fragment {
         Date date1 = null, date2 = null;
         int days_left_free = 0, days_left_paid = 0;
 
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            isFromHome = arguments.getBoolean("isFromHome", false);
+    }
+
+        backButtonHandler = (HomeActivity) fragmentActivity;
+
+        backButtonHandler.setOnBackClickListener(new HomeActivity.OnBackClickListener() {
+            @Override
+            public boolean onBackClick() {
+
+                if (isVisible() && isResumed())
+                    fragmentActivity.getSupportFragmentManager().popBackStackImmediate();
+
+                return true;
+
+            }
+        });
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         ResponseProfileDetails profileDetails = manager.getObjectProfileDetails(mContext, "profile");
@@ -372,10 +407,15 @@ public class PatientRegistration extends Fragment {
                 if (s.length() > 0) {
 
                     cancel_action.setVisibility(View.VISIBLE);
+                    rb_month.setEnabled(false);
+                    et_age.setEnabled(false);
 
                 } else {
 
                     cancel_action.setVisibility(View.GONE);
+                    rb_month.setEnabled(true);
+                    et_age.setEnabled(true);
+                    et_age.setText("");
 
                 }
 
@@ -405,16 +445,14 @@ public class PatientRegistration extends Fragment {
                         String age = getAge(year, monthOfYear, dayOfMonth);
 
                         if (Integer.parseInt(age) < 0) {
-
                             age = "0";
-
                         }
 
                         et_age.setText(age);
                         et_age.setSelection(et_age.getText().toString().length());
                         rb_year.setChecked(true);
 
-                        String myFormat = "yyyy-MM-dd"; // your format
+                        String myFormat = "dd-MM-yyyy"; // your format
                         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
 
                         date_f_birth.setText(sdf.format(myCalendar.getTime()));
@@ -807,11 +845,19 @@ public class PatientRegistration extends Fragment {
                             createContact(response);
                         }
                     }
+
                     fl_progress_bar.setVisibility(View.GONE);
                     Toast.makeText(mContext, "Patient Added Successfully", Toast.LENGTH_SHORT).show();
+                    manager.setPreferences(mContext,"patient_registration","true");
+
+                    if(isFromHome)
+                        goToPrescription();
+                    else
+                        fragmentActivity.getSupportFragmentManager().popBackStackImmediate();
+
                     clearEditTexts();
                     patientId = response.getPatientId();
-                    updatecustomer();
+//                    updatecustomer();
                 }
             } else {
                 fl_progress_bar.setVisibility(View.GONE);
@@ -1167,6 +1213,14 @@ public class PatientRegistration extends Fragment {
         }
     };
 
+    public void goToPrescription() {
+
+        fragmentActivity.getSupportFragmentManager().popBackStackImmediate();
+        CreatePrescription myFragment = new CreatePrescription();
+        fragmentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.homePageContainer, myFragment, "prescription").addToBackStack(null).commit();
+
+    }
+
     private void clearEditTexts() {
         et_age.setText("");
         et_name.setText("");
@@ -1377,5 +1431,11 @@ public class PatientRegistration extends Fragment {
 //        adLoader.loadAd(new AdRequest.Builder().build());
 //    }
 //
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        backButtonHandler = null;
+    }
 
 }

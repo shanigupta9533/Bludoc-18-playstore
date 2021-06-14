@@ -97,8 +97,6 @@
             android:id="@+id/btn_email"
             />
 
-
-
         <TextView
             android:fontFamily="@font/poppins"
             android:layout_marginTop="@dimen/margin_10"

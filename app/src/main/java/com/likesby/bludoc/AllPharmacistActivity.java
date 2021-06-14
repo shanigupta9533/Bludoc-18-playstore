@@ -6,14 +6,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.TextView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -45,7 +44,7 @@ public class AllPharmacistActivity extends AppCompatActivity {
     private SessionManager manager;
     private PharmacistAdapter pharmacistAdapter;
     private PullToRefreshView pullToRefresh;
-    private TextView message;
+    private RelativeLayout no_data_found_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,9 +56,29 @@ public class AllPharmacistActivity extends AppCompatActivity {
         EditText add_pharmacist_serachView = findViewById(R.id.add_pharmacist_serachView);
 
         progressBar = findViewById(R.id.parent_of_progress_bar);
-        message = findViewById(R.id.message);
+        no_data_found_id = findViewById(R.id.no_data_found_id);
+
+        findViewById(R.id.info).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                startActivity(new Intent(AllPharmacistActivity.this, AboutPharmacyActivity.class));
+
+            }
+        });
 
         pullToRefresh = findViewById(R.id.pullToRefresh);
+
+        findViewById(R.id.refresh_button_no_data).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(AllPharmacistActivity.this, AddAPharmacistActivity.class);
+                intent.putExtra("isSelectAdd", true);
+                startActivity(intent);
+
+            }
+        });
 
         findViewById(R.id.send_ids).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,10 +132,10 @@ public class AllPharmacistActivity extends AppCompatActivity {
 
                 String allIds = pharmacistAdapter.getAllIds();
 
-                if (!TextUtils.isEmpty(allIds))
-                    sendIdsOnServer(allIds);
-                else
-                    Toast.makeText(AllPharmacistActivity.this, "Checked min. 1 pharmacist", Toast.LENGTH_SHORT).show();
+//                if (!TextUtils.isEmpty(allIds))
+////                    sendIdsOnServer(allIds);
+//                else
+//                    Toast.makeText(AllPharmacistActivity.this, "Checked min. 1 pharmacist", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -129,10 +148,10 @@ public class AllPharmacistActivity extends AppCompatActivity {
 
         pharmacistAdapter.setOnClickListener(new PharmacistAdapter.OnClickListener() {
             @Override
-            public void onClick(final AllPharmacistList s, final int position) {
+            public void onDelete(final AllPharmacistList s, final int position) {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(AllPharmacistActivity.this, R.style.AlertDialog));
-                builder.setMessage("Do you wish to delete the pharmacist?")
+                builder.setMessage("Do you wish to delete the pharmacy?")
                         .setCancelable(false)
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
@@ -150,6 +169,13 @@ public class AllPharmacistActivity extends AppCompatActivity {
                 alert.show();
 
             }
+
+            @Override
+            public void onChecked(AllPharmacistList s, int position, boolean isChecked) {
+
+                sendIdsOnServer(s, position, isChecked);
+
+            }
         });
 
         AllGetPharmacist();
@@ -158,12 +184,12 @@ public class AllPharmacistActivity extends AppCompatActivity {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                pharmacistAdapter.getFilter().filter(s);
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                pharmacistAdapter.getFilter().filter(s);
 
             }
 
@@ -175,28 +201,35 @@ public class AllPharmacistActivity extends AppCompatActivity {
 
     }
 
-    private void sendIdsOnServer(String allIds) {
+    private void sendIdsOnServer(AllPharmacistList s, int position, boolean isChecked) {
 
         if (Utils.isConnectingToInternet(this)) {
 
-            progressBar.setVisibility(View.VISIBLE);
             Retrofit retrofit = RetrofitClient.getInstance();
 
             final WebServices request = retrofit.create(WebServices.class);
 
+            String str;
+            if (isChecked) str = "yes";
+            else str = "false";
 
-            Call<ResultOfApi> call = request.sendPharmacistById(allIds);
+            Call<ResultOfApi> call = request.sendPharmacistById(manager.getPreferences(AllPharmacistActivity.this, "doctor_id"), s.getPharmacist_id(), str);
 
             call.enqueue(new Callback<ResultOfApi>() {
                 @Override
                 public void onResponse(@NonNull Call<ResultOfApi> call, @NonNull retrofit2.Response<ResultOfApi> response) {
                     ResultOfApi jsonResponse = response.body();
                     assert jsonResponse != null;
-                    progressBar.setVisibility(View.GONE);
 
-                    if(jsonResponse.getSuccess().equals("success")){
+                    if (jsonResponse.getSuccess().equals("success")) {
 
-                        Toast.makeText(AllPharmacistActivity.this, "Upload Ids Successfully", Toast.LENGTH_SHORT).show();
+                        if (isChecked) {
+                            Toast.makeText(AllPharmacistActivity.this, "Added to send list", Toast.LENGTH_SHORT).show();
+                            s.setIs_check("yes");
+                        }  else {
+                            Toast.makeText(AllPharmacistActivity.this, "Removed from send list", Toast.LENGTH_SHORT).show();
+                            s.setIs_check("no");
+                        }
 
                     } else {
 
@@ -208,7 +241,6 @@ public class AllPharmacistActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(@NonNull Call<ResultOfApi> call, @NonNull Throwable t) {
-                    progressBar.setVisibility(View.GONE);
                     Log.e("Error  ***", t.getMessage());
                     Toast.makeText(AllPharmacistActivity.this, "Profile Update Error", Toast.LENGTH_SHORT).show();
 
@@ -244,12 +276,12 @@ public class AllPharmacistActivity extends AppCompatActivity {
                         showModel.addAll(pharmacist);
                         pharmacistAdapter.notifyDataSetChanged();
                         pullToRefresh.setRefreshing(false);
-                        message.setVisibility(View.GONE);
+                        no_data_found_id.setVisibility(View.GONE);
 
                     } else {
+
                         pullToRefresh.setRefreshing(false);
-                        message.setVisibility(View.VISIBLE);
-                        message.setText(jsonResponse.getMessage());
+                        no_data_found_id.setVisibility(View.VISIBLE);
 
                     }
                 }
@@ -276,7 +308,6 @@ public class AllPharmacistActivity extends AppCompatActivity {
 
             final WebServices request = retrofit.create(WebServices.class);
 
-
             Call<ResultOfApi> call = request.deletePharmacist(pharmacist_id);
 
             call.enqueue(new Callback<ResultOfApi>() {
@@ -291,6 +322,12 @@ public class AllPharmacistActivity extends AppCompatActivity {
                         progressBar.setVisibility(View.GONE);
                         showModel.remove(position);
                         pharmacistAdapter.notifyDataSetChanged();
+
+                        if (showModel.size() == 0)
+                            no_data_found_id.setVisibility(View.VISIBLE);
+                        else
+                            no_data_found_id.setVisibility(View.GONE);
+
 
                         Toast.makeText(AllPharmacistActivity.this, "Deleted Successfully", Toast.LENGTH_SHORT).show();
 

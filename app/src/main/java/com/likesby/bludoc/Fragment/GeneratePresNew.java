@@ -23,7 +23,6 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +34,6 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +41,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -62,6 +61,7 @@ import com.likesby.bludoc.Adapter.BottomSheetAdapter;
 import com.likesby.bludoc.Adapter.Pres_LabTest_adapter;
 import com.likesby.bludoc.Adapter.Pres_adapter;
 import com.likesby.bludoc.Adapter.SlidingImage_Adapter_GeneratedPrescription;
+import com.likesby.bludoc.BuildConfig;
 import com.likesby.bludoc.ModelLayer.Entities.BottomSheetItem;
 import com.likesby.bludoc.ModelLayer.Entities.MedicinesItem;
 import com.likesby.bludoc.ModelLayer.Entities.PrescriptionJSON;
@@ -120,7 +120,7 @@ public class GeneratePresNew extends Fragment {
     Dialog dialog_data;
     Dialog dialog_dataShareMenu;
     View v;
-    LinearLayout ll_menu ;
+    LinearLayout ll_menu;
     //LinearLayout ll_invite_member;
     static RecyclerView rView, rViewlabtest;
     TextView textView_advice;
@@ -146,7 +146,7 @@ public class GeneratePresNew extends Fragment {
     FrameLayout fl_progress_bar;
     private static final int PERMISSION_REQUEST_CODE = 100;
     boolean count;
-   // BottomSheetBehavior behavior;
+    // BottomSheetBehavior behavior;
     public static PrescriptionItem patient_item = new PrescriptionItem();
     private static ArrayList<Uri> filesGlobal;
     TextView textView_end_note;
@@ -159,16 +159,21 @@ public class GeneratePresNew extends Fragment {
     Bundle bundle;
     LinearLayout ll_patient_name;
     ArrayList<String> stringArrayDESC;
-    int width = 480,extra_add = 0;
+    int width = 480, extra_add = 0;
     LinearLayout top_header_parent;
-    int lineCounter =0;
-  //  private GeneratePrescriptionBinding binding;
+    int lineCounter = 0;
+    //  private GeneratePrescriptionBinding binding;
     GeneratePrescriptionNewBinding binding;
     private String yesOrNo;
     private BottomSheetAdapter mAdapter;
-    private ArrayList<AbstractViewRenderer> pages=new ArrayList();
+    private ArrayList<AbstractViewRenderer> pages = new ArrayList();
     ConstraintLayout fl_main;
     private String prescriptionId;
+    private String dateString;
+    private String dateStringWithNum;
+    private boolean isSendPharmacy=true;
+    private String message;
+    private boolean certificate_selection_new;
 
 
     @Override
@@ -184,7 +189,7 @@ public class GeneratePresNew extends Fragment {
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
         int widthInches = Math.round(width * 300);
         int heightInches = Math.round(height * 300);
-        Log.e("WH", "________________ " + widthInches+" : "+heightInches);
+        Log.e("WH", "________________ " + widthInches + " : " + heightInches);
 
         v.setLayoutParams(new FrameLayout.LayoutParams(widthInches, heightInches));
         v.requestLayout();
@@ -198,7 +203,7 @@ public class GeneratePresNew extends Fragment {
         binding = GeneratePrescriptionNewBinding.inflate(inflater, container, false);
 
         v = binding.getRoot();
-       //
+        //
 
         width = ScreenSize.getDimensions(mContext)[0];
         initCalls(v);
@@ -338,28 +343,26 @@ public class GeneratePresNew extends Fragment {
 
         if (Utils.isConnectingToInternet(mContext)) {
 
-            ProgressDialog progressDialog=new ProgressDialog(mContext);
-            progressDialog.setMessage("Sending Pharmacist...");
+            ProgressDialog progressDialog = new ProgressDialog(mContext);
+            progressDialog.setMessage("Sending to Pharmacy....");
             progressDialog.setCancelable(false);
             progressDialog.show();
             Retrofit retrofit = RetrofitClient.getInstance();
 
             final WebServices request = retrofit.create(WebServices.class);
 
-            Call<ResultOfApi> call = request.sendPresciption("19,20,21",prescriptionId);
+            Call<ResultOfApi> call = request.sendPresciption(manager.getPreferences(mContext, "doctor_id"), prescriptionId);
 
             call.enqueue(new Callback<ResultOfApi>() {
                 @Override
                 public void onResponse(@NonNull Call<ResultOfApi> call, @NonNull retrofit2.Response<ResultOfApi> response) {
                     ResultOfApi jsonResponse = response.body();
                     progressDialog.dismiss();
-                    if (jsonResponse!=null && jsonResponse.getSuccess().equalsIgnoreCase("Success")) {
-
-                        Toast.makeText(mContext, "Send Pharmacist Successfully", Toast.LENGTH_SHORT).show();
-
-                    } else {
-                        Toast.makeText(mContext, "Profile Update Error", Toast.LENGTH_SHORT).show();
-
+                    if (jsonResponse != null && jsonResponse.getSuccess().equalsIgnoreCase("success")) {
+                        Toast.makeText(mContext, "Sent Successfully", Toast.LENGTH_SHORT).show();
+                    } else if (jsonResponse != null) {
+                        Toast.makeText(mContext, "" + jsonResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                        message=jsonResponse.getMessage();
                     }
                 }
 
@@ -390,8 +393,10 @@ public class GeneratePresNew extends Fragment {
         lp_number_picker.height = WindowManager.LayoutParams.MATCH_PARENT;
         window.setAttributes(lp_number_picker);
 
-        Button  btn_mobile = dialog_dataShareMenu.findViewById(R.id.btn_mobile);
-        TextView __bottom_sheet_name=dialog_dataShareMenu.findViewById(R.id.__bottom_sheet_name);
+        Button btn_mobile = dialog_dataShareMenu.findViewById(R.id.btn_mobile);
+        TextView __bottom_sheet_name = dialog_dataShareMenu.findViewById(R.id.__bottom_sheet_name);
+        TextView open_via_page_pdf = dialog_dataShareMenu.findViewById(R.id.open_via_page_pdf);
+        open_via_page_pdf.setVisibility(View.GONE);
         btn_mobile.setBackground(mContext.getResources().getDrawable(R.drawable.green_faint_round_btn_gradient2));
         __bottom_sheet_name.setTextColor(mContext.getResources().getColor(R.color.guidee));
         __bottom_sheet_name.setBackground(mContext.getResources().getDrawable(R.drawable.faint_white_round_border_green));
@@ -407,10 +412,10 @@ public class GeneratePresNew extends Fragment {
             }
         });
 
-         RecyclerView recyclerView = dialog_dataShareMenu.findViewById(R.id.recyclerView_bottom_sheet);
+        RecyclerView recyclerView = dialog_dataShareMenu.findViewById(R.id.recyclerView_bottom_sheet);
         //Create new GridLayoutManager
         @SuppressLint("WrongConstant") GridLayoutManager gridLayoutManagerr = new GridLayoutManager(mContext,
-                2,//span count no of items in single row
+                3,//span count no of items in single row
                 GridLayoutManager.VERTICAL,//Orientation
                 false);//reverse scrolling of recyclerview
         //set layout manager as gridLayoutManager
@@ -419,20 +424,32 @@ public class GeneratePresNew extends Fragment {
         ArrayList<BottomSheetItem> bottomSheetItemArrayList = new ArrayList<>();
         BottomSheetItem bottomSheetItem = new BottomSheetItem();
         bottomSheetItem.setMenuId("1");
-        bottomSheetItem.setMenuName("Email");
+        bottomSheetItem.setMenuName("View Pdf");
         bottomSheetItem.setMenuImage("mail");
         bottomSheetItemArrayList.add(bottomSheetItem);
 
         bottomSheetItem = new BottomSheetItem();
         bottomSheetItem.setMenuId("2");
-        bottomSheetItem.setMenuName("Download");
+        bottomSheetItem.setMenuName("Share");
         bottomSheetItem.setMenuImage("ic_download_");
 
         bottomSheetItemArrayList.add(bottomSheetItem);
 
         bottomSheetItem = new BottomSheetItem();
         bottomSheetItem.setMenuId("3");
-        bottomSheetItem.setMenuName("Other");
+        bottomSheetItem.setMenuName("Download");
+        bottomSheetItem.setMenuImage("ic_share__");
+        bottomSheetItemArrayList.add(bottomSheetItem);
+
+        bottomSheetItem = new BottomSheetItem();
+        bottomSheetItem.setMenuId("4");
+        bottomSheetItem.setMenuName("Send to\npharmacy");
+        bottomSheetItem.setMenuImage("whatsapp");
+        bottomSheetItemArrayList.add(bottomSheetItem);
+
+        bottomSheetItem = new BottomSheetItem();
+        bottomSheetItem.setMenuId("3");
+        bottomSheetItem.setMenuName("Email");
         bottomSheetItem.setMenuImage("ic_share__");
         bottomSheetItemArrayList.add(bottomSheetItem);
 
@@ -442,8 +459,46 @@ public class GeneratePresNew extends Fragment {
         bottomSheetItem.setMenuImage("whatsapp");
         bottomSheetItemArrayList.add(bottomSheetItem);
 
-        mAdapter = new BottomSheetAdapter(mContext, bottomSheetItemArrayList, fl_progress_bar, null,GeneratePresNew.this);
+        mAdapter = new BottomSheetAdapter(mContext, bottomSheetItemArrayList, fl_progress_bar, null, GeneratePresNew.this);
         recyclerView.setAdapter(mAdapter);
+
+        mAdapter.setPatientName(prescriptionItem.getPName());
+
+        mAdapter.setOnClickListener(new BottomSheetAdapter.onClickListener() {
+            @Override
+            public void onClick(int i) {
+
+                if (i == 0) {
+
+                    if (mAdapter != null) {
+
+                        Intent intentShareFile = new Intent(Intent.ACTION_VIEW);
+                        File fileWithinMyDir = new File(mAdapter.getPdfViaApps());
+                        Uri bmpUri = FileProvider.getUriForFile(mContext, BuildConfig.APPLICATION_ID + ".provider", fileWithinMyDir);
+                        if (fileWithinMyDir.exists()) {
+                            intentShareFile.setDataAndType(bmpUri, "application/pdf");
+                            intentShareFile.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intentShareFile.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(Intent.createChooser(intentShareFile, "Open File Using..."));
+
+                        }
+                    }
+
+                } else if (i == 3) {
+
+                    if (isSendPharmacy) {
+                        sendIdAndPresIdOnServer();
+                        isSendPharmacy = false;
+                    } else if (!isSendPharmacy && !TextUtils.isEmpty(message))
+                        Toast.makeText(mContext, "" + message, Toast.LENGTH_SHORT).show();
+                    else
+                        Toast.makeText(mContext, "Already sent to pharmacy", Toast.LENGTH_SHORT).show();
+
+                }
+
+            }
+        });
+
         ImageView iv_close = dialog_dataShareMenu.findViewById(R.id.iv_close);
         iv_close.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -455,7 +510,6 @@ public class GeneratePresNew extends Fragment {
         });
         dialog_dataShareMenu.show();
     }
-
 
 
     private void initCalls(View view) {
@@ -481,9 +535,9 @@ public class GeneratePresNew extends Fragment {
 
         lLayout2 = new LinearLayoutManager(mContext);
         ll_menu = view.findViewById(R.id.ll_menu);
-       // ll_invite_member = view.findViewById(R.id.ll_invite_member);
+        // ll_invite_member = view.findViewById(R.id.ll_invite_member);
         fl_main = view.findViewById(R.id.fl_mainmm);
-      //  fl_main.setLayoutParams(new FrameLayout.LayoutParams(1800,2300));
+        //  fl_main.setLayoutParams(new FrameLayout.LayoutParams(1800,2300));
 
         rView = view.findViewById(R.id.pres_recycler);
         rView.setLayoutManager(gridLayoutManagerr);
@@ -540,35 +594,36 @@ public class GeneratePresNew extends Fragment {
             definer = bundle.getString("definer");
             end_note = bundle.getString("end_note");
             yesOrNo = bundle.getString("yesOrNo");
+            dateString = bundle.getString("dateString");
+            dateStringWithNum = bundle.getString("dateStringWithNum");
+            certificate_selection_new = bundle.getBoolean("certificate_selection",false);
+            prescriptionId = bundle.getString("presId","");
 
-            if(bundle.getString("top_doctor_details").equals("true")){
+            if (bundle.getString("top_doctor_details").equals("true")) {
                 binding.topDoctorDetails.setVisibility(View.VISIBLE);
-            }
-            else {
+            } else {
                 binding.topDoctorDetails.setVisibility(View.GONE);
-                lineCounter = lineCounter+10;
-                extra_add = extra_add +4;
+                lineCounter = lineCounter + 10;
+                extra_add = extra_add + 4;
             }
 
-            if(bundle.getString("footer_doctor_details").equals("true")){
+            if (bundle.getString("footer_doctor_details").equals("true")) {
                 binding.footerDoctorDetails.setVisibility(View.VISIBLE);
-            }
-            else {
+            } else {
                 binding.footerDoctorDetails.setVisibility(View.GONE);
-                lineCounter = lineCounter+ 4;
-                extra_add = extra_add +2;
+                lineCounter = lineCounter + 4;
+                extra_add = extra_add + 2;
             }
 
 
-            if(bundle.getString("clinic_name").equals("true")){
+            if (bundle.getString("clinic_name").equals("true")) {
                 textView_Clinic_name.setVisibility(View.VISIBLE);
-            }
-            else {
+            } else {
                 textView_Clinic_name.setVisibility(View.GONE);
-                lineCounter = lineCounter+ 2;
+                lineCounter = lineCounter + 2;
             }
 
-            if (yesOrNo.equals("Yes"))
+            if (yesOrNo != null && yesOrNo.equals("Yes"))
                 binding.topHeaderParent.setVisibility(View.VISIBLE);
             else
                 binding.topHeaderParent.setVisibility(View.GONE);
@@ -629,7 +684,7 @@ public class GeneratePresNew extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView_bottom_sheet);
         //Create new GridLayoutManager
         @SuppressLint("WrongConstant") GridLayoutManager gridLayoutManagerr = new GridLayoutManager(mContext,
-                2,//span count no of items in single row
+                3,//span count no of items in single row
                 GridLayoutManager.VERTICAL,//Orientation
                 false);//reverse scrolling of recyclerview
         //set layout manager as gridLayoutManager
@@ -638,30 +693,44 @@ public class GeneratePresNew extends Fragment {
         ArrayList<BottomSheetItem> bottomSheetItemArrayList = new ArrayList<>();
         BottomSheetItem bottomSheetItem = new BottomSheetItem();
         bottomSheetItem.setMenuId("1");
-        bottomSheetItem.setMenuName("Email");
+        bottomSheetItem.setMenuName("View Pdf");
         bottomSheetItem.setMenuImage("mail");
         bottomSheetItemArrayList.add(bottomSheetItem);
 
         bottomSheetItem = new BottomSheetItem();
         bottomSheetItem.setMenuId("2");
-        bottomSheetItem.setMenuName("WhatsApp");
+        bottomSheetItem.setMenuName("Share");
+        bottomSheetItem.setMenuImage("ic_download_");
+
+        bottomSheetItemArrayList.add(bottomSheetItem);
+
+        bottomSheetItem = new BottomSheetItem();
+        bottomSheetItem.setMenuId("3");
+        bottomSheetItem.setMenuName("Download");
+        bottomSheetItem.setMenuImage("ic_share__");
+        bottomSheetItemArrayList.add(bottomSheetItem);
+
+        bottomSheetItem = new BottomSheetItem();
+        bottomSheetItem.setMenuId("4");
+        bottomSheetItem.setMenuName("Send to pharmacy");
         bottomSheetItem.setMenuImage("whatsapp");
         bottomSheetItemArrayList.add(bottomSheetItem);
 
         bottomSheetItem = new BottomSheetItem();
         bottomSheetItem.setMenuId("3");
-        bottomSheetItem.setMenuName("Other");
+        bottomSheetItem.setMenuName("Email");
         bottomSheetItem.setMenuImage("ic_share__");
         bottomSheetItemArrayList.add(bottomSheetItem);
 
-          bottomSheetItem = new BottomSheetItem();
+        bottomSheetItem = new BottomSheetItem();
         bottomSheetItem.setMenuId("4");
-        bottomSheetItem.setMenuName("Download");
-        bottomSheetItem.setMenuImage("ic_download_");
+        bottomSheetItem.setMenuName("WhatsApp");
+        bottomSheetItem.setMenuImage("whatsapp");
         bottomSheetItemArrayList.add(bottomSheetItem);
-
-        mAdapter = new BottomSheetAdapter(mContext, bottomSheetItemArrayList, fl_progress_bar, null,GeneratePresNew.this);
+        mAdapter = new BottomSheetAdapter(mContext, bottomSheetItemArrayList, fl_progress_bar, null, GeneratePresNew.this);
         recyclerView.setAdapter(mAdapter);
+
+//        mAdapter.setPatientName(prescriptionItem.getPName());
 
        /* behavior = BottomSheetBehavior.from(bottomSheet);
         behavior.setHideable(true);
@@ -688,7 +757,7 @@ public class GeneratePresNew extends Fragment {
                 {
                     behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 }*//*
-                *//*else
+         *//*else
                 {
                     behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 }*//*
@@ -860,6 +929,23 @@ public class GeneratePresNew extends Fragment {
 
                 prescriptionJSON.setMedicines(medicinesItemArrayListO);
                 prescriptionJSON.setDiagnosis(prescriptionItem.getDiagnosis());
+
+                if (certificate_selection)
+                    prescriptionJSON.setIsCertificate("yes");
+                else
+                    prescriptionJSON.setIsCertificate("no");
+
+                if (TextUtils.isEmpty(dateStringWithNum)) {
+
+                    Calendar myCalendar = Calendar.getInstance();
+                    int year = myCalendar.get(Calendar.YEAR);
+                    int month = myCalendar.get(Calendar.MONTH);
+                    int DAY_OF_MONTH = myCalendar.get(Calendar.DAY_OF_MONTH);
+
+                    prescriptionJSON.setDate(year+"-"+(month+1)+"-"+DAY_OF_MONTH);
+
+                }  else
+                    prescriptionJSON.setDate(dateStringWithNum);
                 prescriptionJSON.setEndNote(end_note);
                 if (labTestItem != null) {
                     if (labTestItem.size() != 0) {
@@ -897,7 +983,8 @@ public class GeneratePresNew extends Fragment {
 
 
     public void genInv() {
-        ;
+
+        binding.topHeaderParent.setVisibility(View.VISIBLE);
 
         popupCreatingPrescription();
         rViewlabtest.setVisibility(View.GONE);
@@ -924,7 +1011,7 @@ public class GeneratePresNew extends Fragment {
                 if (!str.trim().equals(""))
                     field_active = field_active + 1;
             }
-            Log.e("LINE","LINE ------------------- "+line);
+            Log.e("LINE", "LINE ------------------- " + line);
 
             textView_end_note.setVisibility(View.GONE);
 
@@ -945,7 +1032,7 @@ public class GeneratePresNew extends Fragment {
                         // Do something after 4s = 4000ms
 
                         page_no.setText("Page No. " + page_no_count);
-                        Bitmap screen =  getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
+                        Bitmap screen = getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
                         files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
                         filesGlobal = files;
                         page_no_count = page_no_count + 1;
@@ -981,13 +1068,12 @@ public class GeneratePresNew extends Fragment {
 
                         int sizee = 5;
                         fl_medicines_symbol.setVisibility(View.VISIBLE);
-                        if(flagger){
+                        if (flagger) {
                             sizee = 10;
-                        }
-                        else {
+                        } else {
                             if (line >= 0 && line < 10) {
                                 sizee = 8;
-                                if (labTestItem != null && labTestItem.size() >=3) {
+                                if (labTestItem != null && labTestItem.size() >= 3) {
                                     sizee = 7;
                                 }
 
@@ -995,27 +1081,19 @@ public class GeneratePresNew extends Fragment {
 
                                 if (labTestItem != null && labTestItem.size() > 0) {
                                     sizee = 6;
-                                }
-                                else
+                                } else
                                     sizee = 7;
 
-                            }
-                            else if (line > 40 && line <= 200) {
+                            } else if (line > 40 && line <= 200) {
 
                                 sizee = 6;
-                            }
-
-                            else if (line > 200 && line <= 500) {
+                            } else if (line > 200 && line <= 500) {
 
                                 sizee = 5;
-                            }
-
-                            else if (line > 500 && line <= 1500) {
+                            } else if (line > 500 && line <= 1500) {
 
                                 sizee = 4;
-                            }
-
-                            else if (line > 1500 ) {
+                            } else if (line > 1500) {
 
                                 sizee = 3;
                             }
@@ -1027,21 +1105,19 @@ public class GeneratePresNew extends Fragment {
                             sizee =  15 -(lineCounter/3);
                         }*/
 
-                        if(((11+extra_add) - (lineCounter/3))>0){
-                            if(extra_add>0)
-                                sizee = (11+extra_add+(extra_add/2)) -(lineCounter/3);
+                        if (((11 + extra_add) - (lineCounter / 3)) > 0) {
+                            if (extra_add > 0)
+                                sizee = (11 + extra_add + (extra_add / 2)) - (lineCounter / 3);
                             else
-                                sizee = (11+extra_add) -(lineCounter/3);
+                                sizee = (11 + extra_add) - (lineCounter / 3);
+                        } else {
+                            sizee = (15 + extra_add) - (lineCounter / 3);
                         }
-                        else {
-                            sizee =  (15+extra_add) -(lineCounter/3);
-                        }
 
 
-
-                        if(lineCounter>0 && (lineCounter)<3)
-                            sizee = sizee -1;
-                        if (prescriptionItem.getMedicines().size() >sizee) {
+                        if (lineCounter > 0 && (lineCounter) < 3)
+                            sizee = sizee - 1;
+                        if (prescriptionItem.getMedicines().size() > sizee) {
                             rViewlabtest.setVisibility(View.GONE);
                             textView_advice.setVisibility(View.GONE);
 
@@ -1081,7 +1157,7 @@ public class GeneratePresNew extends Fragment {
                                                 page_no.setText("1/"+(prescriptionItem.getMedicines().size()/4)+1);*/
                                     // Do something after 4s = 4000ms
                                     page_no.setText("Page No. " + page_no_count);
-                                    Bitmap screen =  getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
+                                    Bitmap screen = getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
                                     files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
 
                                                /* if(prescriptionItem.getMedicines()!=null)
@@ -1123,13 +1199,12 @@ public class GeneratePresNew extends Fragment {
                                     textView_advice.setVisibility(View.VISIBLE);
                                     int diff = 0;
                                     //if( (prescriptionItem.getMedicines().size() -sizee)>0)
-                                    if(sizee<prescriptionItem.getMedicines().size()){
-                                        diff = prescriptionItem.getMedicines().size() -sizee;
-                                    }
-                                    else
+                                    if (sizee < prescriptionItem.getMedicines().size()) {
+                                        diff = prescriptionItem.getMedicines().size() - sizee;
+                                    } else
                                         diff = sizee - prescriptionItem.getMedicines().size();
 
-                                    if ((labTestItem.size()-1) > diff) {
+                                    if ((labTestItem.size() - 1) > diff) {
                                         ArrayList<LabTestItem> labTestItem1 = new ArrayList<>();
 
                                         textView_end_note.setVisibility(View.GONE);
@@ -1140,7 +1215,7 @@ public class GeneratePresNew extends Fragment {
                                         Pres_LabTest_adapter pres_labTest_adapter = new Pres_LabTest_adapter(labTestItem1, mContext);
                                         rViewlabtest.setAdapter(pres_labTest_adapter);
                                         rViewlabtest.setVisibility(View.VISIBLE);
-                                        if(diff >0)
+                                        if (diff > 0)
                                             textView_advice.setVisibility(View.VISIBLE);
                                         else
                                             textView_advice.setVisibility(View.GONE);
@@ -1187,8 +1262,7 @@ public class GeneratePresNew extends Fragment {
                                         }, DELAY_TIME);
 
 
-                                    }
-                                    else {
+                                    } else {
                                         Pres_LabTest_adapter pres_labTest_adapter = new Pres_LabTest_adapter(labTestItem, mContext);
                                         rViewlabtest.setAdapter(pres_labTest_adapter);
                                         rViewlabtest.setVisibility(View.VISIBLE);
@@ -1203,7 +1277,7 @@ public class GeneratePresNew extends Fragment {
 
                                                 page_no.setText("Page No. " + page_no_count);
 
-                                                Bitmap screen =  getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
+                                                Bitmap screen = getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
 
                                                 files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
                                                 patient_item = prescriptionItem;
@@ -1229,7 +1303,7 @@ public class GeneratePresNew extends Fragment {
                                         }, DELAY_TIME);
 
                                     }
-                                }else {
+                                } else {
                                     textView_end_note.setVisibility(View.VISIBLE);
                                     textView_advice.setVisibility(View.GONE);
                                     final Handler handler = new Handler();
@@ -1241,7 +1315,7 @@ public class GeneratePresNew extends Fragment {
 
                                             page_no.setText("Page No. " + page_no_count);
 
-                                            Bitmap screen =  getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
+                                            Bitmap screen = getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
 
                                             files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
                                             patient_item = prescriptionItem;
@@ -1267,8 +1341,7 @@ public class GeneratePresNew extends Fragment {
                                     }, DELAY_TIME);
 
                                 }
-                            }
-                            else{
+                            } else {
                                 textView_advice.setVisibility(View.GONE);
                                 final Handler handler = new Handler();
                                 final int finalLine = line;
@@ -1279,7 +1352,7 @@ public class GeneratePresNew extends Fragment {
 
                                         page_no.setText("Page No. " + page_no_count);
 
-                                        Bitmap screen =  getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
+                                        Bitmap screen = getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
 
                                         files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
                                         patient_item = prescriptionItem;
@@ -1307,169 +1380,166 @@ public class GeneratePresNew extends Fragment {
                             }
 
 
-
-
-
-
                         }
-                    }
-                    else {
-                        if (labTestItem != null) {
-                    boolean loop = false;
-                    int pp = 0;
-                    if (labTestItem.size() > 0) {
-                        fl_medicines_symbol.setVisibility(View.GONE);
-                        if(labTestItem.size()>10){
-                            ArrayList<LabTestItem> labTestItem1 = new ArrayList<>();
-
-                            textView_end_note.setVisibility(View.GONE);
-                            for (int i = 0; i < 10; i++) {
-                                labTestItem1.add(labTestItem.get(i));
-                            }
-                            loop = true;
-                            pp = 8;
-                            Pres_LabTest_adapter pres_labTest_adapter = new Pres_LabTest_adapter(labTestItem1, mContext);
-                            rViewlabtest.setAdapter(pres_labTest_adapter);
-                            rViewlabtest.setVisibility(View.VISIBLE);
-                            textView_advice.setVisibility(View.VISIBLE);
-
-                            final Handler handler = new Handler();
-                            final int finalLine = line;
-                            final int finalSizee = 10;
-
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    page_no.setText("Page No. " + page_no_count);
-
-                                    Bitmap screen = getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
-                                    files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
-                                    patient_item = prescriptionItem;
-                                    filesGlobal = files;
-
-                                    page_no_count = page_no_count + 1;
-                                    textView_chief_complaint.setVisibility(View.GONE);
-                                    textView_history.setVisibility(View.GONE);
-                                    textView_findings.setVisibility(View.GONE);
-                                    textView_treatment_advice.setVisibility(View.GONE);
-                                    textView_diagnosis.setVisibility(View.GONE);
-                                    rView.setVisibility(View.GONE);
-                                    binding.textviewTemprature.setVisibility(View.GONE);
-                                    binding.textviewHeight.setVisibility(View.GONE);
-                                    binding.textviewWeight.setVisibility(View.GONE);
-                                    binding.textviewPulse.setVisibility(View.GONE);
-                                    binding.textviewBloodPressure.setVisibility(View.GONE);
-                                    binding.textviewBloodSugar.setVisibility(View.GONE);
-                                    binding.textviewHemoglobing.setVisibility(View.GONE);
-                                    binding.textviewSpo2.setVisibility(View.GONE);
-                                    binding.textviewBloodGroup.setVisibility(View.GONE);
-                                    binding.textViewHosAddress.setVisibility(View.GONE);
-                                    binding.textviewRespirationRate.setVisibility(View.GONE);
-                                    binding.textviewAllergy.setVisibility(View.GONE);
-                                    top_header_parent.setVisibility(View.GONE);
-
-                                    tempLb(files,finalSizee);
-
-                                }},DELAY_TIME);
-
-                        }
-                        else {
-                            Pres_LabTest_adapter pres_labTest_adapter = new Pres_LabTest_adapter(labTestItem, mContext);
-                            rViewlabtest.setAdapter(pres_labTest_adapter);
-                            rViewlabtest.setVisibility(View.VISIBLE);
-                            textView_advice.setVisibility(View.VISIBLE);
-                            textView_end_note.setVisibility(View.VISIBLE);
-                            top_header_parent.setVisibility(View.VISIBLE);
-                            final Handler handler = new Handler();
-                            final int finalLine = line;
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    page_no.setText("Page No. " + page_no_count);
-
-                                    Bitmap screen = getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
-                                    files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
-                                    patient_item = prescriptionItem;
-                                    filesGlobal = files;
-
-                                    page_no_count = page_no_count + 1;
-                                    textView_chief_complaint.setVisibility(View.GONE);
-                                    textView_history.setVisibility(View.GONE);
-                                    textView_findings.setVisibility(View.GONE);
-                                    textView_treatment_advice.setVisibility(View.GONE);
-                                    textView_diagnosis.setVisibility(View.GONE);
-                                    rView.setVisibility(View.GONE);
-                                    binding.textviewTemprature.setVisibility(View.GONE);
-                                    binding.textviewHeight.setVisibility(View.GONE);
-                                    binding.textviewWeight.setVisibility(View.GONE);
-                                    binding.textviewPulse.setVisibility(View.GONE);
-                                    binding.textviewBloodPressure.setVisibility(View.GONE);
-                                    binding.textviewBloodSugar.setVisibility(View.GONE);
-                                    binding.textviewHemoglobing.setVisibility(View.GONE);
-                                    binding.textviewSpo2.setVisibility(View.GONE);
-                                    binding.textviewBloodGroup.setVisibility(View.GONE);
-                                    binding.textViewHosAddress.setVisibility(View.GONE);
-                                    binding.textviewRespirationRate.setVisibility(View.GONE);
-                                    binding.textviewAllergy.setVisibility(View.GONE);
-                                    top_header_parent.setVisibility(View.GONE);
-                                    fl_progress_bar.setVisibility(View.GONE);
-
-                                    if (dialog_data != null){
-                                        dialog_data.dismiss();
-                                        popupBottomMenu();
-                                    }
-
-                                }},DELAY_TIME);
-
-
-                        }
-
                     } else {
-                        textView_advice.setVisibility(View.GONE);
-                        textView_end_note.setVisibility(View.VISIBLE);
-                        rViewlabtest.setVisibility(View.GONE);
-                        textView_advice.setVisibility(View.GONE);
-                        final Handler handler = new Handler();
-                        final int finalLine = line;
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                page_no.setText("Page No. " + page_no_count);
+                        if (labTestItem != null) {
+                            boolean loop = false;
+                            int pp = 0;
+                            if (labTestItem.size() > 0) {
+                                fl_medicines_symbol.setVisibility(View.GONE);
+                                if (labTestItem.size() > 10) {
+                                    ArrayList<LabTestItem> labTestItem1 = new ArrayList<>();
 
-                                Bitmap screen = getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
-                                files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
-                                patient_item = prescriptionItem;
-                                filesGlobal = files;
+                                    textView_end_note.setVisibility(View.GONE);
+                                    for (int i = 0; i < 10; i++) {
+                                        labTestItem1.add(labTestItem.get(i));
+                                    }
+                                    loop = true;
+                                    pp = 8;
+                                    Pres_LabTest_adapter pres_labTest_adapter = new Pres_LabTest_adapter(labTestItem1, mContext);
+                                    rViewlabtest.setAdapter(pres_labTest_adapter);
+                                    rViewlabtest.setVisibility(View.VISIBLE);
+                                    textView_advice.setVisibility(View.VISIBLE);
 
-                                page_no_count = page_no_count + 1;
-                                textView_chief_complaint.setVisibility(View.GONE);
-                                textView_history.setVisibility(View.GONE);
-                                textView_findings.setVisibility(View.GONE);
-                                textView_treatment_advice.setVisibility(View.GONE);
-                                textView_diagnosis.setVisibility(View.GONE);
-                                rView.setVisibility(View.GONE);
-                                binding.textviewTemprature.setVisibility(View.GONE);
-                                binding.textviewHeight.setVisibility(View.GONE);
-                                binding.textviewWeight.setVisibility(View.GONE);
-                                binding.textviewPulse.setVisibility(View.GONE);
-                                binding.textviewBloodPressure.setVisibility(View.GONE);
-                                binding.textviewBloodSugar.setVisibility(View.GONE);
-                                binding.textviewHemoglobing.setVisibility(View.GONE);
-                                binding.textviewSpo2.setVisibility(View.GONE);
-                                binding.textviewBloodGroup.setVisibility(View.GONE);
-                                binding.textViewHosAddress.setVisibility(View.GONE);
-                                binding.textviewRespirationRate.setVisibility(View.GONE);
-                                binding.textviewAllergy.setVisibility(View.GONE);
-                                top_header_parent.setVisibility(View.GONE);
-                                fl_progress_bar.setVisibility(View.GONE);
+                                    final Handler handler = new Handler();
+                                    final int finalLine = line;
+                                    final int finalSizee = 10;
 
-                                if (dialog_data != null){
-                                    dialog_data.dismiss();
-                                    popupBottomMenu();
+                                    handler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            page_no.setText("Page No. " + page_no_count);
+
+                                            Bitmap screen = getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
+                                            files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
+                                            patient_item = prescriptionItem;
+                                            filesGlobal = files;
+
+                                            page_no_count = page_no_count + 1;
+                                            textView_chief_complaint.setVisibility(View.GONE);
+                                            textView_history.setVisibility(View.GONE);
+                                            textView_findings.setVisibility(View.GONE);
+                                            textView_treatment_advice.setVisibility(View.GONE);
+                                            textView_diagnosis.setVisibility(View.GONE);
+                                            rView.setVisibility(View.GONE);
+                                            binding.textviewTemprature.setVisibility(View.GONE);
+                                            binding.textviewHeight.setVisibility(View.GONE);
+                                            binding.textviewWeight.setVisibility(View.GONE);
+                                            binding.textviewPulse.setVisibility(View.GONE);
+                                            binding.textviewBloodPressure.setVisibility(View.GONE);
+                                            binding.textviewBloodSugar.setVisibility(View.GONE);
+                                            binding.textviewHemoglobing.setVisibility(View.GONE);
+                                            binding.textviewSpo2.setVisibility(View.GONE);
+                                            binding.textviewBloodGroup.setVisibility(View.GONE);
+                                            binding.textViewHosAddress.setVisibility(View.GONE);
+                                            binding.textviewRespirationRate.setVisibility(View.GONE);
+                                            binding.textviewAllergy.setVisibility(View.GONE);
+                                            top_header_parent.setVisibility(View.GONE);
+
+                                            tempLb(files, finalSizee);
+
+                                        }
+                                    }, DELAY_TIME);
+
+                                } else {
+                                    Pres_LabTest_adapter pres_labTest_adapter = new Pres_LabTest_adapter(labTestItem, mContext);
+                                    rViewlabtest.setAdapter(pres_labTest_adapter);
+                                    rViewlabtest.setVisibility(View.VISIBLE);
+                                    textView_advice.setVisibility(View.VISIBLE);
+                                    textView_end_note.setVisibility(View.VISIBLE);
+                                    top_header_parent.setVisibility(View.VISIBLE);
+                                    final Handler handler = new Handler();
+                                    final int finalLine = line;
+                                    handler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            page_no.setText("Page No. " + page_no_count);
+
+                                            Bitmap screen = getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
+                                            files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
+                                            patient_item = prescriptionItem;
+                                            filesGlobal = files;
+
+                                            page_no_count = page_no_count + 1;
+                                            textView_chief_complaint.setVisibility(View.GONE);
+                                            textView_history.setVisibility(View.GONE);
+                                            textView_findings.setVisibility(View.GONE);
+                                            textView_treatment_advice.setVisibility(View.GONE);
+                                            textView_diagnosis.setVisibility(View.GONE);
+                                            rView.setVisibility(View.GONE);
+                                            binding.textviewTemprature.setVisibility(View.GONE);
+                                            binding.textviewHeight.setVisibility(View.GONE);
+                                            binding.textviewWeight.setVisibility(View.GONE);
+                                            binding.textviewPulse.setVisibility(View.GONE);
+                                            binding.textviewBloodPressure.setVisibility(View.GONE);
+                                            binding.textviewBloodSugar.setVisibility(View.GONE);
+                                            binding.textviewHemoglobing.setVisibility(View.GONE);
+                                            binding.textviewSpo2.setVisibility(View.GONE);
+                                            binding.textviewBloodGroup.setVisibility(View.GONE);
+                                            binding.textViewHosAddress.setVisibility(View.GONE);
+                                            binding.textviewRespirationRate.setVisibility(View.GONE);
+                                            binding.textviewAllergy.setVisibility(View.GONE);
+                                            top_header_parent.setVisibility(View.GONE);
+                                            fl_progress_bar.setVisibility(View.GONE);
+
+                                            if (dialog_data != null) {
+                                                dialog_data.dismiss();
+                                                popupBottomMenu();
+                                            }
+
+                                        }
+                                    }, DELAY_TIME);
+
+
                                 }
 
-                            }},DELAY_TIME);
-                    }
+                            } else {
+                                textView_advice.setVisibility(View.GONE);
+                                textView_end_note.setVisibility(View.VISIBLE);
+                                rViewlabtest.setVisibility(View.GONE);
+                                textView_advice.setVisibility(View.GONE);
+                                final Handler handler = new Handler();
+                                final int finalLine = line;
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        page_no.setText("Page No. " + page_no_count);
+
+                                        Bitmap screen = getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
+                                        files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
+                                        patient_item = prescriptionItem;
+                                        filesGlobal = files;
+
+                                        page_no_count = page_no_count + 1;
+                                        textView_chief_complaint.setVisibility(View.GONE);
+                                        textView_history.setVisibility(View.GONE);
+                                        textView_findings.setVisibility(View.GONE);
+                                        textView_treatment_advice.setVisibility(View.GONE);
+                                        textView_diagnosis.setVisibility(View.GONE);
+                                        rView.setVisibility(View.GONE);
+                                        binding.textviewTemprature.setVisibility(View.GONE);
+                                        binding.textviewHeight.setVisibility(View.GONE);
+                                        binding.textviewWeight.setVisibility(View.GONE);
+                                        binding.textviewPulse.setVisibility(View.GONE);
+                                        binding.textviewBloodPressure.setVisibility(View.GONE);
+                                        binding.textviewBloodSugar.setVisibility(View.GONE);
+                                        binding.textviewHemoglobing.setVisibility(View.GONE);
+                                        binding.textviewSpo2.setVisibility(View.GONE);
+                                        binding.textviewBloodGroup.setVisibility(View.GONE);
+                                        binding.textViewHosAddress.setVisibility(View.GONE);
+                                        binding.textviewRespirationRate.setVisibility(View.GONE);
+                                        binding.textviewAllergy.setVisibility(View.GONE);
+                                        top_header_parent.setVisibility(View.GONE);
+                                        fl_progress_bar.setVisibility(View.GONE);
+
+                                        if (dialog_data != null) {
+                                            dialog_data.dismiss();
+                                            popupBottomMenu();
+                                        }
+
+                                    }
+                                }, DELAY_TIME);
+                            }
 
 
 
@@ -1482,7 +1552,7 @@ public class GeneratePresNew extends Fragment {
                                 intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
                                 Intent shareIntent = Intent.createChooser(intent, null);
                                 startActivity(shareIntent);*/
-                    // downloadPDFtoExternal();
+                            // downloadPDFtoExternal();
 
                                /* if(loop){
                                     ArrayList<LabTestItem> labTestItem1 = new ArrayList<>();
@@ -1512,7 +1582,7 @@ public class GeneratePresNew extends Fragment {
 
                                 }*/
 
-                } else {
+                        } else {
                             fl_medicines_symbol.setVisibility(View.GONE);
                             textView_end_note.setVisibility(View.VISIBLE);
                             rViewlabtest.setVisibility(View.GONE);
@@ -1544,7 +1614,7 @@ public class GeneratePresNew extends Fragment {
                     int pp = 0;
                     if (labTestItem.size() > 0) {
                         fl_medicines_symbol.setVisibility(View.GONE);
-                        if(labTestItem.size()>10){
+                        if (labTestItem.size() > 10) {
                             ArrayList<LabTestItem> labTestItem1 = new ArrayList<>();
 
                             textView_end_note.setVisibility(View.GONE);
@@ -1593,12 +1663,12 @@ public class GeneratePresNew extends Fragment {
                                     binding.textviewAllergy.setVisibility(View.GONE);
                                     top_header_parent.setVisibility(View.GONE);
 
-                                    tempLb(files,finalSizee);
+                                    tempLb(files, finalSizee);
 
-                                }},DELAY_TIME);
+                                }
+                            }, DELAY_TIME);
 
-                        }
-                        else {
+                        } else {
                             Pres_LabTest_adapter pres_labTest_adapter = new Pres_LabTest_adapter(labTestItem, mContext);
                             rViewlabtest.setAdapter(pres_labTest_adapter);
                             rViewlabtest.setVisibility(View.VISIBLE);
@@ -1639,12 +1709,13 @@ public class GeneratePresNew extends Fragment {
                                     top_header_parent.setVisibility(View.GONE);
                                     fl_progress_bar.setVisibility(View.GONE);
 
-                                    if (dialog_data != null){
+                                    if (dialog_data != null) {
                                         dialog_data.dismiss();
                                         popupBottomMenu();
                                     }
 
-                                }},DELAY_TIME);
+                                }
+                            }, DELAY_TIME);
 
 
                         }
@@ -1688,12 +1759,13 @@ public class GeneratePresNew extends Fragment {
                                 top_header_parent.setVisibility(View.GONE);
                                 fl_progress_bar.setVisibility(View.GONE);
 
-                                if (dialog_data != null){
+                                if (dialog_data != null) {
                                     dialog_data.dismiss();
                                     popupBottomMenu();
                                 }
 
-                            }},DELAY_TIME);
+                            }
+                        }, DELAY_TIME);
                     }
 
 
@@ -1742,7 +1814,7 @@ public class GeneratePresNew extends Fragment {
                     textView_end_note.setVisibility(View.VISIBLE);
                     rViewlabtest.setVisibility(View.GONE);
                     textView_advice.setVisibility(View.GONE);
-                    Bitmap screen =  getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
+                    Bitmap screen = getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
 
 
                     files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
@@ -1828,7 +1900,7 @@ public class GeneratePresNew extends Fragment {
                 textView_end_note.setVisibility(View.VISIBLE);
                 rViewlabtest.setVisibility(View.GONE);
                 textView_advice.setVisibility(View.GONE);
-                Bitmap screen =  getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
+                Bitmap screen = getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
 
                 files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
                 patient_item = prescriptionItem;
@@ -1843,9 +1915,10 @@ public class GeneratePresNew extends Fragment {
                                 startActivity(shareIntent);*/
                 // downloadPDFtoExternal();
                 fl_progress_bar.setVisibility(View.GONE);
-                if (dialog_data != null){
+                if (dialog_data != null) {
                     dialog_data.dismiss();
-                    popupBottomMenu();}
+                    popupBottomMenu();
+                }
             }
                        /* else {
                         fl_progress_bar.setVisibility(View.GONE);
@@ -1858,17 +1931,17 @@ public class GeneratePresNew extends Fragment {
         }
     }
 
-    private File createPDFWithMultipleImage(ArrayList<Uri> files){
+    private File createPDFWithMultipleImage(ArrayList<Uri> files) {
 
         File file = getOutputFile();
-        if (file != null){
+        if (file != null) {
             try {
                 FileOutputStream fileOutputStream = new FileOutputStream(file);
                 PdfDocument pdfDocument = new PdfDocument();
 
-                for (int i = 0; i < files.size(); i++){
-                    Bitmap bitmap = BitmapFactory.decodeFile(FileUtils.getPath(mContext,files.get(i)));
-                    PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(bitmap.getWidth(),bitmap.getHeight(), (i + 1)).create();
+                for (int i = 0; i < files.size(); i++) {
+                    Bitmap bitmap = BitmapFactory.decodeFile(FileUtils.getPath(mContext, files.get(i)));
+                    PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(bitmap.getWidth(), bitmap.getHeight(), (i + 1)).create();
                     PdfDocument.Page page = pdfDocument.startPage(pageInfo);
                     Canvas canvas = page.getCanvas();
                     Paint paint = new Paint();
@@ -1889,12 +1962,12 @@ public class GeneratePresNew extends Fragment {
         return file;
     }
 
-    private File getOutputFile(){
-        File root = new File(mContext.getExternalFilesDir(null),"My PDF Folder");
+    private File getOutputFile() {
+        File root = new File(mContext.getExternalFilesDir(null), "My PDF Folder");
 
         boolean isFolderCreated = true;
 
-        if (!root.exists()){
+        if (!root.exists()) {
             isFolderCreated = root.mkdir();
         }
 
@@ -1903,19 +1976,17 @@ public class GeneratePresNew extends Fragment {
             String imageFileName = "PDF_" + timeStamp;
 
             return new File(root, imageFileName + ".pdf");
-        }
-        else {
+        } else {
             Toast.makeText(mContext, "Folder is not created", Toast.LENGTH_SHORT).show();
             return null;
         }
     }
 
 
-
-    private void downloadPDFtoExternal(){
+    private void downloadPDFtoExternal() {
         ArrayList<Uri> files = GeneratePresNew.getFiles();
         File pdfWithMultipleImage = createPDFWithMultipleImage(files);
-        String destinationFilename = android.os.Environment.getExternalStorageDirectory().getPath()+File.separatorChar+""+pdfWithMultipleImage.getName();
+        String destinationFilename = android.os.Environment.getExternalStorageDirectory().getPath() + File.separatorChar + "" + pdfWithMultipleImage.getName();
 
         BufferedInputStream bis = null;
         BufferedOutputStream bos = null;
@@ -1927,7 +1998,7 @@ public class GeneratePresNew extends Fragment {
             bis.read(buf);
             do {
                 bos.write(buf);
-            } while(bis.read(buf) != -1);
+            } while (bis.read(buf) != -1);
 
             Toast.makeText(mContext, "Downloaded to Storage", Toast.LENGTH_SHORT).show();
             getFragmentManager().popBackStackImmediate();
@@ -1973,7 +2044,7 @@ public class GeneratePresNew extends Fragment {
 
                 if (labTestItem != null) {
                     if (labTestItem.size() > 0) {
-                        if(extra_add>0 && diff_size>7){
+                        if (extra_add > 0 && diff_size > 7) {
                             ArrayList<LabTestItem> labTestItems11 = new ArrayList<>();
                             for (int i = 0; i < 6; i++) {
                                 labTestItems11.add(labTestItem.get(i));
@@ -1985,8 +2056,7 @@ public class GeneratePresNew extends Fragment {
                             rViewlabtest.setVisibility(View.VISIBLE);
                             textView_advice.setVisibility(View.VISIBLE);
                             textView_end_note.setVisibility(View.GONE);
-                        }
-                        else {
+                        } else {
                             Pres_LabTest_adapter pres_labTest_adapter = new Pres_LabTest_adapter(labTestItem, mContext);
                             rViewlabtest.setAdapter(pres_labTest_adapter);
                             rViewlabtest.setVisibility(View.VISIBLE);
@@ -2009,7 +2079,7 @@ public class GeneratePresNew extends Fragment {
                                 page_no.setText("3/"+(prescriptionItem.getMedicines().size()/4)+1);*/
                         page_no_count = page_no_count + 1;
                         page_no.setText("Page No. " + page_no_count);
-                        Bitmap screen1 =  getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
+                        Bitmap screen1 = getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
                         files.add(getImageUri(mContext, screen1, prescriptionItem.getPName() + "1"));
 
                      /*   if(prescriptionItem.getMedicines()!=null)
@@ -2034,13 +2104,12 @@ public class GeneratePresNew extends Fragment {
                         Log.e(TAG, "--------------------------------------------finalP 760 = " + finalP);
                         // temp1(finalP, files);
 
-                        if(extra_add>0 && diff_size>7){
+                        if (extra_add > 0 && diff_size > 7) {
                             textView_end_note.setVisibility(View.GONE);
                             filesGlobal = files;
-                            tempLb(filesGlobal,6);
+                            tempLb(filesGlobal, 6);
 
-                        }
-                        else {
+                        } else {
                             filesGlobal = files;
                             fl_progress_bar.setVisibility(View.GONE);
                             //downloadPDFtoExternal();
@@ -2096,7 +2165,7 @@ public class GeneratePresNew extends Fragment {
                                 page_no.setText("3/"+(prescriptionItem.getMedicines().size()/4)+1);*/
                         page_no_count = page_no_count + 1;
                         page_no.setText("Page No. " + page_no_count);
-                        Bitmap screen1 =  getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
+                        Bitmap screen1 = getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
                         files.add(getImageUri(mContext, screen1, prescriptionItem.getPName() + "1"));
 
                      /*   if(prescriptionItem.getMedicines()!=null)
@@ -2154,7 +2223,7 @@ public class GeneratePresNew extends Fragment {
                       /*  if(prescriptionItem.getMedicines()!=null)
                             if (prescriptionItem.getMedicines().size() > 4)
                                 page_no.setText("3/"+(prescriptionItem.getMedicines().size()/4)+1);*/
-                        Bitmap screen1 =  getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
+                        Bitmap screen1 = getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
                         files.add(getImageUri(mContext, screen1, prescriptionItem.getPName() + "1"));
 
                      /*   if(prescriptionItem.getMedicines()!=null)
@@ -2180,12 +2249,12 @@ public class GeneratePresNew extends Fragment {
 
                         filesGlobal = files;
 
-                       // downloadPDFtoExternal();
+                        // downloadPDFtoExternal();
 
                         fl_progress_bar.setVisibility(View.GONE);
                         if (dialog_data != null) {
                             dialog_data.dismiss();
-                           // PopupGeneratedImages();
+                            // PopupGeneratedImages();
                             popupBottomMenu();
                         }
                     }
@@ -2221,12 +2290,12 @@ public class GeneratePresNew extends Fragment {
                 intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
                 Intent shareIntent = Intent.createChooser(intent, null);
                 startActivity(shareIntent);*/
-           // downloadPDFtoExternal();
+            // downloadPDFtoExternal();
 
             fl_progress_bar.setVisibility(View.GONE);
             if (dialog_data != null) {
                 dialog_data.dismiss();
-              //  PopupGeneratedImages();
+                //  PopupGeneratedImages();
                 popupBottomMenu();
             }
         }
@@ -2258,7 +2327,7 @@ public class GeneratePresNew extends Fragment {
                     page_no.setText("Page No. " + page_no_count);
 
                     // Do something after 4s = 4000ms
-                    Bitmap screen1 =  getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
+                    Bitmap screen1 = getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
                     files.add(getImageUri(mContext, screen1, prescriptionItem.getPName() + "2"));
                     patient_item = prescriptionItem;
                     filesGlobal = files;
@@ -2274,7 +2343,7 @@ public class GeneratePresNew extends Fragment {
                     fl_progress_bar.setVisibility(View.GONE);
                     if (dialog_data != null) {
                         dialog_data.dismiss();
-                       // PopupGeneratedImages();
+                        // PopupGeneratedImages();
                     }
                 }
             }, DELAY_TIME);
@@ -2308,7 +2377,7 @@ public class GeneratePresNew extends Fragment {
                         @Override
                         public void run() {
                             // Do something after 4s = 4000ms
-                            Bitmap screen1 =  getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
+                            Bitmap screen1 = getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
                             files.add(getImageUri(mContext, screen1, prescriptionItem.getPName() + "2"));
                             patient_item = prescriptionItem;
                             filesGlobal = files;
@@ -2320,12 +2389,12 @@ public class GeneratePresNew extends Fragment {
                     intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
                     Intent shareIntent = Intent.createChooser(intent, null);
                     startActivity(shareIntent);*/
-                          //  downloadPDFtoExternal();
+                            //  downloadPDFtoExternal();
                             fl_progress_bar.setVisibility(View.GONE);
                             if (dialog_data != null) {
                                 dialog_data.dismiss();
                                 popupBottomMenu();
-                              //  PopupGeneratedImages();
+                                //  PopupGeneratedImages();
                             }
                         }
                     }, DELAY_TIME);
@@ -2334,22 +2403,22 @@ public class GeneratePresNew extends Fragment {
                     textView_advice.setVisibility(View.GONE);
                     rViewlabtest.setVisibility(View.GONE);
 
-                   // downloadPDFtoExternal();
+                    // downloadPDFtoExternal();
                     fl_progress_bar.setVisibility(View.GONE);
                     if (dialog_data != null) {
                         dialog_data.dismiss();
-                       // PopupGeneratedImages();
+                        // PopupGeneratedImages();
                         popupBottomMenu();
                     }
                 }
             } else {
                 textView_advice.setVisibility(View.GONE);
                 rViewlabtest.setVisibility(View.GONE);
-               // downloadPDFtoExternal();
+                // downloadPDFtoExternal();
                 fl_progress_bar.setVisibility(View.GONE);
                 if (dialog_data != null) {
                     dialog_data.dismiss();
-                  //  PopupGeneratedImages();
+                    //  PopupGeneratedImages();
                     popupBottomMenu();
                 }
             }
@@ -2423,7 +2492,7 @@ public class GeneratePresNew extends Fragment {
                             if (!str.trim().equals(""))
                                 field_active = field_active + 1;
                         }
-                        Log.e("LINE","LINE ------------------- "+line);
+                        Log.e("LINE", "LINE ------------------- " + line);
 
                         textView_end_note.setVisibility(View.GONE);
 
@@ -2444,7 +2513,7 @@ public class GeneratePresNew extends Fragment {
                                     // Do something after 4s = 4000ms
 
                                     page_no.setText("Page No. " + page_no_count);
-                                    Bitmap screen =  getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
+                                    Bitmap screen = getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
                                     files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
                                     filesGlobal = files;
                                     page_no_count = page_no_count + 1;
@@ -2480,61 +2549,51 @@ public class GeneratePresNew extends Fragment {
 
                                     int sizee = 5;
                                     fl_medicines_symbol.setVisibility(View.VISIBLE);
-                                    if(flagger){
+                                    if (flagger) {
                                         sizee = 10;
-                                    }
-                                    else {
+                                    } else {
                                         if (line >= 0 && line < 10) {
                                             sizee = 8;
-                                                if (labTestItem != null && labTestItem.size() >=3) {
-                                                    sizee = 7;
-                                                }
+                                            if (labTestItem != null && labTestItem.size() >= 3) {
+                                                sizee = 7;
+                                            }
 
                                         } else if (line >= 10 && line <= 40) {
 
                                             if (labTestItem != null && labTestItem.size() > 0) {
                                                 sizee = 6;
-                                            }
-                                            else
+                                            } else
                                                 sizee = 7;
 
-                                        }
-                                        else if (line > 40 && line <= 200) {
+                                        } else if (line > 40 && line <= 200) {
 
                                             sizee = 6;
-                                        }
-
-                                        else if (line > 200 && line <= 500) {
+                                        } else if (line > 200 && line <= 500) {
 
                                             sizee = 5;
-                                        }
-
-                                        else if (line > 500 && line <= 1500) {
+                                        } else if (line > 500 && line <= 1500) {
 
                                             sizee = 4;
-                                        }
-
-                                        else if (line > 1500 ) {
+                                        } else if (line > 1500) {
 
                                             sizee = 3;
                                         }
                                     }
-                                        if(((11+extra_add) - (lineCounter/3))>0){
-                                            if(extra_add>0)
-                                                sizee = (11+extra_add+(extra_add/2)) -(lineCounter/3);
-                                            else
-                                                sizee = (11+extra_add) -(lineCounter/3);
-                                        }
-                                        else {
-                                            sizee =  (15+extra_add) -(lineCounter/3);
-                                        }
+                                    if (((11 + extra_add) - (lineCounter / 3)) > 0) {
+                                        if (extra_add > 0)
+                                            sizee = (11 + extra_add + (extra_add / 2)) - (lineCounter / 3);
+                                        else
+                                            sizee = (11 + extra_add) - (lineCounter / 3);
+                                    } else {
+                                        sizee = (15 + extra_add) - (lineCounter / 3);
+                                    }
 
 
-                                    if(lineCounter>0 && (lineCounter)<3)
-                                        sizee = sizee -1;
-                                    if (prescriptionItem.getMedicines().size() >sizee) {
-                                            rViewlabtest.setVisibility(View.GONE);
-                                            textView_advice.setVisibility(View.GONE);
+                                    if (lineCounter > 0 && (lineCounter) < 3)
+                                        sizee = sizee - 1;
+                                    if (prescriptionItem.getMedicines().size() > sizee) {
+                                        rViewlabtest.setVisibility(View.GONE);
+                                        textView_advice.setVisibility(View.GONE);
 
 
                                         ArrayList<MedicinesItem> medicineList = new ArrayList<>();
@@ -2563,16 +2622,16 @@ public class GeneratePresNew extends Fragment {
                                         handler.postDelayed(new Runnable() {
                                             @Override
                                             public void run() {
-                                              //  if(prescriptionItem.getMedicines().size()<7 && finalLine ==0){
+                                                //  if(prescriptionItem.getMedicines().size()<7 && finalLine ==0){
 
-                                              //  }
+                                                //  }
 
                                                /* if(prescriptionItem.getMedicines()!=null)
                                                 if (prescriptionItem.getMedicines().size() > 4)
                                                 page_no.setText("1/"+(prescriptionItem.getMedicines().size()/4)+1);*/
                                                 // Do something after 4s = 4000ms
                                                 page_no.setText("Page No. " + page_no_count);
-                                                Bitmap screen =  getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
+                                                Bitmap screen = getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
                                                 files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
 
                                                /* if(prescriptionItem.getMedicines()!=null)
@@ -2614,13 +2673,12 @@ public class GeneratePresNew extends Fragment {
                                                 textView_advice.setVisibility(View.VISIBLE);
                                                 int diff = 0;
                                                 //if( (prescriptionItem.getMedicines().size() -sizee)>0)
-                                                    if(sizee<prescriptionItem.getMedicines().size()){
-                                                        diff = prescriptionItem.getMedicines().size() -sizee;
-                                                    }
-                                                    else
-                                                        diff = sizee - prescriptionItem.getMedicines().size();
+                                                if (sizee < prescriptionItem.getMedicines().size()) {
+                                                    diff = prescriptionItem.getMedicines().size() - sizee;
+                                                } else
+                                                    diff = sizee - prescriptionItem.getMedicines().size();
 
-                                                if ((labTestItem.size()-1) > diff) {
+                                                if ((labTestItem.size() - 1) > diff) {
                                                     ArrayList<LabTestItem> labTestItem1 = new ArrayList<>();
 
                                                     textView_end_note.setVisibility(View.GONE);
@@ -2631,8 +2689,8 @@ public class GeneratePresNew extends Fragment {
                                                     Pres_LabTest_adapter pres_labTest_adapter = new Pres_LabTest_adapter(labTestItem1, mContext);
                                                     rViewlabtest.setAdapter(pres_labTest_adapter);
                                                     rViewlabtest.setVisibility(View.VISIBLE);
-                                                    if(diff >0)
-                                                    textView_advice.setVisibility(View.VISIBLE);
+                                                    if (diff > 0)
+                                                        textView_advice.setVisibility(View.VISIBLE);
                                                     else
                                                         textView_advice.setVisibility(View.GONE);
 
@@ -2678,8 +2736,7 @@ public class GeneratePresNew extends Fragment {
                                                     }, DELAY_TIME);
 
 
-                                                }
-                                                else {
+                                                } else {
                                                     Pres_LabTest_adapter pres_labTest_adapter = new Pres_LabTest_adapter(labTestItem, mContext);
                                                     rViewlabtest.setAdapter(pres_labTest_adapter);
                                                     rViewlabtest.setVisibility(View.VISIBLE);
@@ -2694,7 +2751,7 @@ public class GeneratePresNew extends Fragment {
 
                                                             page_no.setText("Page No. " + page_no_count);
 
-                                                            Bitmap screen =  getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
+                                                            Bitmap screen = getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
 
                                                             files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
                                                             patient_item = prescriptionItem;
@@ -2720,7 +2777,7 @@ public class GeneratePresNew extends Fragment {
                                                     }, DELAY_TIME);
 
                                                 }
-                                            }else {
+                                            } else {
                                                 textView_end_note.setVisibility(View.VISIBLE);
                                                 textView_advice.setVisibility(View.GONE);
                                                 final Handler handler = new Handler();
@@ -2732,7 +2789,7 @@ public class GeneratePresNew extends Fragment {
 
                                                         page_no.setText("Page No. " + page_no_count);
 
-                                                        Bitmap screen =  getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
+                                                        Bitmap screen = getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
 
                                                         files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
                                                         patient_item = prescriptionItem;
@@ -2758,23 +2815,22 @@ public class GeneratePresNew extends Fragment {
                                                 }, DELAY_TIME);
 
                                             }
-                                        }
-                                        else{
+                                        } else {
                                             textView_advice.setVisibility(View.GONE);
                                             final Handler handler = new Handler();
-                                        final int finalLine = line;
-                                        handler.postDelayed(new Runnable() {
-                                            @Override
-                                            public void run() {
+                                            final int finalLine = line;
+                                            handler.postDelayed(new Runnable() {
+                                                @Override
+                                                public void run() {
 
 
-                                                page_no.setText("Page No. " + page_no_count);
+                                                    page_no.setText("Page No. " + page_no_count);
 
-                                                Bitmap screen =  getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
+                                                    Bitmap screen = getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
 
-                                                files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
-                                                patient_item = prescriptionItem;
-                                                filesGlobal = files;
+                                                    files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
+                                                    patient_item = prescriptionItem;
+                                                    filesGlobal = files;
 
                                         /*Intent intent = new Intent();
                                         intent.setAction(Intent.ACTION_SEND_MULTIPLE);
@@ -2784,22 +2840,18 @@ public class GeneratePresNew extends Fragment {
                                         intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
                                         Intent shareIntent = Intent.createChooser(intent, null);
                                         startActivity(shareIntent);*/
-                                                //  downloadPDFtoExternal();
+                                                    //  downloadPDFtoExternal();
 
-                                                fl_progress_bar.setVisibility(View.GONE);
-                                                if (dialog_data != null) {
-                                                    dialog_data.dismiss();
-                                                    popupBottomMenu();
+                                                    fl_progress_bar.setVisibility(View.GONE);
+                                                    if (dialog_data != null) {
+                                                        dialog_data.dismiss();
+                                                        popupBottomMenu();
+                                                    }
+
                                                 }
-
-                                            }
-                                        }, DELAY_TIME);
+                                            }, DELAY_TIME);
 
                                         }
-
-
-
-
 
 
                                     }
@@ -2809,7 +2861,7 @@ public class GeneratePresNew extends Fragment {
                                 int pp = 0;
                                 if (labTestItem.size() > 0) {
                                     fl_medicines_symbol.setVisibility(View.GONE);
-                                    if(labTestItem.size()>10){
+                                    if (labTestItem.size() > 10) {
                                         ArrayList<LabTestItem> labTestItem1 = new ArrayList<>();
 
                                         textView_end_note.setVisibility(View.GONE);
@@ -2858,12 +2910,12 @@ public class GeneratePresNew extends Fragment {
                                                 binding.textviewAllergy.setVisibility(View.GONE);
                                                 top_header_parent.setVisibility(View.GONE);
 
-                                                tempLb(files,finalSizee);
+                                                tempLb(files, finalSizee);
 
-                                            }},DELAY_TIME);
+                                            }
+                                        }, DELAY_TIME);
 
-                                    }
-                                    else {
+                                    } else {
                                         Pres_LabTest_adapter pres_labTest_adapter = new Pres_LabTest_adapter(labTestItem, mContext);
                                         rViewlabtest.setAdapter(pres_labTest_adapter);
                                         rViewlabtest.setVisibility(View.VISIBLE);
@@ -2904,12 +2956,13 @@ public class GeneratePresNew extends Fragment {
                                                 top_header_parent.setVisibility(View.GONE);
                                                 fl_progress_bar.setVisibility(View.GONE);
 
-                                                if (dialog_data != null){
+                                                if (dialog_data != null) {
                                                     dialog_data.dismiss();
                                                     popupBottomMenu();
                                                 }
 
-                                            }},DELAY_TIME);
+                                            }
+                                        }, DELAY_TIME);
 
 
                                     }
@@ -2953,12 +3006,13 @@ public class GeneratePresNew extends Fragment {
                                             top_header_parent.setVisibility(View.GONE);
                                             fl_progress_bar.setVisibility(View.GONE);
 
-                                            if (dialog_data != null){
+                                            if (dialog_data != null) {
                                                 dialog_data.dismiss();
                                                 popupBottomMenu();
                                             }
 
-                                        }},DELAY_TIME);
+                                        }
+                                    }, DELAY_TIME);
                                 }
 
 
@@ -2972,7 +3026,7 @@ public class GeneratePresNew extends Fragment {
                                 intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
                                 Intent shareIntent = Intent.createChooser(intent, null);
                                 startActivity(shareIntent);*/
-                               // downloadPDFtoExternal();
+                                // downloadPDFtoExternal();
 
                                /* if(loop){
                                     ArrayList<LabTestItem> labTestItem1 = new ArrayList<>();
@@ -3007,7 +3061,7 @@ public class GeneratePresNew extends Fragment {
                                 textView_end_note.setVisibility(View.VISIBLE);
                                 rViewlabtest.setVisibility(View.GONE);
                                 textView_advice.setVisibility(View.GONE);
-                                Bitmap screen =  getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
+                                Bitmap screen = getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
 
 
                                 files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
@@ -3021,7 +3075,7 @@ public class GeneratePresNew extends Fragment {
                                 intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
                                 Intent shareIntent = Intent.createChooser(intent, null);
                                 startActivity(shareIntent);*/
-                              //  downloadPDFtoExternal();
+                                //  downloadPDFtoExternal();
                                 fl_progress_bar.setVisibility(View.GONE);
                                 if (dialog_data != null) {
                                     dialog_data.dismiss();
@@ -3093,7 +3147,7 @@ public class GeneratePresNew extends Fragment {
                             textView_end_note.setVisibility(View.VISIBLE);
                             rViewlabtest.setVisibility(View.GONE);
                             textView_advice.setVisibility(View.GONE);
-                            Bitmap screen =  getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
+                            Bitmap screen = getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
 
                             files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
                             patient_item = prescriptionItem;
@@ -3106,11 +3160,12 @@ public class GeneratePresNew extends Fragment {
                                 intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
                                 Intent shareIntent = Intent.createChooser(intent, null);
                                 startActivity(shareIntent);*/
-                           // downloadPDFtoExternal();
+                            // downloadPDFtoExternal();
                             fl_progress_bar.setVisibility(View.GONE);
-                            if (dialog_data != null){
+                            if (dialog_data != null) {
                                 dialog_data.dismiss();
-                                popupBottomMenu();}
+                                popupBottomMenu();
+                            }
                         }
                        /* else {
                         fl_progress_bar.setVisibility(View.GONE);
@@ -3119,7 +3174,7 @@ public class GeneratePresNew extends Fragment {
                         fl_progress_bar.setVisibility(View.GONE);
                         if (dialog_data != null)
                             dialog_data.dismiss();
-                                e.printStackTrace();
+                        e.printStackTrace();
                     }
                 } else {
                     fl_progress_bar.setVisibility(View.GONE);
@@ -3149,11 +3204,10 @@ public class GeneratePresNew extends Fragment {
     };
 
 
-    private  void  tempLb(final ArrayList<Uri> files,int z){
+    private void tempLb(final ArrayList<Uri> files, int z) {
         rView.setVisibility(View.GONE);
         fl_medicines_symbol.setVisibility(View.GONE);
         ArrayList<LabTestItem> labTestItem1 = new ArrayList<>();
-
 
 
         for (int i = z; i < (labTestItem.size()); i++) {
@@ -3165,55 +3219,56 @@ public class GeneratePresNew extends Fragment {
         rViewlabtest.setVisibility(View.VISIBLE);
 
         textView_end_note.setVisibility(View.VISIBLE);
-                textView_advice.setVisibility(View.VISIBLE);
+        textView_advice.setVisibility(View.VISIBLE);
 
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
 
-                        page_no.setText("Page No. " + page_no_count);
+                page_no.setText("Page No. " + page_no_count);
 
-                        // Do something after 4s = 4000ms
+                // Do something after 4s = 4000ms
                       /*  if(prescriptionItem.getMedicines()!=null)
                             if (prescriptionItem.getMedicines().size() > 4)
                                 page_no.setText("3/"+(prescriptionItem.getMedicines().size()/4)+1);*/
-                        Bitmap screen1 =  getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
-                        files.add(getImageUri(mContext, screen1, prescriptionItem.getPName() + "1"));
+                Bitmap screen1 = getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
+                files.add(getImageUri(mContext, screen1, prescriptionItem.getPName() + "1"));
 
                      /*   if(prescriptionItem.getMedicines()!=null)
                             if (prescriptionItem.getMedicines().size() > 4)
                                 page_no.setText("4/"+(prescriptionItem.getMedicines().size()/4)+1);*/
-                        patient_item = prescriptionItem;
-                        textView_chief_complaint.setVisibility(View.GONE);
-                        textView_history.setVisibility(View.GONE);
-                        textView_findings.setVisibility(View.GONE);
-                        textView_treatment_advice.setVisibility(View.GONE);
-                        textView_diagnosis.setVisibility(View.GONE);
-                        binding.textviewTemprature.setVisibility(View.GONE);
-                        binding.textviewHeight.setVisibility(View.GONE);
-                        binding.textviewWeight.setVisibility(View.GONE);
-                        binding.textviewPulse.setVisibility(View.GONE);
-                        binding.textviewBloodPressure.setVisibility(View.GONE);
-                        binding.textviewBloodSugar.setVisibility(View.GONE);
-                        binding.textviewHemoglobing.setVisibility(View.GONE);
-                        binding.textviewSpo2.setVisibility(View.GONE);
-                        binding.textviewRespirationRate.setVisibility(View.GONE);
-                        binding.textviewAllergy.setVisibility(View.GONE);
+                patient_item = prescriptionItem;
+                textView_chief_complaint.setVisibility(View.GONE);
+                textView_history.setVisibility(View.GONE);
+                textView_findings.setVisibility(View.GONE);
+                textView_treatment_advice.setVisibility(View.GONE);
+                textView_diagnosis.setVisibility(View.GONE);
+                binding.textviewTemprature.setVisibility(View.GONE);
+                binding.textviewHeight.setVisibility(View.GONE);
+                binding.textviewWeight.setVisibility(View.GONE);
+                binding.textviewPulse.setVisibility(View.GONE);
+                binding.textviewBloodPressure.setVisibility(View.GONE);
+                binding.textviewBloodSugar.setVisibility(View.GONE);
+                binding.textviewHemoglobing.setVisibility(View.GONE);
+                binding.textviewSpo2.setVisibility(View.GONE);
+                binding.textviewRespirationRate.setVisibility(View.GONE);
+                binding.textviewAllergy.setVisibility(View.GONE);
 
-                        filesGlobal = files;
+                filesGlobal = files;
 
 
-                        fl_progress_bar.setVisibility(View.GONE);
-                        if (dialog_data != null) {
-                            dialog_data.dismiss();
-                           // PopupGeneratedImages();
-                            popupBottomMenu();
-                        }
-                    }
-                }, DELAY_TIME);
+                fl_progress_bar.setVisibility(View.GONE);
+                if (dialog_data != null) {
+                    dialog_data.dismiss();
+                    // PopupGeneratedImages();
+                    popupBottomMenu();
+                }
+            }
+        }, DELAY_TIME);
 
     }
+
     public void tempMEDICAL_CERT(final int position, final ArrayList<Uri> files) {
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -3227,7 +3282,7 @@ public class GeneratePresNew extends Fragment {
                                                 page_no.setText("1/"+(prescriptionItem.getMedicines().size()/4)+1);*/
                     // Do something after 4s = 4000ms
                     page_no.setText("Page No. " + position + 1);
-                    Bitmap screen =  getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
+                    Bitmap screen = getBitmapFromView(fl_main);  // here give id of our root layout (here its my RelativeLayout's id)
                     files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
 
                                                /* if(prescriptionItem.getMedicines()!=null)
@@ -3379,22 +3434,33 @@ public class GeneratePresNew extends Fragment {
     private void initViews() {
         int counter = 0;
 
-        if (certificate_selection) {
-            page_no.setVisibility(View.GONE);
+        if (certificate_selection_new && !TextUtils.isEmpty(definer) && !definer.equalsIgnoreCase("history")) {
+            page_no.setVisibility(View.VISIBLE);
             fl_medicines_symbol.setVisibility(View.GONE);
             textView_diagnosis.setVisibility(View.GONE);
             textView_advice.setVisibility(View.GONE);
-            textView_medical_cert.setVisibility(View.VISIBLE);
-            textView_medical_cert_desc.setVisibility(View.VISIBLE);
-            textView_medical_cert.setText(bundle.getString("certificate_title"));
-            textView_medical_cert_desc.setText("" + bundle.getString("certificate_desc"));
-            textView_medical_cert_desc.setTextColor(getResources().getColor(R.color.colorBlack));
-            textView_pat_name.setTextColor(getResources().getColor(R.color.colorBlack));
+            textView_medical_cert.setVisibility(View.GONE);
+            binding.flMedicinesSymbol.setVisibility(View.GONE);
+
+            if (!TextUtils.isEmpty(bundle.getString("certificate_title"))) {
+                textView_medical_cert.setText(bundle.getString("certificate_title"));
+                textView_medical_cert.setVisibility(View.VISIBLE);
+
+            }
+
+            if(!TextUtils.isEmpty(bundle.getString("certificate_desc")) && !bundle.getString("certificate_desc").equalsIgnoreCase("null")) {
+                textView_medical_cert_desc.setText(bundle.getString("certificate_desc"));
+                textView_medical_cert_desc.setVisibility(View.VISIBLE);
+                textView_medical_cert_desc.setTextColor(getResources().getColor(R.color.colorBlack));
+                textView_medical_cert.setVisibility(View.VISIBLE);
+            }
 
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             params.gravity = Gravity.CENTER;
             ll_patient_name.setLayoutParams(params);
+
         } else {
+
             if (prescriptionItem.getMedicines() != null) {
                 if (prescriptionItem.getMedicines().size() != 0)
                     fl_medicines_symbol.setVisibility(View.VISIBLE);
@@ -3408,6 +3474,7 @@ public class GeneratePresNew extends Fragment {
 
             textView_medical_cert.setVisibility(View.GONE);
             textView_medical_cert_desc.setVisibility(View.GONE);
+
         }
 
         CreatePrescription.labtestAddFLAG = true;
@@ -3417,15 +3484,31 @@ public class GeneratePresNew extends Fragment {
         else {
             if (end_note.contains("|")) {
                 String[] details = end_note.split(Pattern.quote("|"));
+
+                textView_medical_cert.setVisibility(View.GONE);
+                if (details.length >= 2)
+                    if (!details[1].equals("")) {
+                        textView_medical_cert.setText(details[1]);
+                        textView_medical_cert.setVisibility(View.VISIBLE);
+                    }
+
+                textView_medical_cert_desc.setVisibility(View.GONE);
+                if (details.length >= 3)
+                    if (!details[2].equals("")) {
+                        textView_medical_cert_desc.setText(details[2]);
+                        textView_medical_cert_desc.setVisibility(View.VISIBLE);
+                    }
+
+
                 if (details.length != 0) {
                     if (details[0] != null)
                         if (details[0].equals("")) {
-                            page_no.setVisibility(View.GONE);
+                            page_no.setVisibility(View.VISIBLE);
                             fl_medicines_symbol.setVisibility(View.GONE);
                             textView_diagnosis.setVisibility(View.GONE);
                             textView_advice.setVisibility(View.GONE);
-                            textView_medical_cert.setVisibility(View.VISIBLE);
                             textView_medical_cert_desc.setVisibility(View.VISIBLE);
+                            textView_medical_cert.setVisibility(View.VISIBLE);
                             textView_medical_cert_desc.setTextColor(getResources().getColor(R.color.colorBlack));
                             textView_pat_name.setTextColor(getResources().getColor(R.color.colorBlack));
 
@@ -3433,17 +3516,6 @@ public class GeneratePresNew extends Fragment {
                             params.gravity = Gravity.CENTER;
                             ll_patient_name.setLayoutParams(params);
                             textView_chief_complaint.setVisibility(View.GONE);
-                            textView_medical_cert.setVisibility(View.VISIBLE);
-                            textView_medical_cert_desc.setVisibility(View.VISIBLE);
-                            if (details.length == 2)
-                                if (!details[1].equals("")) {
-                                    textView_medical_cert.setText(details[1]);
-                                }
-
-                            if (details.length == 3)
-                                if (!details[2].equals("")) {
-                                    textView_medical_cert_desc.setText(details[2]);
-                                }
                         } else {
                             textView_chief_complaint.setVisibility(View.VISIBLE);
                             textView_end_note.setText("Note : " + details[0]);
@@ -3522,25 +3594,25 @@ public class GeneratePresNew extends Fragment {
                     line = line + strr.length();
                 }
 
-                for (String strr:details
+                for (String strr : details
                 ) {
-                    if(!strr.equals("")){
+                    if (!strr.equals("")) {
                         int multiplier = 1;
-                        if(strr.length()>90){
-                            multiplier = (strr.length()/90);
+                        if (strr.length() > 90) {
+                            multiplier = (strr.length() / 90);
                         }
-                        Log.e("multiplier"," ====== "+multiplier);
+                        Log.e("multiplier", " ====== " + multiplier);
 
-                        lineCounter = lineCounter +multiplier;
+                        lineCounter = lineCounter + multiplier;
                     }
                 }
-                Log.e("details"," ======-------------------------------------------------- ");
-                Log.e("details"," ====== "+diagnosis_desc);
-                Log.e("lineCounter"," ====== "+lineCounter);
-                Log.e("details"," ======-------------------------------------------------- ");
+                Log.e("details", " ======-------------------------------------------------- ");
+                Log.e("details", " ====== " + diagnosis_desc);
+                Log.e("lineCounter", " ====== " + lineCounter);
+                Log.e("details", " ======-------------------------------------------------- ");
 
 
-              //  Toast.makeText(mContext, "details = "+details.length, Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(mContext, "details = "+details.length, Toast.LENGTH_SHORT).show();
                 if (details[0] != null)
                     if (details[0].equals(""))
                         textView_chief_complaint.setVisibility(View.GONE);
@@ -3785,7 +3857,11 @@ public class GeneratePresNew extends Fragment {
 
             textView_date.setText("Date : " + DateUtils.outFormatsetMMM(prescriptionItem.getDate()));
         } else {
-            textView_date.setText("Date : " + prescriptionItem.getDate());
+
+            if (!TextUtils.isEmpty(dateString))
+                textView_date.setText("Date: "+ dateString);
+            else
+                textView_date.setText("Date : " + prescriptionItem.getDate());
         }
         if (!("").equalsIgnoreCase(doctor.getWorkingDays())) {
             String work_days = doctor.getWorkingDays();
@@ -3813,7 +3889,7 @@ public class GeneratePresNew extends Fragment {
             textView_days.setText("Working : " + work_days);
         } else {
             textView_days.setVisibility(View.GONE);
-            counter = counter +1;
+            counter = counter + 1;
         }
 
         if (TextUtils.isEmpty(binding.textViewDays.getText().toString()) &&
@@ -3832,8 +3908,8 @@ public class GeneratePresNew extends Fragment {
             else
                 textView_time.setText("Time : " + visiting_hr_from_details[0].toLowerCase().trim() + " - " + visiting_hr_to_details[0].toLowerCase().trim());
 
-            if(visiting_hr_from_details.length==1 && visiting_hr_from_details[0].equals(""))
-                if(visiting_hr_to_details.length==1 && visiting_hr_to_details[0].equals(""))
+            if (visiting_hr_from_details.length == 1 && visiting_hr_from_details[0].equals(""))
+                if (visiting_hr_to_details.length == 1 && visiting_hr_to_details[0].equals(""))
                     textView_time.setVisibility(View.GONE);
         } else if (!("").equalsIgnoreCase(doctor.getVisitingHrFrom())) {
             String[] visiting_hr_from_details = manager.getPreferences(mContext, "visiting_hr_from").split(Pattern.quote("|"));
@@ -3846,12 +3922,12 @@ public class GeneratePresNew extends Fragment {
                 textView_time.setText("Time : " + visiting_hr_from_details[0].toLowerCase().trim() + " - " + visiting_hr_to_details[0].toLowerCase().trim());
             //  textView_time.setText("Time : " + doctor.getVisitingHrFrom() + " to " + doctor.getVisitingHrTo());
 
-            if(visiting_hr_from_details.length==1 && visiting_hr_from_details[0].equals(""))
-                if(visiting_hr_to_details.length==1 && visiting_hr_to_details[0].equals(""))
+            if (visiting_hr_from_details.length == 1 && visiting_hr_from_details[0].equals(""))
+                if (visiting_hr_to_details.length == 1 && visiting_hr_to_details[0].equals(""))
                     textView_time.setVisibility(View.GONE);
         } else {
-           textView_time.setVisibility(View.GONE);
-            counter = counter +1;
+            textView_time.setVisibility(View.GONE);
+            counter = counter + 1;
         }
 
 
@@ -3859,19 +3935,19 @@ public class GeneratePresNew extends Fragment {
             textView_contact.setText("Contact : " + doctor.getMobileLetterHead());
         } else {
             textView_contact.setVisibility(View.GONE);
-            counter = counter +1;
+            counter = counter + 1;
         }
         if (!("").equalsIgnoreCase(doctor.getEmailLetterHead())) {
             textView_email.setText("Mail Id : " + doctor.getEmailLetterHead());
         } else {
             textView_email.setVisibility(View.GONE);
-            counter = counter +1;
+            counter = counter + 1;
         }
         if (!("").equalsIgnoreCase(doctor.getClinicAddress())) {
             textView_add.setText("Address : " + doctor.getClinicAddress());
         } else {
             textView_add.setVisibility(View.GONE);
-            counter = counter +1;
+            counter = counter + 1;
         }
 
 
@@ -3934,7 +4010,7 @@ public class GeneratePresNew extends Fragment {
 
 
         }
-        if(counter==5)
+        if (counter == 5)
             binding.lineOfSingle.setVisibility(View.GONE);
 
     }

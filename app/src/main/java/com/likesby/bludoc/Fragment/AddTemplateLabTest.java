@@ -2,8 +2,11 @@ package com.likesby.bludoc.Fragment;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -61,6 +64,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+import static android.app.Activity.RESULT_OK;
 import static com.likesby.bludoc.HomeActivity.poss__;
 
 public class AddTemplateLabTest extends Fragment {
@@ -133,8 +137,52 @@ public class AddTemplateLabTest extends Fragment {
         assert args != null;
         template_name__ = args.getString("name");
         template_name.setText(template_name__);
+
+        v.findViewById(R.id.speech_voice).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intentSpeech = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                intentSpeech.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
+                try {
+                    startActivityForResult(intentSpeech, 500);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(
+                            mContext,
+                            "Oops! Your device doesn't support Speech to Text",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
+
+            }
+        });
+
         initCalls(v);
         return v;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+
+            if (requestCode == 500 && data != null) {
+
+                ArrayList<String> stringArrayListExtra =
+                        data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                searchBarMaterialMedicine.setText(stringArrayListExtra.get(0));
+
+                searchBarMaterialMedicine.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        searchBarMaterialMedicine.setSelection(searchBarMaterialMedicine.getText().length());
+                    }
+                });
+
+            }
+        }
+
     }
 
     private void initCalls(View view) {
@@ -189,7 +237,6 @@ public class AddTemplateLabTest extends Fragment {
         });
 
         addMedicinesArrayList = new ArrayList<>();
-        textView3_5.setVisibility(View.GONE);
         ll_35.setVisibility(View.GONE);
         btn_add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -242,6 +289,8 @@ public class AddTemplateLabTest extends Fragment {
                                                 Log.e("position", String.valueOf(position));
                                                 textView3_5.setText((position + 1) + "/" + addMedicinesArrayList.size());
 
+                                                addLabTestAdapter.notifyItemChanged(position);
+
                                             }
                                         }
 
@@ -284,7 +333,6 @@ public class AddTemplateLabTest extends Fragment {
                                 addLabTestAdapter = new AddLabTestTemplateAdapter(addMedicinesArrayList,
                                         et_additional_comments, btn_add, textView3_5, ll_35, searchBarMaterialMedicine,mRecyclerViewMedicines, btnChooseFromTemplate, btn_save_template,"template");
 
-
                                 mRecyclerViewAddedMedicines.setAdapter(addLabTestAdapter);
 
                                 if (addMedicinesArrayList.size() > 0) {
@@ -318,6 +366,10 @@ public class AddTemplateLabTest extends Fragment {
                             searchBarMaterialMedicine.setText("");
                             searchBarMaterialMedicine.setVisibility(View.VISIBLE);
                             et_additional_comments.setText("");
+
+                            searchBarMaterialMedicine.requestFocus();
+                            InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
 
                         }else {
                             Toast.makeText(mContext, "Please enter lab test / imaging name", Toast.LENGTH_SHORT).show();

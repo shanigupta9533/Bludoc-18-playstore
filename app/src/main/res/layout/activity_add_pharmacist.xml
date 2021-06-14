@@ -48,6 +48,16 @@
 
             </LinearLayout>
 
+            <ImageView
+                android:layout_width="28dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:id="@+id/info"
+                android:layout_marginEnd="@dimen/font_15"
+                android:src="@drawable/info"
+                 />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -69,6 +79,11 @@
         android:textSize="13sp"
         android:hint="@string/search_pharmacist_here"
         android:layout_marginLeft="@dimen/margin_20"
+        android:lines="1"
+        android:maxLines="1"
+        android:minLines="1"
+        android:inputType="text"
+        android:imeOptions="actionNext"
         android:layout_marginRight="@dimen/margin_20"
         android:layout_marginTop="@dimen/margin_10"
         android:layout_marginBottom="@dimen/margin_10"
@@ -80,26 +95,11 @@
         android:background="@drawable/spinner_background_white"
         android:textStyle="bold" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_20"
-        android:layout_marginEnd="@dimen/margin_20"
-        android:layout_below="@+id/add_pharmacist_serachView"
-        android:fontFamily="@font/poppins"
-        android:gravity="center"
-        android:id="@+id/text_notice"
-        android:text="Prescription will be send to selected pharmacist"
-        android:layout_centerHorizontal="true"
-        android:alpha="0.7"
-        android:textColor="@color/colorBlack"
-        android:textSize="14dp" />
-
     <com.yalantis.phoenix.PullToRefreshView
         android:id="@+id/pullToRefresh"
         android:layout_width="match_parent"
         android:layout_marginBottom="50dp"
-        android:layout_below="@+id/text_notice"
+        android:layout_below="@+id/add_pharmacist_serachView"
         android:layout_marginTop="@dimen/margin_5"
         android:layout_height="match_parent">
 
@@ -111,7 +111,7 @@
 
     </com.yalantis.phoenix.PullToRefreshView>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:orientation="horizontal"
         android:layout_alignParentBottom="true"
@@ -125,6 +125,7 @@
             android:textSize="13sp"
             android:layout_gravity="center|bottom"
             android:gravity="center"
+            android:layout_centerInParent="true"
             android:fontFamily="@font/poppins"
             android:layout_marginStart="@dimen/font_16"
             android:textAllCaps="false"
@@ -136,7 +137,7 @@
             />
 
         <Button
-            android:visibility="visible"
+            android:visibility="gone"
             android:textSize="13sp"
             android:layout_gravity="center|bottom"
             android:gravity="center"
@@ -151,18 +152,9 @@
             android:background="@drawable/blue_round_btn_gradient_red"
             />
 
-    </LinearLayout>
+    </RelativeLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:id="@+id/message"
-        android:visibility="gone"
-        android:fontFamily="@font/poppins"
-        android:text="@string/refresh_to_load"
-        android:textColor="@color/colorBlack"
-        android:textSize="18dp" />
+    <include layout="@layout/no_data_found" />
 
     <FrameLayout
         android:layout_width="match_parent"

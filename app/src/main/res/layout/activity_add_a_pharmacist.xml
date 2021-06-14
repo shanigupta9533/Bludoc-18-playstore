@@ -45,6 +45,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins"
                         android:text="@string/add_a_pharmacist"
+                        android:id="@+id/title_on_toolbar"
                         android:textColor="@color/colorBlack"
                         android:textSize="14dp" />
 
@@ -116,7 +117,74 @@
 
         </LinearLayout>
 
-        <LinearLayout
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_marginTop="@dimen/font_12"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_30"
+                        android:layout_marginRight="@dimen/margin_30"
+                        android:layout_marginStart="@dimen/margin_30"
+                        android:id="@+id/email_title_info"
+                        android:layout_marginTop="@dimen/margin_10"
+                        android:gravity="center"
+                        android:text="@string/pharmacist_s_email_id"
+                        android:textColor="@color/colorDarkGrey"
+                        android:textSize="13dp"
+                        android:fontFamily="@font/poppins"
+                        />
+
+                    <ImageView
+                        android:layout_width="@dimen/margin_20"
+                        android:layout_height="@dimen/margin_20"
+                        android:id="@+id/notify_dialog"
+                        android:layout_marginStart="@dimen/font_12"
+                        android:layout_marginTop="@dimen/margin_20"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/email_title_info"
+                        android:src="@drawable/info"
+                         />
+
+                </RelativeLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="@dimen/margin_20"
+                    android:layout_marginRight="@dimen/margin_20"
+                    android:layout_marginEnd="@dimen/margin_20"
+                    android:layout_marginStart="@dimen/margin_20"
+                    android:layout_marginTop="@dimen/margin_10"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:focusedByDefault="false"
+                        android:textSize="16sp"
+                        android:maxLines="1"
+                        android:inputType="text"
+                        android:id="@+id/email_id"
+                        android:imeOptions="actionDone"
+                        android:padding="@dimen/margin_10"
+                        android:paddingEnd="@dimen/font_14"
+                        android:paddingStart="@dimen/margin_10"
+                        android:textColor="@color/colorBlack"
+                        android:textColorHint="@color/colorBlack"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/margin_40"
+                        android:background="@drawable/blue_faint_btn_gradient2"/>
+
+                </FrameLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
             android:layout_width="match_parent"
             android:orientation="vertical"
             android:layout_marginTop="@dimen/font_12"
@@ -165,61 +233,11 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:layout_marginTop="@dimen/font_12"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/margin_30"
-                android:layout_marginRight="@dimen/margin_30"
-                android:layout_marginEnd="@dimen/margin_30"
-                android:layout_marginStart="@dimen/margin_30"
-                android:layout_marginTop="@dimen/margin_10"
-                android:gravity="center"
-                android:text="@string/pharmacist_s_email_id"
-                android:textColor="@color/colorDarkGrey"
-                android:textSize="13dp"
-                android:fontFamily="@font/poppins"
-                />
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_marginLeft="@dimen/margin_20"
-                android:layout_marginRight="@dimen/margin_20"
-                android:layout_marginEnd="@dimen/margin_20"
-                android:layout_marginStart="@dimen/margin_20"
-                android:layout_marginTop="@dimen/margin_10"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:focusedByDefault="false"
-                    android:textSize="16sp"
-                    android:maxLines="1"
-                    android:inputType="text"
-                    android:id="@+id/email_id"
-                    android:imeOptions="actionDone"
-                    android:padding="@dimen/margin_10"
-                    android:paddingEnd="@dimen/font_14"
-                    android:paddingStart="@dimen/margin_10"
-                    android:textColor="@color/colorBlack"
-                    android:textColorHint="@color/colorBlack"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/margin_40"
-                    android:background="@drawable/blue_faint_btn_gradient2"/>
-
-            </FrameLayout>
-
-        </LinearLayout>
-
             <Button
                 android:visibility="visible"
                 android:id="@+id/submit"
                 android:textSize="14sp"
-                android:layout_margin="@dimen/margin_10"
+                android:layout_marginTop="@dimen/margin_20"
                 android:layout_gravity="center|bottom"
                 android:gravity="center"
                 android:fontFamily="@font/poppins"
@@ -229,7 +247,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_centerInParent="true"
                 android:layout_height="@dimen/margin_40"
-                android:text="@string/submit"
+                android:text="Add Pharmacy"
                 android:background="@drawable/blue_round_btn_gradient"
                 />
 

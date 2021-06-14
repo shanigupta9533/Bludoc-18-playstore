@@ -8,8 +8,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     android:background="@color/colorWhite"
     android:id="@+id/fl_mainmm"
-
-
     android:layout_height="match_parent"
     android:layout_width="match_parent"
  >
@@ -40,13 +38,13 @@
                 android:layout_gravity="right|center_vertical"
                 android:layout_marginLeft="@dimen/margin_5"
                 android:layout_marginRight="@dimen/margin_5"
-                android:background="@drawable/blue_round_btn_gradient"
+                android:background="@drawable/blue_round_btn_gradient_mojito"
                 android:gravity="center"
                 android:paddingLeft="@dimen/margin_5"
                 android:paddingRight="@dimen/margin_5"
                 android:text="Back"
                 android:textAllCaps="false"
-                android:textColor="@color/white"
+                android:textColor="@color/colorBlue"
                 android:textSize="12sp"
                 android:visibility="gone" />
 
@@ -57,13 +55,13 @@
                 android:layout_gravity="right|center_vertical"
                 android:layout_marginLeft="@dimen/margin_5"
                 android:layout_marginRight="@dimen/margin_5"
-                android:background="@drawable/blue_round_btn_gradient"
+                android:background="@drawable/blue_round_btn_gradient_mojito"
                 android:gravity="center"
                 android:paddingLeft="@dimen/margin_5"
                 android:paddingRight="@dimen/margin_5"
                 android:text="Edit"
                 android:textAllCaps="false"
-                android:textColor="@color/white"
+                android:textColor="@color/colorBlue"
                 android:textSize="12sp"
                 android:visibility="visible" />
 
@@ -86,7 +84,7 @@
                 android:layout_height="@dimen/margin_35"
                 android:layout_gravity="center"
                 android:layout_marginRight="@dimen/margin_5"
-                android:background="@drawable/blue_round_btn_gradient"
+                android:background="@drawable/blue_round_btn_gradient_mojito"
                 android:gravity="center"
                 android:paddingStart="@dimen/margin_15"
                 android:paddingLeft="@dimen/margin_15"
@@ -94,7 +92,7 @@
                 android:paddingRight="@dimen/margin_15"
                 android:text="Approve and Share"
                 android:textAllCaps="false"
-                android:textColor="@color/white"
+                android:textColor="@color/colorBlue"
                 android:textSize="12sp" />
 
 
@@ -108,7 +106,7 @@
         android:layout_weight="1"
         android:layout_marginTop="@dimen/margin_8"
         android:background="@color/colorDarkBlue"
-        
+
         android:gravity="center"
         android:padding="@dimen/margin_5"
         android:text="Clinic / Hospital name"
@@ -135,13 +133,17 @@
             android:layout_height="match_parent">
 
             <LinearLayout
-                android:id="@+id/top_doctor_details"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="240dp"
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:id="@+id/top_doctor_details"
+                    android:layout_height="match_parent">
 
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -183,7 +185,7 @@
                             android:id="@+id/textView_DocName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            
+
                             android:text=""
                             android:layout_marginStart="@dimen/margin_8"
                             android:textAlignment="viewEnd"
@@ -196,7 +198,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/margin_5"
-                            
+
                             android:text=""
                             android:textAlignment="viewEnd"
                             android:textColor="@color/colorheaderDark"
@@ -208,7 +210,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/margin_5"
-                            
+
                             android:text=""
                             android:textAlignment="viewEnd"
                             android:textColor="@color/colorheaderDark"
@@ -220,7 +222,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/margin_5"
-                            
+
                             android:text=""
                             android:textAlignment="viewEnd"
                             android:textColor="@color/colorheaderDark"
@@ -239,9 +241,9 @@
                     android:layout_marginRight="@dimen/margin_10"
                     android:layout_marginBottom="@dimen/margin_10"
                     android:background="@color/colorFaintWhite" />
+
                 <LinearLayout
                     android:id="@+id/top_header_parent"
-
                     android:layout_width="match_parent"
                     android:orientation="vertical"
                     android:background="@color/white"
@@ -268,7 +270,6 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="start|center"
                                 android:layout_weight="1.5"
-                                
                                 android:text="Working days : "
                                 android:textColor="@color/colorheaderDark"
                                 android:textSize="14sp" />
@@ -333,6 +334,8 @@
 
                 </LinearLayout>
 
+                </LinearLayout>
+
             </LinearLayout>
 
         </FrameLayout>
@@ -347,7 +350,6 @@
             android:layout_marginTop="@dimen/margin_5"
             android:fontFamily="sans-serif"
             android:gravity="center"
-            android:text="@string/medical_certificate"
             android:textColor="@color/colorBlue"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -383,7 +385,7 @@
                 android:layout_marginBottom="@dimen/margin_5"
                 android:alpha="0.8"
                 android:textStyle="bold"
-                
+
                 android:gravity="center"
                 android:text="Patient’s Name: "
                 android:textColor="@color/colorBlack"
@@ -423,7 +425,7 @@
                     android:layout_weight="1"
                     android:alpha="0.8"
                     android:background="@drawable/background_underground"
-                    
+
                     android:text="Address - "
                     android:textColor="@color/colorBlack"
                     android:textSize="13sp" />
@@ -444,7 +446,7 @@
                     android:layout_weight="1"
                     android:alpha="0.8"
                     android:background="@drawable/background_underground"
-                    
+
                     android:text="Temperature - 12"
                     android:textColor="@color/colorBlack"
                     android:textSize="13sp" />
@@ -458,7 +460,7 @@
                     android:layout_weight="1"
                     android:alpha="0.8"
                     android:background="@drawable/background_underground"
-                    
+
                     android:text="Blood Group - 12"
                     android:textColor="@color/colorBlack"
                     android:textSize="13sp" />
@@ -483,7 +485,7 @@
                     android:layout_weight="1"
                     android:alpha="0.8"
                     android:background="@drawable/background_underground"
-                    
+
                     android:text="Height - 12"
                     android:textColor="@color/colorBlack"
                     android:textSize="13sp" />
@@ -498,7 +500,7 @@
                     android:layout_weight="1"
                     android:alpha="0.8"
                     android:background="@drawable/background_underground"
-                    
+
                     android:text="Weight - 12"
                     android:textColor="@color/colorBlack"
                     android:textSize="13sp" />
@@ -520,7 +522,7 @@
                     android:layout_weight="1"
                     android:alpha="0.8"
                     android:background="@drawable/background_underground"
-                    
+
                     android:text="Pulse - 12"
                     android:textColor="@color/colorBlack"
                     android:textSize="13sp" />
@@ -535,7 +537,7 @@
                     android:layout_weight="1"
                     android:alpha="0.8"
                     android:background="@drawable/background_underground"
-                    
+
                     android:text="Blood Pressure - 12"
                     android:textColor="@color/colorBlack"
                     android:textSize="13sp" />
@@ -557,7 +559,7 @@
                     android:layout_weight="1"
                     android:alpha="0.8"
                     android:background="@drawable/background_underground"
-                    
+
                     android:text="Blood Sugar - 12"
                     android:textColor="@color/colorBlack"
                     android:textSize="13sp" />
@@ -573,7 +575,7 @@
                     android:layout_weight="1"
                     android:alpha="0.8"
                     android:background="@drawable/background_underground"
-                    
+
                     android:text="Hemoglobin - 12"
                     android:textColor="@color/colorBlack"
                     android:textSize="13sp" />
@@ -595,7 +597,7 @@
                     android:layout_weight="1"
                     android:alpha="0.8"
                     android:background="@drawable/background_underground"
-                    
+
                     android:text="Spo2 - 12"
                     android:textColor="@color/colorBlack"
                     android:textSize="13sp" />
@@ -610,7 +612,7 @@
                     android:layout_weight="1"
                     android:alpha="0.8"
                     android:background="@drawable/background_underground"
-                    
+
                     android:text="Respirational rate - 12"
                     android:textColor="@color/colorBlack"
                     android:textSize="13sp" />
@@ -629,7 +631,7 @@
                 android:layout_weight="1"
                 android:alpha="0.8"
                 android:background="@drawable/background_underground"
-                
+
                 android:text="Allergy - 12"
                 android:textColor="@color/colorBlack"
                 android:textSize="13sp" />
@@ -646,7 +648,7 @@
             android:layout_weight="1"
             android:alpha="0.8"
             android:background="@drawable/background_underground"
-            
+
             android:text="Chief Complaint - 12"
             android:textColor="@color/colorBlack"
             android:textSize="13sp" />
@@ -661,7 +663,7 @@
             android:layout_weight="1"
             android:alpha="0.8"
             android:background="@drawable/background_underground"
-            
+
             android:text=""
             android:textColor="@color/colorBlack"
             android:textSize="13sp" />
@@ -676,7 +678,7 @@
             android:layout_weight="1"
             android:alpha="0.8"
             android:background="@drawable/background_underground"
-            
+
             android:text=""
             android:textColor="@color/colorBlack"
             android:textSize="13sp" />
@@ -691,7 +693,7 @@
             android:layout_weight="1"
             android:alpha="0.8"
             android:background="@drawable/background_underground"
-            
+
             android:text=""
             android:textColor="@color/colorBlack"
             android:textSize="13sp" />
@@ -706,7 +708,7 @@
             android:layout_weight="1"
             android:alpha="0.8"
             android:background="@drawable/background_underground"
-            
+
             android:text=""
             android:textColor="@color/colorBlack"
             android:textSize="13sp" />
@@ -726,21 +728,17 @@
 
         <ImageView
             android:layout_marginTop   ="@dimen/margin_10"
-
             android:layout_marginLeft   ="@dimen/margin_40"
             android:layout_marginStart  ="@dimen/margin_40"
-
             android:id="@+id/fl_medicines_symbol"
             android:layout_width="20dp"
             android:layout_height="20dp"
-
             android:src="@drawable/rx" />
 
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_marginLeft   ="@dimen/margin_50"
             android:layout_marginStart  ="@dimen/margin_50"
-
             android:layout_marginEnd    ="@dimen/margin_10"
             android:layout_marginRight  ="@dimen/margin_10"
             android:layout_marginTop    ="@dimen/margin_10"
@@ -750,14 +748,13 @@
             />
 
         <TextView
-            
+
             android:id="@+id/textView_advice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_10"
             android:layout_marginLeft   ="@dimen/margin_40"
             android:layout_marginStart  ="@dimen/margin_40"
-
             android:text="Advice"
             android:textAllCaps="true"
             android:textColor="@color/colorBlack"
@@ -830,7 +827,7 @@
                 android:layout_height="75dp" />
 
             <TextView
-                
+
                 android:id="@+id/sig_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -873,7 +870,6 @@
         <LinearLayout
             android:gravity="center"
             android:layout_gravity="bottom"
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -883,7 +879,6 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-
                 android:layout_marginTop="@dimen/margin_10"
                 android:layout_marginEnd="@dimen/margin_30"
                 android:layout_marginRight="@dimen/margin_30"
@@ -899,6 +894,7 @@
                 android:gravity="center"
                 android:text="Page No. 1"
                 android:textSize="14sp" />
+
         </LinearLayout>
     </LinearLayout>
 

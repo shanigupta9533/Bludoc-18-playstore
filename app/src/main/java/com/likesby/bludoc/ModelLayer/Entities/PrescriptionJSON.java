@@ -35,6 +35,9 @@ public class PrescriptionJSON{
 	@SerializedName("end_note")
 	private String endNote;
 
+	@SerializedName("is_certificate")
+	private String isCertificate;
+
 	@SerializedName("temperature")
 	private String temperature;
 
@@ -43,6 +46,9 @@ public class PrescriptionJSON{
 
 	@SerializedName("weight")
 	private String weight;
+
+	@SerializedName("date")
+	private String date;
 
 	@SerializedName("pulse")
 	private String pulse;
@@ -72,6 +78,14 @@ public class PrescriptionJSON{
 		return diagnosis;
 	}
 
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
+
 	public void setDiagnosis(String diagnosis) {
 		this.diagnosis = diagnosis;
 	}
@@ -85,6 +99,14 @@ public class PrescriptionJSON{
 
 	public String getDoctorId(){
 		return doctorId;
+	}
+
+	public String getIsCertificate() {
+		return isCertificate;
+	}
+
+	public void setIsCertificate(String isCertificate) {
+		this.isCertificate = isCertificate;
 	}
 
 	public void setMedicines(ArrayList<MedicinesItem> medicines){

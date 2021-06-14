@@ -113,7 +113,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
         viewHolder.tv_patient_created.setText(DateUtils.outFormatsetMMM(mFilteredList.get(i).getDate()));
 
-
         if(!("").equalsIgnoreCase(mFilteredList.get(i).getPMobile())) {
             viewHolder.tv_mobile.setText("Mobile : " + mFilteredList.get(i).getPMobile());
         }
@@ -149,10 +148,11 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
                 bundle.putString("definer", "history");
                 bundle.putString("end_note", prescriptionItem.getEndNote());
                 bundle.putString("yesOrNo",prescriptionItem.getAge());
+                bundle.putString("pres_id",prescriptionItem.getPresbPatientId());
+                bundle.putString("isCertificate",prescriptionItem.getIsCertificate());
                 myFragment.setArguments(bundle);
                 FragmentManager fragmentManager = ((FragmentActivity) ctx).getSupportFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.homePageContainer, myFragment, "first").addToBackStack("Detail").commit();
-
             }
         });
 
@@ -251,9 +251,4 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
         }
     }
-
-
-
-
-
 }

@@ -1049,10 +1049,10 @@
                         android:layout_height="@dimen/margin_35"
                         android:layout_gravity="right"
                         android:textSize="@dimen/font_14"
-                        android:background="@drawable/blue_round"
+                        android:background="@drawable/blue_round_btn_gradient"
                         android:text="Save and Add next"
                         android:textAllCaps="false"
-                        android:textColor="#17263E"
+                        android:textColor="@color/white"
                         app:layout_constraintEnd_toEndOf="parent" />
 
 

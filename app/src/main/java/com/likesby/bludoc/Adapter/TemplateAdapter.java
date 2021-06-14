@@ -185,8 +185,14 @@ public class TemplateAdapter extends RecyclerView.Adapter<TemplateAdapter.ViewHo
 
                       ((FragmentActivity) ctx).getSupportFragmentManager().popBackStack();
                     backCheckerFlag = true;
-                    CreatePrescription.medicineAddFLAG = true;
-                    CreatePrescription.NEWaddMedicinesArrayList.addAll(mFilteredList.get(getAdapterPosition()).getMedicines());
+//                    CreatePrescription.medicineAddFLAG = true;
+//                    CreatePrescription.NEWaddMedicinesArrayList.addAll(mFilteredList.get(getAdapterPosition()).getMedicines());
+
+                    CreatePrescription createPrescription= (CreatePrescription) ((FragmentActivity) ctx).getSupportFragmentManager().findFragmentByTag("prescription");
+                    if(createPrescription!=null){
+                        createPrescription.setDataOnMedicines(mFilteredList.get(getAdapterPosition()).getMedicines());
+                    }
+
                     /*CreatePrescription myFragment = new CreatePrescription();
                     Bundle bundle = new Bundle();
                     bundle.putParcelableArrayList("new_list",mFilteredList.get(getAdapterPosition()).getMedicines());
@@ -213,7 +219,6 @@ public class TemplateAdapter extends RecyclerView.Adapter<TemplateAdapter.ViewHo
                     CreatePrescription.is_on_medicines = true;
                     CreatePrescription.is_on_case_history = false;
                     CreatePrescription.certificate_selection = false;
-
                     bundle.putString("definer_type","medicines");
                     bundle.putString("temp_id",mFilteredList.get(getAdapterPosition()).getTemplateId());
                     bundle.putString("temp_name",mFilteredList.get(getAdapterPosition()).getTemplateName());

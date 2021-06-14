@@ -66,6 +66,9 @@ public class PrescriptionItem implements Parcelable {
     @SerializedName("age")
     private String age;
 
+    @SerializedName("is_certificate")
+    private String isCertificate;
+
     protected PrescriptionItem(Parcel in) {
         date = in.readString();
         endNote = in.readString();
@@ -144,6 +147,14 @@ public class PrescriptionItem implements Parcelable {
 
     public ArrayList<MedicinesItem> getMedicines() {
         return medicines;
+    }
+
+    public String getIsCertificate() {
+        return isCertificate;
+    }
+
+    public void setIsCertificate(String isCertificate) {
+        this.isCertificate = isCertificate;
     }
 
     public void setLabTest(ArrayList<LabTestItem> labTest) {

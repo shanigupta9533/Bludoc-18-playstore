@@ -70,8 +70,8 @@
 
         <Button
             android:layout_margin="@dimen/margin_20"
-            android:textSize="16sp"
-            android:textColor="@color/colorWhite"
+            android:textSize="14sp"
+            android:textColor="@color/colorBlue"
             android:textStyle="normal"
             android:layout_gravity="center"
             android:gravity="center"

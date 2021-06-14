@@ -116,11 +116,13 @@ public interface WebServices {
 
     @FormUrlEncoded
     @POST("SendPresciption")
-    Call<ResultOfApi> sendPresciption(@Field("pharmacist_id") String pharmacist_id,@Field("presb_patient_id") String presb_patient_id);
+    Call<ResultOfApi> sendPresciption(@Field("created_by") String doctor_id,@Field("presb_patient_id") String presb_patient_id);
 
     @FormUrlEncoded
     @POST("Phamalist")
-    Call<ResultOfApi> sendPharmacistById(@Field("pharmacist_id") String pharmacist_id);
+    Call<ResultOfApi> sendPharmacistById(@Field("created_by") String doctor_id,
+                                         @Field("pharmacist_id") String pharmacist_id,
+                                         @Field("is_check") String is_check);
 
     @FormUrlEncoded
     @POST("UpdateProfile")
@@ -168,6 +170,20 @@ public interface WebServices {
     @FormUrlEncoded
     @POST("PatientEdit")
     Single<ResponseSuccess> PatientUpdate(@Field("patient_id") String patient_id,
+                                          @Field("p_name") String p_name,
+                                          @Field("age") String age,
+                                          @Field("gender") String gender,
+                                          @Field("p_mobile") String p_mobile,
+                                          @Field("p_email") String p_email,
+                                          @Field("p_address") String p_address,
+                                          @Field("p_blood_grp") String p_blood_grp,
+                                          @Field("p_dob") String p_dob
+
+    );
+
+    @FormUrlEncoded
+    @POST("PatientEdit")
+    Call<ResponseSuccess> PatientUpdateFromApi(@Field("patient_id") String patient_id,
                                           @Field("p_name") String p_name,
                                           @Field("age") String age,
                                           @Field("gender") String gender,
@@ -256,6 +272,10 @@ public interface WebServices {
     @FormUrlEncoded
     @POST("MyPatients")
     Single<ResponsePatients> getPatients(@Field("created_by") String created_by);
+
+    @FormUrlEncoded
+    @POST("MyPatients")
+    Call<ResponsePatients> getPatients2(@Field("created_by") String created_by);
 
     @FormUrlEncoded
     @POST("MySubsciptions")
@@ -363,6 +383,10 @@ public interface WebServices {
     @FormUrlEncoded
     @POST("DeletePatient")
     Single<ResponseSuccess> deletePatient(@Field("patient_id") String patient_id);
+
+    @FormUrlEncoded
+    @POST("DeletePatient")
+    Call<ResponseSuccess> deletePatientFromApi(@Field("patient_id") String patient_id);
 
 
     @FormUrlEncoded

@@ -73,8 +73,6 @@ public class AddLabTestAdapter extends RecyclerView.Adapter<AddLabTestAdapter.Vi
         LabTestItem medicinesItem = mFilteredList.get(i);
         viewHolder.MEDICINE_NAME.setText(medicinesItem.getLabTestName());
 
-
-
         if(!("").equalsIgnoreCase(medicinesItem.getLabTestComment())){
             viewHolder.MEDICINE_ADD_CMMNT.setText(medicinesItem.getLabTestComment());
         }else {
@@ -217,7 +215,6 @@ public class AddLabTestAdapter extends RecyclerView.Adapter<AddLabTestAdapter.Vi
                     mFilteredList.remove(getAdapterPosition());
                     CreatePrescription.NEWaddLabTestArrayList.remove(getAdapterPosition());
                     if(mFilteredList.size() == 0 ){
-                        textView3_5.setVisibility(View.GONE);
                         ll_35.setVisibility(View.GONE);
                     }else {
                         textView3_5.setText("1/"+mFilteredList.size());

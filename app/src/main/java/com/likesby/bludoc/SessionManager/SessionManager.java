@@ -21,14 +21,9 @@ public class SessionManager
         editor.apply();
     }
 
-    public  String getPreferences(Context context, String key)
-    {
-
+    public  String getPreferences(Context context, String key) {
         SharedPreferences prefs = context.getSharedPreferences("status",	Context.MODE_PRIVATE);
         return prefs.getString(key, "");
-
-
-
     }
 
 

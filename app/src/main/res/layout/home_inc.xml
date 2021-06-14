@@ -110,9 +110,9 @@
             <Button
                 android:fontFamily="@font/poppins"
                 android:visibility="gone"
-                android:textColor="@color/white"
+                android:textColor="@color/colorBlue"
                 android:text="Whatsapp Test"
-                android:background="@drawable/blue_round_btn_gradient"
+                android:background="@drawable/blue_round_btn_gradient_mojito"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/wahtsappTest"
@@ -362,6 +362,7 @@
                     android:id="@+id/img8"
                     android:src="@drawable/add_pharmacist_neww"
                     style="@style/homeCardImage"/>
+
                 <TextView
                     android:fontFamily="@font/poppins"
                     android:text="@string/add_pharmacist"

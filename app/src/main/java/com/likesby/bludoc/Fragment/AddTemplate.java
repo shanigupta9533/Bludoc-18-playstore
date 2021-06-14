@@ -6,11 +6,15 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.SystemClock;
 import android.speech.RecognizerIntent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -228,7 +232,6 @@ public class AddTemplate extends Fragment {
         });
 
         addMedicinesArrayList = new ArrayList<>();
-        textView3_5.setVisibility(View.GONE);
         ll_35.setVisibility(View.GONE);
         btn_add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -275,7 +278,7 @@ public class AddTemplate extends Fragment {
 
 
                                 textView3_5.setText("1/" + addMedicinesArrayList.size());
-                                mRecyclerViewAddedMedicines.setOnScrollListener(new RecyclerView.OnScrollListener() {
+                                mRecyclerViewAddedMedicines.addOnScrollListener(new RecyclerView.OnScrollListener() {
                                     @Override
                                     public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                                         super.onScrollStateChanged(recyclerView, newState);
@@ -285,12 +288,15 @@ public class AddTemplate extends Fragment {
                                             Log.e("position", String.valueOf(position));
                                             textView3_5.setText((position + 1) + "/" + addMedicinesArrayList.size());
 
+                                            addMedicineAdapter.notifyItemChanged(position);
+
                                         }
                                     }
 
                                     @Override
                                     public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                                         super.onScrolled(recyclerView, dx, dy);
+
                                     }
                                 });
 
@@ -335,7 +341,7 @@ public class AddTemplate extends Fragment {
                                 textView3_5.setText("1/" + addMedicinesArrayList.size());
 
                                 poss__ = 0;
-                                mRecyclerViewAddedMedicines.setOnScrollListener(new RecyclerView.OnScrollListener() {
+                                mRecyclerViewAddedMedicines.addOnScrollListener(new RecyclerView.OnScrollListener() {
                                     @Override
                                     public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                                         super.onScrollStateChanged(recyclerView, newState);
@@ -346,12 +352,25 @@ public class AddTemplate extends Fragment {
                                             Log.e("position", String.valueOf(position));
                                             textView3_5.setText((position + 1) + "/" + addMedicinesArrayList.size());
 
+                                            addMedicineAdapter = new AddMedicineAdapter(mContext, addMedicinesArrayList,
+                                                    frequency_list, frequency2_list, et_no_of_days,
+                                                    medicine_qty, route_list, instructions_list, frequency_spinner, frequency2_spinner,
+                                                    route_spinner, instructions_spinner, et_additional_comments, btn_add, textView3_5, ll_35, searchBarMaterialMedicine, mRecyclerViewMedicines, btnChooseFromTemplate, btn_save_template, "template", fl_progress_bar);
+                                            mRecyclerViewAddedMedicines.setAdapter(addMedicineAdapter);
+
+                                            if (addMedicinesArrayList.size() > 0) {
+                                                textView3_5.setVisibility(View.VISIBLE);
+                                                ll_35.setVisibility(View.VISIBLE);
+                                                mRecyclerViewAddedMedicines.smoothScrollToPosition(position);
+                                            }
+
                                         }
                                     }
 
                                     @Override
                                     public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                                         super.onScrolled(recyclerView, dx, dy);
+
                                     }
                                 });
 
@@ -365,6 +384,10 @@ public class AddTemplate extends Fragment {
                             route_spinner.setSelection(0);
                             medicine_qty.setText("");
                             instructions_spinner.setSelection(0);
+
+                            searchBarMaterialMedicine.requestFocus();
+                            InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
 
 
                         } else {

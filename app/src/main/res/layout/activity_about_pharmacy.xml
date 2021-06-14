@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".AboutPharmacyActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@android:color/white"
+        app:contentInsetStart="0dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/back"
+                android:layout_width="23dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="12dp"
+                android:contentDescription="TODO"
+                android:src="@drawable/ic_back_button"
+                app:tint="@color/colorBlack" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="12dp"
+                android:layout_toEndOf="@+id/back"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/title_on_toolbar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins"
+                    android:text="About Pharmacy"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14dp" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignParentBottom="true"
+                android:background="#dcdcdc" />
+
+        </RelativeLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/font_12"
+                android:src="@drawable/ppp_images_online" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/font_12"
+                android:layout_marginTop="@dimen/margin_30"
+                android:fontFamily="@font/poppinsmedium"
+                android:text="Add Pharmacy"
+                android:textColor="@color/colorBlack"
+                android:textSize="15dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/font_13"
+                android:layout_marginTop="@dimen/margin_5"
+                android:layout_marginEnd="@dimen/font_12"
+                android:alpha="0.8"
+                android:fontFamily="@font/open_sans"
+                android:letterSpacing="0.01"
+                android:text="- you can customise and directly send a copy of e-prescription to the pharmacy/pharmacist.
+                \n\n- Pharmacist can keep the medications/products ready
+
+                \n\n- Patient can directly collect the medications/products from the counter"
+                android:textColor="@color/colorBlack"
+                android:textSize="14dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/font_12"
+                android:layout_marginTop="@dimen/font_18"
+                android:fontFamily="@font/poppinsmedium"
+                android:text="How to use?"
+                android:textColor="@color/colorBlack"
+                android:textSize="15dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/font_13"
+                android:layout_marginTop="@dimen/margin_5"
+                android:layout_marginEnd="@dimen/font_12"
+                android:alpha="0.8"
+                android:fontFamily="@font/open_sans"
+                android:letterSpacing="0.01"
+                android:text="- Add &amp; save the details of Pharmacy.
+                \n\n - Select the pharmacy you would like to send a copy of prescription. Prescription
+will be sent to selected pharmacy only.
+\n\n - You can choose to send a copy of prescription to selected pharmacy at sharing page by clicking on 'Send to Pharmacy' button.
+                \n\n- Copy to pharmacy will not contain patient case history, only patient's basic details and medications will be included."
+                android:textColor="@color/colorBlack"
+                android:textSize="14dp" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

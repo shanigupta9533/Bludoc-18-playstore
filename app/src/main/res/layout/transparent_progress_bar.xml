@@ -5,6 +5,7 @@
     android:background="#60000000"
     android:id="@+id/progress_bar"
     android:visibility="gone"
+    android:elevation="@dimen/font_7"
     android:layout_height="match_parent">
 
     <FrameLayout

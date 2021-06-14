@@ -28,8 +28,8 @@
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar_invite_member"
                     android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:background="?attr/colorPrimary"
+                    android:layout_height="45dp"
+                    android:background="@color/white"
                     android:padding="-48dp"
                     app:contentInsetLeft="0dp"
                     app:contentInsetStart="0dp"
@@ -37,8 +37,6 @@
                     app:layout_collapseMode="pin"
                     app:popupTheme="@style/AppThemeNOAC"
                     app:subtitleTextColor="@color/colorWhite"
-
-
                     app:titleTextColor="@color/colorWhite">
 
                     <FrameLayout
@@ -56,18 +54,19 @@
                                 android:layout_height="25dp"
                                 android:layout_gravity="center|start"
                                 android:layout_margin="@dimen/margin_10"
-                                android:src="@drawable/ic_back_button" />
+                                android:src="@drawable/ic_back_button"
+                                app:tint="@color/colorBlack" />
 
                             <TextView
                                 android:id="@+id/header"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:fontFamily="@font/poppinsmedium"
+                                android:fontFamily="@font/poppins"
                                 android:gravity="center"
                                 android:text="Create Prescription"
-                                android:textColor="@color/colorWhite"
-                                android:textSize="18sp"
+                                android:textColor="@color/colorBlack"
+                                android:textSize="15sp"
                                 android:typeface="sans" />
 
                         </FrameLayout>
@@ -89,21 +88,24 @@
                 <EditText
                     android:id="@+id/patient_searchview"
                     android:layout_width="match_parent"
-
                     android:layout_height="40dp"
                     android:layout_marginLeft="@dimen/margin_20"
+                    android:maxLines="1"
+                    android:lines="1"
                     android:layout_marginTop="@dimen/margin_10"
                     android:layout_marginRight="@dimen/margin_20"
                     android:layout_marginBottom="@dimen/margin_10"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
                     android:background="@drawable/spinner_background"
+                    android:minLines="1"
                     android:fontFamily="@font/poppins"
-                    android:paddingStart="@dimen/margin_10"
-                    android:paddingLeft="@dimen/margin_10"
-                    android:paddingEnd="@dimen/margin_10"
-                    android:paddingRight="@dimen/margin_10"
+                    android:paddingStart="@dimen/font_15"
+                    android:paddingLeft="@dimen/font_15"
+                    android:paddingEnd="@dimen/font_15"
+                    android:paddingRight="@dimen/font_15"
                     android:textColor="#000"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
+                    android:textSize="13sp" />
 
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -161,7 +163,7 @@
                         android:layout_marginRight="@dimen/margin_10"
                         android:layout_marginBottom="@dimen/margin_5"
                         android:layout_weight="1"
-                        android:background="@drawable/faint_white_round"
+                        android:background="@drawable/blue_round_btn_gradient_mojito"
                         android:clickable="true"
                         android:focusable="true"
                         android:gravity="center"
@@ -180,13 +182,13 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppinsmedium"
+                            android:fontFamily="@font/poppins"
                             android:paddingStart="@dimen/margin_5"
                             android:paddingLeft="@dimen/margin_5"
                             android:text="Case History"
-                            android:textColor="@color/colorDarkBlue2"
+                            android:textColor="@color/colorBlue"
                             android:textSize="10sp"
-                            android:textStyle="bold" />
+                            />
                     </LinearLayout>
 
                     <LinearLayout
@@ -199,7 +201,7 @@
                         android:layout_marginRight="@dimen/margin_5"
                         android:layout_marginBottom="@dimen/margin_5"
                         android:layout_weight="1"
-                        android:background="@drawable/faint_white_round"
+                        android:background="@drawable/blue_round_btn_gradient_mojito"
 
                         android:clickable="true"
                         android:focusable="true"
@@ -219,13 +221,13 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppinsmedium"
+                            android:fontFamily="@font/poppins"
                             android:paddingStart="@dimen/margin_5"
                             android:paddingLeft="@dimen/margin_5"
                             android:text="Medicine/Product"
-                            android:textColor="@color/colorDarkBlue2"
+                            android:textColor="@color/colorBlue"
                             android:textSize="10sp"
-                            android:textStyle="bold" />
+                             />
                     </LinearLayout>
 
                     <LinearLayout
@@ -241,7 +243,7 @@
                         android:layout_marginRight="@dimen/margin_5"
                         android:layout_marginBottom="@dimen/margin_5"
                         android:layout_weight="1"
-                        android:background="@drawable/faint_white_round"
+                        android:background="@drawable/blue_round_btn_gradient_mojito"
                         android:clickable="true"
                         android:focusable="true"
                         android:gravity="center"
@@ -260,13 +262,13 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppinsmedium"
+                            android:fontFamily="@font/poppins"
                             android:paddingStart="@dimen/margin_5"
                             android:paddingLeft="@dimen/margin_5"
                             android:text="Lab Test/Imaging"
-                            android:textColor="@color/colorDarkBlue2"
+                            android:textColor="@color/colorBlue"
                             android:textSize="10sp"
-                            android:textStyle="bold" />
+                            />
                     </LinearLayout>
 
 
@@ -283,7 +285,7 @@
                         android:layout_marginRight="@dimen/margin_5"
                         android:layout_marginBottom="@dimen/margin_5"
                         android:layout_weight="1"
-                        android:background="@drawable/faint_white_round"
+                        android:background="@drawable/blue_round_btn_gradient_mojito"
                         android:clickable="true"
                         android:focusable="true"
                         android:gravity="center"
@@ -303,14 +305,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:fontFamily="@font/poppinsmedium"
+                            android:fontFamily="@font/poppins"
                             android:gravity="center"
                             android:paddingStart="@dimen/margin_5"
                             android:paddingLeft="@dimen/margin_5"
                             android:text="Medical Certificate"
-                            android:textColor="@color/colorDarkBlue2"
+                            android:textColor="@color/colorBlue"
                             android:textSize="10sp"
-                            android:textStyle="bold" />
+                             />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -537,14 +539,14 @@
                                         android:layout_marginRight="5dp"
                                         android:layout_marginBottom="@dimen/margin_3"
                                         android:layout_weight="2"
-                                        android:background="@drawable/blue_round"
+                                        android:background="@drawable/blue_round_btn_gradient_mojito"
                                         android:fontFamily="@font/poppinsmedium"
                                         android:foreground="?android:attr/selectableItemBackground"
                                         android:paddingLeft="10dp"
                                         android:paddingRight="10dp"
                                         android:text="Save and Add next"
                                         android:textAllCaps="false"
-                                        android:textColor="#17263E"
+                                        android:textColor="@color/colorBlue"
                                         android:textSize="@dimen/font_14"
                                         android:textStyle="normal"
                                         app:layout_constraintEnd_toEndOf="parent"
@@ -562,14 +564,14 @@
                                         android:layout_marginRight="@dimen/margin_20"
                                         android:layout_marginBottom="@dimen/margin_3"
                                         android:layout_weight="1"
-                                        android:background="@drawable/blue_round"
+                                        android:background="@drawable/blue_round_btn_gradient_mojito"
                                         android:fontFamily="@font/poppinsmedium"
                                         android:foreground="?android:attr/selectableItemBackground"
                                         android:paddingLeft="10dp"
                                         android:paddingRight="10dp"
                                         android:text="Choose from Template"
                                         android:textAllCaps="false"
-                                        android:textColor="#17263E"
+                                        android:textColor="@color/colorBlue"
                                         android:textSize="@dimen/font_14"
                                         android:textStyle="normal"
                                         app:layout_constraintEnd_toEndOf="parent"
@@ -1053,14 +1055,15 @@
                                         android:layout_marginRight="5dp"
                                         android:layout_marginBottom="@dimen/margin_5"
                                         android:layout_weight="2"
-                                        android:background="@drawable/blue_round"
+                                        android:background="@drawable/blue_round_btn_gradient_mojito"
                                         android:fontFamily="@font/poppinsmedium"
                                         android:foreground="?android:attr/selectableItemBackground"
                                         android:paddingLeft="10dp"
                                         android:paddingRight="10dp"
                                         android:text="Save and Add next"
                                         android:textAllCaps="false"
-                                        android:textColor="#17263E"
+                                        android:textColor="@color/colorBlue"
+                                        android:elevation="0dp"
                                         android:textSize="@dimen/font_14"
                                         android:textStyle="normal"
                                         app:layout_constraintEnd_toEndOf="parent"
@@ -1078,14 +1081,15 @@
                                         android:layout_marginRight="@dimen/margin_20"
                                         android:layout_marginBottom="@dimen/margin_5"
                                         android:layout_weight="1"
-                                        android:background="@drawable/blue_round"
+                                        android:background="@drawable/blue_round_btn_gradient_mojito"
                                         android:fontFamily="@font/poppinsmedium"
                                         android:foreground="?android:attr/selectableItemBackground"
                                         android:paddingLeft="10dp"
                                         android:paddingRight="10dp"
                                         android:text="Choose from Template"
                                         android:textAllCaps="false"
-                                        android:textColor="#17263E"
+                                        android:elevation="0dp"
+                                        android:textColor="@color/colorBlue"
                                         android:textSize="@dimen/font_14"
                                         android:textStyle="normal"
                                         app:layout_constraintEnd_toEndOf="parent"
@@ -1662,6 +1666,9 @@
                                             android:maxLength="150"
                                             android:maxLines="2"
                                             android:minLines="2"
+                                            android:overScrollMode="always"
+                                            android:scrollbarStyle="insideInset"
+                                            android:scrollbars="vertical"
                                             android:paddingStart="@dimen/margin_8"
                                             android:paddingLeft="@dimen/margin_8"
                                             android:paddingTop="@dimen/margin_2"
@@ -1705,11 +1712,14 @@
                                         android:layout_marginLeft="@dimen/margin_20"
                                         android:layout_marginTop="@dimen/margin_10"
                                         android:layout_marginRight="@dimen/margin_4"
-
                                         android:layout_marginBottom="@dimen/margin_10"
                                         android:layout_weight="1"
                                         android:background="@drawable/spinner_background"
                                         android:fontFamily="@font/poppins"
+                                        android:gravity="top"
+                                        android:overScrollMode="always"
+                                        android:scrollbarStyle="insideInset"
+                                        android:scrollbars="vertical"
                                         android:imeOptions="actionNext"
                                         android:inputType="textCapSentences|textMultiLine"
                                         android:maxLength="500"
@@ -1760,7 +1770,7 @@
                                         android:layout_marginLeft="@dimen/margin_20"
                                         android:layout_marginTop="@dimen/margin_10"
                                         android:layout_marginRight="@dimen/margin_4"
-
+                                        android:gravity="top"
                                         android:layout_marginBottom="@dimen/margin_10"
                                         android:layout_weight="1"
                                         android:background="@drawable/spinner_background"
@@ -1769,6 +1779,9 @@
                                         android:inputType="textCapSentences|textMultiLine"
                                         android:maxLength="500"
                                         android:maxLines="4"
+                                        android:overScrollMode="always"
+                                        android:scrollbarStyle="insideInset"
+                                        android:scrollbars="vertical"
                                         android:minLines="2"
                                         android:padding="@dimen/margin_10"
                                         android:textColor="#000"
@@ -1815,13 +1828,16 @@
                                         android:layout_marginTop="@dimen/margin_10"
                                         android:layout_marginRight="@dimen/margin_4"
                                         android:layout_marginBottom="@dimen/margin_10"
-
+                                        android:gravity="top"
                                         android:layout_weight="1"
                                         android:background="@drawable/spinner_background"
                                         android:fontFamily="@font/poppins"
                                         android:imeOptions="actionNext"
                                         android:inputType="textCapSentences|textMultiLine"
                                         android:maxLength="500"
+                                        android:overScrollMode="always"
+                                        android:scrollbarStyle="insideInset"
+                                        android:scrollbars="vertical"
                                         android:maxLines="4"
                                         android:minLines="4"
                                         android:padding="@dimen/margin_10"
@@ -1871,12 +1887,16 @@
                                         android:layout_marginTop="@dimen/margin_10"
                                         android:layout_marginBottom="@dimen/margin_10"
                                         android:layout_weight="1"
+                                        android:gravity="top"
                                         android:background="@drawable/spinner_background"
                                         android:fontFamily="@font/poppins"
                                         android:imeOptions="actionNext"
                                         android:inputType="textCapSentences|textMultiLine"
                                         android:maxLength="500"
                                         android:maxLines="4"
+                                        android:overScrollMode="always"
+                                        android:scrollbarStyle="insideInset"
+                                        android:scrollbars="vertical"
                                         android:minLines="2"
                                         android:padding="@dimen/margin_10"
                                         android:textColor="#000"
@@ -1929,11 +1949,15 @@
                                         android:layout_weight="1"
                                         android:background="@drawable/spinner_background"
                                         android:fontFamily="@font/poppins"
+                                        android:gravity="top"
                                         android:imeOptions="actionNext"
                                         android:inputType="textCapSentences|textMultiLine"
                                         android:maxLength="500"
                                         android:maxLines="4"
                                         android:minLines="2"
+                                        android:overScrollMode="always"
+                                        android:scrollbarStyle="insideInset"
+                                        android:scrollbars="vertical"
                                         android:padding="@dimen/margin_10"
                                         android:textColor="#000"
                                         android:textSize="15sp"
@@ -1981,7 +2005,7 @@
                                         android:layout_marginTop="@dimen/margin_10"
                                         android:layout_marginRight="@dimen/margin_4"
                                         android:layout_marginBottom="@dimen/margin_10"
-
+                                        android:gravity="top"
                                         android:layout_weight="1"
                                         android:background="@drawable/spinner_background"
                                         android:fontFamily="@font/poppins"
@@ -1991,6 +2015,9 @@
                                         android:maxLines="2"
                                         android:minLines="2"
                                         android:padding="@dimen/margin_10"
+                                        android:overScrollMode="always"
+                                        android:scrollbarStyle="insideInset"
+                                        android:scrollbars="vertical"
                                         android:textColor="#000"
                                         android:textSize="15sp"
                                         android:textStyle="normal" />
@@ -2046,18 +2073,22 @@
                                         android:layout_marginLeft="@dimen/margin_20"
                                         android:layout_marginTop="@dimen/margin_10"
                                         android:layout_marginRight="@dimen/margin_4"
+                                        android:gravity="top"
                                         android:layout_marginBottom="@dimen/margin_10"
                                         android:layout_weight="1"
                                         android:background="@drawable/spinner_background"
                                         android:fontFamily="@font/poppins"
-                                        android:hint="Medical Certificate"
+                                        android:text="Medical Certificate"
                                         android:imeOptions="actionDone"
                                         android:lines="1"
                                         android:maxLines="1"
+                                        android:overScrollMode="always"
+                                        android:scrollbarStyle="insideInset"
+                                        android:scrollbars="vertical"
                                         android:padding="@dimen/margin_8"
                                         android:textColor="#000"
                                         android:textSize="14sp"
-                                        android:textStyle="bold" />
+                                         />
 
                                     <ImageView
                                         android:id="@+id/speech_voice_medical_certificate"
@@ -2100,6 +2131,7 @@
                                         android:layout_marginRight="@dimen/margin_4"
                                         android:layout_marginBottom="@dimen/margin_10"
                                         android:layout_weight="1"
+                                        android:gravity="top"
                                         android:background="@drawable/spinner_background"
                                         android:fontFamily="@font/poppins"
                                         android:imeOptions="actionDone"
@@ -2108,6 +2140,9 @@
                                         android:maxLines="25"
                                         android:minLines="4"
                                         android:paddingStart="@dimen/margin_8"
+                                        android:overScrollMode="always"
+                                        android:scrollbarStyle="insideInset"
+                                        android:scrollbars="vertical"
                                         android:paddingLeft="@dimen/margin_8"
                                         android:paddingEnd="@dimen/margin_8"
                                         android:paddingRight="@dimen/margin_8"
@@ -2223,17 +2258,17 @@
 
         <Button
             android:id="@+id/btn_create_patient"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="220dp"
+            android:layout_height="45dp"
             android:layout_gravity="center|bottom"
             android:layout_margin="@dimen/margin_10"
             android:background="@drawable/blue_round_btn_gradient"
-            android:fontFamily="@font/poppinsmedium"
+            android:fontFamily="@font/poppins"
             android:gravity="center"
-            android:text="Add Patient and Prescribe"
+            android:text="Add Patient"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="17sp"
+            android:textSize="15sp"
             android:textStyle="normal"
             android:visibility="gone" />
 

@@ -13,8 +13,8 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.likesby.bludoc.AddAPharmacistActivity;
@@ -55,7 +55,8 @@ public class PharmacistAdapter  extends RecyclerView.Adapter<PharmacistAdapter.v
 
     public interface OnClickListener{
 
-        void onClick(AllPharmacistList s, int position);
+        void onDelete(AllPharmacistList s, int position);
+        void onChecked(AllPharmacistList s, int position,boolean isChecked);
 
     }
 
@@ -74,17 +75,29 @@ public class PharmacistAdapter  extends RecyclerView.Adapter<PharmacistAdapter.v
         viewHolder.mobile_number.setText(s.getPharmacist_mobile());
         viewHolder.tv_pharmacist_name.setText(s.getPharmacist_name());
 
-        viewHolder.switch_ids.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            if (s.getIs_check().equalsIgnoreCase("yes"))
+                viewHolder.switch_ids.setChecked(true);
+            else
+                viewHolder.switch_ids.setChecked(false);
 
-                if(isChecked)
-                    switch_ids.add(s.getPharmacist_id());
-                else
-                    switch_ids.remove(s.getPharmacist_id());
+            viewHolder.switch_ids.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-            }
-        });
+                    onClickListener.onChecked(s, position, viewHolder.switch_ids.isChecked());
+
+                }
+            });
+
+//            viewHolder.switch_ids.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                @Override
+//                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//
+//                    onClickListener.onChecked(s, position, isChecked);
+//
+//                }
+//            });
+
 
         if(TextUtils.isEmpty(s.getPharmacist_email()))
             viewHolder.email_id.setText("____");
@@ -108,7 +121,7 @@ public class PharmacistAdapter  extends RecyclerView.Adapter<PharmacistAdapter.v
             @Override
             public void onClick(View v) {
 
-                onClickListener.onClick(s,position);
+                onClickListener.onDelete(s,position);
 
             }
         });
@@ -127,6 +140,8 @@ public class PharmacistAdapter  extends RecyclerView.Adapter<PharmacistAdapter.v
         return new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence charSequence) {
+
+
                 String charString = charSequence.toString();
                 if (charString.isEmpty()) {
                     listFilter = pharmacistList;

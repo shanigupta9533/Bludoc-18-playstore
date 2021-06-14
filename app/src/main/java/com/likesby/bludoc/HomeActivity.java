@@ -1,6 +1,7 @@
 package com.likesby.bludoc;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -8,21 +9,26 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -41,6 +47,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -141,8 +148,26 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
     private UnifiedNativeAd nativeAd;
     boolean showNativeAdFlag = false;
     Dialog dialog_data;
+    private OnBackClickListener onBackClickListener;
     AdRequest adRequest,adRequestInterstitial;
     private InterstitialAd mInterstitialAd;
+    private OnBackClickListener2 onBackClickListener2;
+
+    public interface OnBackClickListener {
+        boolean onBackClick();
+    }
+
+    public void setOnBackClickListener(OnBackClickListener onBackClickListener) {
+        this.onBackClickListener = onBackClickListener;
+    }
+
+    public interface OnBackClickListener2 {
+        boolean onBackClick();
+    }
+
+    public void setOnBackClickListener2(OnBackClickListener2 onBackClickListener2) {
+        this.onBackClickListener2 = onBackClickListener2;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -804,6 +829,9 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
                 if(!("").equalsIgnoreCase(manager.getPreferences(mContext,"registration_no")))
                 {
                     PatientRegistration myFragment = new PatientRegistration();
+                    Bundle bundle=new Bundle();
+                    bundle.putBoolean("isFromHome",true);
+                    myFragment.setArguments(bundle);
                     getSupportFragmentManager().beginTransaction().replace(R.id.homePageContainer, myFragment, "first").addToBackStack(null).commit();
 
                 }
@@ -868,8 +896,6 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
 
         fragmanager.beginTransaction().replace(R.id.homePageContainer, myFragment, "prescription").addToBackStack(null).commit();
     }
-
-
 
     private boolean whatsappInstalledOrNot(String uri) {
         PackageManager pm = getPackageManager();
@@ -1538,7 +1564,7 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
                     addflag = true;
                     manager.setPreferences(mContext,"show_banner_ad","true");
                     tv_premium_top.setVisibility(View.GONE);
-                    ll_premium.setBackgroundDrawable(getResources().getDrawable(R.drawable.no_border));
+                    ll_premium.setBackgroundDrawable(getResources().getDrawable(R.drawable.blue_round_btn_gradient_mojito));
                     showNativeAdFlag = true;
                    // popupFreeSubscription("", false);
                     tv_days_left.setTextColor(getResources().getColor(R.color.colorBlue));
@@ -2139,7 +2165,31 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
         dialog_data.show();
     }
 
+    public void transactFragment(boolean reload) {
 
+       ProgressDialog progressDialog = new ProgressDialog(HomeActivity.this);
+        progressDialog.setMessage("Please wait.");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        if (reload) {
+            getSupportFragmentManager().popBackStack();
+        }
+        transaction.replace(R.id.homePageContainer, new CreatePrescription(),"prescription");
+        transaction.addToBackStack(null);
+        transaction.commit();
+
+        new Handler(Looper.myLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                progressDialog.dismiss();
+
+            }
+        },1000);
+    }
 
     private  void popupExit2()
     {
@@ -2216,14 +2266,87 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
         dialog_data.show();
     }
 
+    private  void popUpExitPage()
+    {
+        final Dialog dialog_data = new Dialog(mContext);
+        dialog_data.setCancelable(true);
+
+        dialog_data.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        Objects.requireNonNull(dialog_data.getWindow()).setGravity(Gravity.CENTER);
+
+        dialog_data.setContentView(R.layout.popup_exit);
+
+        WindowManager.LayoutParams lp_number_picker = new WindowManager.LayoutParams();
+        Window window = dialog_data.getWindow();
+        lp_number_picker.copyFrom(window.getAttributes());
+
+        lp_number_picker.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp_number_picker.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+        //window.setGravity(Gravity.CENTER);
+        window.setAttributes(lp_number_picker);
+        ProgressBar pb = dialog_data.findViewById(R.id.pb);
+
+        final Button btn_no = dialog_data.findViewById(R.id.btn_no);
+        final Button btn_yes = dialog_data.findViewById(R.id.btn_yes);
+        FrameLayout fl_layout = dialog_data.findViewById(R.id.fl_layout);
+        /*CountDownTimer countDownTimer  = new CountDownTimer(2000, 2000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                btn_no.setVisibility(View.VISIBLE);
+                btn_yes.setVisibility(View.VISIBLE);
+            }
+        };
+        countDownTimer.start();*/
+        /*if(showNativeAdFlag){
+            NativeAd(dialog_data,pb,btn_yes,btn_no);
+
+        }
+        else {
+            btn_no.setVisibility(View.VISIBLE);
+            btn_yes.setVisibility(View.VISIBLE);
+            fl_layout.setVisibility(View.GONE);
+
+        }*/
+        btn_no.setVisibility(View.VISIBLE);
+        btn_yes.setVisibility(View.VISIBLE);
+        fl_layout.setVisibility(View.GONE);
+
+        TextView tv_no_template =  dialog_data.findViewById(R.id.tv_no_template);
+        tv_no_template.setText("Would you like to Exit?");
+        btn_yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        btn_no.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog_data.dismiss();
+            }
+        });
+
+        dialog_data.show();
+    }
 
     @Override
     public void onBackPressed() {
 
-
-        Fragment myFragment = (Fragment) getSupportFragmentManager().findFragmentByTag("prescription");
+        Fragment myFragment = getSupportFragmentManager().findFragmentByTag("prescription");
         if (myFragment != null && myFragment.isVisible()) {
-            popupExit2();
+
+            if (onBackClickListener2 != null  && onBackClickListener2.onBackClick()) {
+                return;
+            }
+
+//            popupExit2();
            /* androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AlertDialog));
             builder.setMessage("Would you like leave this page?")
                     .setCancelable(false)
@@ -2248,27 +2371,23 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
 
         } else {
 
-
-
             Fragment myFragment1 = (Fragment) getSupportFragmentManager().findFragmentByTag("first");
             if (myFragment1 != null && myFragment1.isVisible()) {
+
                 super.onBackPressed();
+
             } else {
-                popupExit();
-//                if (doubleBackToExitPressedOnce) {
-//                    super.onBackPressed();
-//                    return;
-//                }
-//                this.doubleBackToExitPressedOnce = true;
-//                Toast.makeText(this, "Press again to Exit", Toast.LENGTH_SHORT).show();
-//                new Handler().postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        doubleBackToExitPressedOnce = false;
-//                    }
-//                }, 2000);
+
+                if (onBackClickListener != null  && onBackClickListener.onBackClick()) {
+                    onBackClickListener=null;
+                    return;
+                } else {
+                    popUpExitPage();
+                }
 
             }
+
         }
+
     }
 }

@@ -5,9 +5,11 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Objects;
+
 public class MedicinesItem implements Parcelable {
 
-	@SerializedName("presb_medicine_id")
+	@SerializedName("medicine_id")
 	private String presbMedicineId;
 
 	@SerializedName("route")
@@ -33,6 +35,20 @@ public class MedicinesItem implements Parcelable {
 
 	@SerializedName("frequency")
 	private String frequency;
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		MedicinesItem that = (MedicinesItem) o;
+		return Objects.equals(presbMedicineId, that.presbMedicineId) &&
+				Objects.equals(presbPatientId, that.presbPatientId);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(presbMedicineId, presbPatientId);
+	}
 
 	protected MedicinesItem(Parcel in) {
 		presbMedicineId = in.readString();

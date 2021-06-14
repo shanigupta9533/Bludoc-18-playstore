@@ -33,7 +33,6 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +41,7 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -58,7 +58,6 @@ import com.commit451.modalbottomsheetdialogfragment.OptionRequest;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
-import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
 import com.google.android.gms.ads.rewarded.RewardItem;
 import com.google.android.gms.ads.rewarded.RewardedAd;
 import com.google.android.gms.ads.rewarded.RewardedAdCallback;
@@ -67,8 +66,8 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.hendrix.pdfmyxml.PdfDocument;
 import com.hendrix.pdfmyxml.viewRenderer.AbstractViewRenderer;
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.Document;
@@ -76,11 +75,10 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Image;
 import com.likesby.bludoc.Adapter.BottomSheetAdapter;
 import com.likesby.bludoc.Adapter.Pres_LabTest_adapter_mobile;
-import com.likesby.bludoc.Adapter.Pres_adapter;
 import com.likesby.bludoc.Adapter.Pres_adapter_mobile;
 import com.likesby.bludoc.Adapter.SlidingImage_Adapter_GeneratedPrescription;
 import com.likesby.bludoc.AllPharmacistActivity;
-import com.likesby.bludoc.HomeActivity;
+import com.likesby.bludoc.BuildConfig;
 import com.likesby.bludoc.ModelLayer.Entities.BottomSheetItem;
 import com.likesby.bludoc.ModelLayer.Entities.MedicinesItem;
 import com.likesby.bludoc.ModelLayer.Entities.PrescriptionJSON;
@@ -88,11 +86,12 @@ import com.likesby.bludoc.ModelLayer.Entities.ResponseSuccess;
 import com.likesby.bludoc.ModelLayer.NetworkLayer.EndpointInterfaces.WebServices;
 import com.likesby.bludoc.ModelLayer.NetworkLayer.Helpers.RetrofitClient;
 import com.likesby.bludoc.ModelLayer.NewEntities.LabTestItem;
+import com.likesby.bludoc.ModelLayer.NewEntities.LabTestItems;
+import com.likesby.bludoc.ModelLayer.NewEntities.MedicineItem;
 import com.likesby.bludoc.ModelLayer.NewEntities3.Doctor;
 import com.likesby.bludoc.ModelLayer.NewEntities3.PrescriptionItem;
 import com.likesby.bludoc.MultiplePharmacistActivity;
 import com.likesby.bludoc.R;
-import com.likesby.bludoc.RegisterDetails;
 import com.likesby.bludoc.SessionManager.SessionManager;
 import com.likesby.bludoc.constants.ApplicationConstant;
 import com.likesby.bludoc.databinding.GeneratePrescriptionBinding;
@@ -132,7 +131,7 @@ import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.likesby.bludoc.Fragment.CreatePrescription.certificate_selection;
 
-public class GeneratePres extends Fragment implements ModalBottomSheetDialogFragment.Listener,GeneratedPresBottomFragment.onClickListener {
+public class GeneratePres extends Fragment implements ModalBottomSheetDialogFragment.Listener, GeneratedPresBottomFragment.onClickListener {
     ArrayList<com.likesby.bludoc.ModelLayer.Entities.MedicinesItem> medicinesItemArrayListO = new ArrayList<>();
     Button generatePDF, back, btn_backbtn_edit_profile;
     Context mContext;
@@ -174,38 +173,48 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
     int DELAY_TIME = 2000;
     int DELAY_TIME_MULTIPLIER = 5000;
     ImageView fl_medicines_symbol;
-    TextView textView_medical_cert_desc, textView_medical_cert, page_no;
+    TextView textView_medical_cert_desc, page_no;
+    TextView textView_medical_cert;
     int page_no_count = 1;
     Bundle bundle;
     LinearLayout ll_patient_name;
     ArrayList<String> stringArrayDESC;
     int width = 480;
-    LinearLayout top_header_parent;
+    boolean value;
+    int i = 0;
     Dialog dialog_dataShareMenu;
 
     private GeneratePrescriptionBinding binding;
     private String yesOrNo;
     private BottomSheetAdapter mAdapter;
-    private ArrayList<AbstractViewRenderer> pages=new ArrayList();
+    private ArrayList<AbstractViewRenderer> pages = new ArrayList();
     FrameLayout fl_main;
     AdRequest adRequest;
     private InterstitialAd mInterstitialAd;
     private RewardedAd rewardedAd;
     private boolean isVisible = true;
     private boolean isFooterVisible = true;
+    private boolean isClinicNameFound = false;
     private FragmentActivity fragmentActivity;
-    private boolean isClinicVisible=true;
+    private boolean isClinicVisible = true;
     private String prescriptionId;
+    private String dateValueString;
+    private String dateWithName;
+    private ArrayList<com.likesby.bludoc.ModelLayer.NewEntities3.MedicinesItem> medicinesInEnglish;
+    private ArrayList<LabTestItem> labTestItemInEnglish;
+    private boolean isSendPharmacy = true;
+    private String message;
+    private String isCertificate;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getActivity();
         manager = new SessionManager();
-        if(manager.contains(mContext,"show_banner_ad")){
+        if (manager.contains(mContext, "show_banner_ad")) {
             adRequest = new AdRequest.Builder()/*.addTestDevice("31B09DFC1F78AF28F2AFB1506F51B0BF")*/.build();
             initInterstitialAd(adRequest);
-            if(manager.contains(mContext,"ad_count") && manager.getPreferences(mContext,"ad_count").equals("0")){
+            if (manager.contains(mContext, "ad_count") && manager.getPreferences(mContext, "ad_count").equals("0")) {
                 rewardedAd = createAndLoadRewardedAd();
             }
         }
@@ -217,13 +226,13 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
 
     public RewardedAd createAndLoadRewardedAd() {
         //   rewardedAd = new RewardedAd(mContext,"ca-app-pub-9225891557304181/7053195953");// Live ad credentials
-        rewardedAd = new RewardedAd(mContext,"ca-app-pub-3940256099942544/5224354917");// Test ad credentials
+        rewardedAd = new RewardedAd(mContext, "ca-app-pub-3940256099942544/5224354917");// Test ad credentials
 
         RewardedAdLoadCallback adLoadCallback = new RewardedAdLoadCallback() {
             @Override
             public void onRewardedAdLoaded() {
                 // Ad successfully loaded.
-                Log.e("Rewarded","onRewardedAdLoaded");
+                Log.e("Rewarded", "onRewardedAdLoaded");
 
 
             }
@@ -231,7 +240,7 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
             @Override
             public void onRewardedAdFailedToLoad(int errorCode) {
                 // Ad failed to load.
-                Log.e("Rewarded","onRewardedAdFailedToLoad");
+                Log.e("Rewarded", "onRewardedAdFailedToLoad");
                 // Toast.makeText(mContext, "RewardedAd FailedToLoad", Toast.LENGTH_SHORT).show();
 
 
@@ -243,14 +252,12 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
     }
 
 
-
-    private void initInterstitialAd(AdRequest adRequest){
+    private void initInterstitialAd(AdRequest adRequest) {
 
         mInterstitialAd = new InterstitialAd(mContext);
         //  mInterstitialAd.setAdUnitId("ca-app-pub-9225891557304181/3105393849");//Live
         mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");//Test
         mInterstitialAd.loadAd(this.adRequest);
-
 
         mInterstitialAd.setAdListener(new AdListener() {
             @Override
@@ -288,12 +295,13 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
         });
 
     }
+
     public void setViewInInches(float width, float height, View v) {
         DisplayMetrics metrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
         int widthInches = Math.round(width * 300);
         int heightInches = Math.round(height * 300);
-        Log.e("WH", "________________ " + widthInches+" : "+heightInches);
+        Log.e("WH", "________________ " + widthInches + " : " + heightInches);
 
         v.setLayoutParams(new CoordinatorLayout.LayoutParams(widthInches, heightInches));
         v.requestLayout();
@@ -312,6 +320,16 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
         width = ScreenSize.getDimensions(mContext)[0];
         initCalls(v);
 
+        if (manager.getPreferences(mContext, "first_time").equals("")) {
+
+            binding.newText.setVisibility(View.VISIBLE);
+            manager.setPreferences(mContext, "first_time", "false");
+
+        } else {
+
+            binding.newText.setVisibility(View.GONE);
+
+        }
 
        /* v.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
@@ -334,11 +352,10 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_BACK) {
 
-
                     CreatePrescription.backCheckerFlag = true;
-
-                    FragmentManager fm = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
+                    FragmentManager fm = fragmentActivity.getSupportFragmentManager();
                     fm.popBackStackImmediate();
+
                      /*CreatePrescription myFragment = new CreatePrescription();
                     Bundle bundle = new Bundle();
                     bundle.putString("definer","temp");
@@ -408,28 +425,31 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
 
         if (Utils.isConnectingToInternet(mContext)) {
 
-            ProgressDialog progressDialog=new ProgressDialog(mContext);
-            progressDialog.setMessage("Sending Pharmacist...");
+            ProgressDialog progressDialog = new ProgressDialog(mContext);
+            progressDialog.setMessage("Sending to Pharmacy...");
             progressDialog.setCancelable(false);
             progressDialog.show();
             Retrofit retrofit = RetrofitClient.getInstance();
 
             final WebServices request = retrofit.create(WebServices.class);
 
-            Call<ResultOfApi> call = request.sendPresciption("19,20,21",prescriptionId);
+            Call<ResultOfApi> call = request.sendPresciption(manager.getPreferences(mContext, "doctor_id"), prescriptionId);
 
             call.enqueue(new Callback<ResultOfApi>() {
                 @Override
                 public void onResponse(@NonNull Call<ResultOfApi> call, @NonNull retrofit2.Response<ResultOfApi> response) {
                     ResultOfApi jsonResponse = response.body();
                     progressDialog.dismiss();
-                    if (jsonResponse!=null && jsonResponse.getSuccess().equalsIgnoreCase("Success")) {
+                    if (jsonResponse != null && jsonResponse.getSuccess().equalsIgnoreCase("success")) {
 
-                        Toast.makeText(mContext, "Send Pharmacist Successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, "Sent Successfully", Toast.LENGTH_SHORT).show();
 
-                    } else {
-                        Toast.makeText(mContext, "Profile Update Error", Toast.LENGTH_SHORT).show();
-
+                    } else if (jsonResponse != null && jsonResponse.getMessage().toLowerCase().equalsIgnoreCase("no data available")) {
+                        Toast.makeText(mContext, "" + jsonResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                        message = jsonResponse.getMessage();
+                    } else if (jsonResponse != null) {
+                        Toast.makeText(mContext, "" + jsonResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                        message = jsonResponse.getMessage();
                     }
                 }
 
@@ -446,8 +466,11 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
         }
     }
 
-
     private void popupBottomMenu() {
+
+        if (dialog_data != null)
+            dialog_data.dismiss();
+
         dialog_dataShareMenu = new Dialog(mContext);
         dialog_dataShareMenu.setCancelable(false);
         dialog_dataShareMenu.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -460,7 +483,8 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
         lp_number_picker.height = WindowManager.LayoutParams.MATCH_PARENT;
         window.setAttributes(lp_number_picker);
 
-        TextView __bottom_sheet_name=dialog_dataShareMenu.findViewById(R.id.__bottom_sheet_name);
+        TextView __bottom_sheet_name = dialog_dataShareMenu.findViewById(R.id.__bottom_sheet_name);
+        TextView open_via_page_pdf = dialog_dataShareMenu.findViewById(R.id.open_via_page_pdf);
 
         __bottom_sheet_name.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -471,10 +495,32 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
             }
         });
 
+        open_via_page_pdf.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                if (mAdapter != null) {
+
+                    Intent intentShareFile = new Intent(Intent.ACTION_VIEW);
+                    File fileWithinMyDir = new File(mAdapter.getPdfViaApps());
+                    Uri bmpUri = FileProvider.getUriForFile(mContext, BuildConfig.APPLICATION_ID + ".provider", fileWithinMyDir);
+                    if (fileWithinMyDir.exists()) {
+                        intentShareFile.setDataAndType(bmpUri, "application/pdf");
+                        intentShareFile.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intentShareFile.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(Intent.createChooser(intentShareFile, "Open File Using..."));
+
+                    }
+                }
+
+            }
+        });
+
         RecyclerView recyclerView = dialog_dataShareMenu.findViewById(R.id.recyclerView_bottom_sheet);
         //Create new GridLayoutManager
         @SuppressLint("WrongConstant") GridLayoutManager gridLayoutManagerr = new GridLayoutManager(mContext,
-                2,//span count no of items in single row
+                3,//span count no of items in single row
                 GridLayoutManager.VERTICAL,//Orientation
                 false);//reverse scrolling of recyclerview
         //set layout manager as gridLayoutManager
@@ -483,20 +529,32 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
         ArrayList<BottomSheetItem> bottomSheetItemArrayList = new ArrayList<>();
         BottomSheetItem bottomSheetItem = new BottomSheetItem();
         bottomSheetItem.setMenuId("1");
-        bottomSheetItem.setMenuName("Email");
+        bottomSheetItem.setMenuName("View Pdf");
         bottomSheetItem.setMenuImage("mail");
         bottomSheetItemArrayList.add(bottomSheetItem);
 
         bottomSheetItem = new BottomSheetItem();
         bottomSheetItem.setMenuId("2");
-        bottomSheetItem.setMenuName("Download");
+        bottomSheetItem.setMenuName("Share");
         bottomSheetItem.setMenuImage("ic_download_");
 
         bottomSheetItemArrayList.add(bottomSheetItem);
 
         bottomSheetItem = new BottomSheetItem();
         bottomSheetItem.setMenuId("3");
-        bottomSheetItem.setMenuName("Other");
+        bottomSheetItem.setMenuName("Download");
+        bottomSheetItem.setMenuImage("ic_share__");
+        bottomSheetItemArrayList.add(bottomSheetItem);
+
+        bottomSheetItem = new BottomSheetItem();
+        bottomSheetItem.setMenuId("4");
+        bottomSheetItem.setMenuName("Send to\npharmacy");
+        bottomSheetItem.setMenuImage("whatsapp");
+        bottomSheetItemArrayList.add(bottomSheetItem);
+
+        bottomSheetItem = new BottomSheetItem();
+        bottomSheetItem.setMenuId("3");
+        bottomSheetItem.setMenuName("Email");
         bottomSheetItem.setMenuImage("ic_share__");
         bottomSheetItemArrayList.add(bottomSheetItem);
 
@@ -506,8 +564,46 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
         bottomSheetItem.setMenuImage("whatsapp");
         bottomSheetItemArrayList.add(bottomSheetItem);
 
-        mAdapter = new BottomSheetAdapter(mContext, bottomSheetItemArrayList, fl_progress_bar, GeneratePres.this,null);
+        mAdapter = new BottomSheetAdapter(mContext, bottomSheetItemArrayList, fl_progress_bar, GeneratePres.this, null);
         recyclerView.setAdapter(mAdapter);
+
+        mAdapter.setPatientName(prescriptionItem.getPName());
+
+        mAdapter.setOnClickListener(new BottomSheetAdapter.onClickListener() {
+            @Override
+            public void onClick(int i) {
+
+                if (i == 0) {
+
+                    if (mAdapter != null) {
+
+                        Intent intentShareFile = new Intent(Intent.ACTION_VIEW);
+                        File fileWithinMyDir = new File(mAdapter.getPdfViaApps());
+                        Uri bmpUri = FileProvider.getUriForFile(mContext, BuildConfig.APPLICATION_ID + ".provider", fileWithinMyDir);
+                        if (fileWithinMyDir.exists()) {
+                            intentShareFile.setDataAndType(bmpUri, "application/pdf");
+                            intentShareFile.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intentShareFile.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(Intent.createChooser(intentShareFile, "Open File Using..."));
+
+                        }
+                    }
+
+                } else if (i == 3) {
+
+                    if (isSendPharmacy) {
+                        sendIdAndPresIdOnServer();
+                        isSendPharmacy = false;
+                    } else if (!isSendPharmacy && !TextUtils.isEmpty(message))
+                        Toast.makeText(mContext, "" + message, Toast.LENGTH_SHORT).show();
+                    else
+                        Toast.makeText(mContext, "Already sent to pharmacy", Toast.LENGTH_SHORT).show();
+
+                }
+
+            }
+        });
+
         ImageView iv_close = dialog_dataShareMenu.findViewById(R.id.iv_close);
         iv_close.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -517,10 +613,9 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
                 getFragmentManager().popBackStackImmediate();*/
             }
         });
+
         dialog_dataShareMenu.show();
     }
-
-
 
     public Bitmap getBitmapFromView(View view) {
         //Define a bitmap with the same size as the view
@@ -544,7 +639,7 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
     }
 
     private void popupCreatingPrescription() {
-        if(dialog_data!=null && dialog_data.isShowing())
+        if (dialog_data != null && dialog_data.isShowing())
             dialog_data.dismiss();
 
         dialog_data = new Dialog(mContext);
@@ -584,7 +679,6 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
 
         rView = view.findViewById(R.id.pres_recycler);
         rView.setLayoutManager(gridLayoutManagerr);
-        top_header_parent = view.findViewById(R.id.top_header_parent);
         ll_patient_name = view.findViewById(R.id.ll_patient_name);
         textView_medical_cert = view.findViewById(R.id.textView_medical_certificate);
         textView_medical_cert_desc = view.findViewById(R.id.textView_medical_cert_desc);
@@ -634,17 +728,20 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
             @Override
             public void onClick(View v) {
 
-                GeneratedPresBottomFragment generatedPresBottomFragment=new GeneratedPresBottomFragment();
+                GeneratedPresBottomFragment generatedPresBottomFragment = new GeneratedPresBottomFragment();
+
+                binding.newText.setVisibility(View.GONE);
 
                 Bundle bundle = new Bundle();
-                bundle.putBoolean("isDoctorDetails",isVisible);
-                bundle.putBoolean("isClinic",isClinicVisible);
-                bundle.putBoolean("isFooter",isFooterVisible);
+                bundle.putBoolean("isDoctorDetails", isVisible);
+                bundle.putBoolean("isClinic", isClinicVisible);
+                bundle.putBoolean("isFooter", isFooterVisible);
+                bundle.putBoolean("isClinicFound", isClinicNameFound);
 
                 generatedPresBottomFragment.setArguments(bundle);
 
                 generatedPresBottomFragment.show(fragmentActivity.getSupportFragmentManager(), "generatedBottomFragment");
-                generatedPresBottomFragment.SetOnClickListener(GeneratePres.this::onChangeResult);
+                generatedPresBottomFragment.SetOnClickListener(GeneratePres.this);
 
             }
         });
@@ -656,13 +753,10 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
             labTestItem = bundle.getParcelableArrayList("defaultAttributeIdLabTest");
             definer = bundle.getString("definer");
             end_note = bundle.getString("end_note");
-            if(bundle.getString(yesOrNo) !=null){
+            isCertificate = bundle.getString("isCertificate", "");
+            prescriptionId = bundle.getString("pres_id", "");
+            if (bundle.getString(yesOrNo) != null) {
                 yesOrNo = bundle.getString("yesOrNo");
-
-                if (yesOrNo.equals("Yes"))
-                    binding.topHeaderParent.setVisibility(View.VISIBLE);
-                else
-                    binding.topHeaderParent.setVisibility(View.GONE);
 
             }
 
@@ -670,6 +764,14 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
             labTestItemTEMP = labTestItem;
             definerTEMP = definer;
             end_noteTEMP = end_note;
+
+            if (!value) {
+
+                medicinesInEnglish = prescriptionItem.getMedicines();
+                labTestItemInEnglish = labTestItem;
+
+            }
+
             initViews();
 
             generatePDF.setOnClickListener(new View.OnClickListener() {
@@ -692,6 +794,7 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
 
                 }
             });
+
            /* rView.setLayoutParams(new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     2000));*/
@@ -736,8 +839,7 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
     }
 
 
-    private  void popupSelection()
-    {
+    private void popupSelection() {
         final Dialog dialog_data = new Dialog(mContext);
         dialog_data.setCancelable(true);
 
@@ -770,14 +872,13 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
                     if (manager.contains(mContext, "ad_show_time")) {
 
                         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy, HH:mm");
-                        Log.e("DIFF","ad_show_time ____________________ "+DateUtils.getDateDiff(dateFormat,manager.getPreferences(mContext,"ad_show_time"),DateUtils.currentDateTime()));
+                        Log.e("DIFF", "ad_show_time ____________________ " + DateUtils.getDateDiff(dateFormat, manager.getPreferences(mContext, "ad_show_time"), DateUtils.currentDateTime()));
 
                         if (DateUtils.getDateDiff(dateFormat, manager.getPreferences(mContext, "ad_show_time"), DateUtils.currentDateTime()) > 10) {
 
                             if (manager.contains(mContext, "ad_count")) {
                                 if (manager.getPreferences(mContext, "ad_count").equals("0")) {
-                                    if(rewardedAd!=null && rewardedAd.isLoaded())
-                                    {
+                                    if (rewardedAd != null && rewardedAd.isLoaded()) {
                                         manager.setPreferences(mContext, "ad_count", "5");
 
 
@@ -798,19 +899,19 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
                                                 // rewardedAd = createAndLoadRewardedAd();
                                                 //   Toast.makeText(mContext, "Congratulations!! You won "+rewardItem.getAmount()+" "+rewardItem.getType(), Toast.LENGTH_SHORT).show();
                                             }
+
                                             @Override
                                             public void onRewardedAdFailedToShow(int i) {
                                                 super.onRewardedAdFailedToShow(i);
                                             }
                                         });
-                                    }
-                                    else {
+                                    } else {
                                         if (mInterstitialAd != null && mInterstitialAd.isLoaded())
                                             mInterstitialAd.show();
                                     }
                                 } else {
                                     int count = Integer.parseInt(manager.getPreferences(mContext, "ad_count"));
-                                    manager.setPreferences(mContext, "ad_count", ""+(count-1));
+                                    manager.setPreferences(mContext, "ad_count", "" + (count - 1));
                                     if (mInterstitialAd != null && mInterstitialAd.isLoaded())
                                         mInterstitialAd.show();
                                 }
@@ -819,13 +920,11 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
                                 if (mInterstitialAd != null && mInterstitialAd.isLoaded())
                                     mInterstitialAd.show();
                             }
-                        }
-                        else {
+                        } else {
                             if (mInterstitialAd != null && mInterstitialAd.isLoaded())
                                 mInterstitialAd.show();
                         }
-                    }
-                    else {
+                    } else {
                         manager.setPreferences(mContext, "ad_count", "5");
                         manager.setPreferences(mContext, "ad_show_time", DateUtils.currentDateTime());
                         if (mInterstitialAd != null && mInterstitialAd.isLoaded())
@@ -846,14 +945,13 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
                     if (manager.contains(mContext, "ad_show_time")) {
 
                         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy, HH:mm");
-                        Log.e("DIFF","ad_show_time ____________________ "+DateUtils.getDateDiff(dateFormat,manager.getPreferences(mContext,"ad_show_time"),DateUtils.currentDateTime()));
+                        Log.e("DIFF", "ad_show_time ____________________ " + DateUtils.getDateDiff(dateFormat, manager.getPreferences(mContext, "ad_show_time"), DateUtils.currentDateTime()));
 
                         if (DateUtils.getDateDiff(dateFormat, manager.getPreferences(mContext, "ad_show_time"), DateUtils.currentDateTime()) > 10) {
 
                             if (manager.contains(mContext, "ad_count")) {
                                 if (manager.getPreferences(mContext, "ad_count").equals("0")) {
-                                    if(rewardedAd!=null && rewardedAd.isLoaded())
-                                    {
+                                    if (rewardedAd != null && rewardedAd.isLoaded()) {
                                         manager.setPreferences(mContext, "ad_count", "5");
 
 
@@ -874,19 +972,19 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
                                                 // rewardedAd = createAndLoadRewardedAd();
                                                 //   Toast.makeText(mContext, "Congratulations!! You won "+rewardItem.getAmount()+" "+rewardItem.getType(), Toast.LENGTH_SHORT).show();
                                             }
+
                                             @Override
                                             public void onRewardedAdFailedToShow(int i) {
                                                 super.onRewardedAdFailedToShow(i);
                                             }
                                         });
-                                    }
-                                    else {
+                                    } else {
                                         if (mInterstitialAd != null && mInterstitialAd.isLoaded())
                                             mInterstitialAd.show();
                                     }
                                 } else {
                                     int count = Integer.parseInt(manager.getPreferences(mContext, "ad_count"));
-                                    manager.setPreferences(mContext, "ad_count", ""+(count-1));
+                                    manager.setPreferences(mContext, "ad_count", "" + (count - 1));
                                     if (mInterstitialAd != null && mInterstitialAd.isLoaded())
                                         mInterstitialAd.show();
                                 }
@@ -895,13 +993,11 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
                                 if (mInterstitialAd != null && mInterstitialAd.isLoaded())
                                     mInterstitialAd.show();
                             }
-                        }
-                        else {
+                        } else {
                             if (mInterstitialAd != null && mInterstitialAd.isLoaded())
                                 mInterstitialAd.show();
                         }
-                    }
-                    else {
+                    } else {
                         manager.setPreferences(mContext, "ad_count", "5");
                         manager.setPreferences(mContext, "ad_show_time", DateUtils.currentDateTime());
                         if (mInterstitialAd != null && mInterstitialAd.isLoaded())
@@ -912,21 +1008,26 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
                 generatePDF.setVisibility(View.GONE);
                 GeneratePresNew myFragment = new GeneratePresNew();
 
-                if(binding.topDoctorDetails.getVisibility()==View.VISIBLE)
-                    bundle.putString("top_doctor_details","true");
+                if (binding.topDoctorDetails.getVisibility() == View.VISIBLE)
+                    bundle.putString("top_doctor_details", "true");
                 else
-                    bundle.putString("top_doctor_details","false");
+                    bundle.putString("top_doctor_details", "false");
 
-                if(binding.footerDocterDetails.getVisibility()==View.VISIBLE)
-                    bundle.putString("footer_doctor_details","true");
+                if (binding.footerDocterDetails.getVisibility() == View.VISIBLE)
+                    bundle.putString("footer_doctor_details", "true");
                 else
-                    bundle.putString("footer_doctor_details","false");
+                    bundle.putString("footer_doctor_details", "false");
 
-                if(binding.textViewClinicName.getVisibility()==View.VISIBLE)
-                    bundle.putString("clinic_name","true");
+                if (binding.textViewClinicName.getVisibility() == View.VISIBLE)
+                    bundle.putString("clinic_name", "true");
                 else
-                    bundle.putString("clinic_name","false");
+                    bundle.putString("clinic_name", "false");
 
+                bundle.putString("dateString", dateWithName);
+                bundle.putString("dateStringWithNum", dateValueString);
+                bundle.putString("definer", definer);
+                bundle.putString("presId", prescriptionId);
+                bundle.putBoolean("certificate_selection", certificate_selection);
 
                 myFragment.setArguments(bundle);
 
@@ -948,14 +1049,12 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
     }
 
 
-
-
     private void BottomSheet(View view) {
         View bottomSheet = view.findViewById(R.id.bottom_sheet);
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView_bottom_sheet);
         //Create new GridLayoutManager
         @SuppressLint("WrongConstant") GridLayoutManager gridLayoutManagerr = new GridLayoutManager(mContext,
-                2,//span count no of items in single row
+                3,//span count no of items in single row
                 GridLayoutManager.VERTICAL,//Orientation
                 false);//reverse scrolling of recyclerview
         //set layout manager as gridLayoutManager
@@ -964,19 +1063,32 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
         ArrayList<BottomSheetItem> bottomSheetItemArrayList = new ArrayList<>();
         BottomSheetItem bottomSheetItem = new BottomSheetItem();
         bottomSheetItem.setMenuId("1");
-        bottomSheetItem.setMenuName("Email");
+        bottomSheetItem.setMenuName("View Pdf");
         bottomSheetItem.setMenuImage("mail");
         bottomSheetItemArrayList.add(bottomSheetItem);
 
         bottomSheetItem = new BottomSheetItem();
         bottomSheetItem.setMenuId("2");
-        bottomSheetItem.setMenuName("Download");
+        bottomSheetItem.setMenuName("Share");
         bottomSheetItem.setMenuImage("ic_download_");
+
         bottomSheetItemArrayList.add(bottomSheetItem);
 
         bottomSheetItem = new BottomSheetItem();
         bottomSheetItem.setMenuId("3");
-        bottomSheetItem.setMenuName("Other");
+        bottomSheetItem.setMenuName("Download");
+        bottomSheetItem.setMenuImage("ic_share__");
+        bottomSheetItemArrayList.add(bottomSheetItem);
+
+        bottomSheetItem = new BottomSheetItem();
+        bottomSheetItem.setMenuId("4");
+        bottomSheetItem.setMenuName("Send to pharmacy");
+        bottomSheetItem.setMenuImage("whatsapp");
+        bottomSheetItemArrayList.add(bottomSheetItem);
+
+        bottomSheetItem = new BottomSheetItem();
+        bottomSheetItem.setMenuId("3");
+        bottomSheetItem.setMenuName("Email");
         bottomSheetItem.setMenuImage("ic_share__");
         bottomSheetItemArrayList.add(bottomSheetItem);
 
@@ -986,7 +1098,7 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
         bottomSheetItem.setMenuImage("whatsapp");
         bottomSheetItemArrayList.add(bottomSheetItem);
 
-        mAdapter = new BottomSheetAdapter(mContext, bottomSheetItemArrayList, fl_progress_bar,GeneratePres.this,null);
+        mAdapter = new BottomSheetAdapter(mContext, bottomSheetItemArrayList, fl_progress_bar, GeneratePres.this, null);
         recyclerView.setAdapter(mAdapter);
 
         behavior = BottomSheetBehavior.from(bottomSheet);
@@ -1146,10 +1258,11 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
 //                textView_medical_cert_desc.setVisibility(View.GONE);
 
             genInv();
+
+
         } else {
             if (!count) {
                 PrescriptionJSON prescriptionJSON = new PrescriptionJSON();
-
                 prescriptionJSON.setPatientId(prescriptionItem.getPatientId());
                 prescriptionJSON.setDoctorId(manager.getPreferences(mContext, "doctor_id"));
                 if (prescriptionItem.getMedicines() != null) {
@@ -1172,6 +1285,25 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
 
                 prescriptionJSON.setMedicines(medicinesItemArrayListO);
                 prescriptionJSON.setDiagnosis(prescriptionItem.getDiagnosis());
+
+                if (certificate_selection)
+                    prescriptionJSON.setIsCertificate("yes");
+                else
+                    prescriptionJSON.setIsCertificate("no");
+
+
+                if (TextUtils.isEmpty(dateValueString)) {
+
+                    Calendar myCalendar = Calendar.getInstance();
+                    int year = myCalendar.get(Calendar.YEAR);
+                    int month = myCalendar.get(Calendar.MONTH);
+                    int DAY_OF_MONTH = myCalendar.get(Calendar.DAY_OF_MONTH);
+
+                    prescriptionJSON.setDate(year + "-" + (month + 1) + "-" + DAY_OF_MONTH);
+
+                } else
+                    prescriptionJSON.setDate(dateValueString);
+
                 prescriptionJSON.setEndNote(end_note);
                 if (labTestItem != null) {
                     if (labTestItem.size() != 0) {
@@ -1194,6 +1326,7 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(responsePrescription);
+
             } else {
                 genInv();
             }
@@ -1206,7 +1339,6 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
 
 
     public void genInv() {
-
 
         popupCreatingPrescription();
         rViewlabtest.setVisibility(View.GONE);
@@ -1239,15 +1371,15 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
                 Log.e(TAG, "------------------------------------   LINE   === " + line);
 
 
-                if (line > 400) {
+                if (line > 3000) {
                     checker = true;
-                    rView.setVisibility(View.GONE);
+//                    rView.setVisibility(View.GONE);
                     rViewlabtest.setVisibility(View.GONE);
                     fl_medicines_symbol.setVisibility(View.GONE);
                     textView_advice.setVisibility(View.GONE);
                     textView_end_note.setVisibility(View.GONE);
 
-                    if(prescriptionItem.getMedicines()==null){
+                    if (prescriptionItem.getMedicines() == null) {
                         rViewlabtest.setVisibility(View.VISIBLE);
                         textView_advice.setVisibility(View.VISIBLE);
                         textView_end_note.setVisibility(View.VISIBLE);
@@ -1286,7 +1418,6 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
                             binding.textviewRespirationRate.setVisibility(View.GONE);
                             binding.textviewAllergy.setVisibility(View.GONE);
                             fl_medicines_symbol.setVisibility(View.VISIBLE);
-                            top_header_parent.setVisibility(View.GONE);
                             textView_end_note.setVisibility(View.GONE);
                         }
                     }, 1);
@@ -1295,9 +1426,8 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
                 if (prescriptionItem != null) {
 
                     generatePDF.setVisibility(View.GONE);
-                    if (prescriptionItem.getMedicines() != null) {
-                        if (prescriptionItem.getMedicines().size() != 0) {
-                            int sizee = 8;
+                    if (prescriptionItem.getMedicines() != null && prescriptionItem.getMedicines().size() != 0) {
+                        int sizee = 8;
                                    /* if (width < 520)
                                         sizee = 5;
                                     else if (width < 820)
@@ -1308,64 +1438,64 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
                                         sizee = 6;
                                     }*/
 
-                            if (prescriptionItem.getMedicines().size() >= sizee) {
-                                rViewlabtest.setVisibility(View.GONE);
-                                textView_advice.setVisibility(View.GONE);
+                        if (prescriptionItem.getMedicines().size() >= sizee) {
+                            rViewlabtest.setVisibility(View.GONE);
+                            textView_advice.setVisibility(View.GONE);
 
-                                ArrayList<MedicinesItem> medicineList = new ArrayList<>();
-                                for (int i = 0; i < sizee; i++) {
-                                    if (prescriptionItem.getMedicines().size() > p[0]) {
-                                        medicineList.add(medicinesItemArrayListO.get(p[0]));
-                                        p[0] = p[0] + 1;
-                                    }
+                            ArrayList<MedicinesItem> medicineList = new ArrayList<>();
+                            for (int i = 0; i < sizee; i++) {
+                                if (prescriptionItem.getMedicines().size() > p[0]) {
+                                    medicineList.add(medicinesItemArrayListO.get(p[0]));
+                                    p[0] = p[0] + 1;
                                 }
+                            }
 
-                                Pres_adapter_mobile templateAdapter = new Pres_adapter_mobile(medicineList, mContext);
-                                rView.setAdapter(templateAdapter);
+                            Pres_adapter_mobile templateAdapter = new Pres_adapter_mobile(medicineList, mContext);
+                            rView.setAdapter(templateAdapter);
 
-                                final Handler handler = new Handler();
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
+                            final Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
                                                /* if(prescriptionItem.getMedicines()!=null)
                                                 if (prescriptionItem.getMedicines().size() > 4)
                                                 page_no.setText("1/"+(prescriptionItem.getMedicines().size()/4)+1);*/
-                                        // Do something after 4s = 4000ms
-                                        page_no.setText("Page No. " + page_no_count);
-                                        Bitmap screen = getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
-                                        files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
+                                    // Do something after 4s = 4000ms
+                                    page_no.setText("Page No. " + page_no_count);
+                                    Bitmap screen = getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
+                                    files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
 
                                                /* if(prescriptionItem.getMedicines()!=null)
                                                     if (prescriptionItem.getMedicines().size() > 4)
                                                         page_no.setText("2/"+(prescriptionItem.getMedicines().size()/4)+1);*/
 
-                                        patient_item = prescriptionItem;
-                                        textView_chief_complaint.setVisibility(View.GONE);
-                                        textView_history.setVisibility(View.GONE);
-                                        textView_findings.setVisibility(View.GONE);
-                                        textView_treatment_advice.setVisibility(View.GONE);
-                                        textView_diagnosis.setVisibility(View.GONE);
-                                        binding.textviewTemprature.setVisibility(View.GONE);
-                                        binding.textviewHeight.setVisibility(View.GONE);
-                                        binding.textviewWeight.setVisibility(View.GONE);
-                                        binding.textviewPulse.setVisibility(View.GONE);
-                                        binding.textviewBloodPressure.setVisibility(View.GONE);
-                                        binding.textviewBloodSugar.setVisibility(View.GONE);
-                                        binding.textviewHemoglobing.setVisibility(View.GONE);
-                                        binding.textviewSpo2.setVisibility(View.GONE);
-                                        binding.textviewBloodGroup.setVisibility(View.GONE);
-                                        binding.textviewRespirationRate.setVisibility(View.GONE);
-                                        binding.textViewHosAddress.setVisibility(View.GONE);
-                                        binding.textviewAllergy.setVisibility(View.GONE);
-                                        Log.e(TAG, "--------------------------------------------p[0] - 1199 = " + p[0]);
+                                    patient_item = prescriptionItem;
+                                    textView_chief_complaint.setVisibility(View.GONE);
+                                    textView_history.setVisibility(View.GONE);
+                                    textView_findings.setVisibility(View.GONE);
+                                    textView_treatment_advice.setVisibility(View.GONE);
+                                    textView_diagnosis.setVisibility(View.GONE);
+                                    binding.textviewTemprature.setVisibility(View.GONE);
+                                    binding.textviewHeight.setVisibility(View.GONE);
+                                    binding.textviewWeight.setVisibility(View.GONE);
+                                    binding.textviewPulse.setVisibility(View.GONE);
+                                    binding.textviewBloodPressure.setVisibility(View.GONE);
+                                    binding.textviewBloodSugar.setVisibility(View.GONE);
+                                    binding.textviewHemoglobing.setVisibility(View.GONE);
+                                    binding.textviewSpo2.setVisibility(View.GONE);
+                                    binding.textviewBloodGroup.setVisibility(View.GONE);
+                                    binding.textviewRespirationRate.setVisibility(View.GONE);
+                                    binding.textViewHosAddress.setVisibility(View.GONE);
+                                    binding.textviewAllergy.setVisibility(View.GONE);
+                                    Log.e(TAG, "--------------------------------------------p[0] - 1199 = " + p[0]);
 
-                                        temp(p[0], files);
-                                        filesGlobal = files;
+                                    temp(p[0], files);
+                                    filesGlobal = files;
 
-                                    }
-                                }, DELAY_TIME);
+                                }
+                            }, DELAY_TIME);
 
-                            } else {
+                        } else {
                                        /* if(!checker){
                                             fl_medicines_symbol.setVisibility(View.VISIBLE);
                                             if(prescriptionItem.getMedicines().size()!=0)
@@ -1392,14 +1522,14 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
                                         }*/
 
 
-                                textView_end_note.setVisibility(View.VISIBLE);
-                                page_no.setText("Page No. " + page_no_count);
+                            textView_end_note.setVisibility(View.VISIBLE);
+                            page_no.setText("Page No. " + page_no_count);
 
-                                Bitmap screen = getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
+                            Bitmap screen = getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
 
-                                files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
-                                patient_item = prescriptionItem;
-                                filesGlobal = files;
+                            files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
+                            patient_item = prescriptionItem;
+                            filesGlobal = files;
                                         /*Intent intent = new Intent();
                                         intent.setAction(Intent.ACTION_SEND_MULTIPLE);
                                         intent.putExtra(Intent.EXTRA_SUBJECT, "E-prescription from "+ manager.getPreferences(mContext, "name"));
@@ -1408,21 +1538,23 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
                                         intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
                                         Intent shareIntent = Intent.createChooser(intent, null);
                                         startActivity(shareIntent);*/
-                                popupBottomMenu();
-                                fl_progress_bar.setVisibility(View.GONE);
-                                if (dialog_data != null)
-                                    dialog_data.dismiss();
-                            }
+                            popupBottomMenu();
+                            fl_progress_bar.setVisibility(View.GONE);
+                            if (dialog_data != null)
+                                dialog_data.dismiss();
                         }
+
                     } else if (labTestItem != null) {
                         fl_medicines_symbol.setVisibility(View.GONE);
-                        if(checker && prescriptionItem.getMedicines()==null){
+                        if (checker && prescriptionItem.getMedicines() == null) {
                             patient_item = prescriptionItem;
-                        }
-                        else {
+                        } else {
                             textView_end_note.setVisibility(View.VISIBLE);
                             rViewlabtest.setVisibility(View.VISIBLE);
-                            textView_advice.setVisibility(View.VISIBLE);
+                            if (labTestItem.size() != 0)
+                                textView_advice.setVisibility(View.VISIBLE);
+                            else
+                                textView_advice.setVisibility(View.GONE);
 
                             final Handler handler = new Handler();
                             handler.postDelayed(new Runnable() {
@@ -1433,7 +1565,8 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
                                     files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
                                     patient_item = prescriptionItem;
                                     filesGlobal = files;
-                                }},1);
+                                }
+                            }, 1);
                         }
 
                                 /*Intent intent = new Intent();
@@ -1451,10 +1584,9 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
                             dialog_data.dismiss();
                     } else {
                         fl_medicines_symbol.setVisibility(View.GONE);
-                        if(checker ){
+                        if (checker) {
                             patient_item = prescriptionItem;
-                        }
-                        else {
+                        } else {
                             textView_end_note.setVisibility(View.VISIBLE);
                             Bitmap screen = getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
                             rViewlabtest.setVisibility(View.GONE);
@@ -1584,7 +1716,6 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
     }
 
     public void temp(int p, final ArrayList<Uri> files) {
-        top_header_parent.setVisibility(View.GONE);
         if (prescriptionItem.getMedicines() != null)
             Log.e(TAG, "--------------------------------------------prescriptionItem.getMedicines().size()   = " + prescriptionItem.getMedicines().size());
 
@@ -1750,7 +1881,7 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
         } else if (labTestItem != null) {
             page_no_count = page_no_count + 1;
             page_no.setText("Page No. " + page_no_count);
-            rView.setVisibility(View.GONE);
+//            rView.setVisibility(View.GONE);
             fl_medicines_symbol.setVisibility(View.GONE);
             textView_end_note.setVisibility(View.VISIBLE);
             if (labTestItem.size() > 0) {
@@ -2057,15 +2188,15 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
                         Log.e(TAG, "------------------------------------   LINE   === " + line);
 
 
-                        if (line > 400) {
+                        if (line > 3000) {
                             checker = true;
-                            rView.setVisibility(View.GONE);
+//                            rView.setVisibility(View.GONE);
                             rViewlabtest.setVisibility(View.GONE);
                             fl_medicines_symbol.setVisibility(View.GONE);
                             textView_advice.setVisibility(View.GONE);
                             textView_end_note.setVisibility(View.GONE);
 
-                            if(prescriptionItem.getMedicines()==null){
+                            if (prescriptionItem.getMedicines() == null) {
                                 rViewlabtest.setVisibility(View.VISIBLE);
                                 textView_advice.setVisibility(View.VISIBLE);
                                 textView_end_note.setVisibility(View.VISIBLE);
@@ -2104,7 +2235,6 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
                                     binding.textviewRespirationRate.setVisibility(View.GONE);
                                     binding.textviewAllergy.setVisibility(View.GONE);
                                     fl_medicines_symbol.setVisibility(View.VISIBLE);
-                                    top_header_parent.setVisibility(View.GONE);
                                     textView_end_note.setVisibility(View.GONE);
                                 }
                             }, 1);
@@ -2234,10 +2364,9 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
                                 }
                             } else if (labTestItem != null) {
                                 fl_medicines_symbol.setVisibility(View.GONE);
-                                if(checker && prescriptionItem.getMedicines()==null){
+                                if (checker && prescriptionItem.getMedicines() == null) {
                                     patient_item = prescriptionItem;
-                                }
-                                else {
+                                } else {
                                     textView_end_note.setVisibility(View.VISIBLE);
                                     rViewlabtest.setVisibility(View.VISIBLE);
                                     textView_advice.setVisibility(View.VISIBLE);
@@ -2251,7 +2380,8 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
                                             files.add(getImageUri(mContext, screen, prescriptionItem.getPName()));
                                             patient_item = prescriptionItem;
                                             filesGlobal = files;
-                                        }},1);
+                                        }
+                                    }, 1);
                                 }
 
                                 /*Intent intent = new Intent();
@@ -2269,10 +2399,9 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
                                     dialog_data.dismiss();
                             } else {
                                 fl_medicines_symbol.setVisibility(View.GONE);
-                                if(checker ){
+                                if (checker) {
                                     patient_item = prescriptionItem;
-                                }
-                                else {
+                                } else {
                                     textView_end_note.setVisibility(View.VISIBLE);
                                     Bitmap screen = getBitmapFromView(scrollview_edit_profile); // here give id of our root layout (here its my RelativeLayout's id)
                                     rViewlabtest.setVisibility(View.GONE);
@@ -2580,27 +2709,45 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
     }
 
     private void initViews() {
-        int counter =0;
+        int counter = 0;
 
-        if (certificate_selection) {
-            page_no.setVisibility(View.GONE);
+        if (certificate_selection && !TextUtils.isEmpty(definer) && !definer.equalsIgnoreCase("history")) {
+            page_no.setVisibility(View.VISIBLE);
             fl_medicines_symbol.setVisibility(View.GONE);
             textView_diagnosis.setVisibility(View.GONE);
+
             textView_advice.setVisibility(View.GONE);
             textView_medical_cert.setVisibility(View.VISIBLE);
-            textView_medical_cert_desc.setVisibility(View.VISIBLE);
-            textView_medical_cert.setText(bundle.getString("certificate_title"));
-            textView_medical_cert_desc.setText("" + bundle.getString("certificate_desc"));
-            textView_medical_cert_desc.setTextColor(getResources().getColor(R.color.colorBlack));
+            textView_medical_cert_desc.setVisibility(View.GONE);
+
+            if (!TextUtils.isEmpty(bundle.getString("certificate_title"))) {
+                textView_medical_cert.setText(bundle.getString("certificate_title"));
+                textView_medical_cert.setVisibility(View.VISIBLE);
+            }
+
+                if (prescriptionItem.getMedicines() != null)
+                    prescriptionItem.getMedicines().clear();
+
+                if (labTestItem != null)
+                    labTestItem.clear();
+
+            if (!TextUtils.isEmpty(bundle.getString("certificate_desc")) && !bundle.getString("certificate_desc").equalsIgnoreCase("null")) {
+                textView_medical_cert_desc.setText("" + bundle.getString("certificate_desc"));
+                textView_medical_cert_desc.setTextColor(getResources().getColor(R.color.colorBlack));
+            }
+
             textView_pat_name.setTextColor(getResources().getColor(R.color.colorBlack));
 
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             params.gravity = Gravity.CENTER;
             ll_patient_name.setLayoutParams(params);
         } else {
+
             if (prescriptionItem.getMedicines() != null) {
                 if (prescriptionItem.getMedicines().size() != 0)
                     fl_medicines_symbol.setVisibility(View.VISIBLE);
+                else
+                    fl_medicines_symbol.setVisibility(View.GONE);
             } else {
                 if (labTestItem != null) {
                     if (labTestItem.size() != 0)
@@ -2620,33 +2767,37 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
         else {
             if (end_note.contains("|")) {
                 String[] details = end_note.split(Pattern.quote("|"));
+
+                textView_medical_cert.setVisibility(View.GONE);
+                if (details.length >= 2)
+                    if (!details[1].equals("")) {
+                        textView_medical_cert.setText(details[1]);
+                        textView_medical_cert.setVisibility(View.VISIBLE);
+                    }
+
+                textView_medical_cert_desc.setVisibility(View.GONE);
+                if (details.length >= 3)
+                    if (!details[2].equals("")) {
+                        textView_medical_cert_desc.setText(details[2]);
+                        textView_medical_cert_desc.setVisibility(View.VISIBLE);
+                    }
+
                 if (details.length != 0) {
                     if (details[0] != null)
                         if (details[0].equals("")) {
-                            page_no.setVisibility(View.GONE);
+                            page_no.setVisibility(View.VISIBLE);
                             fl_medicines_symbol.setVisibility(View.GONE);
                             textView_diagnosis.setVisibility(View.GONE);
                             textView_advice.setVisibility(View.GONE);
-                            textView_medical_cert.setVisibility(View.VISIBLE);
                             textView_medical_cert_desc.setVisibility(View.VISIBLE);
                             textView_medical_cert_desc.setTextColor(getResources().getColor(R.color.colorBlack));
                             textView_pat_name.setTextColor(getResources().getColor(R.color.colorBlack));
-
                             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                             params.gravity = Gravity.CENTER;
                             ll_patient_name.setLayoutParams(params);
                             textView_chief_complaint.setVisibility(View.GONE);
-                            textView_medical_cert.setVisibility(View.VISIBLE);
                             textView_medical_cert_desc.setVisibility(View.VISIBLE);
-                            if (details.length == 2)
-                                if (!details[1].equals("")) {
-                                    textView_medical_cert.setText(details[1]);
-                                }
 
-                            if (details.length == 3)
-                                if (!details[2].equals("")) {
-                                    textView_medical_cert_desc.setText(details[2]);
-                                }
                         } else {
                             textView_chief_complaint.setVisibility(View.VISIBLE);
                             textView_end_note.setText("Note : " + details[0]);
@@ -2718,22 +2869,22 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
             String[] details = diagnosis_desc.split(Pattern.quote("|"));
             // Toast.makeText(mContext, "details = "+details.length, Toast.LENGTH_SHORT).show();
             int lineCounter = 0;
-            for (String strr:details
+            for (String strr : details
             ) {
-                if(!strr.equals("")){
+                if (!strr.equals("")) {
                     int multiplier = 1;
-                    if(strr.length()>90){
-                        multiplier = (strr.length()/90);
+                    if (strr.length() > 90) {
+                        multiplier = (strr.length() / 90);
                     }
-                    Log.e("multiplier"," ====== "+multiplier);
+                    Log.e("multiplier", " ====== " + multiplier);
 
-                    lineCounter = lineCounter +multiplier;
+                    lineCounter = lineCounter + multiplier;
                 }
             }
-            Log.e("details"," ======-------------------------------------------------- ");
-            Log.e("details"," ====== "+diagnosis_desc);
-            Log.e("lineCounter"," ====== "+lineCounter);
-            Log.e("details"," ======-------------------------------------------------- ");
+            Log.e("details", " ======-------------------------------------------------- ");
+            Log.e("details", " ====== " + diagnosis_desc);
+            Log.e("lineCounter", " ====== " + lineCounter);
+            Log.e("details", " ======-------------------------------------------------- ");
 
             if (details.length != 0) {
                 int line = 0;
@@ -2892,8 +3043,10 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
         Doctor doctor = prescriptionItem.getDoctor();
         if (!("").equalsIgnoreCase(doctor.getClinicName())) {
             textView_Clinic_name.setText(doctor.getClinicName());
+            isClinicNameFound = true;
         } else {
             textView_Clinic_name.setVisibility(View.GONE);
+            isClinicNameFound = false;
         }
 
             /*String name_ =doctor.getName().trim();
@@ -3014,7 +3167,7 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
             textView_days.setText("Working : " + work_days);
         } else {
             textView_days.setVisibility(View.GONE);
-            counter = counter +1;
+            counter = counter + 1;
         }
 
         if (TextUtils.isEmpty(binding.textViewDays.getText().toString()) &&
@@ -3033,8 +3186,8 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
             else
                 textView_time.setText("Time : " + visiting_hr_from_details[0].toLowerCase().trim() + " - " + visiting_hr_to_details[0].toLowerCase().trim());
 
-            if(visiting_hr_from_details.length==1 && visiting_hr_from_details[0].equals(""))
-                if(visiting_hr_to_details.length==1 && visiting_hr_to_details[0].equals(""))
+            if (visiting_hr_from_details.length == 1 && visiting_hr_from_details[0].equals(""))
+                if (visiting_hr_to_details.length == 1 && visiting_hr_to_details[0].equals(""))
                     textView_time.setVisibility(View.GONE);
         } else if (!("").equalsIgnoreCase(doctor.getVisitingHrFrom())) {
             String[] visiting_hr_from_details = manager.getPreferences(mContext, "visiting_hr_from").split(Pattern.quote("|"));
@@ -3047,32 +3200,31 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
                 textView_time.setText("Time : " + visiting_hr_from_details[0].toLowerCase().trim() + " - " + visiting_hr_to_details[0].toLowerCase().trim());
             //  textView_time.setText("Time : " + doctor.getVisitingHrFrom() + " to " + doctor.getVisitingHrTo());
 
-            if(visiting_hr_from_details.length==1 && visiting_hr_from_details[0].equals(""))
-                if(visiting_hr_to_details.length==1 && visiting_hr_to_details[0].equals(""))
+            if (visiting_hr_from_details.length == 1 && visiting_hr_from_details[0].equals(""))
+                if (visiting_hr_to_details.length == 1 && visiting_hr_to_details[0].equals(""))
                     textView_time.setVisibility(View.GONE);
         } else {
             textView_time.setVisibility(View.GONE);
-            counter = counter +1;
+            counter = counter + 1;
         }
         if (!("").equalsIgnoreCase(doctor.getMobileLetterHead())) {
             textView_contact.setText("Contact : " + doctor.getMobileLetterHead());
         } else {
             textView_contact.setVisibility(View.GONE);
-            counter = counter +1;
+            counter = counter + 1;
         }
         if (!("").equalsIgnoreCase(doctor.getEmailLetterHead())) {
             textView_email.setText("Mail Id : " + doctor.getEmailLetterHead());
         } else {
             textView_email.setVisibility(View.GONE);
-            counter = counter +1;
+            counter = counter + 1;
         }
         if (!("").equalsIgnoreCase(doctor.getClinicAddress())) {
             textView_add.setText("Address : " + doctor.getClinicAddress());
         } else {
             textView_add.setVisibility(View.GONE);
-            counter = counter +1;
+            counter = counter + 1;
         }
-
 
 
         if (!("").equalsIgnoreCase(doctor.getImage())) {
@@ -3133,85 +3285,220 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
             }
         }
 
-        if(counter==5)
+        if (counter == 5)
             binding.lineOfSingle.setVisibility(View.GONE);
 
     }
-    @Override
-    public void onModalOptionSelected(@org.jetbrains.annotations.Nullable String s, @NotNull Option option) {
 
-        switch (option.getId()) {
+    public void setOnDataViaTranslation(String selectedLanguage) {
 
-            case 5:
-                setLanguageOnBlueDoc();
-                break;
+        Log.i(TAG, "setOnDataViaTranslation1: " + medicinesInEnglish);
+        Log.i(TAG, "setOnDataViaTranslation2: " + labTestItemInEnglish);
 
-        }
+        ArrayList<MedicineItem> medicineItems = setDataOnSecondModules(medicinesInEnglish);
+        ArrayList<LabTestItems> labTestItems = setLabtestDataModules(labTestItemInEnglish);
 
-    }
+        String translatedString = toJSON(medicineItems);
+        String translatedStringOfLabTest = toJSONLabTest(labTestItems);
 
-    public void setOnDataViaTranslation(){
-
-        String translatedString = toJSON(prescriptionItem.getMedicines());
-
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        JsonParser jp = new JsonParser();
-        String translatedStringJson = gson.toJson(jp.parse(translatedString));
-
-        Log.i(TAG, "setOnDataViaTranslation: "+translatedStringJson);
+        String translatedStringJsonOfMedicines = getTranslatedJson(translatedString);
+        String translatedStringOfLabTestOfOffline = getTranslatedJson(translatedStringOfLabTest);
 
         TranslateAPI translateAPI = new TranslateAPI(
-                Language.ENGLISH,   //Source Language
-                Language.HINDI,        //Target Language
-                translatedStringJson);         //Query Text
+                Language.AUTO_DETECT,   //Source Language
+                selectedLanguage,        //Target Language
+                translatedStringJsonOfMedicines);         //Query Text
 
         translateAPI.setTranslateListener(new TranslateAPI.TranslateListener() {
             @Override
             public void onSuccess(String translatedText) {
-                getTranslateOnDiffrentLanguage(translatedText.trim());
+                String replace = translatedText.trim().replace(" ,", ",").replace("“ ", "\"").replace("”", "\"").replace("“", "\"").replace(" ،", ",").replace(", \"", ",");
+                getTranslateOnDiffrentLanguage(replace, selectedLanguage);
+                Log.i(TAG, "onSuccess: " + replace);
             }
 
             @Override
             public void onFailure(String ErrorText) {
-                Log.d(TAG, "onFailure: "+ErrorText);
+                Log.d(TAG, "onFailure: " + ErrorText);
+            }
+        });
+
+        // lab_test
+
+        TranslateAPI labTestTranslatedApi = new TranslateAPI(
+                Language.AUTO_DETECT,   //Source Language
+                selectedLanguage,        //Target Language
+                translatedStringOfLabTestOfOffline);         //Query Text
+
+        labTestTranslatedApi.setTranslateListener(new TranslateAPI.TranslateListener() {
+            @Override
+            public void onSuccess(String translatedText) {
+                String replace = translatedText.trim().replace(" ,", ",").replace("“ ", "\"").replace("”", "\"").replace("“", "\"").replace(" ،", ",").replace(", \"", ",");
+                getTranslateOnDiffrentLanguageLabTest(replace, selectedLanguage);
+                Log.i(TAG, "onSuccess: " + replace);
+            }
+
+
+            @Override
+            public void onFailure(String ErrorText) {
+                Log.d(TAG, "onFailure: " + ErrorText);
             }
         });
 
     }
 
-    String toJSON(ArrayList<com.likesby.bludoc.ModelLayer.NewEntities3.MedicinesItem> list) {
+    private ArrayList<LabTestItems> setLabtestDataModules(ArrayList<LabTestItem> labTestItem) {
 
-        Gson gson = new Gson();
-        return gson.toJson(list, new TypeToken<ArrayList<com.likesby.bludoc.ModelLayer.NewEntities3.MedicinesItem>>() {}.getType());
+        ArrayList<LabTestItems> labTestItemArrayList = new ArrayList<>();
+
+        if (labTestItem != null) {
+
+            for (LabTestItem mi : labTestItem) {
+                LabTestItems mii = new LabTestItems();
+                mii.setLabTestComment(mi.getLabTestComment());
+                mii.setLabTestName(mi.getLabTestName());
+                labTestItemArrayList.add(mii);
+
+            }
+        }
+
+        return labTestItemArrayList;
+
     }
 
-    private void getTranslateOnDiffrentLanguage(final String medicinesJoin) {
+    private ArrayList<MedicineItem> setDataOnSecondModules(ArrayList<com.likesby.bludoc.ModelLayer.NewEntities3.MedicinesItem> medicines) {
+
+        ArrayList<MedicineItem> medicineItems = new ArrayList<>();
+
+        if (medicines != null) {
+
+            for (com.likesby.bludoc.ModelLayer.NewEntities3.MedicinesItem mi : medicines) {
+                MedicineItem mii = new MedicineItem();
+                mii.setMedicineName(mi.getMedicineName());
+                mii.setPresbMedicineId(mi.getPresbMedicineId());
+                mii.setAdditionaComment(mi.getAdditionaComment());
+                mii.setFrequency(mi.getFrequency());
+                mii.setQty(mi.getQty());
+                mii.setInstruction(mi.getInstruction());
+                mii.setNoOfDays(mi.getNoOfDays());
+                mii.setRoute(mi.getRoute());
+                medicineItems.add(mii);
+
+            }
+        }
+
+        return medicineItems;
+
+    }
+
+    private void getTranslateOnDiffrentLanguageLabTest(String labTestJoin, String selectedLanguage) {
 
         Gson gson = new Gson();
-        Type type = new TypeToken<ArrayList<com.likesby.bludoc.ModelLayer.NewEntities3.MedicinesItem>>(){}.getType();
-        ArrayList<com.likesby.bludoc.ModelLayer.NewEntities3.MedicinesItem> contactList = null;
+        Type type = new TypeToken<ArrayList<LabTestItems>>() {
+        }.getType();
+        ArrayList<LabTestItems> contactList = null;
         try {
-            contactList = gson.fromJson(medicinesJoin, type);
-        } catch (Exception e) {
+            contactList = gson.fromJson(labTestJoin, type);
+        } catch (JsonSyntaxException e) {
             e.printStackTrace();
         }
 
-        prescriptionItem.setMedicines(contactList);
-//        prescriptionItem.setLabTest(labTestItem);
-//
-//        if(labTestItem!=null) {
-//            labTestItem.clear();
-//            labTestItem.addAll(labTestItemsList);
-//        }
+        ArrayList<LabTestItem> reverseFromLabTest = getReverseFromLabTest(contactList);
 
-        Bundle bundle=new Bundle();
-        bundle.putParcelable("defaultAttributeId",prescriptionItem);
-        bundle.putParcelableArrayList("defaultAttributeIdLabTest",labTestItem);
-        bundle.putString("definer",definer);
-        bundle.putString("end_note",end_note);
-        bundle.putString("yesOrNo",yesOrNo);
+        if (labTestItem != null && contactList != null) {
+            labTestItem.clear();
+            labTestItem.addAll(reverseFromLabTest);
+        }
+
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("defaultAttributeId", prescriptionItem);
+        bundle.putParcelableArrayList("defaultAttributeIdLabTest", labTestItem);
+        bundle.putString("definer", definer);
+        bundle.putString("end_note", end_note);
+        bundle.putString("yesOrNo", yesOrNo);
+        bundle.putString("selectedLanguage", selectedLanguage);
 
         this.setArguments(bundle);
+
+        value = true;
+
+        fragmentActivity.getSupportFragmentManager()
+                .beginTransaction()
+                .detach(this)
+                .attach(this)
+                .commit();
+
+
+    }
+
+    private ArrayList<LabTestItem> getReverseFromLabTest(ArrayList<LabTestItems> contactList) {
+
+        ArrayList<LabTestItem> labTestItemArrayList = new ArrayList<>();
+
+        if (contactList != null) {
+
+            for (LabTestItems mi : contactList) {
+                LabTestItem mii = new LabTestItem();
+                mii.setLabTestComment(mi.getLabTestComment());
+                mii.setLabTestName(mi.getLabTestName());
+                labTestItemArrayList.add(mii);
+
+            }
+        }
+
+        return labTestItemArrayList;
+
+    }
+
+    private String getTranslatedJson(String translatedString) {
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        JsonParser jp = new JsonParser();
+        return gson.toJson(jp.parse(translatedString));
+
+    }
+
+    String toJSON(ArrayList<MedicineItem> list) {
+
+        Gson gson = new Gson();
+        return gson.toJson(list, new TypeToken<ArrayList<MedicineItem>>() {
+        }.getType());
+    }
+
+    String toJSONLabTest(ArrayList<LabTestItems> labTestItem) {
+
+        Gson gson = new Gson();
+        return gson.toJson(labTestItem, new TypeToken<ArrayList<LabTestItems>>() {
+        }.getType());
+    }
+
+    private void getTranslateOnDiffrentLanguage(final String medicinesJoin, String selectedLanguage) {
+
+        Gson gson = new Gson();
+        Type type = new TypeToken<ArrayList<MedicineItem>>() {
+        }.getType();
+        ArrayList<MedicineItem> contactList = null;
+        try {
+            contactList = gson.fromJson(medicinesJoin, type);
+        } catch (JsonSyntaxException e) {
+            e.printStackTrace();
+        }
+
+        ArrayList<com.likesby.bludoc.ModelLayer.NewEntities3.MedicinesItem> reverseFromMedicineItem = getReverseFromMedicineItem(contactList);
+
+        prescriptionItem.setMedicines(reverseFromMedicineItem);
+
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("defaultAttributeId", prescriptionItem);
+        bundle.putParcelableArrayList("defaultAttributeIdLabTest", labTestItem);
+        bundle.putString("definer", definer);
+        bundle.putString("end_note", end_note);
+        bundle.putString("yesOrNo", yesOrNo);
+        bundle.putString("selectedLanguage", selectedLanguage);
+
+        this.setArguments(bundle);
+
+        value = true;
 
         fragmentActivity.getSupportFragmentManager()
                 .beginTransaction()
@@ -3221,14 +3508,111 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
 
     }
 
+    private ArrayList<com.likesby.bludoc.ModelLayer.NewEntities3.MedicinesItem> getReverseFromMedicineItem(ArrayList<MedicineItem> contactList) {
+
+        ArrayList<com.likesby.bludoc.ModelLayer.NewEntities3.MedicinesItem> medicineItems = new ArrayList<>();
+
+        if (contactList != null) {
+
+            for (MedicineItem mi : contactList) {
+                com.likesby.bludoc.ModelLayer.NewEntities3.MedicinesItem mii = new com.likesby.bludoc.ModelLayer.NewEntities3.MedicinesItem();
+                mii.setMedicineName(mi.getMedicineName());
+                mii.setPresbMedicineId(mi.getPresbMedicineId());
+                mii.setAdditionaComment(mi.getAdditionaComment());
+                mii.setFrequency(mi.getFrequency());
+                mii.setQty(mi.getQty());
+                mii.setInstruction(mi.getInstruction());
+                mii.setNoOfDays(mi.getNoOfDays());
+                mii.setRoute(mi.getRoute());
+                medicineItems.add(mii);
+
+            }
+        }
+
+        return medicineItems;
+
+    }
+
     private String checkNull(@Nullable String s) {
 
-        if(TextUtils.isEmpty(s))
+        if (TextUtils.isEmpty(s))
             return "";
-        else if(!TextUtils.isEmpty(s) && s!=null)
-            return s.replace("0000000","");
+        else if (!TextUtils.isEmpty(s) && s != null)
+            return s.replace("0000000", "");
 
         return "";
+
+    }
+
+    @Override
+    public void onModalOptionSelected(@org.jetbrains.annotations.Nullable String s, @NotNull Option option) {
+
+        switch (option.getId()) {
+
+            case 6:
+                setOnDataViaTranslation(Language.HINDI);
+                break;
+
+            case 7:
+                setOnDataViaTranslation(Language.ENGLISH);
+                break;
+
+            case 8:
+                setOnDataViaTranslation(Language.CHINESE);
+                break;
+
+            case 9:
+                setOnDataViaTranslation(Language.SPANISH);
+                break;
+
+            case 10:
+                setOnDataViaTranslation(Language.FRENCH);
+                break;
+
+            case 11:
+                setOnDataViaTranslation(Language.BENGALI);
+                break;
+
+            case 12:
+                setOnDataViaTranslation(Language.GERMAN);
+                break;
+
+            case 13:
+                setOnDataViaTranslation(Language.ITALIAN);
+                break;
+
+            case 14:
+                setOnDataViaTranslation(Language.DUTCH);
+                break;
+
+            case 15:
+                setOnDataViaTranslation(Language.POLISH);
+                break;
+
+            case 16:
+                setOnDataViaTranslation(Language.INDONESIAN);
+                break;
+
+            case 17:
+                setOnDataViaTranslation(Language.DANISH);
+                break;
+
+            case 18:
+                setOnDataViaTranslation(Language.SWEDISH);
+                break;
+
+            case 19:
+                setOnDataViaTranslation(Language.TURKISH);
+                break;
+
+            case 20:
+                setOnDataViaTranslation("mr");
+                break;
+
+            case 21:
+                setOnDataViaTranslation("ur");
+                break;
+        }
 
     }
 
@@ -3249,9 +3633,10 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
         builder.add(new OptionRequest(15, "Polish", R.drawable.ic_action_language));
         builder.add(new OptionRequest(16, "Indonesian", R.drawable.ic_action_language));
         builder.add(new OptionRequest(17, "Danish", R.drawable.ic_action_language));
-        builder.add(new OptionRequest(17, "Swedish", R.drawable.ic_action_language));
-        builder.add(new OptionRequest(17, "Turkish", R.drawable.ic_action_language));
-
+        builder.add(new OptionRequest(18, "Swedish", R.drawable.ic_action_language));
+        builder.add(new OptionRequest(19, "Turkish", R.drawable.ic_action_language));
+        builder.add(new OptionRequest(20, "Marathi", R.drawable.ic_action_language));
+        builder.add(new OptionRequest(21, "Urdu", R.drawable.ic_action_language));
 
         builder.layout(R.layout.item_customs_languages);
         builder.show(getChildFragmentManager(), "Custom_languages");
@@ -3262,13 +3647,11 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
 
         if (!value) {
             binding.topDoctorDetails.setVisibility(View.GONE);
-            binding.topHeaderParent.setVisibility(View.GONE);
         } else {
             binding.topDoctorDetails.setVisibility(View.VISIBLE);
-            binding.topHeaderParent.setVisibility(View.VISIBLE);
         }
 
-        isVisible=value;
+        isVisible = value;
 
     }
 
@@ -3280,7 +3663,7 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
             binding.textViewClinicName.setVisibility(View.VISIBLE);
         }
 
-        isClinicVisible=value;
+        isClinicVisible = value;
 
     }
 
@@ -3288,18 +3671,20 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
 
         if (!value) {
             binding.footerDocterDetails.setVisibility(View.GONE);
+            binding.pageOfParent.setVisibility(View.GONE);
         } else {
             binding.footerDocterDetails.setVisibility(View.VISIBLE);
+            binding.pageOfParent.setVisibility(View.VISIBLE);
         }
 
-        isFooterVisible=value;
+        isFooterVisible = value;
 
     }
 
     @Override
     public void onChangeResult(int ids, boolean value) {
 
-        switch (ids){
+        switch (ids) {
 
             case 1:
 
@@ -3332,6 +3717,15 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
                 break;
 
         }
+
+    }
+
+    @Override
+    public void onChooseCalender(String dataValue, String date_with_name) {
+
+        textView_date.setText("Date: " + date_with_name);
+        dateValueString = dataValue;
+        dateWithName = date_with_name;
 
     }
 }

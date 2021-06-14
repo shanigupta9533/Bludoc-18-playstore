@@ -1,98 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:layout_marginStart="@dimen/margin_8"
+    android:layout_marginLeft="@dimen/margin_8"
+    android:layout_marginEnd="@dimen/margin_8"
+    android:layout_marginRight="@dimen/margin_8"
     android:background="@drawable/white_btn_gradient"
-    android:paddingBottom   ="@dimen/margin_5"
-    android:paddingLeft     ="@dimen/margin_10"
-    android:paddingStart    ="@dimen/margin_10"
-    android:paddingEnd      ="@dimen/margin_10"
-    android:paddingRight    ="@dimen/margin_10"
-    android:paddingTop      ="@dimen/margin_5"
-    android:layout_marginLeft   ="@dimen/margin_8"
-    android:layout_marginStart  ="@dimen/margin_8"
-    android:layout_marginEnd    ="@dimen/margin_8"
-    android:layout_marginRight  ="@dimen/margin_8"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="vertical"
+    android:paddingStart="@dimen/margin_10"
+    android:paddingLeft="@dimen/margin_10"
+    android:paddingTop="@dimen/margin_5"
+    android:paddingEnd="@dimen/margin_10"
+    android:paddingRight="@dimen/margin_10"
+    android:paddingBottom="@dimen/margin_5">
 
 
     <TextView
- android:fontFamily="@font/poppinsmedium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#000"
-        android:maxLength="60"
         android:id="@+id/test_name"
-        android:textSize="13sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_3"
+        android:fontFamily="@font/poppinsmedium"
+        android:maxLength="60"
         android:text="Test Name"
-        android:textStyle="bold"/>
+        android:textColor="#000"
+        android:textSize="13sp"
+        android:textStyle="bold" />
 
 
     <TextView
- android:fontFamily="@font/poppins"
+        android:id="@+id/test_comment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#000"
-        android:id="@+id/test_comment"
-        android:lines="2"
         android:layout_marginLeft="@dimen/margin_5"
-        android:textSize="12sp"
-        android:text="Desc" />
-
-
+        android:fontFamily="@font/poppins"
+        android:lines="2"
+        android:text="Desc"
+        android:textColor="#000"
+        android:textSize="12sp" />
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="3"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:id="@+id/parent_of_button"
+        android:weightSum="3">
 
 
         <Button
-            android:fontFamily="@font/poppinsmedium"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/margin_25"
-            android:paddingLeft="@dimen/margin_5"
-            android:paddingRight="@dimen/margin_5"
-            android:textColor="#000"
-            android:layout_weight="1"
-            android:layout_margin="@dimen/margin_5"
-            android:textSize="@dimen/font_12"
-            android:background="@drawable/white_back_gradient"
             android:id="@+id/labtest_view_more"
-            android:text="View More"/>
-
-        <Button
-            android:fontFamily="@font/poppinsmedium"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/margin_25"
-            android:paddingLeft="@dimen/margin_5"
-            android:paddingRight="@dimen/margin_5"
-            android:textColor="#000"
             android:layout_margin="@dimen/margin_5"
             android:layout_weight="1"
-            android:textSize="@dimen/font_12"
             android:background="@drawable/white_back_gradient"
+            android:fontFamily="@font/poppinsmedium"
+            android:paddingLeft="@dimen/margin_5"
+            android:paddingRight="@dimen/margin_5"
+            android:text="View More"
+            android:textColor="#000"
+            android:textSize="@dimen/font_12" />
+
+        <Button
             android:id="@+id/labtest_edit"
-            android:text="Edit"/>
-
-        <Button
-            android:fontFamily="@font/poppinsmedium"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/margin_25"
+            android:layout_margin="@dimen/margin_5"
+            android:layout_weight="1"
+            android:background="@drawable/white_back_gradient"
+            android:fontFamily="@font/poppinsmedium"
             android:paddingLeft="@dimen/margin_5"
             android:paddingRight="@dimen/margin_5"
+            android:text="Edit"
             android:textColor="#000"
-            android:layout_weight="1"
-            android:layout_margin="@dimen/margin_5"
-            android:textSize="@dimen/font_12"
-            android:background="@drawable/white_back_gradient"
+            android:textSize="@dimen/font_12" />
+
+        <Button
             android:id="@+id/labtest_delete"
-            android:text="Delete"/>
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/margin_25"
+            android:layout_margin="@dimen/margin_5"
+            android:layout_weight="1"
+            android:background="@drawable/white_back_gradient"
+            android:fontFamily="@font/poppinsmedium"
+            android:paddingLeft="@dimen/margin_5"
+            android:paddingRight="@dimen/margin_5"
+            android:text="Delete"
+            android:textColor="#000"
+            android:textSize="@dimen/font_12" />
     </LinearLayout>
 
 </LinearLayout>

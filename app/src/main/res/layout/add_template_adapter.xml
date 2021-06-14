@@ -1,213 +1,228 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:layout_marginStart="@dimen/margin_10"
+    android:layout_marginLeft="@dimen/margin_10"
+    android:layout_marginEnd="@dimen/margin_10"
+    android:layout_marginRight="@dimen/margin_10"
+    android:layout_marginBottom="@dimen/margin_5"
     android:background="@drawable/white_btn_gradient"
-    android:paddingBottom   ="@dimen/margin_3"
-    android:paddingLeft     ="@dimen/margin_10"
-    android:paddingStart    ="@dimen/margin_10"
-    android:paddingEnd      ="@dimen/margin_10"
-    android:paddingRight    ="@dimen/margin_10"
-    android:paddingTop      ="@dimen/margin_10"
-    android:layout_marginLeft   ="@dimen/margin_10"
-    android:layout_marginStart  ="@dimen/margin_10"
-    android:layout_marginEnd    ="@dimen/margin_10"
-    android:layout_marginRight  ="@dimen/margin_10"
-    android:layout_marginBottom ="@dimen/margin_5"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-
-
-    <TextView
-        android:fontFamily="@font/poppinsmedium"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#000"
-        android:id="@+id/tab_name"
-        android:maxLength="60"
-        android:lines="1"
-        android:ellipsize="end"
-        android:textSize="13sp"
-        android:layout_marginLeft   ="@dimen/margin_5"
-        android:layout_marginStart  ="@dimen/margin_5"
-        android:layout_marginEnd    ="@dimen/margin_3"
-        android:layout_marginRight  ="@dimen/margin_3"
-        android:layout_marginBottom   ="@dimen/margin_3"
-
-        android:text="Tab Augmentin 625mg"
-        android:textStyle="bold"/>
+    android:orientation="vertical"
+    android:paddingStart="@dimen/margin_10"
+    android:paddingLeft="@dimen/margin_10"
+    android:paddingTop="@dimen/margin_10"
+    android:paddingEnd="@dimen/margin_10"
+    android:paddingRight="@dimen/margin_10"
+    android:paddingBottom="@dimen/margin_3">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft   ="@dimen/margin_3"
-        android:layout_marginStart  ="@dimen/margin_3"
-        android:layout_marginEnd    ="@dimen/margin_3"
-        android:layout_marginRight  ="@dimen/margin_3"
-        android:orientation="horizontal">
-    <TextView
-        android:fontFamily="@font/poppins"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#000"
-        android:id="@+id/tab_freq1"
-        android:lines="2"
-        android:layout_marginLeft="@dimen/margin_10"
-        android:textSize="12sp"
-        android:text="BD" />
-
-    <TextView
-        android:fontFamily="@font/poppins"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#000"
-        android:visibility="gone"
-        android:id="@+id/tab_instruction"
-        android:layout_marginLeft="@dimen/margin_5"
-        android:textSize="@dimen/font_16"
-        android:text="After Meals" />
-
-    <TextView
-        android:fontFamily="@font/poppins"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#000"
-        android:visibility="gone"
-        android:id="@+id/tab_freq2"
-        android:layout_marginLeft="@dimen/margin_5"
-        android:textSize="@dimen/font_16"
-        android:text="5 Days" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft   ="@dimen/margin_3"
-        android:layout_marginStart  ="@dimen/margin_3"
-        android:layout_marginEnd    ="@dimen/margin_3"
-        android:layout_marginRight  ="@dimen/margin_3"
-        android:layout_marginTop    ="@dimen/margin_3"
-        android:orientation="horizontal">
-
-    <TextView
-        android:fontFamily="@font/poppins"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#000"
-        android:visibility="gone"
-        android:textStyle="bold"
-        android:id="@+id/rt"
-        android:textSize="@dimen/font_16"
-        android:text="Route/Form - " />
-
-    <TextView
-        android:fontFamily="@font/poppins"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#000"
-        android:visibility="gone"
-        android:id="@+id/tab_route"
-        android:layout_marginLeft="@dimen/margin_5"
-        android:textSize="@dimen/font_16"
-        android:text="Oral" />
-
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_3"
-        android:orientation="horizontal">
+        android:id="@+id/parent_of_content"
+        android:orientation="vertical">
 
         <TextView
-            android:fontFamily="@font/poppins"
-            android:layout_width="wrap_content"
+            android:id="@+id/tab_name"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#000"
-            android:textStyle="bold"
-            android:id="@+id/cm"
-            android:visibility="gone"
-            android:textSize="@dimen/font_16"
-            android:text="Comments - " />
-
-        <TextView
-            android:fontFamily="@font/poppins"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#000"
-            android:id="@+id/tab_comments"
-            android:visibility="gone"
+            android:layout_marginStart="@dimen/margin_5"
             android:layout_marginLeft="@dimen/margin_5"
-            android:textSize="@dimen/font_16"
-            android:text="Stop if allergy develops" />
+            android:layout_marginEnd="@dimen/margin_3"
+            android:layout_marginRight="@dimen/margin_3"
+            android:layout_marginBottom="@dimen/margin_3"
+            android:ellipsize="end"
+            android:fontFamily="@font/poppinsmedium"
+            android:lines="1"
+            android:maxLength="60"
+            android:text="Tab Augmentin 625mg"
+            android:textColor="#000"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_3"
+            android:layout_marginLeft="@dimen/margin_3"
+            android:layout_marginEnd="@dimen/margin_3"
+            android:layout_marginRight="@dimen/margin_3"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tab_freq1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:fontFamily="@font/poppins"
+                android:lines="2"
+                android:text="BD"
+                android:textColor="#000"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tab_instruction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_5"
+                android:fontFamily="@font/poppins"
+                android:text="After Meals"
+                android:textColor="#000"
+                android:textSize="@dimen/font_16"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tab_freq2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_5"
+                android:fontFamily="@font/poppins"
+                android:text="5 Days"
+                android:textColor="#000"
+                android:textSize="@dimen/font_16"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_3"
+            android:layout_marginLeft="@dimen/margin_3"
+            android:layout_marginTop="@dimen/margin_3"
+            android:layout_marginEnd="@dimen/margin_3"
+            android:layout_marginRight="@dimen/margin_3"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/rt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins"
+                android:text="Route/Form - "
+                android:textColor="#000"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tab_route"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_5"
+                android:fontFamily="@font/poppins"
+                android:text="Oral"
+                android:textColor="#000"
+                android:textSize="13sp"
+                android:visibility="gone" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_3"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/cm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins"
+                android:text="Comments - "
+                android:textColor="#000"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tab_comments"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_5"
+                android:maxLines="1"
+                android:minLines="1"
+                android:lines="1"
+                android:fontFamily="@font/poppins"
+                android:text="Stop if allergy develops"
+                android:textColor="#000"
+                android:textSize="13sp"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/margin_30"
+            android:visibility="gone"
+            android:id="@+id/view_more_view"
+            />
 
     </LinearLayout>
 
     <LinearLayout
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="3"
-        android:orientation="horizontal">
-
+        android:layout_marginTop="9dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:weightSum="3">
 
         <Button
-            android:layout_marginBottom   ="@dimen/margin_5"
-            android:fontFamily="@font/poppinsmedium"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/margin_25"
-            android:paddingLeft="@dimen/margin_5"
-            android:paddingRight="@dimen/margin_5"
-            android:textColor="#000"
-            android:layout_weight="1"
-            android:layout_marginLeft   ="@dimen/margin_5"
-            android:layout_marginStart  ="@dimen/margin_5"
-            android:layout_marginEnd    ="@dimen/margin_5"
-            android:layout_marginRight  ="@dimen/margin_5"
-            android:textSize="@dimen/font_12"
-            android:background="@drawable/white_back_gradient"
             android:id="@+id/view_more"
-            android:text="View More"/>
-
-        <Button
-            android:layout_marginBottom   ="@dimen/margin_5"
-            android:fontFamily="@font/poppinsmedium"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/margin_25"
+            android:layout_marginStart="@dimen/margin_5"
+            android:layout_marginLeft="@dimen/margin_5"
+            android:layout_marginEnd="@dimen/margin_5"
+            android:layout_marginRight="@dimen/margin_5"
+            android:layout_marginBottom="@dimen/margin_5"
+            android:layout_weight="1"
+            android:background="@drawable/white_back_gradient"
+            android:fontFamily="@font/poppinsmedium"
             android:paddingLeft="@dimen/margin_5"
             android:paddingRight="@dimen/margin_5"
+            android:text="View More"
             android:textColor="#000"
-            android:layout_marginLeft   ="@dimen/margin_5"
-            android:layout_marginStart  ="@dimen/margin_5"
-            android:layout_marginEnd    ="@dimen/margin_5"
-            android:layout_marginRight  ="@dimen/margin_5"
-            android:layout_weight="1"
-            android:textSize="@dimen/font_12"
-            android:background="@drawable/white_back_gradient"
+            android:textSize="@dimen/font_12" />
+
+        <Button
             android:id="@+id/edit"
-            android:text="Edit"/>
-
-        <Button
-            android:layout_marginBottom   ="@dimen/margin_5"
-            android:fontFamily="@font/poppinsmedium"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/margin_25"
+            android:layout_marginStart="@dimen/margin_5"
+            android:layout_marginLeft="@dimen/margin_5"
+            android:layout_marginEnd="@dimen/margin_5"
+            android:layout_marginRight="@dimen/margin_5"
+            android:layout_marginBottom="@dimen/margin_5"
+            android:layout_weight="1"
+            android:background="@drawable/white_back_gradient"
+            android:fontFamily="@font/poppinsmedium"
             android:paddingLeft="@dimen/margin_5"
             android:paddingRight="@dimen/margin_5"
+            android:text="Edit"
             android:textColor="#000"
-            android:layout_weight="1"
-            android:layout_marginLeft   ="@dimen/margin_5"
-            android:layout_marginStart  ="@dimen/margin_5"
-            android:layout_marginEnd    ="@dimen/margin_5"
-            android:layout_marginRight  ="@dimen/margin_5"
-            android:textSize="@dimen/font_12"
-            android:background="@drawable/white_back_gradient"
+            android:textSize="@dimen/font_12" />
+
+        <Button
             android:id="@+id/delete"
-            android:text="Delete"/>
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/margin_25"
+            android:layout_marginStart="@dimen/margin_5"
+            android:layout_marginLeft="@dimen/margin_5"
+            android:layout_marginEnd="@dimen/margin_5"
+            android:layout_marginRight="@dimen/margin_5"
+            android:layout_marginBottom="@dimen/margin_5"
+            android:layout_weight="1"
+            android:background="@drawable/white_back_gradient"
+            android:fontFamily="@font/poppinsmedium"
+            android:paddingLeft="@dimen/margin_5"
+            android:paddingRight="@dimen/margin_5"
+            android:text="Delete"
+            android:textColor="#000"
+            android:textSize="@dimen/font_12" />
     </LinearLayout>
 
 </LinearLayout>

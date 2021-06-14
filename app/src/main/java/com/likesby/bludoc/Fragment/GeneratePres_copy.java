@@ -365,11 +365,6 @@ public class GeneratePres_copy extends Fragment {
             end_note = bundle.getString("end_note");
             yesOrNo = bundle.getString("yesOrNo");
 
-            if (yesOrNo.equals("Yes"))
-                binding.topHeaderParent.setVisibility(View.VISIBLE);
-            else
-                binding.topHeaderParent.setVisibility(View.GONE);
-
 
             prescriptionItemTEMP = prescriptionItem;
             labTestItemTEMP = labTestItem;
@@ -399,20 +394,39 @@ public class GeneratePres_copy extends Fragment {
         ArrayList<BottomSheetItem> bottomSheetItemArrayList = new ArrayList<>();
         BottomSheetItem bottomSheetItem = new BottomSheetItem();
         bottomSheetItem.setMenuId("1");
-        bottomSheetItem.setMenuName("Email");
+        bottomSheetItem.setMenuName("View Pdf");
         bottomSheetItem.setMenuImage("mail");
         bottomSheetItemArrayList.add(bottomSheetItem);
 
         bottomSheetItem = new BottomSheetItem();
         bottomSheetItem.setMenuId("2");
-        bottomSheetItem.setMenuName("WhatsApp");
+        bottomSheetItem.setMenuName("Share");
+        bottomSheetItem.setMenuImage("ic_download_");
+
+        bottomSheetItemArrayList.add(bottomSheetItem);
+
+        bottomSheetItem = new BottomSheetItem();
+        bottomSheetItem.setMenuId("3");
+        bottomSheetItem.setMenuName("Download");
+        bottomSheetItem.setMenuImage("ic_share__");
+        bottomSheetItemArrayList.add(bottomSheetItem);
+
+        bottomSheetItem = new BottomSheetItem();
+        bottomSheetItem.setMenuId("4");
+        bottomSheetItem.setMenuName("Send to pharmacy");
         bottomSheetItem.setMenuImage("whatsapp");
         bottomSheetItemArrayList.add(bottomSheetItem);
 
         bottomSheetItem = new BottomSheetItem();
         bottomSheetItem.setMenuId("3");
-        bottomSheetItem.setMenuName("Other");
+        bottomSheetItem.setMenuName("Email");
         bottomSheetItem.setMenuImage("ic_share__");
+        bottomSheetItemArrayList.add(bottomSheetItem);
+
+        bottomSheetItem = new BottomSheetItem();
+        bottomSheetItem.setMenuId("4");
+        bottomSheetItem.setMenuName("WhatsApp");
+        bottomSheetItem.setMenuImage("whatsapp");
         bottomSheetItemArrayList.add(bottomSheetItem);
 
          /* bottomSheetItem = new BottomSheetItem();

@@ -185,7 +185,7 @@ As a registered user of or subscriber to business-standard.com you may choose to
     <string name="medical_certificate"><u>Medical Certificate</u></string>
     <string name="doctor_details">Doctor Details</string>
     <string name="footer_details"><![CDATA[Footer (Sign & date) details]]></string>
-    <string name="add_pharmacist">Add Pharmacist</string>
+    <string name="add_pharmacist">Add Pharmacy</string>
     <string name="send_to_pharmacist">Send to pharmacist</string>
     <string name="language">Language</string>
     <string name="email">Email :</string>
@@ -193,15 +193,17 @@ As a registered user of or subscriber to business-standard.com you may choose to
     <string name="type_here">type here</string>
     <string name="clinic_hospital_name">Clinic / Hospital name</string>
 
-    <string name="add_a_pharmacist">Add Pharmacist</string>
-    <string name="pharmacist_s_full_name">Pharmacist\'s Full Name *</string>
-    <string name="pharmacist_s_whatsnumber">Pharmacist\'s WhatsNumber </string>
-    <string name="pharmacist_s_email_id">Pharmacist\'s Email Id </string>
+    <string name="add_a_pharmacist">Add New Pharmacy</string>
+    <string name="pharmacist_s_full_name">Name of pharmacy *</string>
+    <string name="pharmacist_s_whatsnumber">Pharmacy\'s contact Number </string>
+    <string name="pharmacist_s_email_id">Pharmacy\'s email Id * </string>
     <string name="all_pharmacist"> List of Pharmacy </string>
     <string name="search_pharmacist_here">Search Here</string>
     <string name="refresh_to_load">Refresh to load</string>
     <string name="select_pharmacist">Select Pharmacist</string>
     <string name="no_data_found">No data found</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

@@ -40,13 +40,13 @@
                 android:layout_gravity="right|center_vertical"
                 android:layout_marginLeft="@dimen/margin_5"
                 android:layout_marginRight="@dimen/margin_5"
-                android:background="@drawable/blue_round_btn_gradient"
+                android:background="@drawable/blue_round_btn_gradient_mojito"
                 android:gravity="center"
                 android:paddingLeft="@dimen/margin_5"
                 android:paddingRight="@dimen/margin_5"
                 android:text="Back"
                 android:textAllCaps="false"
-                android:textColor="@color/white"
+                android:textColor="@color/colorBlue"
                 android:textSize="12sp"
                 android:visibility="gone" />
 
@@ -57,13 +57,13 @@
                 android:layout_gravity="right|center_vertical"
                 android:layout_marginLeft="@dimen/margin_5"
                 android:layout_marginRight="@dimen/margin_5"
-                android:background="@drawable/blue_round_btn_gradient"
+                android:background="@drawable/blue_round_btn_gradient_mojito"
                 android:gravity="center"
                 android:paddingLeft="@dimen/margin_5"
                 android:paddingRight="@dimen/margin_5"
                 android:text="Edit"
                 android:textAllCaps="false"
-                android:textColor="@color/white"
+                android:textColor="@color/colorBlue"
                 android:textSize="12sp"
                 android:visibility="visible" />
 
@@ -86,7 +86,7 @@
                 android:layout_height="@dimen/margin_35"
                 android:layout_gravity="center"
                 android:layout_marginRight="@dimen/margin_5"
-                android:background="@drawable/blue_round_btn_gradient"
+                android:background="@drawable/blue_round_btn_gradient_mojito"
                 android:gravity="center"
                 android:paddingStart="@dimen/margin_15"
                 android:paddingLeft="@dimen/margin_15"
@@ -94,7 +94,7 @@
                 android:paddingRight="@dimen/margin_15"
                 android:text="Approve and Share"
                 android:textAllCaps="false"
-                android:textColor="@color/white"
+                android:textColor="@color/colorBlue"
                 android:textSize="12sp" />
 
 

@@ -1,92 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout android:layout_width="wrap_content"
-    android:layout_marginTop   ="@dimen/margin_15"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fl_share"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:focusable="true"
+    android:layout_marginTop="@dimen/margin_15"
+    android:layout_marginBottom="@dimen/margin_20"
     android:clickable="true"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-
+    android:focusable="true">
 
     <LinearLayout
-        android:padding="@dimen/margin_8"
-        android:focusable="true"
-        android:clickable="true"
-
-        android:background="@android:color/transparent"
         android:id="@+id/ll_bottom_sheet"
-        android:layout_width="130dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:focusable="true"
         android:orientation="vertical"
-        >
+        android:padding="@dimen/margin_8">
 
         <ImageView
-            android:visibility="gone"
-            android:padding="@dimen/margin_10"
-            android:layout_gravity="center"
-
             android:id="@+id/bottom_sheet_iv"
-            android:layout_width="80dp"
-            android:layout_height="70dp"
-            />
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_whatsapp_share"
+            android:visibility="visible"
+            app:tint="@color/colorBlue" />
+
         <TextView
             android:id="@+id/__bottom_sheet_id"
-            android:text=""
-            android:visibility="gone"
-            android:textAlignment="center"
-            android:maxLines="1"
-            android:minLines="1"
-            android:gravity="center"
-            android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:maxLines="1"
+            android:minLines="1"
+            android:text=""
+            android:textAlignment="center"
+            android:textColor="@color/colorOrangeFaintest"
             android:textSize="12sp"
             android:textStyle="bold"
-            android:textColor="@color/colorOrangeFaintest"
-            />
+            android:visibility="gone" />
 
 
         <TextView
-            android:fontFamily="@font/poppins"
             android:id="@+id/__bottom_sheet_name"
-            android:text=""
-            android:paddingBottom   ="@dimen/margin_6"
-            android:paddingLeft     ="@dimen/margin_5"
-            android:paddingStart    ="@dimen/margin_5"
-            android:paddingEnd      ="@dimen/margin_5"
-            android:paddingRight    ="@dimen/margin_5"
-            android:paddingTop      ="@dimen/margin_6"
-            android:maxLines="1"
-            android:minLines="1"
-            android:gravity="center"
-            android:textStyle="normal"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="13sp"
-            android:background="@drawable/faint_white_round_border_blue"
+            android:fontFamily="@font/poppins"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/font_12"
+            android:text="whatsApp"
             android:textColor="@color/colorBlue"
-            />
+            android:textSize="12sp"
+            android:textStyle="normal" />
 
 
     </LinearLayout>
 
     <TextView
-        android:fontFamily="@font/poppins"
-        android:visibility="gone"
-        android:textStyle="bold"
-        android:paddingLeft="@dimen/margin_3"
-        android:paddingStart="@dimen/margin_3"
-        android:paddingEnd="@dimen/margin_3"
-        android:paddingRight="@dimen/margin_3"
-        android:layout_gravity="center|top"
-        android:gravity="center"
-        android:textSize="8sp"
-        android:textColor="@color/colorWhite"
-        android:text=""
+        android:id="@+id/bottomsheet_sub_expiry"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/margin_15"
+        android:layout_gravity="center|top"
         android:background="@color/colorBlue2"
-        android:id="@+id/bottomsheet_sub_expiry"
-        />
+        android:fontFamily="@font/poppins"
+        android:gravity="center"
+        android:paddingStart="@dimen/margin_3"
+        android:paddingLeft="@dimen/margin_3"
+        android:paddingEnd="@dimen/margin_3"
+        android:paddingRight="@dimen/margin_3"
+        android:text=""
+        android:textColor="@color/colorWhite"
+        android:textSize="8sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
 </FrameLayout>

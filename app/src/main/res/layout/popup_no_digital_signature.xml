@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<RelativeLayout
     android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,14 +9,12 @@
     <LinearLayout
         android:id="@+id/ll_promo"
         android:visibility="visible"
-
         android:padding="15dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_gravity="center"
-        android:elevation="@dimen/margin_5"
-        xmlns:android="http://schemas.android.com/apk/res/android">
+        android:elevation="@dimen/margin_5">
 
 
 
@@ -53,6 +51,7 @@
             android:clickable="false"
             android:focusable="false"
             android:focusableInTouchMode="false"
+            android:elevation="0dp"
             xmlns:sign="http://schemas.android.com/apk/res-auto"
             android:id="@+id/signature_pad"
             android:background="@drawable/blue_faint_btn_gradient2"
@@ -90,7 +89,6 @@
             android:layout_width="260dp"
             android:layout_height="40dp"
             android:layout_gravity="center"
-
             android:background="@drawable/grey_dark_round_btn_gradient"
             android:gravity="center"
             android:text="Clear"
@@ -101,29 +99,27 @@
             android:textSize="16sp"
            />
 
-    <Button
-        android:foreground="?attr/selectableItemBackgroundBorderless"
-        android:clickable="true"
-        android:elevation="@dimen/margin_10"
-        android:layout_marginTop="@dimen/margin_20"
-        android:layout_marginBottom="@dimen/margin_40"
-        android:id="@+id/btn_upload"
-        android:layout_width="260dp"
-        android:layout_height="40dp"
-        android:layout_gravity="center"
-
-        android:background="@drawable/blue_round_btn_gradient"
-        android:gravity="center"
-        android:fontFamily="@font/poppinsmedium"
-        android:text="Upload"
-        android:textAllCaps="false"
-        android:textColor="@color/colorWhite"
-        android:textColorHint="@color/colorWhite"
-        android:textSize="16sp"
-        />
-
+        <Button
+            android:elevation="@dimen/margin_10"
+            android:layout_marginTop="@dimen/font_17"
+            android:id="@+id/btn_upload"
+            android:layout_width="260dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:background="@drawable/blue_round_btn_gradient"
+            android:gravity="center"
+            android:text="Upload"
+            android:fontFamily="@font/poppinsmedium"
+            android:textAllCaps="false"
+            android:textColor="@color/colorWhite"
+            android:textColorHint="@color/colorWhite"
+            android:textSize="16sp"
+            />
 
 
     </LinearLayout>
-</FrameLayout>
+
+    <include layout="@layout/transparent_progress_bar"/>
+
+</RelativeLayout>
 

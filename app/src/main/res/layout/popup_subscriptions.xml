@@ -173,10 +173,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Upgrade to Premium"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textAllCaps="false"
-            android:background="@drawable/blue_round_btn_gradient"
-            android:textColor="@color/colorWhite"
+            android:background="@drawable/blue_round_btn_gradient_mojito"
+            android:textColor="@color/colorBlue"
             android:id="@+id/btn_upgrade_premium"
             />
 
@@ -200,9 +200,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Watch an Ad"
-            android:textSize="16sp"
-            android:background="@drawable/blue_round_btn_gradient"
-            android:textColor="@color/colorWhite"
+            android:textSize="14sp"
+            android:background="@drawable/blue_round_btn_gradient_mojito"
+            android:textColor="@color/colorBlue"
             android:id="@+id/btn_watch_ad"
             />
 

@@ -18,9 +18,9 @@
 
             <ImageView
                 app:tint="@color/colorBlack"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:src="@drawable/ic_action_doctor_details"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_stethoscope_icon"
                 android:layout_gravity="center"
                 android:alpha="0.7"
                 android:contentDescription="@null" />
@@ -54,10 +54,10 @@
 
             <ImageView
                 app:tint="@color/colorBlack"
-                android:layout_width="25dp"
+                android:layout_width="20dp"
                 android:alpha="0.7"
-                android:layout_height="25dp"
-                android:src="@drawable/ic_hospital_icon"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_plus_icon"
                 android:layout_gravity="center"
                 android:contentDescription="@null" />
 
@@ -89,10 +89,10 @@
 
             <ImageView
                 app:tint="@color/colorBlack"
-                android:layout_width="25dp"
+                android:layout_width="20dp"
                 android:alpha="0.7"
-                android:layout_height="25dp"
-                android:src="@drawable/ic_action_footer"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_signature_with_a_pen"
                 android:layout_gravity="center"
                 android:contentDescription="@null" />
 
@@ -124,9 +124,9 @@
             android:padding="16dp">
 
             <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:src="@drawable/ic_pharmacist_doctor"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/ic_pharmacy_icon"
                 android:layout_gravity="center"
                 android:alpha="0.7"
                 android:contentDescription="@null" />
@@ -142,6 +142,35 @@
                 android:textColor="@color/colorBlack"
                 android:textSize="@dimen/font_15"
                 android:text="@string/add_pharmacist" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/date_of_calender"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/ic_calendar_icon"
+                android:layout_gravity="center"
+                android:alpha="0.7"
+                android:contentDescription="@null" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:alpha="0.8"
+                android:layout_marginStart="@dimen/font_14"
+                android:fontFamily="@font/poppinsmedium"
+                android:layout_weight="1"
+                android:textColor="@color/colorBlack"
+                android:textSize="@dimen/font_15"
+                android:text="Change Date" />
 
         </LinearLayout>
 
@@ -180,6 +209,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/language"
+            android:visibility="gone"
             android:orientation="horizontal"
             android:padding="16dp">
 
