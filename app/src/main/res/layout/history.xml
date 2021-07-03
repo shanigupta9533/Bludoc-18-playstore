@@ -22,6 +22,7 @@
             android:id="@+id/appbar_layout"
             android:animateLayoutChanges="true"
             android:layout_width="match_parent"
+            android:visibility="gone"
             android:layout_height="wrap_content"
             android:theme="@style/AppTheme.NoActionBar"
             >
@@ -116,9 +117,6 @@
                 android:textStyle="bold" />
 
 
-
-
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_template"
                 android:layout_width="match_parent"
@@ -129,8 +127,6 @@
                 android:layout_marginRight  ="@dimen/margin_20"
                 android:layout_marginTop ="10dp"
                 android:background="#fff" />
-
-
 
             <ImageView
                 android:id="@+id/iv_no_template"

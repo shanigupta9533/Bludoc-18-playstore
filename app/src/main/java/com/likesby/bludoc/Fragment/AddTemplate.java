@@ -309,7 +309,7 @@ public class AddTemplate extends Fragment {
                                         MedicinesItem medicinesItem = new MedicinesItem();
                                         medicinesItem.setMedicineName(searchBarMaterialMedicine.getText().toString().trim());
                                         medicinesItem.setFrequency(frequency.trim());
-                                        medicinesItem.setNoOfDays(et_no_of_days.getText().toString().trim() + " Days");
+                                        medicinesItem.setNoOfDays(et_no_of_days.getText().toString().trim());
                                         medicinesItem.setRoute(route.trim());
                                         medicinesItem.setQty(medicine_qty.getText().toString());
                                         medicinesItem.setInstruction(instructions_spinner.getSelectedItem().toString());
@@ -352,17 +352,8 @@ public class AddTemplate extends Fragment {
                                             Log.e("position", String.valueOf(position));
                                             textView3_5.setText((position + 1) + "/" + addMedicinesArrayList.size());
 
-                                            addMedicineAdapter = new AddMedicineAdapter(mContext, addMedicinesArrayList,
-                                                    frequency_list, frequency2_list, et_no_of_days,
-                                                    medicine_qty, route_list, instructions_list, frequency_spinner, frequency2_spinner,
-                                                    route_spinner, instructions_spinner, et_additional_comments, btn_add, textView3_5, ll_35, searchBarMaterialMedicine, mRecyclerViewMedicines, btnChooseFromTemplate, btn_save_template, "template", fl_progress_bar);
-                                            mRecyclerViewAddedMedicines.setAdapter(addMedicineAdapter);
+                                            addMedicineAdapter.notifyItemChanged(position);
 
-                                            if (addMedicinesArrayList.size() > 0) {
-                                                textView3_5.setVisibility(View.VISIBLE);
-                                                ll_35.setVisibility(View.VISIBLE);
-                                                mRecyclerViewAddedMedicines.smoothScrollToPosition(position);
-                                            }
 
                                         }
                                     }
@@ -385,9 +376,16 @@ public class AddTemplate extends Fragment {
                             medicine_qty.setText("");
                             instructions_spinner.setSelection(0);
 
-                            searchBarMaterialMedicine.requestFocus();
-                            InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
-                            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+                            searchBarMaterialMedicine.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    searchBarMaterialMedicine.requestFocus();
+                                    InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+                                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+
+                                }
+                            },300);
 
 
                         } else {

@@ -73,11 +73,17 @@ public class NetworkLayer {
     // endregion*/
 
     // region Register User
-    public Single<ResponseRegister> userLogin(String email) {
+    public Single<ResponseRegister> userLogin(String email,String hospitalCode) {
         services = ApiClient.createService(WebServices.class);
-        return services.userLogin(email);
+        return services.userLogin(email, hospitalCode);
     }
     // endregion
+
+    public Single<ResponseProfileDetails> updateHospitalCode(String doctor_id,String hospital_code ){
+        services = ApiClient.createService(WebServices.class);
+        return services.updateHospitalCode(doctor_id, hospital_code);
+    }
+
 
 
     // region Register User
@@ -384,6 +390,13 @@ public class NetworkLayer {
     public Single<ResponseSuccess> Prescription(String json) {
         services = ApiClient.createService(WebServices.class);
         return services.Prescription(json);
+    }
+
+
+    // region Register User
+    public Single<ResponseSuccess> sendDataOnInvoices(String json) {
+        services = ApiClient.createService(WebServices.class);
+        return services.sendDataOnInvoices(json);
     }
 
 

@@ -54,15 +54,15 @@ public class Pres_adapter_mobile extends RecyclerView.Adapter<Pres_adapter_mobil
         if(!("").equalsIgnoreCase(medicines.get(position).getFrequency())){
             temp += medicines.get(position).getFrequency();
         }
-        if(!("None").equalsIgnoreCase(medicines.get(position).getInstruction())){
+        if(medicines.get(position).getInstruction()!=null && !("None").equalsIgnoreCase(medicines.get(position).getInstruction()) && !medicines.get(position).getInstruction().equalsIgnoreCase("null")){
             temp += " "+medicines.get(position).getInstruction();
         }
-        if(("0").equalsIgnoreCase(medicines.get(position).getNoOfDays()) || ("").equalsIgnoreCase(medicines.get(position).getNoOfDays())){
+        if((("0").equalsIgnoreCase(medicines.get(position).getNoOfDays()) || ("").equalsIgnoreCase(medicines.get(position).getNoOfDays()) || medicines.get(position).getNoOfDays().equalsIgnoreCase("null") )){
 
         }else {
             temp += " for " + medicines.get(position).getNoOfDays() +" Days";
         }
-        if(!("").equalsIgnoreCase(medicines.get(position).getRoute())){
+        if( medicines.get(position).getRoute()!=null && !("").equalsIgnoreCase(medicines.get(position).getRoute()) && !medicines.get(position).getRoute().equalsIgnoreCase("null")){
             temp += " , (Route/Form - " +medicines.get(position).getRoute()+")";
         }
         if(!("").equalsIgnoreCase(temp)){
@@ -72,7 +72,7 @@ public class Pres_adapter_mobile extends RecyclerView.Adapter<Pres_adapter_mobil
         }
 
 
-        if(!("").equalsIgnoreCase(medicines.get(position).getAdditionaComment())) {
+        if(!("").equalsIgnoreCase(medicines.get(position).getAdditionaComment()) && !medicines.get(position).getAdditionaComment().equalsIgnoreCase("null")) {
             viewHolder.tab_comments.setVisibility(View.VISIBLE);
             viewHolder.tab_comments.setText(medicines.get(position).getAdditionaComment());
         }else {

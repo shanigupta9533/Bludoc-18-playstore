@@ -1,29 +1,22 @@
 package com.likesby.bludoc;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
-import androidx.databinding.DataBindingUtil;
-
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.Filter;
 import android.widget.FrameLayout;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.snackbar.Snackbar;
-import com.itextpdf.text.pdf.languages.ArabicLigaturizer;
-import com.likesby.bludoc.Adapter.CustumeAdapter;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.likesby.bludoc.Adapter.PharmacistAdapter;
 import com.likesby.bludoc.ModelLayer.NetworkLayer.EndpointInterfaces.WebServices;
 import com.likesby.bludoc.ModelLayer.NetworkLayer.Helpers.RetrofitClient;
 import com.likesby.bludoc.SessionManager.SessionManager;
@@ -43,24 +36,38 @@ public class MultiplePharmacistActivity extends AppCompatActivity {
     private FrameLayout progressBar;
     private TextView message;
     private SessionManager manager;
-    private final ArrayList<AllPharmacistList> arrayAdapterList=new ArrayList<>();
-    private final ArrayList<String> SearchList=new ArrayList<>();
-    private final ArrayList<AllPharmacistList> arrayList =new ArrayList<>();
-    private ListView listView;
-    private CustumeAdapter arrayAdapter;
+    private final ArrayList<AllPharmacistList> arrayAdapterList = new ArrayList<>();
+    private final ArrayList<String> SearchList = new ArrayList<>();
+    private final ArrayList<AllPharmacistList> arrayList = new ArrayList<>();
+    private RecyclerView recyclerview;
+    private PharmacistAdapter arrayAdapter;
     private ActivityMultiplePharmacistBinding activity;
     private SearchView searchView;
-    private RelativeLayout no_data_found_id;
+    private TextView no_data_found_id;
+    private String keywords;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activity=DataBindingUtil.setContentView(this,R.layout.activity_multiple_pharmacist);
+        activity = DataBindingUtil.setContentView(this, R.layout.activity_multiple_pharmacist);
 
-        listView =findViewById(R.id.list_item);
-        arrayAdapter=new CustumeAdapter(arrayAdapterList,this);
-        listView.setAdapter(arrayAdapter);
+        Intent intent = getIntent();
+        if (intent != null) {
+            keywords = intent.getStringExtra("keywords");
+        }
+
+        recyclerview = findViewById(R.id.recyclerview);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        recyclerview.setLayoutManager(linearLayoutManager);
+        arrayAdapter = new PharmacistAdapter(arrayAdapterList, this);
+        arrayAdapter.setMultipleSelection(true);
+        recyclerview.setAdapter(arrayAdapter);
         no_data_found_id = findViewById(R.id.no_data_found_id);
+
+        if (!TextUtils.isEmpty(keywords))
+            activity.appName.setText("Select " + keywords);
+        else
+            activity.appName.setText("Select...");
 
         activity.back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,32 +78,28 @@ public class MultiplePharmacistActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.refresh_button_no_data).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent=new Intent(MultiplePharmacistActivity.this, AddAPharmacistActivity.class);
-                intent.putExtra("isSelectAdd",true);
-                startActivity(intent);
-
-            }
-        });
-
         activity.submitAllResult.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Intent data = new Intent();
-                data.putExtra("arraylist_of_details",arrayList);
-                setResult(RESULT_OK,data);
-                finish();
+                if (arrayAdapter.getAllIds().isEmpty()) {
 
-                Toast.makeText(MultiplePharmacistActivity.this, "Prescription sent successfully !", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MultiplePharmacistActivity.this, "No Data Selected...", Toast.LENGTH_SHORT).show();
+
+                } else {
+
+                    Intent data = new Intent();
+                    data.putExtra("arraylist_of_details", arrayAdapter.getAllIds());
+                    data.putExtra("keywordsMultiple", keywords);
+                    setResult(RESULT_OK, data);
+                    finish();
+
+                }
 
             }
         });
 
-        searchView=findViewById(R.id.search_view);
+        searchView = findViewById(R.id.search_view);
         progressBar = findViewById(R.id.parent_of_progress_bar);
         message = findViewById(R.id.message);
         manager = new SessionManager();
@@ -119,40 +122,6 @@ public class MultiplePharmacistActivity extends AppCompatActivity {
             }
         });
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                AllPharmacistList allPharmacistList = arrayAdapterList.get(position);
-                CheckBox checkBox=view.findViewById(R.id.checkbox);
-
-                if(!allPharmacistList.getPharmacist_mobile().equals("0")) {
-
-                    if (arrayList.contains(allPharmacistList)) {
-                        view.setBackgroundColor(Color.parseColor("#ffffff"));
-                        arrayList.remove(allPharmacistList);
-                        checkBox.setChecked(false);
-                    } else {
-                        arrayList.add(allPharmacistList);
-                        view.setBackgroundColor(Color.parseColor("#eeeeee"));
-                        checkBox.setChecked(true);
-                    }
-
-                    if (!arrayList.isEmpty()) {
-                        activity.submitAllResult.setVisibility(View.VISIBLE);
-                    } else {
-                        activity.submitAllResult.setVisibility(View.GONE);
-                    }
-
-                } else {
-
-                    Toast.makeText(MultiplePharmacistActivity.this, "Mobile Number not found!", Toast.LENGTH_SHORT).show();
-
-                }
-
-            }
-        });
-
     }
 
     public void AllGetPharmacist() {
@@ -161,9 +130,8 @@ public class MultiplePharmacistActivity extends AppCompatActivity {
 
             progressBar.setVisibility(View.VISIBLE);
             Retrofit retrofit = RetrofitClient.getInstance();
-            ;
+
             final WebServices request = retrofit.create(WebServices.class);
-            ;
 
             Call<AllPharmacistModels> call = request.allPharmacist(manager.getPreferences(MultiplePharmacistActivity.this, "doctor_id"));
 
@@ -176,24 +144,23 @@ public class MultiplePharmacistActivity extends AppCompatActivity {
                     if (jsonResponse.getSuccess().equalsIgnoreCase("Success")) {
 
                         ArrayList<AllPharmacistList> pharmacist = jsonResponse.getPharmacist();
-                        arrayAdapterList.clear();
 
+                        arrayAdapterList.clear();
                         for (AllPharmacistList allPharmacistList : pharmacist) {
-                            SearchList.add(allPharmacistList.getPharmacist_name());
+                            if (!TextUtils.isEmpty(allPharmacistList.getType()) && allPharmacistList.getType().equalsIgnoreCase(keywords))
+                                arrayAdapterList.add(allPharmacistList);
                         }
 
-                        arrayAdapterList.addAll(pharmacist);
                         arrayAdapter.notifyDataSetChanged();
 
-                        if(SearchList.size()>0)
+                        if (arrayAdapterList.size() > 0)
                             no_data_found_id.setVisibility(View.GONE);
                         else
                             no_data_found_id.setVisibility(View.VISIBLE);
 
-
                     } else {
+
                         no_data_found_id.setVisibility(View.VISIBLE);
-                        message.setText(jsonResponse.getMessage());
 
                     }
                 }
@@ -215,10 +182,10 @@ public class MultiplePharmacistActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        if(manager.getPreferences(MultiplePharmacistActivity.this,"uploadPharmacist").equals("true")){
+        if (manager.getPreferences(MultiplePharmacistActivity.this, "uploadPharmacist").equals("true")) {
 
             AllGetPharmacist();
-            manager.setPreferences(MultiplePharmacistActivity.this,"uploadPharmacist","false");
+            manager.setPreferences(MultiplePharmacistActivity.this, "uploadPharmacist", "false");
 
         }
 

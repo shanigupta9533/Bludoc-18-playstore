@@ -198,7 +198,7 @@ public class EmpLogin extends AppCompatActivity implements GoogleApiClient.Conne
                        // login_verifyOTPLayout.setVisibility(View.GONE);
                        // ll_submit_phone.setVisibility(View.VISIBLE);
                         try {
-                            setLogin(manager.getPreferences(mContext, "verify_email"));
+                            setLogin(manager.getPreferences(mContext, "verify_email"),"");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -267,16 +267,19 @@ public class EmpLogin extends AppCompatActivity implements GoogleApiClient.Conne
         {
             if(!(Objects.requireNonNull(extras.getString("email")).equalsIgnoreCase("")))
             {
-               // ll_submit.setVisibility(View.GONE);
+                // ll_submit.setVisibility(View.GONE);
                 frameLayoutProgressMainl.setVisibility(View.VISIBLE);
                 hideKeyboard(mContext);
                 submit_resend.setVisibility(View.VISIBLE);
 
                 login_verifyOTPLayout.setVisibility(View.VISIBLE);
-             //   ll_submit_phone.setVisibility(View.VISIBLE);
+                //   ll_submit_phone.setVisibility(View.VISIBLE);
 
                 try {
-                    setLogin(extras.getString("email"));
+                    String hospital_code = "";
+                    if(manager.contains(mContext,"hospital_code"))
+                        hospital_code = manager.getPreferences(mContext,"hospital_code");
+                    setLogin(extras.getString("email"),hospital_code);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -410,12 +413,12 @@ public class EmpLogin extends AppCompatActivity implements GoogleApiClient.Conne
 
     //-----------------------------------------------------------
     //region Get Product Response
-    private void setLogin(String email) throws JSONException {
+    private void setLogin(String email,String hospitalCode) throws JSONException {
         //if(subscriptionList.size()!=0) {
         if (Utils.isConnectingToInternet(mContext)) {
             /*JSONObject jsonObject = new JSONObject();
             jsonObject.put("customer_mobile","8545989999685");*/
-            apiViewHolder.setUserLogin( email)
+            apiViewHolder.setUserLogin( email, hospitalCode)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(responseUserLogin);
@@ -623,12 +626,20 @@ public class EmpLogin extends AppCompatActivity implements GoogleApiClient.Conne
             if (response != null) {
                 if(response.getMessage().equalsIgnoreCase("Otp Sent"))
                 {
-                  //  Toast.makeText(mContext, ""+response.getOtp(), Toast.LENGTH_SHORT).show();
+                    //  Toast.makeText(mContext, ""+response.getOtp(), Toast.LENGTH_SHORT).show();
                     et_email.setText("");
+                    //manager.setPreferences(mContext,"hospital_code",et_hospital_code.getText().toString().trim());
                     frameLayoutProgressMainl.setVisibility(View.GONE);
                     login_verifyOTPLayout.setVisibility(View.VISIBLE);
                     manager.setPreferences(mContext,"verify_otp",String.valueOf(response.getOtp()));
+                    manager.setPreferences(mContext,"status",response.getStatus());
                     submit.setEnabled(true);
+                }
+                else if(response.getMessage().equals("Invalid Hospital Code")){
+                    Toast.makeText(mContext, "Invalid Hospital Code", Toast.LENGTH_SHORT).show();
+                    frameLayoutProgressMainl.setVisibility(View.GONE);
+                    login_textView_otp.setVisibility(View.GONE);
+                    submit_resend.setVisibility(View.GONE);
                 }
                 else if(response.getMessage().equals("You are inactive contact admin")){
                     Toast.makeText(mContext, "Your account is Inactive. Contact Admin.", Toast.LENGTH_SHORT).show();
@@ -638,7 +649,6 @@ public class EmpLogin extends AppCompatActivity implements GoogleApiClient.Conne
                     Toast.makeText(mContext, "Your account is Inactive or Deleted. Contact Admin.", Toast.LENGTH_SHORT).show();
                     popuplogout();
                 }
-
 
             }
         }

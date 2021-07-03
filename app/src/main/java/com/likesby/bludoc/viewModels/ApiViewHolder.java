@@ -48,8 +48,14 @@ public class ApiViewHolder extends AndroidViewModel {
 
 
     //region CabTabDetails API Call
-    public Single<ResponseRegister> setUserLogin(String email) {
-        return networkLayer.userLogin(email);
+    public Single<ResponseRegister> setUserLogin(String email,String hospitalCode) {
+        return networkLayer.userLogin(email, hospitalCode);
+    }
+    //endregion
+
+
+    public Single<ResponseProfileDetails> updateHospitalCode(String doctor_id,String hospital_code   ){
+        return networkLayer.updateHospitalCode( doctor_id,hospital_code);
     }
     //endregion
 
@@ -208,6 +214,12 @@ public class ApiViewHolder extends AndroidViewModel {
     //region CabTabDetails API Call
     public Single<ResponseSuccess> Prescription(String json) {
         return networkLayer.Prescription(json);
+    }
+
+
+    //region CabTabDetails API Call
+    public Single<ResponseSuccess> sendDataOnInvoices(String json) {
+        return networkLayer.sendDataOnInvoices(json);
     }
 
 

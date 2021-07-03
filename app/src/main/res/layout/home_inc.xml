@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -155,6 +154,7 @@
                             android:id="@+id/img2"
                             android:src="@drawable/prescribe_new"
                             style="@style/homeCardImage"/>
+
                         <TextView
                             android:fontFamily="@font/poppins"
                             android:text="Prescribe"
@@ -365,7 +365,7 @@
 
                 <TextView
                     android:fontFamily="@font/poppins"
-                    android:text="@string/add_pharmacist"
+                    android:text="Add Referral Centre"
                     android:gravity="center"
                     android:textColor="#000"
                     android:layout_marginBottom="@dimen/margin_2"
@@ -426,7 +426,112 @@
             </androidx.cardview.widget.CardView>
 
         </LinearLayout>
-<!--        </LinearLayout>-->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="2"
+                android:orientation="horizontal">
+
+                <androidx.cardview.widget.CardView
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="15dp"
+                    android:visibility="gone"
+                    android:layout_weight="1"
+                    android:id="@+id/add_laboratory"
+                    android:layout_margin="@dimen/margin_5"
+                    android:layout_marginBottom="20dp"
+                    app:cardPreventCornerOverlap="true"
+                    android:layout_marginTop="20dp">
+
+                    <LinearLayout
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:minHeight="90dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/home_gradient_2"
+                        android:padding="10dp">
+
+                        <ImageView
+                            android:layout_marginTop="@dimen/margin_2"
+                            android:maxHeight="80dp"
+                            android:layout_centerHorizontal="true"
+                            android:id="@+id/image9"
+                            android:src="@drawable/laboratory_icon"
+                            style="@style/homeCardImage"/>
+
+                        <TextView
+                            android:fontFamily="@font/poppins"
+                            android:text="Path Lab"
+                            android:gravity="center"
+                            android:textColor="#000"
+                            android:layout_marginBottom="@dimen/margin_2"
+                            android:layout_centerHorizontal="true"
+                            android:layout_below="@+id/img8"
+                            style="@style/viewParent.headerText"
+                            android:textSize="12sp"/>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="15dp"
+                    android:layout_weight="1"
+                    android:id="@+id/add_invoices"
+                    android:layout_margin="@dimen/margin_5"
+                    android:layout_marginBottom="20dp"
+                    app:cardPreventCornerOverlap="true"
+                    android:layout_marginTop="20dp">
+
+                    <LinearLayout
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:minHeight="90dp"
+                        android:visibility="gone"
+                        android:layout_gravity="center"
+                        android:background="@drawable/home_gradient_2"
+                        android:padding="10dp">
+
+                        <ImageView
+                            android:layout_marginTop="@dimen/margin_2"
+                            android:maxHeight="80dp"
+                            android:layout_centerHorizontal="true"
+                            android:id="@+id/image10"
+                            android:src="@drawable/invoices_icon"
+                            style="@style/homeCardImage"/>
+
+                        <TextView
+                            android:fontFamily="@font/poppins"
+                            android:text="Create invoices"
+                            android:gravity="center"
+                            android:textColor="#000"
+                            android:layout_marginBottom="@dimen/margin_2"
+                            android:layout_centerHorizontal="true"
+                            android:layout_below="@+id/img8"
+                            style="@style/viewParent.headerText"
+                            android:textSize="12sp"/>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
+            <!--        </LinearLayout>-->
 <!--            <Button-->
 <!--                android:foreground="?android:attr/selectableItemBackground"-->
 <!--                android:layout_marginLeft   ="@dimen/margin_10"-->

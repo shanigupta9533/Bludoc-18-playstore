@@ -4,6 +4,17 @@ import com.google.gson.annotations.SerializedName;
 
 public class OtpResponse {
 
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	@SerializedName("status")
+	private String status;
+
 	@SerializedName("success")
 	private String success;
 
@@ -44,6 +55,7 @@ public class OtpResponse {
 			"success = '" + success + '\'' + 
 			",otp = '" + otp + '\'' + 
 			",message = '" + message + '\'' + 
+			",status = '" + status + '\'' +
 			"}";
 		}
 }

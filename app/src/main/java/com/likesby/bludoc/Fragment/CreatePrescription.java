@@ -201,6 +201,7 @@ public class CreatePrescription extends Fragment {
     private FragmentActivity fragmentActivity;
     private TextView header;
     private ArrayList<MedicinesItem> addMedicinesArrayListGlobal = new ArrayList<>();
+    private boolean totalMedicineAdded;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -560,7 +561,6 @@ public class CreatePrescription extends Fragment {
             }
 
         if (args != null) {
-
             btn_create_patient.setVisibility(View.GONE);
             patient_id = args.getString("patient_id");
             ll_info_no_patient.setVisibility(View.GONE);
@@ -583,6 +583,7 @@ public class CreatePrescription extends Fragment {
                             medicinesItem.setInstruction(mi.getInstruction());
                             medicinesItem.setAdditionaComment(mi.getAdditionaComment());
                             addMedicinesArrayList.add(medicinesItem);
+
                         }
 
                     }
@@ -749,7 +750,6 @@ public class CreatePrescription extends Fragment {
                                 int position = gridLayoutManager5.findFirstVisibleItemPosition();
                                 Log.e("position", String.valueOf(position));
                                 textView3_5.setText((position + 1) + "/" + addLabTestArrayList.size());
-
                                 addLabTestAdapter.notifyItemChanged(position);
                             }
                         }
@@ -1089,6 +1089,8 @@ public class CreatePrescription extends Fragment {
                                     CreatePrescription myFragment = new CreatePrescription();
                                     manager.beginTransaction().replace(R.id.homePageContainer, myFragment, "prescription").addToBackStack(null).commit();
 
+                                    CreatePrescription.NEWaddMedicinesArrayList.clear();
+                                    CreatePrescription.NEWaddLabTestArrayList.clear();
 
                                 }
 
@@ -1370,10 +1372,8 @@ public class CreatePrescription extends Fragment {
         //Toast.makeText(mContext, "onResume", Toast.LENGTH_SHORT).show();
 
         if (manager.getPreferences(mContext, "patient_registration").equals("true")) {
-
             AllGetPatients();
             fl_progress_bar.setVisibility(View.VISIBLE);
-
             manager.setPreferences(mContext, "patient_registration", "false");
 
         } else {
@@ -1388,7 +1388,6 @@ public class CreatePrescription extends Fragment {
                             LabTestItem labTestItem = new LabTestItem();
                             labTestItem.setLabTestName(mi.getLabTestName());
                             labTestItem.setLabTestComment(mi.getLabTestComment());
-
                             addLabTestArrayList.add(labTestItem);
                         }
                     }
@@ -1445,9 +1444,11 @@ public class CreatePrescription extends Fragment {
                         if (newState == RecyclerView.SCROLL_STATE_IDLE) {
 
                             int position = gridLayoutManager5.findFirstVisibleItemPosition();
-                            Log.e("position", String.valueOf(position));
-                            textView3_5.setText((position + 1) + "/" + addLabTestArrayList.size());
 
+                            if(position<0)
+                                position=0;
+
+                            textView3_5.setText((position + 1) + "/" + addLabTestArrayList.size());
                             addLabTestAdapter.notifyItemChanged(position);
 
                         }
@@ -1474,6 +1475,10 @@ public class CreatePrescription extends Fragment {
 
                                 int position = gridLayoutManager5.findFirstVisibleItemPosition();
                                 Log.e("position", String.valueOf(position));
+
+                                if(position<0)
+                                    position=0;
+
                                 textView3_5.setText((position + 1) + "/" + addLabTestArrayList.size());
 
                                 addLabTestAdapter.notifyItemChanged(position);
@@ -1489,9 +1494,104 @@ public class CreatePrescription extends Fragment {
                 }
             }
             // setActiveMedicine_LAB();
+
             if (medicineAddFLAG) {
+                if (NEWaddMedicinesArrayList != null) {
+                    if (NEWaddMedicinesArrayList.size() != 0) {
+                        addMedicinesArrayList = new ArrayList<>();
+                        for (com.likesby.bludoc.ModelLayer.NewEntities.MedicinesItem mi : NEWaddMedicinesArrayList) {
+                            MedicinesItem medicinesItem = new MedicinesItem();
+                            medicinesItem.setMedicineName(mi.getMedicineName());
+                            // medicinesItem.setMedicineId(mi.getTempMedicineId());
+                            medicinesItem.setFrequency(mi.getFrequency());
+                            medicinesItem.setNoOfDays(mi.getNoOfDays());
+                            medicinesItem.setQty(mi.getQty());
+                            medicinesItem.setRoute(mi.getRoute());
+                            medicinesItem.setInstruction(mi.getInstruction());
+                            medicinesItem.setAdditionaComment(mi.getAdditionaComment());
+                            addMedicinesArrayList.add(medicinesItem);
+                        }
+
+                    }
+
+                    addMedicinesArrayListGlobal.addAll(addMedicinesArrayList);
+
+                }
+
+                if (patientsItemArrayList != null) {
+                    if (patientsItemArrayList.size() != 0) {
+                        String age___ = "";
+                        if (patientsItemArrayList.get(pos).getAge().contains("yr") || patientsItemArrayList.get(pos).getAge().contains("month"))
+                            age___ = patientsItemArrayList.get(pos).getAge();
+                        else
+                            age___ = patientsItemArrayList.get(pos).getAge() + " yr";
+                        patientdetails.setText(patientsItemArrayList.get(pos).getPName() + " - " + patientsItemArrayList.get(pos).getGender() + " / " + age___);
+                    } else {
+                        patientsItemArrayList = splashActivity.getpatients();
+
+                    }
+//                    Collections.sort(addMedicinesArrayList, new Comparator<MedicinesItem>() {
+//                        @Override
+//                        public int compare(MedicinesItem lhs, MedicinesItem rhs) {
+//                            return lhs.getMedicineName().compareTo(rhs.getMedicineName());
+//                        }
+//                    });
+
+         /*   Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    addMedicineAdapter = new AddMedicineAdapter(addMedicinesArrayList,
+                            frequency_list, frequency2_list, et_no_of_days,
+                            route_list, instructions_list, frequency_spinner, frequency2_spinner,
+                            route_spinner, instructions_spinner, et_additional_comments, btn_add, textView3_5, searchBarMaterialMedicine, mRecyclerViewMedicines, btnChooseFromTemplate, btn_prescribe, "pres", fl_progress_bar);
+                    mRecyclerViewAddedMedicines.setAdapter(addMedicineAdapter);
+                    ll_medicine_product.performClick();
+                }
+            });*/
+
+
+                    addMedicineAdapter = new AddMedicineAdapter(mContext, addMedicinesArrayList,
+                            frequency_list, frequency2_list, et_no_of_days,
+                            binding.medicineQty, route_list, instructions_list, frequency_spinner, frequency2_spinner,
+                            route_spinner, instructions_spinner, et_additional_comments, btn_add, textView3_5, ll_35, searchBarMaterialMedicine, mRecyclerViewMedicines, btnChooseFromTemplate, btn_prescribe, "pres", fl_progress_bar);
+                    mRecyclerViewAddedMedicines.setAdapter(addMedicineAdapter);
+                    //  ll_medicine_product.performClick();
+
+
+                    if (addMedicinesArrayList.size() > 0) {
+                        textView3_5.setVisibility(View.VISIBLE);
+                        ll_35.setVisibility(View.VISIBLE);
+                        mRecyclerViewAddedMedicines.smoothScrollToPosition(addMedicinesArrayList.size() - 1);
+                        textView3_5.setText("1/" + addMedicinesArrayList.size());
+                    }
+                    mRecyclerViewAddedMedicines.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                        @Override
+                        public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                            super.onScrollStateChanged(recyclerView, newState);
+
+                            if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                                int position = gridLayoutManager3.findFirstVisibleItemPosition();
+                                Log.e("position", String.valueOf(position));
+
+                                if(position<0)
+                                    position=0;
+
+                                textView3_5.setText((position + 1) + "/" + addMedicinesArrayList.size());
+                                addMedicineAdapter.notifyItemChanged(position);
+
+                            }
+                        }
+
+                        @Override
+                        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                            super.onScrolled(recyclerView, dx, dy);
+                        }
+                    });
+
+                }
 
             } else {
+
                 if (addMedicinesArrayList.size() > 0) {
                     addMedicineAdapter = new AddMedicineAdapter(mContext, addMedicinesArrayList,
                             frequency_list, frequency2_list, et_no_of_days,
@@ -1514,8 +1614,11 @@ public class CreatePrescription extends Fragment {
                             if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                                 int position = gridLayoutManager3.findFirstVisibleItemPosition();
                                 Log.e("position", String.valueOf(position));
-                                textView3_5.setText((position + 1) + "/" + addMedicinesArrayList.size());
 
+                                if(position<0)
+                                    position=0;
+
+                                textView3_5.setText((position + 1) + "/" + addMedicinesArrayList.size());
                                 addMedicineAdapter.notifyItemChanged(position);
 
                             }
@@ -1528,8 +1631,6 @@ public class CreatePrescription extends Fragment {
                     });
                 }
             }
-            medicineAddFLAG = false;
-            labtestAddFLAG = false;
 
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
@@ -1553,12 +1654,13 @@ public class CreatePrescription extends Fragment {
                     ll_main_medicine_details.setVisibility(View.VISIBLE);*/
                         if (is_on_lab_test)  //Lab Test selected
                         {
-                            //  Toast.makeText(mContext, "is_on_lab_test", Toast.LENGTH_SHORT).show();
+//                              Toast.makeText(mContext, "is_on_lab_test", Toast.LENGTH_SHORT).show();
                             setActiveMedicine_LAB();
+
                         } else {
 
                             if (definer_type_flag) {
-                                // Toast.makeText(mContext, "is_on_medicines_test", Toast.LENGTH_SHORT).show();
+//                                 Toast.makeText(mContext, "is_on_medicines_test", Toast.LENGTH_SHORT).show();
                                 ll_medicine_product.setVisibility(View.GONE);
                                 ll_medicinal_lab.setVisibility(View.VISIBLE);
                                 ll_end_note.setVisibility(View.GONE);
@@ -1567,8 +1669,7 @@ public class CreatePrescription extends Fragment {
 
                             } else {
                                 if (is_on_case_history) {
-                                    //  Toast.makeText(mContext, "is_on_case_history", Toast.LENGTH_SHORT).show();
-
+//                                      Toast.makeText(mContext, "is_on_case_history", Toast.LENGTH_SHORT).show();
                                     ll_end_note.performClick();
                                     ll_certificate.setVisibility(View.GONE);
                                 } else if (is_on_medicines) {
@@ -1579,56 +1680,58 @@ public class CreatePrescription extends Fragment {
                         }
                     }
                 }
-            }, 1);
+            }, 500);
 
-        }
 
-        if (backCheckerFlag) {
-            //  Toast.makeText(mContext, "backCheckerFlag", Toast.LENGTH_SHORT).show();
-            fl_progress_bar.setVisibility(View.GONE);
-            ll_patients_view.setVisibility(View.GONE);
-            ll_prescription_view.setVisibility(View.VISIBLE);
-            top_view.setVisibility(View.VISIBLE);
-            ll_info_no_patient.setVisibility(View.GONE);
-            btn_create_patient.setVisibility(View.GONE);
-            backCheckerFlag = false;
-            final Handler handler2 = new Handler();
-            handler2.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (certificate_selection) {
-                        ll_certificate.setVisibility(View.VISIBLE);
-                        ll_main_certificate_details.setVisibility(View.VISIBLE);
-                        ll_medicinal_lab.setVisibility(View.GONE);
-                        ll_main_lab_test_details.setVisibility(View.GONE);
-                        ll_medicine_product.setVisibility(View.GONE);
-                        ll_main_medicine_details.setVisibility(View.GONE);
-                        ll_end_note.setVisibility(View.GONE);
-                        ll_main_end_note_details.setVisibility(View.GONE);
-                    } else {
-                        ll_certificate.setVisibility(View.GONE);
-                        ll_main_certificate_details.setVisibility(View.GONE);
+            if (backCheckerFlag) {
+                //  Toast.makeText(mContext, "backCheckerFlag", Toast.LENGTH_SHORT).show();
+                fl_progress_bar.setVisibility(View.GONE);
+                ll_patients_view.setVisibility(View.GONE);
+                ll_prescription_view.setVisibility(View.VISIBLE);
+                top_view.setVisibility(View.VISIBLE);
+                ll_info_no_patient.setVisibility(View.GONE);
+                btn_create_patient.setVisibility(View.GONE);
+                backCheckerFlag = false;
+                final Handler handler2 = new Handler();
+                handler2.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (certificate_selection) {
+                            ll_certificate.setVisibility(View.VISIBLE);
+                            ll_main_certificate_details.setVisibility(View.VISIBLE);
+                            ll_medicinal_lab.setVisibility(View.GONE);
+                            ll_main_lab_test_details.setVisibility(View.GONE);
+                            ll_medicine_product.setVisibility(View.GONE);
+                            ll_main_medicine_details.setVisibility(View.GONE);
+                            ll_end_note.setVisibility(View.GONE);
+                            ll_main_end_note_details.setVisibility(View.GONE);
+                        } else {
+                            ll_certificate.setVisibility(View.GONE);
+                            ll_main_certificate_details.setVisibility(View.GONE);
                         /*ll_medicine_product.setVisibility(View.VISIBLE);
                         ll_main_medicine_details.setVisibility(View.VISIBLE);*/
-                        if (is_on_lab_test)  //Lab Test selected
-                        {
-                            //  Toast.makeText(mContext, "is_on_lab_test", Toast.LENGTH_SHORT).show();
-                            setActiveMedicine_LAB();
-                        } else {
-                            if (is_on_case_history) {
-                                //  Toast.makeText(mContext, "is_on_case_history", Toast.LENGTH_SHORT).show();
+                            if (is_on_lab_test)  //Lab Test selected
+                            {
+                                //  Toast.makeText(mContext, "is_on_lab_test", Toast.LENGTH_SHORT).show();
+                                setActiveMedicine_LAB();
 
-                                setActiveEdit_Note();
-                                ll_certificate.setVisibility(View.GONE);
-                            } else if (is_on_medicines) {
-                                setActiveMedicine_Product();
-                                ll_certificate.setVisibility(View.GONE);
+                            } else {
+                                if (is_on_case_history) {
+                                    //  Toast.makeText(mContext, "is_on_case_history", Toast.LENGTH_SHORT).show();
+
+                                    setActiveEdit_Note();
+                                    ll_certificate.setVisibility(View.GONE);
+                                } else if (is_on_medicines) {
+                                    setActiveMedicine_Product();
+                                    ll_certificate.setVisibility(View.GONE);
+                                }
                             }
-                        }
 
+                        }
                     }
-                }
-            }, 2);
+                }, 2);
+
+            }
 
         }
 
@@ -1660,64 +1763,6 @@ public class CreatePrescription extends Fragment {
                 }
             }
         });*/
-
-        if (NEWaddMedicinesArrayList.size() > 0) {
-            textView3_5.setVisibility(View.VISIBLE);
-            ll_35.setVisibility(View.VISIBLE);
-            mRecyclerViewAddedMedicines.smoothScrollToPosition(NEWaddMedicinesArrayList.size() - 1);
-            textView3_5.setText("1/" + NEWaddMedicinesArrayList.size());
-
-            mRecyclerViewAddedMedicines.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                    super.onScrollStateChanged(recyclerView, newState);
-
-                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                        int position = gridLayoutManager3.findFirstVisibleItemPosition();
-                        Log.e("position", String.valueOf(position));
-                        textView3_5.setText((position + 1) + "/" + NEWaddMedicinesArrayList.size());
-
-                    }
-                }
-
-                @Override
-                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
-                }
-            });
-
-        }
-
-        if (addMedicinesArrayListGlobal.size() > 0) {
-            textView3_5.setVisibility(View.VISIBLE);
-            ll_35.setVisibility(View.VISIBLE);
-
-            Toast.makeText(mContext, "yes", Toast.LENGTH_SHORT).show();
-
-            mRecyclerViewAddedMedicines.smoothScrollToPosition(addMedicinesArrayListGlobal.size() - 1);
-            textView3_5.setText("1/" + addMedicinesArrayListGlobal.size());
-
-            mRecyclerViewAddedMedicines.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                    super.onScrollStateChanged(recyclerView, newState);
-
-                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                        int position = gridLayoutManager3.findFirstVisibleItemPosition();
-                        Log.e("position", String.valueOf(position));
-                        textView3_5.setText((position + 1) + "/" + addMedicinesArrayListGlobal.size());
-
-                    }
-                }
-
-                @Override
-                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
-                }
-            });
-
-        }
-
 
     }
 
@@ -2586,36 +2631,50 @@ public class CreatePrescription extends Fragment {
         ll_medicine_product.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 ll_medicine_product.post(new Runnable() {
                     @Override
                     public void run() {
+
+                        hideKeyboard(getContext());
                         setActiveMedicine_Product();
                     }
                 });
+
             }
         });
 
         ll_medicinal_lab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 ll_medicinal_lab.post(new Runnable() {
                     @Override
                     public void run() {
+
+                        hideKeyboard(mContext);
                         setActiveMedicine_LAB();
+
                     }
                 });
+
             }
         });
 
         ll_end_note.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 ll_end_note.post(new Runnable() {
                     @Override
                     public void run() {
+
+                        hideKeyboard(mContext);
                         setActiveEdit_Note();
+
                     }
                 });
+
             }
         });
         header = view.findViewById(R.id.header);
@@ -2750,13 +2809,6 @@ public class CreatePrescription extends Fragment {
             @Override
             public void onClick(View v) {
                 if (Utils.isConnectingToInternet(mContext)) {
-
-                    if (addMedicinesArrayListGlobal.size() > 0) {
-                        addMedicinesArrayList.clear();
-                        addMedicinesArrayList.addAll(addMedicinesArrayListGlobal);
-                        addMedicinesArrayListGlobal.addAll(addMedicinesArrayList);
-                        NEWaddMedicinesArrayList.clear();
-                    }
 
                     if (btn_prescribe.getText().toString().trim().equalsIgnoreCase("Prescribe")) {
                         if (is_on_medicines) {
@@ -3289,6 +3341,7 @@ public class CreatePrescription extends Fragment {
         });
 
 
+        textView3_5.setVisibility(View.GONE);
         ll_35.setVisibility(View.GONE);
        /* btn_add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -3612,7 +3665,6 @@ public class CreatePrescription extends Fragment {
                                     textView3_5.setText("1/" + addMedicinesArrayList.size());
                                 }
 
-
                                 mRecyclerViewAddedMedicines.addOnScrollListener(new RecyclerView.OnScrollListener() {
                                     @Override
                                     public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -3623,7 +3675,6 @@ public class CreatePrescription extends Fragment {
                                             int position = gridLayoutManager3.findFirstVisibleItemPosition();
                                             Log.e("position", String.valueOf(position));
                                             textView3_5.setText((position + 1) + "/" + addMedicinesArrayList.size());
-
                                             addMedicineAdapter.notifyItemChanged(position);
 
 
@@ -3789,7 +3840,7 @@ public class CreatePrescription extends Fragment {
         ll_btn_templates.setVisibility(View.VISIBLE);
         is_on_lab_test = false;
         is_on_medicines = true;
-//        header.setText("Create Prescription");
+        header.setText("Create Prescription");
         is_on_case_history = false;
 
         if (addMedicinesArrayList.size() > 0) {
@@ -3798,8 +3849,10 @@ public class CreatePrescription extends Fragment {
             textView3_5.setText("1/" + addMedicinesArrayList.size());
 
         } else {
+            textView3_5.setVisibility(View.GONE);
             ll_35.setVisibility(View.GONE);
         }
+
         mRecyclerViewAddedMedicines.post(new Runnable() {
             @Override
             public void run() {
@@ -3807,6 +3860,12 @@ public class CreatePrescription extends Fragment {
                 mRecyclerViewAddedMedicines.setVisibility(View.VISIBLE);
                 if (addMedicineAdapter != null) {
                     mRecyclerViewAddedMedicines.setAdapter(addMedicineAdapter);
+
+                    if (addMedicineAdapter.getItemCount() > 0) {
+                        textView3_5.setVisibility(View.VISIBLE);
+                        textView3_5.setText("1/" + addMedicineAdapter.getItemCount());
+                        ll_35.setVisibility(View.VISIBLE);
+                    }
                 }
             }
         });
@@ -3831,7 +3890,9 @@ public class CreatePrescription extends Fragment {
             textView3_5.setVisibility(View.VISIBLE);
             ll_35.setVisibility(View.VISIBLE);
             textView3_5.setText("1/" + addLabTestArrayList.size());
+
         } else {
+            textView3_5.setVisibility(View.GONE);
             ll_35.setVisibility(View.GONE);
         }
 
@@ -3860,6 +3921,7 @@ public class CreatePrescription extends Fragment {
         is_on_medicines = false;
 
         ll_btn_templates.setVisibility(View.GONE);
+        textView3_5.setVisibility(View.GONE);
         ll_35.setVisibility(View.GONE);
         mRecyclerViewAddedLabTest.setVisibility(View.GONE);
         mRecyclerViewAddedMedicines.setVisibility(View.GONE);
@@ -4631,10 +4693,9 @@ public class CreatePrescription extends Fragment {
 
     public void setDataOnMedicines(ArrayList<com.likesby.bludoc.ModelLayer.NewEntities.MedicinesItem> medicines) {
 
-        NEWaddMedicinesArrayList.clear();
         NEWaddMedicinesArrayList.addAll(medicines);
-        if (NEWaddMedicinesArrayList != null) {
-            if (NEWaddMedicinesArrayList.size() != 0) {
+        if (medicines != null) {
+            if (medicines.size() != 0) {
                 addMedicinesArrayList = new ArrayList<>();
                 for (com.likesby.bludoc.ModelLayer.NewEntities.MedicinesItem mi : NEWaddMedicinesArrayList) {
                     MedicinesItem medicinesItem = new MedicinesItem();
@@ -4653,20 +4714,19 @@ public class CreatePrescription extends Fragment {
 
             addMedicinesArrayListGlobal.addAll(addMedicinesArrayList);
 
-        }
 
-        if (patientsItemArrayList != null) {
-            if (patientsItemArrayList.size() != 0) {
-                String age___ = "";
-                if (patientsItemArrayList.get(pos).getAge().contains("yr") || patientsItemArrayList.get(pos).getAge().contains("month"))
-                    age___ = patientsItemArrayList.get(pos).getAge();
-                else
-                    age___ = patientsItemArrayList.get(pos).getAge() + " yr";
-                patientdetails.setText(patientsItemArrayList.get(pos).getPName() + " - " + patientsItemArrayList.get(pos).getGender() + " / " + age___);
-            } else {
-                patientsItemArrayList = splashActivity.getpatients();
-
-            }
+//        if (patientsItemArrayList != null) {
+//            if (patientsItemArrayList.size() != 0) {
+//                String age___ = "";
+//                if (patientsItemArrayList.get(pos).getAge().contains("yr") || patientsItemArrayList.get(pos).getAge().contains("month"))
+//                    age___ = patientsItemArrayList.get(pos).getAge();
+//                else
+//                    age___ = patientsItemArrayList.get(pos).getAge() + " yr";
+//                patientdetails.setText(patientsItemArrayList.get(pos).getPName() + " - " + patientsItemArrayList.get(pos).getGender() + " / " + age___);
+//            } else {
+//                patientsItemArrayList = splashActivity.getpatients();
+//
+//            }
 //                    Collections.sort(addMedicinesArrayList, new Comparator<MedicinesItem>() {
 //                        @Override
 //                        public int compare(MedicinesItem lhs, MedicinesItem rhs) {
@@ -4700,6 +4760,8 @@ public class CreatePrescription extends Fragment {
                 ll_35.setVisibility(View.VISIBLE);
                 mRecyclerViewAddedMedicines.smoothScrollToPosition(addMedicinesArrayList.size() - 1);
                 textView3_5.setText("1/" + addMedicinesArrayList.size());
+                medicineAddFLAG = true;
+                manager.setPreferences(mContext, "TotalMedicineAdded", "true");
             }
             mRecyclerViewAddedMedicines.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
@@ -4710,7 +4772,6 @@ public class CreatePrescription extends Fragment {
                         int position = gridLayoutManager3.findFirstVisibleItemPosition();
                         Log.e("position", String.valueOf(position));
                         textView3_5.setText((position + 1) + "/" + addMedicinesArrayList.size());
-
                         addMedicineAdapter.notifyItemChanged(position);
 
                     }
@@ -4725,6 +4786,77 @@ public class CreatePrescription extends Fragment {
         }
 
     }
+
+    public void setDataOnLabTest(ArrayList<com.likesby.bludoc.ModelLayer.NewEntities2.LabTestItem> labTest) {
+
+        if (labTest != null) {
+            if (labTest.size() != 0) {
+                addLabTestArrayList = new ArrayList<>();
+                for (com.likesby.bludoc.ModelLayer.NewEntities2.LabTestItem mi : labTest) {
+                    LabTestItem labTestItem = new LabTestItem();
+                    labTestItem.setLabTestName(mi.getLabTestName());
+                    labTestItem.setLabTestComment(mi.getLabTestComment());
+                    addLabTestArrayList.add(labTestItem);
+                }
+
+                labtestAddFLAG = true;
+
+//                    Collections.sort(addMedicinesArrayList, new Comparator<MedicinesItem>() {
+//                        @Override
+//                        public int compare(MedicinesItem lhs, MedicinesItem rhs) {
+//                            return lhs.getMedicineName().compareTo(rhs.getMedicineName());
+//                        }
+//                    });
+
+        /*    Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    addLabTestAdapter = new AddLabTestAdapter(addLabTestArrayList,
+                            et_additional_comments_labtests, btn_add_labtest, textView3_5, searchBarMaterialTestLab,mRecyclerViewAddedLabTest, btnChooseFromTemplateLabTest, btn_prescribe,"pres");
+                    mRecyclerViewAddedLabTest.setAdapter(addLabTestAdapter);
+                    ll_medicinal_lab.performClick();
+                }
+            });*/
+
+
+                addLabTestAdapter = new AddLabTestAdapter(addLabTestArrayList,
+                        et_additional_comments_labtests, btn_add_labtest, textView3_5, ll_35, searchBarMaterialTestLab, mRecyclerViewAddedLabTest, btnChooseFromTemplateLabTest, btn_prescribe, "pres");
+                mRecyclerViewAddedLabTest.setAdapter(addLabTestAdapter);
+                //ll_medicinal_lab.performClick();
+
+
+                if (addLabTestArrayList.size() > 0) {
+                    textView3_5.setVisibility(View.VISIBLE);
+                    ll_35.setVisibility(View.VISIBLE);
+                    mRecyclerViewAddedLabTest.smoothScrollToPosition(addLabTestArrayList.size() - 1);
+                    textView3_5.setText("1/" + addLabTestArrayList.size());
+                }
+                mRecyclerViewAddedLabTest.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                    @Override
+                    public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                        super.onScrollStateChanged(recyclerView, newState);
+
+                        if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+
+                            int position = gridLayoutManager5.findFirstVisibleItemPosition();
+                            Log.e("position", String.valueOf(position));
+                            textView3_5.setText((position + 1) + "/" + addLabTestArrayList.size());
+                            addLabTestAdapter.notifyItemChanged(position);
+
+                        }
+                    }
+
+                    @Override
+                    public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                        super.onScrolled(recyclerView, dx, dy);
+                    }
+                });
+
+            }
+        }
+
+    }
 }
+//}
 
 

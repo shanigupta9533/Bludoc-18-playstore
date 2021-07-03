@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,19 +20,15 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,18 +53,16 @@ import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
-import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.VideoController;
 import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
-import com.google.android.gms.ads.formats.MediaView;
-import com.google.android.gms.ads.formats.NativeAdOptions;
 import com.google.android.gms.ads.formats.UnifiedNativeAd;
 import com.google.android.gms.ads.formats.UnifiedNativeAdView;
 import com.google.android.gms.ads.rewarded.RewardItem;
 import com.google.android.gms.ads.rewarded.RewardedAd;
 import com.google.android.gms.ads.rewarded.RewardedAdCallback;
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.navigation.NavigationView;
 import com.likesby.bludoc.Adapter.SlidingImage_Adapter;
 import com.likesby.bludoc.Fragment.CreatePrescription;
 import com.likesby.bludoc.Fragment.History;
@@ -84,8 +77,6 @@ import com.likesby.bludoc.SessionManager.SessionManager;
 import com.likesby.bludoc.db.MyDB;
 import com.likesby.bludoc.utils.DateUtils;
 import com.likesby.bludoc.viewModels.ApiViewHolder;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.navigation.NavigationView;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import java.io.ByteArrayOutputStream;
@@ -102,8 +93,8 @@ import java.util.TimerTask;
 
 import io.reactivex.disposables.CompositeDisposable;
 
-public class HomeActivity  extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
-   // private static final String ADMOB_AD_UNIT_ID = "ca-app-pub-6756023122563497/5728747901";
+public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    // private static final String ADMOB_AD_UNIT_ID = "ca-app-pub-6756023122563497/5728747901";
     //Context mContext;
     Dialog dialog;
 
@@ -119,37 +110,37 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
     public static ArrayList<PatientsItem> patientsItemArrayList = new ArrayList<>();
     boolean doubleBackToExitPressedOnce = false;
     TextView login;
-    static String Streamid,SubjectName;
+    static String Streamid, SubjectName;
     //   FrameLayout frame;
     //private BottomNavigationView bottomNavigationView;
     private static ViewPager mPager;
     private static int currentPage = 0;
     private static int NUM_PAGES = 0;
-    private static final Integer[] IMAGES= {R.drawable.one,R.drawable.two,R.drawable.three,R.drawable.four,R.drawable.five};
+    private static final Integer[] IMAGES = {R.drawable.one, R.drawable.two, R.drawable.three, R.drawable.four, R.drawable.five};
     private ArrayList<Integer> ImagesArray = new ArrayList<Integer>();
-    CardView History,prescribe,new_patient,my_template,buy_subscription;
-    ImageView refer_app,close_pop;
+    CardView History, prescribe, new_patient, my_template, buy_subscription;
+    ImageView refer_app, close_pop;
     static SessionManager manager;
     Boolean addflag = false;
     Context mContext;
-    public  static  ArrayList<MedicinesItem> medicinesItemArrayList = new ArrayList<>();
-    private   ArrayList<BannersItem> bannerArrayList = new ArrayList<>();
-    public static int poss__=0;
+    public static ArrayList<MedicinesItem> medicinesItemArrayList = new ArrayList<>();
+    private ArrayList<BannersItem> bannerArrayList = new ArrayList<>();
+    public static int poss__ = 0;
     FrameLayout fl_progress_layout;
-    private  static Context ctx;
+    private static Context ctx;
     Button wahtsappTest;
-    private  static  FragmentManager fragmanager= null;
+    private static FragmentManager fragmanager = null;
     MyDB myDB;
     private RewardedAd rewardedAd;
-    TextView tv_days_left,tv_premium_top;
+    TextView tv_days_left, tv_premium_top;
     LinearLayout ll_premium;
-    private AdView mAdView,mAdViewNative;
-     AdLoader adLoader;
+    private AdView mAdView, mAdViewNative;
+    AdLoader adLoader;
     private UnifiedNativeAd nativeAd;
     boolean showNativeAdFlag = false;
     Dialog dialog_data;
     private OnBackClickListener onBackClickListener;
-    AdRequest adRequest,adRequestInterstitial;
+    AdRequest adRequest, adRequestInterstitial;
     private InterstitialAd mInterstitialAd;
     private OnBackClickListener2 onBackClickListener2;
 
@@ -178,10 +169,10 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(Color.parseColor("#000000"));
         }
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE|WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         mContext = HomeActivity.this;
         MobileAds.initialize(this, "ca-app-pub-9225891557304181~7586066501");
-       // rewardedAd = createAndLoadRewardedAd();
+        // rewardedAd = createAndLoadRewardedAd();
 
         adRequest = new AdRequest.Builder()/*.addTestDevice("31B09DFC1F78AF28F2AFB1506F51B0BF")*/.build();
         adRequestInterstitial = new AdRequest.Builder()/*.addTestDevice("31B09DFC1F78AF28F2AFB1506F51B0BF")*/.build();
@@ -189,7 +180,7 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
         myDB = new MyDB(mContext);
         fragmanager = getSupportFragmentManager();
         manager = new SessionManager();
-        manager.setPreferences(mContext,"home","true");
+        manager.setPreferences(mContext, "home", "true");
 
         initCalls();
 
@@ -246,9 +237,9 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
     }
 
 
-    private void initInterstitialAd(AdRequest adRequest){
+    private void initInterstitialAd(AdRequest adRequest) {
         mInterstitialAd = new InterstitialAd(mContext);
-      //  mInterstitialAd.setAdUnitId("ca-app-pub-9225891557304181/3105393849");//Live
+        //  mInterstitialAd.setAdUnitId("ca-app-pub-9225891557304181/3105393849");//Live
         mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");//Test
         mInterstitialAd.loadAd(adRequest);
 
@@ -290,6 +281,7 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
         });
 
     }
+
     private void displayUnifiedNativeAd(ViewGroup parent, UnifiedNativeAd ad) {
 
         // Inflate a layout and add it to the parent ViewGroup.
@@ -324,7 +316,6 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
         // Place the AdView into the parent.
         parent.addView(adView);
     }
-
 
 
 //    private void NativeAd(Dialog v, ProgressBar pb, Button btn_yes, Button btn_no) {
@@ -519,15 +510,15 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
 //            adLoader.loadAd(new AdRequest.Builder().build());
 //    }
 
-        @Override
-        protected void onDestroy() {
-            if (nativeAd != null) {
-                nativeAd.destroy();
-            }
-            super.onDestroy();
+    @Override
+    protected void onDestroy() {
+        if (nativeAd != null) {
+            nativeAd.destroy();
         }
+        super.onDestroy();
+    }
 
-    private  void BannerAd(AdRequest adRequest){
+    private void BannerAd(AdRequest adRequest) {
         mAdView = findViewById(R.id.adView);
         mAdView.setVisibility(View.VISIBLE);
         //Toast.makeText(mContext, "BANNER Test Device = "+adRequest.isTestDevice(mContext), Toast.LENGTH_LONG).show();
@@ -543,7 +534,7 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
 
             @Override
             public void onAdFailedToLoad(int errorCode) {
-              //  Toast.makeText(mContext, "BANNER ErrorCode = "+errorCode, Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(mContext, "BANNER ErrorCode = "+errorCode, Toast.LENGTH_SHORT).show();
                 // Code to be executed when an ad request fails.
             }
 
@@ -573,25 +564,23 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
     }
 
 
-
-
     public RewardedAd createAndLoadRewardedAd() {
         rewardedAd = new RewardedAd(this,
-            //    "ca-app-pub-3940256099942544/5224354917");// Test ad credentials
+                //    "ca-app-pub-3940256099942544/5224354917");// Test ad credentials
                 "ca-app-pub-6756023122563497/6395539305");// Live ad credentials
 
         RewardedAdLoadCallback adLoadCallback = new RewardedAdLoadCallback() {
             @Override
             public void onRewardedAdLoaded() {
                 // Ad successfully loaded.
-                Log.e("Rewarded","onRewardedAdLoaded");
+                Log.e("Rewarded", "onRewardedAdLoaded");
 
             }
 
             @Override
             public void onRewardedAdFailedToLoad(int errorCode) {
                 // Ad failed to load.
-                Log.e("Rewarded","onRewardedAdFailedToLoad");
+                Log.e("Rewarded", "onRewardedAdFailedToLoad");
 
 
             }
@@ -601,9 +590,7 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
     }
 
 
-
-
-    private void initCalls(){
+    private void initCalls() {
         init();
         initViews();
         initViewHolder();
@@ -614,32 +601,94 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
             @Override
             public void onClick(View v) {
 
-                startActivity(new Intent(HomeActivity.this,AllPharmacistActivity.class));
+                if(!("").equalsIgnoreCase(manager.getPreferences(mContext,"registration_no"))) {
+                    ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
+                    if ( !("").equalsIgnoreCase(responseProfileDetails.getHospitalCode())) {
+
+                        if (responseProfileDetails.getAccess().equals("Pending")) {
+                            popupAccess();
+                        } else if (responseProfileDetails.getAccess().equals("Approve")) {
+
+                            startActivity(new Intent(HomeActivity.this, AllPharmacistActivity.class));
+                        } else if (responseProfileDetails.getAccess().equals("Rejected")) {
+                            //popupHospitalCode();
+                        } else {
+                            popupAccess();
+                        }
+                    } else {
+                        startActivity(new Intent(HomeActivity.this, AllPharmacistActivity.class));
+                    }
+                }
+                else {
+                    popup();
+                }
 
             }
         });
         //transparentStatusAndNavigation();
         //  setState();
     }
+    private  void popupAccess()
+    {
+        final Dialog dialog_data = new Dialog(mContext);
+        dialog_data.setCancelable(true);
+
+        dialog_data.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        Objects.requireNonNull(dialog_data.getWindow()).setGravity(Gravity.CENTER);
+
+        dialog_data.setContentView(R.layout.popup_access);
+
+        WindowManager.LayoutParams lp_number_picker = new WindowManager.LayoutParams();
+        Window window = dialog_data.getWindow();
+        lp_number_picker.copyFrom(window.getAttributes());
+
+        lp_number_picker.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp_number_picker.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+        //window.setGravity(Gravity.CENTER);
+        window.setAttributes(lp_number_picker);
+
+        Button btn_add = dialog_data.findViewById(R.id.btn_register);
+        ImageView btn_close = dialog_data.findViewById(R.id.btn_close);
+
+
+        btn_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog_data.dismiss();
+
+            }
+        });
+
+
+        btn_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog_data.dismiss();
+
+            }
+        });
+        dialog_data.show();
+    }
 
     private void initViews() {
         lLayout = new GridLayoutManager(this, 2);
 
 
-
         tv_premium_top = findViewById(R.id.tv_premium_top);
         ll_premium = findViewById(R.id.ll_premium);
-        ll_premium.setPadding(20,30,20,30);
+        ll_premium.setPadding(20, 30, 20, 30);
         tv_days_left = findViewById(R.id.tv_days_left);
         History = findViewById(R.id.History);
         wahtsappTest = findViewById(R.id.wahtsappTest);
         prescribe = findViewById(R.id.prescribe);
-        new_patient= findViewById(R.id.new_patient);
-        my_template= findViewById(R.id.my_template);
-      //  buy_subscription= findViewById(R.id.buy_subscription);
-        refer_app= findViewById(R.id.refer_app);
-        close_pop= findViewById(R.id.close_pop);
-        fl_progress_layout  = findViewById(R.id.fl_progress_layout);
+        new_patient = findViewById(R.id.new_patient);
+        my_template = findViewById(R.id.my_template);
+        //  buy_subscription= findViewById(R.id.buy_subscription);
+        refer_app = findViewById(R.id.refer_app);
+        close_pop = findViewById(R.id.close_pop);
+        fl_progress_layout = findViewById(R.id.fl_progress_layout);
         fl_progress_layout.setVisibility(View.GONE);
         // fl_progress_layout.setVisibility(View.VISIBLE);
         // setContentView(R.layout.activity_main);
@@ -656,7 +705,25 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
             @Override
             public void onClick(View v) {
 
-            startActivity(new Intent(HomeActivity.this,AllPharmacistActivity.class));
+                startActivity(new Intent(HomeActivity.this, AllPharmacistActivity.class));
+
+            }
+        });
+
+        findViewById(R.id.add_invoices).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                startActivity(new Intent(HomeActivity.this, InvoiceActivity.class));
+
+            }
+        });
+
+        findViewById(R.id.add_laboratory).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                startActivity(new Intent(HomeActivity.this, RefrelActivity.class));
 
             }
         });
@@ -679,7 +746,7 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
             name_2 = name_2.replace("Dr.","");
             manager.setPreferences(mContext,"name",name_2.trim());
         }*/
-        if(!("").equalsIgnoreCase(manager.getPreferences(mContext,"name").trim())) {
+        if (!("").equalsIgnoreCase(manager.getPreferences(mContext, "name").trim())) {
             Log_name.setText(manager.getPreferences(mContext, "name").trim().trim());
         }
         //handling floating action menu
@@ -694,7 +761,7 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
         findViewById(R.id.btn_desktop).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               popupDesktopVersion();
+                popupDesktopVersion();
             }
         });
 
@@ -703,8 +770,8 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
             @Override
             public void onClick(View v) {
 
-               /* if (isWhatsappInstalled) {
-                    *//*Uri uri = Uri.parse("smsto:" + "+918668931702");
+                /* if (isWhatsappInstalled) {
+                 *//*Uri uri = Uri.parse("smsto:" + "+918668931702");
                     Intent sendIntent = new Intent(Intent.ACTION_SENDTO, uri);
                     sendIntent.putExtra("sms_body", "Hii this is a test message for Whatsapp");
                     sendIntent.setPackage("com.whatsapp");
@@ -745,19 +812,18 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
 
                 }*/
                 boolean isWhatsappInstalled = whatsappInstalledOrNot("com.whatsapp");
-                if(isWhatsappInstalled)
-                {
+                if (isWhatsappInstalled) {
                     PackageManager packageManager = mContext.getPackageManager();
-                   // Intent sendIntent = new Intent(Intent.ACTION_VIEW);
+                    // Intent sendIntent = new Intent(Intent.ACTION_VIEW);
 
                     try {
                         Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(),
-                                R.drawable.history);;
+                                R.drawable.history);
+                        ;
                         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
                         String path = MediaStore.Images.Media.insertImage(mContext.getContentResolver(), bitmap, "Title", "null");
                         Uri imageUri = Uri.parse(path);
-
 
 
                         String smsNumber = "917768055620"; // E164 format without '+' sign
@@ -774,14 +840,12 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
 
                         if (sendIntent.resolveActivity(packageManager) != null) {
                             mContext.startActivity(sendIntent);
-                        }
-                        else
+                        } else
                             Toast.makeText(HomeActivity.this, "Resolve activity Null", Toast.LENGTH_SHORT).show();
-                    } catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }
-                else
+                } else
                     Toast.makeText(HomeActivity.this, "WhatsApp not Installed", Toast.LENGTH_SHORT).show();
 
             }
@@ -790,15 +854,29 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
         History.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!("").equalsIgnoreCase(manager.getPreferences(mContext,"registration_no")))
-                {
-                    com.likesby.bludoc.Fragment.History myFragment = new History();
-                    getSupportFragmentManager().beginTransaction().replace(R.id.homePageContainer, myFragment, "first").addToBackStack(null).commit();
+
+                if(!("").equalsIgnoreCase(manager.getPreferences(mContext,"registration_no"))) {
+                    ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
+                    if ( !("").equalsIgnoreCase(responseProfileDetails.getHospitalCode())) {
+
+                        if (responseProfileDetails.getAccess().equals("Pending")) {
+                            popupAccess();
+                        } else if (responseProfileDetails.getAccess().equals("Approve")) {
+
+                            startActivity(new Intent(HomeActivity.this, HistoryActivity.class));
+                        } else if (responseProfileDetails.getAccess().equals("Rejected")) {
+                            //popupHospitalCode();
+                        } else {
+                            popupAccess();
+                        }
+                    } else {
+                        startActivity(new Intent(HomeActivity.this, HistoryActivity.class));
+                    }
                 }
-                else
-                {
+                else {
                     popup();
                 }
+
             }
         });
 
@@ -807,21 +885,42 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
             @Override
             public void onClick(View v) {
 
-                if(!("").equalsIgnoreCase(manager.getPreferences(mContext,"registration_no")))
-                {
+            if(!("").equalsIgnoreCase(manager.getPreferences(mContext,"registration_no"))) {
+                ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
+                if ( !("").equalsIgnoreCase(responseProfileDetails.getHospitalCode())) {
+
+                    if (responseProfileDetails.getAccess().equals("Pending")) {
+                        popupAccess();
+                    } else if (responseProfileDetails.getAccess().equals("Approve")) {
+
+                        CreatePrescription.backCheckerFlag = false;
+                        CreatePrescription.NEWaddMedicinesArrayList = new ArrayList<>();
+                        CreatePrescription.NEWaddLabTestArrayList = new ArrayList<>();
+                        CreatePrescription myFragment = new CreatePrescription();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.homePageContainer, myFragment, "prescription").addToBackStack(null).commit();
+
+                    } else if (responseProfileDetails.getAccess().equals("Rejected")) {
+                        //popupHospitalCode();
+                    } else {
+                        popupAccess();
+                    }
+                } else {
+
                     CreatePrescription.backCheckerFlag = false;
                     CreatePrescription.NEWaddMedicinesArrayList = new ArrayList<>();
                     CreatePrescription.NEWaddLabTestArrayList = new ArrayList<>();
                     CreatePrescription myFragment = new CreatePrescription();
                     getSupportFragmentManager().beginTransaction().replace(R.id.homePageContainer, myFragment, "prescription").addToBackStack(null).commit();
-                }
-                else
-                {
-                    popup();
-                }
 
+                }
+            }
+            else {
+                popup();
+            }
             }
         });
+
+
         new_patient.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -846,18 +945,40 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
             @Override
             public void onClick(View v) {
 
-                if(!("").equalsIgnoreCase(manager.getPreferences(mContext,"registration_no")))
-                {
-                    TemplateSelection myFragment = new TemplateSelection();
-                    Bundle bundle = new Bundle();
-                    bundle.putString("patient_id","");
-                    bundle.putString("definer","home");
+                if(!("").equalsIgnoreCase(manager.getPreferences(mContext,"registration_no"))) {
+                    ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
+                    if ( !("").equalsIgnoreCase(responseProfileDetails.getHospitalCode())) {
 
-                    myFragment.setArguments(bundle);
-                    getSupportFragmentManager().beginTransaction().replace(R.id.homePageContainer, myFragment, "first").addToBackStack(null).commit();
+                        if (responseProfileDetails.getAccess().equals("Pending")) {
+                            popupAccess();
+                        } else if (responseProfileDetails.getAccess().equals("Approve")) {
+
+                            TemplateSelection myFragment = new TemplateSelection();
+                            Bundle bundle = new Bundle();
+                            bundle.putString("patient_id", "");
+                            bundle.putString("definer", "home");
+
+                            myFragment.setArguments(bundle);
+                            getSupportFragmentManager().beginTransaction().replace(R.id.homePageContainer, myFragment, "first").addToBackStack(null).commit();
+
+                        } else if (responseProfileDetails.getAccess().equals("Rejected")) {
+                            //popupHospitalCode();
+                        } else {
+                            popupAccess();
+                        }
+                    } else {
+
+                        TemplateSelection myFragment = new TemplateSelection();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("patient_id", "");
+                        bundle.putString("definer", "home");
+
+                        myFragment.setArguments(bundle);
+                        getSupportFragmentManager().beginTransaction().replace(R.id.homePageContainer, myFragment, "first").addToBackStack(null).commit();
+
+                    }
                 }
-                else
-                {
+                else {
                     popup();
                 }
 
@@ -873,11 +994,11 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
                     Intent shareIntent = new Intent(Intent.ACTION_SEND);
                     shareIntent.setType("text/plain");
                     shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Bludoc : E-Prescription for doctors");
-                    String shareMessage= "\nHey Doctor! Try this new application BluDoc : E-prescription app for Doctors. Make your prescriptions easy, quick, smart, paper free and send them to your patients across the world on a single click. I have started using it. Download BluDoc now!!\n\n";
+                    String shareMessage = "\nHey Doctor! Try this new application BluDoc : E-prescription app for Doctors. Make your prescriptions easy, quick, smart, paper free and send them to your patients across the world on a single click. I have started using it. Download BluDoc now!!\n\n";
                     shareMessage = shareMessage + "https://play.google.com/store/apps/details?id=com.likesby.bludoc";
                     shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
                     startActivity(Intent.createChooser(shareIntent, "choose one"));
-                } catch(Exception e) {
+                } catch (Exception e) {
                     //e.toString();
                 }
             }
@@ -885,8 +1006,7 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
 
     }
 
-    public  static void goToPrescription()
-    {
+    public static void goToPrescription() {
 
        /* apiViewHolder.getPatients(manager.getPreferences(ctx, "doctor_id"))
                 .subscribeOn(Schedulers.io())
@@ -909,9 +1029,8 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
     }
 
 
-    private void initViewHolder () {
+    private void initViewHolder() {
         apiViewHolder = ViewModelProviders.of(this).get(ApiViewHolder.class);
-
 
 
 //        apiViewHolder.getBanners()
@@ -1215,7 +1334,7 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
             Intent intent1 = new Intent(HomeActivity.this, Profile.class);
             startActivity(intent1);
             // Handle the camera action
-        }  else if (id == R.id.My_Subscription) {
+        } else if (id == R.id.My_Subscription) {
 
             Intent intent1 = new Intent(HomeActivity.this, MySubscription.class);
             startActivity(intent1);
@@ -1261,13 +1380,13 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
             startActivity(intent1);
         } else if (id == R.id.logout) {
             popuplogout();
-        }else if (id == R.id.Subscription_packages) {
+        } else if (id == R.id.Subscription_packages) {
             Intent intent1 = new Intent(HomeActivity.this, SubscriptionPackages.class);
             startActivity(intent1);
         }
 
 
-        DrawerLayout drawer =  findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -1311,7 +1430,7 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
 
         mPager = (ViewPager) findViewById(R.id.pager);
         bannerArrayList = SplashActivity.bannerArrayList;
-        mPager.setAdapter(new SlidingImage_Adapter(HomeActivity.this,SplashActivity.bannerArrayList));
+        mPager.setAdapter(new SlidingImage_Adapter(HomeActivity.this, SplashActivity.bannerArrayList));
 
         CirclePageIndicator indicator = (CirclePageIndicator)
                 findViewById(R.id.indicator);
@@ -1323,7 +1442,7 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
         //Set circle indicator radius
         indicator.setRadius(5 * density);
 
-        NUM_PAGES =bannerArrayList.size();
+        NUM_PAGES = bannerArrayList.size();
 
         // Auto start of viewpager
         final Handler handler = new Handler();
@@ -1365,44 +1484,42 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
     }
 
 
-
     @Override
     protected void onResume() {
         super.onResume();
-        String sub_valid = "",premium_valid="";
-       boolean flag_reset_paid=false;
-        Date date1 = null,date2=null;
-        int days_left_free = 0,days_left_paid=0;
+        String sub_valid = "", premium_valid = "";
+        boolean flag_reset_paid = false;
+        Date date1 = null, date2 = null;
+        int days_left_free = 0, days_left_paid = 0;
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-        ResponseProfileDetails profileDetails = manager.getObjectProfileDetails(mContext,"profile");
-        if(profileDetails.getSubcriptions()!=null){
-            if(profileDetails.getSubcriptions().size()!=0){
-                for (SubcriptionsItem si :profileDetails.getSubcriptions()) {
-                    if(si.getType().equals("Free")){
+        ResponseProfileDetails profileDetails = manager.getObjectProfileDetails(mContext, "profile");
+        if (profileDetails.getSubcriptions() != null) {
+            if (profileDetails.getSubcriptions().size() != 0) {
+                for (SubcriptionsItem si : profileDetails.getSubcriptions()) {
+                    if (si.getType().equals("Free")) {
                         try {
-                            Calendar c2 = Calendar .getInstance();
+                            Calendar c2 = Calendar.getInstance();
                             DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
                             Date dateEnd = dateFormat.parse(si.getEnd());
                             Date c = Calendar.getInstance().getTime();
                             assert dateEnd != null;
                             premium_valid = si.getDays();
-                            Log.e("DATE_____1 = ",DateUtils.printDifference(c,dateEnd));
-                           // Log.e("DATE_____2 = ",DateUtils.outFormatsetMMM(DateUtils.printDifference(c,dateEnd)));
-                           // Log.e("DATE_____3 = ",DateUtils.outFormatset(DateUtils.printDifference(c,dateEnd)));
-
+                            Log.e("DATE_____1 = ", DateUtils.printDifference(c, dateEnd));
+                            // Log.e("DATE_____2 = ",DateUtils.outFormatsetMMM(DateUtils.printDifference(c,dateEnd)));
+                            // Log.e("DATE_____3 = ",DateUtils.outFormatset(DateUtils.printDifference(c,dateEnd)));
 
 
                             try {
                                 date1 = dateFormat.parse(dateFormat.format(c2.getTime()));
                                 date2 = dateFormat.parse(si.getEnd());
-                                Log.e("DATE_____1 = ",DateUtils.printDifference(date1,date2)+" left");
+                                Log.e("DATE_____1 = ", DateUtils.printDifference(date1, date2) + " left");
                                 flag_reset_free = true;
 
-                                String[] splited = DateUtils.printDifference(date1,date2).split("\\s+");
+                                String[] splited = DateUtils.printDifference(date1, date2).split("\\s+");
 
                                 days_left_free = days_left_free + Integer.parseInt(splited[0]);
-                               // popupFreeSubscription(DateUtils.printDifference(date1,date2),true);
-                               // break;
+                                // popupFreeSubscription(DateUtils.printDifference(date1,date2),true);
+                                // break;
                                 sub_valid = si.getEnd();
                             } catch (ParseException e) {
                                 e.printStackTrace();
@@ -1410,90 +1527,85 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
 
                             //viewHolder.expiry.setText(DateUtils.printDifference(date1,date2)+" left");
 
-                        }
-                        catch(ParseException pe ) {
+                        } catch (ParseException pe) {
                             // handle the failure
                             flag_reset_free = false;
                         }
 
-                    }
-                    else if(si.getType().equals("Paid")){
+                    } else if (si.getType().equals("Paid")) {
                         try {
-                        Calendar c2 = Calendar .getInstance();
-                        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
-                        Date dateEnd = dateFormat.parse(si.getEnd());
-                        Date c = Calendar.getInstance().getTime();
-                        assert dateEnd != null;
-                        premium_valid = si.getDays();
-                        Log.e("DATE_____1 = ",DateUtils.printDifference(c,dateEnd));
-                        // Log.e("DATE_____2 = ",DateUtils.outFormatsetMMM(DateUtils.printDifference(c,dateEnd)));
-                        // Log.e("DATE_____3 = ",DateUtils.outFormatset(DateUtils.printDifference(c,dateEnd)));
-
+                            Calendar c2 = Calendar.getInstance();
+                            DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+                            Date dateEnd = dateFormat.parse(si.getEnd());
+                            Date c = Calendar.getInstance().getTime();
+                            assert dateEnd != null;
+                            premium_valid = si.getDays();
+                            Log.e("DATE_____1 = ", DateUtils.printDifference(c, dateEnd));
+                            // Log.e("DATE_____2 = ",DateUtils.outFormatsetMMM(DateUtils.printDifference(c,dateEnd)));
+                            // Log.e("DATE_____3 = ",DateUtils.outFormatset(DateUtils.printDifference(c,dateEnd)));
 
 
                             date1 = dateFormat.parse(dateFormat.format(c2.getTime()));
-                           date2 = dateFormat.parse(si.getEnd());
-                           // date2 = dateFormat.parse("12-12-2020");
-                            Log.e("DATE_____1 = ",DateUtils.printDifference(date1,date2)+" left");
+                            date2 = dateFormat.parse(si.getEnd());
+                            // date2 = dateFormat.parse("12-12-2020");
+                            Log.e("DATE_____1 = ", DateUtils.printDifference(date1, date2) + " left");
                             flag_reset_paid = true;
 
-                            String[] splited = DateUtils.printDifference(date1,date2).split("\\s+");
+                            String[] splited = DateUtils.printDifference(date1, date2).split("\\s+");
 
                             days_left_paid = days_left_paid + Integer.parseInt(splited[0]);
                             sub_valid = si.getEnd();
-                           // break;
+                            // break;
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
                     }
                 }
-                if(flag_reset_paid){   //Premium Subscription
-                    if(days_left_paid<1){
+                if (flag_reset_paid) {   //Premium Subscription
+                    if (days_left_paid < 1) {
                         tv_premium_top.setVisibility(View.GONE);
                         showNativeAdFlag = false;
-                       // popupFreeSubscription("",false);
-                        manager.setPreferences(mContext,"show_banner_ad","true");
+                        // popupFreeSubscription("",false);
+                        manager.setPreferences(mContext, "show_banner_ad", "true");
                         BannerAd(adRequest);
                         addflag = true;
                         ll_premium.setVisibility(View.VISIBLE);
                         ll_premium.setBackgroundDrawable(getResources().getDrawable(R.drawable.blue_btn_gradient));
-                        ll_premium.setPadding(20,30,20,30);
+                        ll_premium.setPadding(20, 30, 20, 30);
                         tv_days_left.setText("Expired!! Upgrade to premium for an ad free experience.");
                         ll_premium.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent intent = new Intent(mContext,SubscriptionPackages.class);
+                                Intent intent = new Intent(mContext, SubscriptionPackages.class);
                                 startActivity(intent);
                             }
                         });
-                    }
-                    else {
+                    } else {
                         showNativeAdFlag = false;
-                      //  popupFreeSubscription("",false);
-                     //   Toast.makeText(mContext, ""+days_left_paid, Toast.LENGTH_SHORT).show();
-                        if(days_left_paid<11){
+                        //  popupFreeSubscription("",false);
+                        //   Toast.makeText(mContext, ""+days_left_paid, Toast.LENGTH_SHORT).show();
+                        if (days_left_paid < 11) {
                             ll_premium.setVisibility(View.VISIBLE);
-                            if(manager.contains(mContext,"show_banner_ad"))
-                                manager.deletePreferences(mContext,"show_banner_ad");
-                            tv_days_left.setText("Your subscription will end on "+sub_valid+".\n Click here to renew");
+                            if (manager.contains(mContext, "show_banner_ad"))
+                                manager.deletePreferences(mContext, "show_banner_ad");
+                            tv_days_left.setText("Your subscription will end on " + sub_valid + ".\n Click here to renew");
                             ll_premium.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Intent intent = new Intent(mContext,SubscriptionPackages.class);
+                                    Intent intent = new Intent(mContext, SubscriptionPackages.class);
                                     startActivity(intent);
                                 }
                             });
-                        }
-                        else{
+                        } else {
                             showNativeAdFlag = false;
                             ll_premium.setVisibility(View.VISIBLE);
-                            if(manager.contains(mContext,"show_banner_ad"))
-                                manager.deletePreferences(mContext,"show_banner_ad");
-                            tv_days_left.setText("Your subscription is valid till "+sub_valid+".");
+                            if (manager.contains(mContext, "show_banner_ad"))
+                                manager.deletePreferences(mContext, "show_banner_ad");
+                            tv_days_left.setText("Your subscription is valid till " + sub_valid + ".");
                             ll_premium.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Intent intent = new Intent(mContext,SubscriptionPackages.class);
+                                    Intent intent = new Intent(mContext, SubscriptionPackages.class);
                                     startActivity(intent);
                                 }
                             });
@@ -1504,115 +1616,108 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
                             tv_days_left.setTextColor(getResources().getColor(R.color.colorWhite));*/
                         }
 
-                        if(manager.contains(mContext,"purchased_new")){
-                            if(manager.contains(mContext,"show_banner_ad"))
-                                manager.deletePreferences(mContext,"show_banner_ad");
-                            if(manager.getPreferences(mContext,"purchased_new").equalsIgnoreCase("true")) {
+                        if (manager.contains(mContext, "purchased_new")) {
+                            if (manager.contains(mContext, "show_banner_ad"))
+                                manager.deletePreferences(mContext, "show_banner_ad");
+                            if (manager.getPreferences(mContext, "purchased_new").equalsIgnoreCase("true")) {
                                 ll_premium.setBackgroundDrawable(getResources().getDrawable(R.drawable.green_gradient));
                                 ll_premium.setPadding(20, 30, 20, 30);
                                 tv_days_left.setText("Congratulations!! \n You are now a premium member. \n Your subscription is valid till " + sub_valid);
                                 tv_days_left.setTextColor(mContext.getResources().getColor(R.color.white));
                                 showNativeAdFlag = false;
-                            }else {
+                            } else {
                                 ll_premium.setVisibility(View.GONE);
                             }
                         }
                     }
-                }
-                else   //Free Subscription
+                } else   //Free Subscription
                 {
-                    if(flag_reset_free){
-                        if(manager.contains(mContext,"show_banner_ad"))
-                            manager.deletePreferences(mContext,"show_banner_ad");
-                        manager.setPreferences(mContext,"show_banner_ad","true");
+                    if (flag_reset_free) {
+                        if (manager.contains(mContext, "show_banner_ad"))
+                            manager.deletePreferences(mContext, "show_banner_ad");
+                        manager.setPreferences(mContext, "show_banner_ad", "true");
                         BannerAd(adRequest);
-                      //  popupFreeSubscription(""+days_left_free,true);
-                        tv_days_left.setText("Congratulations!! \nYou have been offered a "+ premium_valid +" days free trial.\nValid till - "+sub_valid+" \nUpgrade to premium for an ad free experience.\nClick here to upgrade");
+                        //  popupFreeSubscription(""+days_left_free,true);
+                        tv_days_left.setText("Congratulations!! \nYou have been offered a " + premium_valid + " days free trial.\nValid till - " + sub_valid + " \nUpgrade to premium for an ad free experience.\nClick here to upgrade");
                         tv_premium_top.setVisibility(View.VISIBLE);
                         showNativeAdFlag = false;
                         ll_premium.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent intent = new Intent(mContext,SubscriptionPackages.class);
+                                Intent intent = new Intent(mContext, SubscriptionPackages.class);
                                 startActivity(intent);
                             }
                         });
-                    }
-                    else {
-                        manager.setPreferences(mContext,"show_banner_ad","true");
+                    } else {
+                        manager.setPreferences(mContext, "show_banner_ad", "true");
                         BannerAd(adRequest);
                         addflag = true;
                         ll_premium.setVisibility(View.GONE);
                         ll_premium.setBackgroundDrawable(getResources().getDrawable(R.drawable.blue_btn_gradient));
-                        ll_premium.setPadding(20,30,20,30);
+                        ll_premium.setPadding(20, 30, 20, 30);
                         tv_days_left.setText("Upgrade to premium for an ad free experience.\nClick here to upgrade");
                         showNativeAdFlag = true;
                         ll_premium.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent intent = new Intent(mContext,SubscriptionPackages.class);
+                                Intent intent = new Intent(mContext, SubscriptionPackages.class);
                                 startActivity(intent);
                             }
                         });
                     }
 
                 }
-            }
-            else
-                if(!flag_reset_free) {
-                    BannerAd(adRequest);
-                    addflag = true;
-                    manager.setPreferences(mContext,"show_banner_ad","true");
-                    tv_premium_top.setVisibility(View.GONE);
-                    ll_premium.setBackgroundDrawable(getResources().getDrawable(R.drawable.blue_round_btn_gradient_mojito));
-                    showNativeAdFlag = true;
-                   // popupFreeSubscription("", false);
-                    tv_days_left.setTextColor(getResources().getColor(R.color.colorBlue));
-                    tv_days_left.setText("Upgrade to Premium");
-                    ll_premium.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(mContext,SubscriptionPackages.class);
-                            startActivity(intent);
-                        }
-                    });
+            } else if (!flag_reset_free) {
+                BannerAd(adRequest);
+                addflag = true;
+                manager.setPreferences(mContext, "show_banner_ad", "true");
+                tv_premium_top.setVisibility(View.GONE);
+                ll_premium.setBackgroundDrawable(getResources().getDrawable(R.drawable.blue_round_btn_gradient_mojito));
+                showNativeAdFlag = true;
+                // popupFreeSubscription("", false);
+                tv_days_left.setTextColor(getResources().getColor(R.color.colorBlue));
+                tv_days_left.setText("Upgrade to Premium");
+                ll_premium.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(mContext, SubscriptionPackages.class);
+                        startActivity(intent);
+                    }
+                });
 
-                }
-        }
-        else{
-            manager.setPreferences(mContext,"show_banner_ad","true");
+            }
+        } else {
+            manager.setPreferences(mContext, "show_banner_ad", "true");
             BannerAd(adRequest);
             addflag = true;
             showNativeAdFlag = true;
         }
 
-        if(manager.contains(mContext,"show_banner_ad")) {
-            if (manager.contains(mContext, "show_time")){
+        if (manager.contains(mContext, "show_banner_ad")) {
+            if (manager.contains(mContext, "show_time")) {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy, HH:mm");
-                Log.e("DIFF","____________________ "+DateUtils.getDateDiff(dateFormat,manager.getPreferences(mContext,"show_time"),DateUtils.currentDateTime()));
+                Log.e("DIFF", "____________________ " + DateUtils.getDateDiff(dateFormat, manager.getPreferences(mContext, "show_time"), DateUtils.currentDateTime()));
 
-                if(DateUtils.getDateDiff(dateFormat,manager.getPreferences(mContext,"show_time"),DateUtils.currentDateTime())>0){
-                    manager.setPreferences(mContext,"show_time",DateUtils.currentDateTime());
+                if (DateUtils.getDateDiff(dateFormat, manager.getPreferences(mContext, "show_time"), DateUtils.currentDateTime()) > 0) {
+                    manager.setPreferences(mContext, "show_time", DateUtils.currentDateTime());
                     initInterstitialAd(adRequestInterstitial);
                 }
 
 
-            }
-            else{
-                manager.setPreferences(mContext,"show_time",DateUtils.currentDateTime());
+            } else {
+                manager.setPreferences(mContext, "show_time", DateUtils.currentDateTime());
 
                 initInterstitialAd(adRequestInterstitial);
             }
 
         }
 
-      //  BannerAd();
-       // popupFreeSubscription();
-       // Toast.makeText(mContext, ""+CreatePrescription.backCheckerFlag, Toast.LENGTH_SHORT).show();
+        //  BannerAd();
+        // popupFreeSubscription();
+        // Toast.makeText(mContext, ""+CreatePrescription.backCheckerFlag, Toast.LENGTH_SHORT).show();
     }
 
-    private  void popuplogout()
-    {
+    private void popuplogout() {
         final Dialog dialog_data = new Dialog(mContext);
         dialog_data.setCancelable(true);
 
@@ -1644,7 +1749,7 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
                 myDB.deleteAllLabTests();
                 SplashActivity splashActivity = new SplashActivity();
                 splashActivity.setPatientsnull();
-                Intent i  = new Intent(mContext, SplashActivity.class);
+                Intent i = new Intent(mContext, SplashActivity.class);
                 startActivity(i);
                 finishAffinity();
             }
@@ -1655,12 +1760,11 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
                 dialog_data.dismiss();
             }
         });
-        if(dialog_data!=null && !dialog_data.isShowing())
-        dialog_data.show();
+        if (dialog_data != null && !dialog_data.isShowing())
+            dialog_data.show();
     }
 
-    private  void popupExit()
-    {
+    private void popupExit() {
         final Dialog dialog_data = new Dialog(mContext);
         dialog_data.setCancelable(true);
 
@@ -1710,7 +1814,7 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
             }
         };
         countDownTimer.start();*/
-        TextView tv_no_template =  dialog_data.findViewById(R.id.tv_no_template);
+        TextView tv_no_template = dialog_data.findViewById(R.id.tv_no_template);
         tv_no_template.setText("Are you sure you want to exit?");
         btn_yes.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1725,13 +1829,12 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
             }
         });
 
-        if(dialog_data!=null)
-        dialog_data.show();
+        if (dialog_data != null)
+            dialog_data.show();
     }
 
 
-    private  void popupAssign()
-    {
+    private void popupAssign() {
         final Dialog dialog_data = new Dialog(mContext);
         dialog_data.setCancelable(true);
 
@@ -1764,56 +1867,52 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
     }
 
 
+    private void popup() {
+        final Dialog dialog_data = new Dialog(mContext);
+        dialog_data.setCancelable(true);
 
-    private  void popup()
-        {
-            final Dialog dialog_data = new Dialog(mContext);
-                        dialog_data.setCancelable(true);
+        dialog_data.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-                        dialog_data.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        Objects.requireNonNull(dialog_data.getWindow()).setGravity(Gravity.CENTER);
 
-                        Objects.requireNonNull(dialog_data.getWindow()).setGravity(Gravity.CENTER);
+        dialog_data.setContentView(R.layout.popup_no_registration);
 
-                        dialog_data.setContentView(R.layout.popup_no_registration);
+        WindowManager.LayoutParams lp_number_picker = new WindowManager.LayoutParams();
+        Window window = dialog_data.getWindow();
+        lp_number_picker.copyFrom(window.getAttributes());
 
-            WindowManager.LayoutParams lp_number_picker = new WindowManager.LayoutParams();
-            Window window = dialog_data.getWindow();
-                        lp_number_picker.copyFrom(window.getAttributes());
+        lp_number_picker.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp_number_picker.height = WindowManager.LayoutParams.WRAP_CONTENT;
 
-            lp_number_picker.width = WindowManager.LayoutParams.MATCH_PARENT;
-            lp_number_picker.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        //window.setGravity(Gravity.CENTER);
+        window.setAttributes(lp_number_picker);
 
-            //window.setGravity(Gravity.CENTER);
-                        window.setAttributes(lp_number_picker);
-
-            Button btn_add = dialog_data.findViewById(R.id.btn_register);
-            ImageView btn_close = dialog_data.findViewById(R.id.btn_close);
+        Button btn_add = dialog_data.findViewById(R.id.btn_register);
+        ImageView btn_close = dialog_data.findViewById(R.id.btn_close);
 
 
-                        btn_add.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog_data.dismiss();
-                            Intent intent  = new Intent(mContext,RegisterDetails.class);
-                            startActivity(intent);
+        btn_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog_data.dismiss();
+                Intent intent = new Intent(mContext, RegisterDetails.class);
+                startActivity(intent);
 
-                }
-            });
-
-
-            btn_close.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog_data.dismiss();
-
-                }
-            });
-                    dialog_data.show();
             }
+        });
+
+        btn_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog_data.dismiss();
+
+            }
+        });
+        dialog_data.show();
+    }
 
 
-    private  void popupDesktopVersion()
-    {
+    private void popupDesktopVersion() {
         final Dialog dialog_data = new Dialog(mContext);
         dialog_data.setCancelable(true);
 
@@ -1844,7 +1943,7 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
                 Intent intentEmail = new Intent();
                 intentEmail.setType("message/rfc822");
                 intentEmail.setAction(Intent.ACTION_SEND);
-                intentEmail.putExtra(Intent.EXTRA_EMAIL  , new String[]{""});
+                intentEmail.putExtra(Intent.EXTRA_EMAIL, new String[]{""});
                 intentEmail.putExtra(Intent.EXTRA_SUBJECT, "Get a BluDoc Desktop Version");
                 intentEmail.putExtra(Intent.EXTRA_TEXT, "Dear User,\nKindly click on the link below to get BluDoc desktop version. \n https://bludoc.in/web");
                 intentEmail.setPackage("com.google.android.gm");
@@ -1868,9 +1967,7 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
     }
 
 
-
-    private  void popupsubscriptiom()
-    {
+    private void popupsubscriptiom() {
         final Dialog dialog_data = new Dialog(mContext);
         dialog_data.setCancelable(true);
 
@@ -1895,34 +1992,34 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
         TextView tv_msg = dialog_data.findViewById(R.id.tv_msg);
 
 
-        String sub_valid = "",premium_valid="";
-        boolean flag_reset_free = false,flag_reset_paid=false;
-        int days_left_free = 0,days_left_paid=0;
+        String sub_valid = "", premium_valid = "";
+        boolean flag_reset_free = false, flag_reset_paid = false;
+        int days_left_free = 0, days_left_paid = 0;
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-        ResponseProfileDetails profileDetails = manager.getObjectProfileDetails(mContext,"profile");
-        if(profileDetails.getSubcriptions()!=null){
-            if(profileDetails.getSubcriptions().size()!=0){
-                for (SubcriptionsItem si :profileDetails.getSubcriptions()) {
-                    if(si.getType().equals("Free")){
+        ResponseProfileDetails profileDetails = manager.getObjectProfileDetails(mContext, "profile");
+        if (profileDetails.getSubcriptions() != null) {
+            if (profileDetails.getSubcriptions().size() != 0) {
+                for (SubcriptionsItem si : profileDetails.getSubcriptions()) {
+                    if (si.getType().equals("Free")) {
                         try {
-                            Calendar c2 = Calendar .getInstance();
+                            Calendar c2 = Calendar.getInstance();
                             DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
                             Date dateEnd = dateFormat.parse(si.getEnd());
                             Date c = Calendar.getInstance().getTime();
                             assert dateEnd != null;
-                            Log.e("DATE_____1 = ",DateUtils.printDifference(c,dateEnd));
+                            Log.e("DATE_____1 = ", DateUtils.printDifference(c, dateEnd));
                             // Log.e("DATE_____2 = ",DateUtils.outFormatsetMMM(DateUtils.printDifference(c,dateEnd)));
                             // Log.e("DATE_____3 = ",DateUtils.outFormatset(DateUtils.printDifference(c,dateEnd)));
 
 
-                            Date date1 = null,date2=null;
+                            Date date1 = null, date2 = null;
                             try {
                                 date1 = dateFormat.parse(dateFormat.format(c2.getTime()));
                                 date2 = dateFormat.parse(si.getEnd());
-                                Log.e("DATE_____1 = ",DateUtils.printDifference(date1,date2)+" left");
+                                Log.e("DATE_____1 = ", DateUtils.printDifference(date1, date2) + " left");
                                 flag_reset_free = true;
 
-                                String[] splited = DateUtils.printDifference(date1,date2).split("\\s+");
+                                String[] splited = DateUtils.printDifference(date1, date2).split("\\s+");
 
                                 days_left_free = days_left_free + Integer.parseInt(splited[0]);
                                 // popupFreeSubscription(DateUtils.printDifference(date1,date2),true);
@@ -1933,33 +2030,31 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
 
                             //viewHolder.expiry.setText(DateUtils.printDifference(date1,date2)+" left");
 
-                        }
-                        catch(ParseException pe ) {
+                        } catch (ParseException pe) {
                             // handle the failure
                             flag_reset_free = false;
                         }
 
-                    }
-                    else if(si.getType().equals("Paid")){
+                    } else if (si.getType().equals("Paid")) {
                         try {
-                            Calendar c2 = Calendar .getInstance();
+                            Calendar c2 = Calendar.getInstance();
                             DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
                             Date dateEnd = dateFormat.parse(si.getEnd());
                             Date c = Calendar.getInstance().getTime();
                             assert dateEnd != null;
-                            Log.e("DATE_____1 = ",DateUtils.printDifference(c,dateEnd));
+                            Log.e("DATE_____1 = ", DateUtils.printDifference(c, dateEnd));
                             // Log.e("DATE_____2 = ",DateUtils.outFormatsetMMM(DateUtils.printDifference(c,dateEnd)));
                             // Log.e("DATE_____3 = ",DateUtils.outFormatset(DateUtils.printDifference(c,dateEnd)));
 
-                            Date date1 = null,date2=null;
+                            Date date1 = null, date2 = null;
 
                             date1 = dateFormat.parse(dateFormat.format(c2.getTime()));
                             date2 = dateFormat.parse(si.getEnd());
                             // date2 = dateFormat.parse("12-12-2020");
-                            Log.e("DATE_____1 = ",DateUtils.printDifference(date1,date2)+" left");
+                            Log.e("DATE_____1 = ", DateUtils.printDifference(date1, date2) + " left");
                             flag_reset_paid = true;
 
-                            String[] splited = DateUtils.printDifference(date1,date2).split("\\s+");
+                            String[] splited = DateUtils.printDifference(date1, date2).split("\\s+");
 
                             days_left_paid = days_left_paid + Integer.parseInt(splited[0]);
                             sub_valid = si.getEnd();
@@ -1969,26 +2064,24 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
                         }
                     }
                 }
-                if(flag_reset_paid){   //Premium Subscription
-                    if(days_left_paid<1){
+                if (flag_reset_paid) {   //Premium Subscription
+                    if (days_left_paid < 1) {
 
                         tv_msg.setText("Expired!! Upgrade to premium for an ad free experience.");
 
-                    }
-                    else {
+                    } else {
                         //  popupFreeSubscription("",false);
                         //   Toast.makeText(mContext, ""+days_left_paid, Toast.LENGTH_SHORT).show();
-                        if(days_left_paid<11){
+                        if (days_left_paid < 11) {
                             tv_congratulations.setVisibility(View.VISIBLE);
                             tv_congratulations.setText("Premium");
-                            tv_msg.setText("Your subscription will end on "+sub_valid+".");
+                            tv_msg.setText("Your subscription will end on " + sub_valid + ".");
 
-                        }
-                        else{
+                        } else {
                             tv_congratulations.setVisibility(View.VISIBLE);
                             tv_congratulations.setText("Premium");
 
-                            tv_msg.setText("Your subscription will end on "+sub_valid+".");
+                            tv_msg.setText("Your subscription will end on " + sub_valid + ".");
 
 
                             /*ll_premium.setBackgroundDrawable(getResources().getDrawable(R.drawable.green_gradient));
@@ -1999,43 +2092,41 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
 
 
                     }
-                }
-                else   //Free Subscription
+                } else   //Free Subscription
                 {
-                    if(flag_reset_free){
+                    if (flag_reset_free) {
 
-                        tv_msg.setText("Congratulations!! You have been offered a 5 days free trial.\nDays left - "+days_left_free+"\nUpgrade to premium for an ad free experience.");
+                        tv_msg.setText("Congratulations!! You have been offered a 5 days free trial.\nDays left - " + days_left_free + "\nUpgrade to premium for an ad free experience.");
 
-                    }
-                    else {
+                    } else {
 
                         tv_msg.setText("Upgrade to premium for an ad free experience.");
 
 
+                    }
+
                 }
 
+
+                btn_close.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog_data.dismiss();
+
+                    }
+                });
+                dialog_data.show();
             }
+        }
+    }
 
-
-
-        btn_close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog_data.dismiss();
-
-            }
-        });
-        dialog_data.show();
-    }}}
-
-    private  void popupFreeSubscription(String days_left,boolean flagger)
-    {
-        if(dialog_data!=null && dialog_data.isShowing())
+    private void popupFreeSubscription(String days_left, boolean flagger) {
+        if (dialog_data != null && dialog_data.isShowing())
             dialog_data.dismiss();
 
         dialog_data = new Dialog(mContext);
 
-        if(flagger)
+        if (flagger)
             dialog_data.setCancelable(true);
         else
             dialog_data.setCancelable(false);
@@ -2056,9 +2147,9 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
 
         ImageView btn_close = dialog_data.findViewById(R.id.btn_close);
         ProgressBar pb = dialog_data.findViewById(R.id.pb);
-        ImageView iv_no_template= dialog_data.findViewById(R.id.iv_no_template);
+        ImageView iv_no_template = dialog_data.findViewById(R.id.iv_no_template);
         iv_no_template.setVisibility(View.GONE);
-        if(!flagger)
+        if (!flagger)
             btn_close.setVisibility(View.GONE);
 
         final Button btn_upgrade_premium = dialog_data.findViewById(R.id.btn_upgrade_premium);
@@ -2066,18 +2157,17 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
         FrameLayout fl_layout = dialog_data.findViewById(R.id.fl_layout);
 
 
-        if(showNativeAdFlag){
+        if (showNativeAdFlag) {
 
             btn_upgrade_premium.setVisibility(View.GONE);
             btn_watch_ad.setVisibility(View.GONE);
-          //  NativeAd(dialog_data,pb,btn_upgrade_premium,btn_watch_ad);
-        }
-        else {
+            //  NativeAd(dialog_data,pb,btn_upgrade_premium,btn_watch_ad);
+        } else {
             btn_upgrade_premium.setVisibility(View.VISIBLE);
             btn_watch_ad.setVisibility(View.VISIBLE);
             fl_layout.setVisibility(View.GONE);
         }
-        CountDownTimer countDownTimer  = new CountDownTimer(2000, 2000) {
+        CountDownTimer countDownTimer = new CountDownTimer(2000, 2000) {
             @Override
             public void onTick(long millisUntilFinished) {
 
@@ -2094,12 +2184,11 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
         LinearLayout ll_expired = dialog_data.findViewById(R.id.ll_expired);
         TextView tv_free_trial_days_left = dialog_data.findViewById(R.id.tv_free_trial_days_left);
 
-        tv_free_trial_days_left.setText("Your free trial will end after "+days_left+" days.");
-        if(flagger){
+        tv_free_trial_days_left.setText("Your free trial will end after " + days_left + " days.");
+        if (flagger) {
             ll_congratulations.setVisibility(View.VISIBLE);
             ll_expired.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             ll_congratulations.setVisibility(View.GONE);
             ll_expired.setVisibility(View.VISIBLE);
         }
@@ -2108,7 +2197,7 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
             @Override
             public void onClick(View v) {
                 dialog_data.dismiss();
-                Intent intent = new Intent(mContext,SubscriptionPackages.class);
+                Intent intent = new Intent(mContext, SubscriptionPackages.class);
                 startActivity(intent);
             }
         });
@@ -2118,8 +2207,7 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
             @Override
             public void onClick(View v) {
                 dialog_data.dismiss();
-                if(rewardedAd.isLoaded())
-                {
+                if (rewardedAd.isLoaded()) {
 
                     rewardedAd.show(HomeActivity.this, new RewardedAdCallback() {
                         @Override
@@ -2130,24 +2218,24 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
                         @Override
                         public void onRewardedAdClosed() {
                             super.onRewardedAdClosed();
-                          //  rewardedAd = createAndLoadRewardedAd();
+                            //  rewardedAd = createAndLoadRewardedAd();
                         }
 
                         @Override
                         public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
                             flag_reset_free = true;
-                           // rewardedAd = createAndLoadRewardedAd();
-                         //   Toast.makeText(mContext, "Congratulations!! You won "+rewardItem.getAmount()+" "+rewardItem.getType(), Toast.LENGTH_SHORT).show();
+                            // rewardedAd = createAndLoadRewardedAd();
+                            //   Toast.makeText(mContext, "Congratulations!! You won "+rewardItem.getAmount()+" "+rewardItem.getType(), Toast.LENGTH_SHORT).show();
                         }
+
                         @Override
                         public void onRewardedAdFailedToShow(int i) {
                             super.onRewardedAdFailedToShow(i);
                             flag_reset_free = true;
                         }
                     });
-                }
-                else{
-                  //  Toast.makeText(HomeActivity.this, "Ad is not loaded", Toast.LENGTH_SHORT).show();
+                } else {
+                    //  Toast.makeText(HomeActivity.this, "Ad is not loaded", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -2167,7 +2255,7 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
 
     public void transactFragment(boolean reload) {
 
-       ProgressDialog progressDialog = new ProgressDialog(HomeActivity.this);
+        ProgressDialog progressDialog = new ProgressDialog(HomeActivity.this);
         progressDialog.setMessage("Please wait.");
         progressDialog.setCancelable(false);
         progressDialog.show();
@@ -2177,7 +2265,7 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
         if (reload) {
             getSupportFragmentManager().popBackStack();
         }
-        transaction.replace(R.id.homePageContainer, new CreatePrescription(),"prescription");
+        transaction.replace(R.id.homePageContainer, new CreatePrescription(), "prescription");
         transaction.addToBackStack(null);
         transaction.commit();
 
@@ -2188,11 +2276,10 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
                 progressDialog.dismiss();
 
             }
-        },1000);
+        }, 1000);
     }
 
-    private  void popupExit2()
-    {
+    private void popupExit2() {
         final Dialog dialog_data = new Dialog(mContext);
         dialog_data.setCancelable(true);
 
@@ -2243,7 +2330,7 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
         btn_yes.setVisibility(View.VISIBLE);
         fl_layout.setVisibility(View.GONE);
 
-        TextView tv_no_template =  dialog_data.findViewById(R.id.tv_no_template);
+        TextView tv_no_template = dialog_data.findViewById(R.id.tv_no_template);
         tv_no_template.setText("Would you like to leave this page?");
         btn_yes.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -2266,8 +2353,7 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
         dialog_data.show();
     }
 
-    private  void popUpExitPage()
-    {
+    private void popUpExitPage() {
         final Dialog dialog_data = new Dialog(mContext);
         dialog_data.setCancelable(true);
 
@@ -2318,7 +2404,7 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
         btn_yes.setVisibility(View.VISIBLE);
         fl_layout.setVisibility(View.GONE);
 
-        TextView tv_no_template =  dialog_data.findViewById(R.id.tv_no_template);
+        TextView tv_no_template = dialog_data.findViewById(R.id.tv_no_template);
         tv_no_template.setText("Would you like to Exit?");
         btn_yes.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -2342,7 +2428,7 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
         Fragment myFragment = getSupportFragmentManager().findFragmentByTag("prescription");
         if (myFragment != null && myFragment.isVisible()) {
 
-            if (onBackClickListener2 != null  && onBackClickListener2.onBackClick()) {
+            if (onBackClickListener2 != null && onBackClickListener2.onBackClick()) {
                 return;
             }
 
@@ -2378,8 +2464,8 @@ public class HomeActivity  extends AppCompatActivity implements NavigationView.O
 
             } else {
 
-                if (onBackClickListener != null  && onBackClickListener.onBackClick()) {
-                    onBackClickListener=null;
+                if (onBackClickListener != null && onBackClickListener.onBackClick()) {
+                    onBackClickListener = null;
                     return;
                 } else {
                     popUpExitPage();

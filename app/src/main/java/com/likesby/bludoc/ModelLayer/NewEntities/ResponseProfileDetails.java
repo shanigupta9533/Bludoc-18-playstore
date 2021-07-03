@@ -6,6 +6,30 @@ import com.google.gson.annotations.SerializedName;
 
 public class ResponseProfileDetails{
 
+	public String getAccess() {
+		return access;
+	}
+
+	public void setAccess(String access) {
+		this.access = access;
+	}
+
+	@SerializedName("access")
+	private String access;
+
+
+
+	public String getHospitalCode() {
+		return hospitalCode;
+	}
+
+	public void setHospitalCode(String hospitalCode) {
+		this.hospitalCode = hospitalCode;
+	}
+
+	@SerializedName("hospital_code")
+	private String hospitalCode;
+
 	@SerializedName("email_letter_head")
 	private String emailLetterHead;
 
@@ -357,6 +381,8 @@ public class ResponseProfileDetails{
 			",pg_id = '" + pgId + '\'' + 
 			",visiting_hr_from = '" + visitingHrFrom + '\'' + 
 			",designation_id = '" + designationId + '\'' +
+			",access = '" + access + '\'' +
+			",hospitalCode = '" + hospitalCode + '\'' +
 			"}";
 		}
 }

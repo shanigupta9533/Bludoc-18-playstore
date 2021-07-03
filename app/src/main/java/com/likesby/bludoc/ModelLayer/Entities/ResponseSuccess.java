@@ -1,18 +1,22 @@
 package com.likesby.bludoc.ModelLayer.Entities;
 
 import com.google.gson.annotations.SerializedName;
+import com.likesby.bludoc.ModelLayer.InvoicePresModel;
+
+import java.util.ArrayList;
 
 public class ResponseSuccess {
-        @SerializedName("success")
-        private String success;
+    @SerializedName("success")
+    private String success;
 
-
-        @SerializedName("message")
-        private String message;
-
+    @SerializedName("message")
+    private String message;
 
     @SerializedName("presb_patient_id")
     private String prescriptionId;
+
+    @SerializedName("Invoice")
+    private ArrayList<InvoicePresModel> invoice;
 
     public String getPrescriptionId() {
         return prescriptionId;
@@ -26,23 +30,30 @@ public class ResponseSuccess {
     //	@SerializedName("subscription_history")
 //	private ArrayList<SubscriptionHistoryItem> subscriptionHistory;
 
-        public void setSuccess(String success){
-            this.success = success;
-        }
+    public void setSuccess(String success) {
+        this.success = success;
+    }
 
-        public String getSuccess(){
-            return success;
-        }
+    public String getSuccess() {
+        return success;
+    }
 
 
-        public void setMessage(String message){
-            this.message = message;
-        }
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
-        public String getMessage(){
-            return message;
-        }
+    public String getMessage() {
+        return message;
+    }
 
+    public ArrayList<InvoicePresModel> getInvoice() {
+        return invoice;
+    }
+
+    public void setInvoice(ArrayList<InvoicePresModel> invoice) {
+        this.invoice = invoice;
+    }
 
     @Override
     public String toString() {

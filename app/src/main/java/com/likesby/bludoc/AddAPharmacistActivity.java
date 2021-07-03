@@ -17,11 +17,15 @@ import androidx.databinding.DataBindingUtil;
 import com.likesby.bludoc.Fragment.EmailNotifyDialogFragment;
 import com.likesby.bludoc.ModelLayer.NetworkLayer.EndpointInterfaces.WebServices;
 import com.likesby.bludoc.ModelLayer.NetworkLayer.Helpers.RetrofitClient;
+import com.likesby.bludoc.ModelLayer.NewEntities.ResponseProfileDetails;
 import com.likesby.bludoc.SessionManager.SessionManager;
 import com.likesby.bludoc.databinding.ActivityAddAPharmacistBinding;
 import com.likesby.bludoc.utils.Utils;
 import com.likesby.bludoc.viewModels.AllPharmacistList;
 import com.likesby.bludoc.viewModels.ResultOfApi;
+
+import java.util.Arrays;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -82,9 +86,10 @@ public class AddAPharmacistActivity extends AppCompatActivity {
 
                 activity.etName.setText(pharmacist.getPharmacist_name());
                 activity.emailId.setText(pharmacist.getPharmacist_email());
+                activity.categoryType.setSelection(getSelectedValue(pharmacist.getType()));
 
-                activity.titleOnToolbar.setText("Edit Pharmacy");
-                activity.submit.setText("Update Pharmacy");
+                activity.titleOnToolbar.setText("Edit Referral Centre");
+                activity.submit.setText("Update Referral Centre");
 
                 if(!TextUtils.isEmpty(pharmacist.getPharmacist_mobile()) && !pharmacist.getPharmacist_mobile().equals("0") )
                 activity.whatsnumber.setText(pharmacist.getPharmacist_mobile());
@@ -107,6 +112,10 @@ public class AddAPharmacistActivity extends AppCompatActivity {
                     activity.emailId.setError("Email is Required*");
                     activity.emailId.requestFocus();
 
+                } else if(activity.categoryType.getSelectedItemPosition()==0){
+
+                    Toast.makeText(AddAPharmacistActivity.this, "Please Select a Category!", Toast.LENGTH_SHORT).show();
+
                 } else {
 
                     if (isEdit) {
@@ -121,6 +130,23 @@ public class AddAPharmacistActivity extends AppCompatActivity {
 
     }
 
+    private int getSelectedValue(String type) {
+
+        int pos = 0;
+        List<String> strings = Arrays.asList(getResources().getStringArray(R.array.select_categories));
+
+        for (int i = 0; i < strings.size(); i++) {
+
+              if(!TextUtils.isEmpty(strings.get(i)) && strings.get(i).equalsIgnoreCase(type)) {
+                  pos = i;
+                  break;
+              }
+
+        }
+
+        return pos;
+    }
+
     private void editPharmacistDetails(String pharmacist_id) {
 
         if (Utils.isConnectingToInternet(this)) {
@@ -129,7 +155,7 @@ public class AddAPharmacistActivity extends AppCompatActivity {
             Retrofit retrofit = RetrofitClient.getInstance();
             final WebServices request = retrofit.create(WebServices.class);
 
-            Call<ResultOfApi> call = request.editPharmacist(pharmacist_id, activity.etName.getText().toString(), activity.whatsnumber.getText().toString(), activity.emailId.getText().toString());
+            Call<ResultOfApi> call = request.editPharmacist(pharmacist_id, activity.etName.getText().toString(), activity.whatsnumber.getText().toString(), activity.emailId.getText().toString(),activity.categoryType.getSelectedItem().toString(),manager.getPreferences(this,"hospital_code"));
 
             call.enqueue(new Callback<ResultOfApi>() {
                 @Override
@@ -142,14 +168,14 @@ public class AddAPharmacistActivity extends AppCompatActivity {
 
                         progressBar.setVisibility(View.GONE);
 
+                        Toast.makeText(AddAPharmacistActivity.this, activity.categoryType.getSelectedItem().toString()+" Updated Successfully", Toast.LENGTH_SHORT).show();
+
                         activity.whatsnumber.setText("");
                         activity.etName.setText("");
                         activity.emailId.setText("");
 
                         manager.setPreferences(AddAPharmacistActivity.this,"uploadPharmacist","true");
                         onBackPressed();
-
-                        Toast.makeText(AddAPharmacistActivity.this, "Pharmacy Updated Successfully", Toast.LENGTH_SHORT).show();
 
                     } else {
                         Toast.makeText(AddAPharmacistActivity.this, "Profile Update Error", Toast.LENGTH_SHORT).show();
@@ -175,11 +201,11 @@ public class AddAPharmacistActivity extends AppCompatActivity {
 
             progressBar.setVisibility(View.VISIBLE);
             Retrofit retrofit = RetrofitClient.getInstance();
-            ;
-            final WebServices request = retrofit.create(WebServices.class);
-            ;
 
-            Call<ResultOfApi> call = request.addPharmacist(manager.getPreferences(AddAPharmacistActivity.this, "doctor_id"), activity.etName.getText().toString(), activity.whatsnumber.getText().toString(), activity.emailId.getText().toString());
+            final WebServices request = retrofit.create(WebServices.class);
+
+            ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(this, "profile");
+            Call<ResultOfApi> call = request.addPharmacist(manager.getPreferences(AddAPharmacistActivity.this, "doctor_id"), activity.etName.getText().toString(), activity.whatsnumber.getText().toString(), activity.emailId.getText().toString(),activity.categoryType.getSelectedItem().toString(),responseProfileDetails.getHospitalCode());
 
             call.enqueue(new Callback<ResultOfApi>() {
                 @Override
@@ -192,11 +218,12 @@ public class AddAPharmacistActivity extends AppCompatActivity {
 
                         progressBar.setVisibility(View.GONE);
 
+                        Toast.makeText(AddAPharmacistActivity.this, activity.categoryType.getSelectedItem().toString()+" Added Successfully", Toast.LENGTH_SHORT).show();
+
                         activity.whatsnumber.setText("");
                         activity.etName.setText("");
                         activity.emailId.setText("");
 
-                        Toast.makeText(AddAPharmacistActivity.this, "Pharmacy Added Successfully", Toast.LENGTH_SHORT).show();
                         manager.setPreferences(AddAPharmacistActivity.this,"uploadPharmacist","true");
                         onBackPressed();
 

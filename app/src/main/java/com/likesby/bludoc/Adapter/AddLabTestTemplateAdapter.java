@@ -75,13 +75,43 @@ public class AddLabTestTemplateAdapter extends RecyclerView.Adapter<AddLabTestTe
 
         if (!("").equalsIgnoreCase(medicinesItem.getLabTestComment())) {
             viewHolder.MEDICINE_ADD_CMMNT.setText(medicinesItem.getLabTestComment());
+            viewHolder.view_more.setEnabled(true);
+            viewHolder.view_more.setBackgroundResource(R.drawable.white_back_gradient);
         } else {
             viewHolder.MEDICINE_ADD_CMMNT.setVisibility(View.GONE);
+            viewHolder.view_more.setEnabled(false);
+            viewHolder.view_more.setBackgroundResource(R.drawable.disabled_button);
         }
 
         viewHolder.MEDICINE_ADD_CMMNT.setVisibility(View.GONE);
         count = false;
         viewHolder.view_more.setText("View More");
+
+        viewHolder.view_more.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View v) {
+
+                                                        LabTestItem medicinesItem = mFilteredList.get(i);
+                                                        if (count) {
+                                                            count = false;
+                                                            viewHolder.view_more.setText("View More");
+                                                            viewHolder.MEDICINE_ADD_CMMNT.setVisibility(View.GONE);
+
+                                                        } else {
+
+                                                            if (!("").equalsIgnoreCase(medicinesItem.getLabTestComment())) {
+                                                                viewHolder.MEDICINE_ADD_CMMNT.setVisibility(View.VISIBLE);
+
+                                                            } else {
+                                                                viewHolder.MEDICINE_ADD_CMMNT.setVisibility(View.GONE);
+                                                            }
+
+                                                            count = true;
+                                                            viewHolder.view_more.setText("View Less");
+                                                        }
+                                                    }
+                                                }
+        );
 
         //viewHolder.MEDICINE_CREATED.setText(medicinesItem.getCreated());
         //viewHolder.MEDICINE_MODIFIED.setText(medicinesItem.getModified());
@@ -146,7 +176,7 @@ public class AddLabTestTemplateAdapter extends RecyclerView.Adapter<AddLabTestTe
         // FrameLayout fl;
         ProgressBar pb;
         //ImageButton pic;
-        LinearLayout ll_medicine_main,parent_of_button;
+        LinearLayout ll_medicine_main, parent_of_button;
         ImageView imageView;
         Button btnEdit, btnDelete;
 
@@ -162,30 +192,7 @@ public class AddLabTestTemplateAdapter extends RecyclerView.Adapter<AddLabTestTe
             btnDelete = view.findViewById(R.id.labtest_delete);
             final CreatePrescription createPrescription = new CreatePrescription();
             final AddTemplate addTemplate = new AddTemplate();
-            view_more.setOnClickListener(new View.OnClickListener() {
-                                             @Override
-                                             public void onClick(View v) {
 
-                                                 LabTestItem medicinesItem = mFilteredList.get(getAdapterPosition());
-                                                 if (count) {
-                                                     MEDICINE_ADD_CMMNT.setVisibility(View.GONE);
-                                                     count = false;
-                                                     view_more.setText("View More");
-
-                                                 } else {
-
-                                                     if (!("").equalsIgnoreCase(medicinesItem.getLabTestComment())) {
-                                                         MEDICINE_ADD_CMMNT.setVisibility(View.VISIBLE);
-                                                     } else {
-                                                         MEDICINE_ADD_CMMNT.setVisibility(View.GONE);
-                                                     }
-
-                                                     count = true;
-                                                     view_more.setText("View Less");
-                                                 }
-                                             }
-                                         }
-            );
 
             btnEdit.setOnClickListener(new View.OnClickListener() {
                 @Override

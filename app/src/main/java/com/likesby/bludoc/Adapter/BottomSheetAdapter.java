@@ -59,7 +59,8 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
 
     private ArrayList<BottomSheetItem> mArryCountries, mFilteredList;
     private Context mContext;
-    int[] image_array_setup = new int[]{R.drawable.ic_view_pdf, R.drawable.ic_share_icon, R.drawable.ic_download_share, R.drawable.ic_paper_plane_updated, R.drawable.ic_envelope_icon, R.drawable.ic_whatsapp_updated};
+    int[] image_array_setup = new int[]{R.drawable.ic_view_pdf, R.drawable.ic_share_icon, R.drawable.ic_download_share, R.drawable.ic_envelope_icon, R.drawable.ic_whatsapp_updated};
+    int[] image_array_setup_send = new int[]{R.drawable.pharmacy_icon_india, R.drawable.pathlab_icon_india, R.drawable.imaging_green_india, R.drawable.hospital_green_india, R.drawable.doctor_green_india};
     SessionManager manager;
     FrameLayout fl_progress_bar;
     private ArrayList<AbstractViewRenderer> pages;
@@ -68,6 +69,7 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
     private onClickListener onClickListener;
     private boolean isSendPharmacy=true;
     private String pName;
+    private boolean sendTo;
 
     public BottomSheetAdapter(Context mContext,
                               ArrayList<BottomSheetItem> objects, FrameLayout fl_progress_bar, GeneratePres generatePres, GeneratePresNew generatePresNew) {
@@ -83,6 +85,12 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
     public void setPatientName(String pName) {
 
         this.pName=pName;
+
+    }
+
+    public void setSendTo(boolean b) {
+
+        this.sendTo=b;
 
     }
 
@@ -114,7 +122,6 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
         viewHolder.id.setText(mFilteredList.get(i).getMenuId());
         viewHolder.Name.setText(mFilteredList.get(i).getMenuName());
 
-
 //        if (i == 3) {
 //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
 //                viewHolder.fl_share.setVisibility(View.GONE);
@@ -122,14 +129,30 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
 //        }
 
 
-        if (generatePres == null) {
-            viewHolder.Name.setTextColor(mContext.getResources().getColor(R.color.guidee));
-            Glide.with(mContext).load(image_array_setup[i]).override(Target.SIZE_ORIGINAL,Target.SIZE_ORIGINAL).into(viewHolder.bottom_sheet_iv);
-            viewHolder.bottom_sheet_iv.setColorFilter(ContextCompat.getColor(mContext, R.color.guidee), android.graphics.PorterDuff.Mode.SRC_IN);
+        if(!sendTo) {
+
+            if (generatePres == null) {
+                viewHolder.Name.setTextColor(mContext.getResources().getColor(R.color.guidee));
+                Glide.with(mContext).load(image_array_setup[i]).override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).into(viewHolder.bottom_sheet_iv);
+                viewHolder.bottom_sheet_iv.setColorFilter(ContextCompat.getColor(mContext, R.color.guidee), android.graphics.PorterDuff.Mode.SRC_IN);
+            } else {
+                viewHolder.Name.setTextColor(mContext.getResources().getColor(R.color.colorBlue));
+                Glide.with(mContext).load(image_array_setup[i]).override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).into(viewHolder.bottom_sheet_iv);
+                viewHolder.bottom_sheet_iv.setColorFilter(ContextCompat.getColor(mContext, R.color.colorBlue), android.graphics.PorterDuff.Mode.SRC_IN);
+            }
+
         } else {
-            viewHolder.Name.setTextColor(mContext.getResources().getColor(R.color.colorBlue));
-            Glide.with(mContext).load(image_array_setup[i]).override(Target.SIZE_ORIGINAL,Target.SIZE_ORIGINAL).into(viewHolder.bottom_sheet_iv);
-            viewHolder.bottom_sheet_iv.setColorFilter(ContextCompat.getColor(mContext, R.color.colorBlue), android.graphics.PorterDuff.Mode.SRC_IN);
+
+            if (generatePres == null) {
+                viewHolder.Name.setTextColor(mContext.getResources().getColor(R.color.guidee));
+                Glide.with(mContext).load(image_array_setup_send[i]).override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).into(viewHolder.bottom_sheet_iv);
+                viewHolder.bottom_sheet_iv.setColorFilter(ContextCompat.getColor(mContext, R.color.guidee), android.graphics.PorterDuff.Mode.SRC_IN);
+            } else {
+                viewHolder.Name.setTextColor(mContext.getResources().getColor(R.color.colorBlue));
+                Glide.with(mContext).load(image_array_setup_send[i]).override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).into(viewHolder.bottom_sheet_iv);
+                viewHolder.bottom_sheet_iv.setColorFilter(ContextCompat.getColor(mContext, R.color.colorBlue), android.graphics.PorterDuff.Mode.SRC_IN);
+            }
+
         }
 
     }
@@ -209,11 +232,14 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
 
     private File getOutputFile() {
         File root = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            root = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + "/" + "My PDF Folder");
+        if (Build.VERSION_CODES.R > Build.VERSION.SDK_INT) {
+            root = new File(Environment.getExternalStorageDirectory().getPath()
+                    + "//MyApp");
         } else {
-            root = new File(mContext.getExternalFilesDir(null), "My PDF Folder");
+            root = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getPath()
+                    + "//MyApp");
         }
+
         boolean isFolderCreated = true;
 
         if (!root.exists()) {
@@ -303,7 +329,7 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
 
                     //Toast.makeText(mContext, ""+Name.getText().toString().trim(), Toast.LENGTH_SHORT).show();
 
-                    if (getAdapterPosition() == 4) {
+                    if (getAdapterPosition() == 3) {
                            /* Intent intent = new Intent(mContext, InviteMembers.class);
                             mContext.startActivity(intent);*/
                         //  Toast.makeText(mContext, "Working on Email ", Toast.LENGTH_SHORT).show();
@@ -427,7 +453,19 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
                             onClickListener.onClick(3);
                         }
 
-                    } else if (getAdapterPosition() == 5) {
+                    } else if (getAdapterPosition() == 6) {
+
+                        if (onClickListener != null) {
+                            onClickListener.onClick(6);
+                        }
+
+                    } else if (getAdapterPosition() == 7) {
+
+                        if (onClickListener != null) {
+                            onClickListener.onClick(7);
+                        }
+
+                    } else if (getAdapterPosition() == 4) {
                         boolean isWhatsappInstalled = whatsappInstalledOrNot("com.whatsapp");
                         if (isWhatsappInstalled) {
 
@@ -527,6 +565,20 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
                     //AppRater.app_launched(mContext);
                 }
             });
+
+            if(sendTo){
+
+                ll_bottom_sheet.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        onClickListener.onClick(getAdapterPosition());
+
+                    }
+                });
+
+            }
+
         }
 
         private void sendMail(Uri URI, String p_name, String p_email) {

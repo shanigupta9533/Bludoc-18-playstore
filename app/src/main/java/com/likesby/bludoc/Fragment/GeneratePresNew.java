@@ -1,6 +1,7 @@
 package com.likesby.bludoc.Fragment;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -71,6 +72,7 @@ import com.likesby.bludoc.ModelLayer.NetworkLayer.Helpers.RetrofitClient;
 import com.likesby.bludoc.ModelLayer.NewEntities.LabTestItem;
 import com.likesby.bludoc.ModelLayer.NewEntities3.Doctor;
 import com.likesby.bludoc.ModelLayer.NewEntities3.PrescriptionItem;
+import com.likesby.bludoc.MultiplePharmacistActivity;
 import com.likesby.bludoc.R;
 import com.likesby.bludoc.SessionManager.SessionManager;
 import com.likesby.bludoc.constants.ApplicationConstant;
@@ -189,7 +191,6 @@ public class GeneratePresNew extends Fragment {
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
         int widthInches = Math.round(width * 300);
         int heightInches = Math.round(height * 300);
-        Log.e("WH", "________________ " + widthInches + " : " + heightInches);
 
         v.setLayoutParams(new FrameLayout.LayoutParams(widthInches, heightInches));
         v.requestLayout();
@@ -339,19 +340,19 @@ public class GeneratePresNew extends Fragment {
         dialog_data.show();
     }
 
-    public void sendIdAndPresIdOnServer() {
+    public void sendIdAndPresIdOnServer(String keywords, String keywordsMultiple) {
 
         if (Utils.isConnectingToInternet(mContext)) {
 
             ProgressDialog progressDialog = new ProgressDialog(mContext);
-            progressDialog.setMessage("Sending to Pharmacy....");
+            progressDialog.setMessage("Sending to "+keywordsMultiple);
             progressDialog.setCancelable(false);
             progressDialog.show();
             Retrofit retrofit = RetrofitClient.getInstance();
 
             final WebServices request = retrofit.create(WebServices.class);
 
-            Call<ResultOfApi> call = request.sendPresciption(manager.getPreferences(mContext, "doctor_id"), prescriptionId);
+            Call<ResultOfApi> call = request.sendPresciption(manager.getPreferences(mContext, "doctor_id"), prescriptionId,keywords);
 
             call.enqueue(new Callback<ResultOfApi>() {
                 @Override
@@ -403,15 +404,6 @@ public class GeneratePresNew extends Fragment {
         btn_mobile.setTextColor(mContext.getResources().getColor(R.color.colorDarkBlue));
         btn_mobile.setText("A4 Size View");
 
-        __bottom_sheet_name.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                sendIdAndPresIdOnServer();
-
-            }
-        });
-
         RecyclerView recyclerView = dialog_dataShareMenu.findViewById(R.id.recyclerView_bottom_sheet);
         //Create new GridLayoutManager
         @SuppressLint("WrongConstant") GridLayoutManager gridLayoutManagerr = new GridLayoutManager(mContext,
@@ -419,7 +411,6 @@ public class GeneratePresNew extends Fragment {
                 GridLayoutManager.VERTICAL,//Orientation
                 false);//reverse scrolling of recyclerview
         //set layout manager as gridLayoutManager
-
         recyclerView.setLayoutManager(gridLayoutManagerr);
         ArrayList<BottomSheetItem> bottomSheetItemArrayList = new ArrayList<>();
         BottomSheetItem bottomSheetItem = new BottomSheetItem();
@@ -443,18 +434,12 @@ public class GeneratePresNew extends Fragment {
 
         bottomSheetItem = new BottomSheetItem();
         bottomSheetItem.setMenuId("4");
-        bottomSheetItem.setMenuName("Send to\npharmacy");
-        bottomSheetItem.setMenuImage("whatsapp");
-        bottomSheetItemArrayList.add(bottomSheetItem);
-
-        bottomSheetItem = new BottomSheetItem();
-        bottomSheetItem.setMenuId("3");
         bottomSheetItem.setMenuName("Email");
         bottomSheetItem.setMenuImage("ic_share__");
         bottomSheetItemArrayList.add(bottomSheetItem);
 
         bottomSheetItem = new BottomSheetItem();
-        bottomSheetItem.setMenuId("4");
+        bottomSheetItem.setMenuId("5");
         bottomSheetItem.setMenuName("WhatsApp");
         bottomSheetItem.setMenuImage("whatsapp");
         bottomSheetItemArrayList.add(bottomSheetItem);
@@ -484,17 +469,88 @@ public class GeneratePresNew extends Fragment {
                         }
                     }
 
+                }
+
+            }
+        });
+
+          RecyclerView recyclerView_bottom_sheet_send_to = dialog_dataShareMenu.findViewById(R.id.recyclerView_bottom_sheet_send_to);
+        //Create new GridLayoutManager
+        @SuppressLint("WrongConstant") GridLayoutManager gridLayoutManagerSendTo = new GridLayoutManager(mContext,
+                3,//span count no of items in single row
+                GridLayoutManager.VERTICAL,//Orientation
+                false);//reverse scrolling of recyclerview
+        //set layout manager as gridLayoutManager
+
+        recyclerView_bottom_sheet_send_to.setLayoutManager(gridLayoutManagerSendTo);
+
+        recyclerView.setLayoutManager(gridLayoutManagerr);
+        ArrayList<BottomSheetItem> bottomSheetItemArrayListSendTo = new ArrayList<>();
+        BottomSheetItem bottomSheetItemSendTo = new BottomSheetItem();
+        bottomSheetItemSendTo.setMenuId("1");
+        bottomSheetItemSendTo.setMenuName("Pharmacy");
+        bottomSheetItemSendTo.setMenuImage("pharmacy");
+        bottomSheetItemArrayListSendTo.add(bottomSheetItemSendTo);
+
+        bottomSheetItemSendTo = new BottomSheetItem();
+        bottomSheetItemSendTo.setMenuId("2");
+        bottomSheetItemSendTo.setMenuName("Path Lab");
+        bottomSheetItemSendTo.setMenuImage("laboratory");
+        bottomSheetItemArrayListSendTo.add(bottomSheetItemSendTo);
+
+        bottomSheetItemSendTo = new BottomSheetItem();
+        bottomSheetItemSendTo.setMenuId("3");
+        bottomSheetItemSendTo.setMenuName("Imaging Centre");
+        bottomSheetItemSendTo.setMenuImage("imaging_center");
+        bottomSheetItemArrayListSendTo.add(bottomSheetItemSendTo);
+
+        bottomSheetItemSendTo = new BottomSheetItem();
+        bottomSheetItemSendTo.setMenuId("4");
+        bottomSheetItemSendTo.setMenuName("Hospital");
+        bottomSheetItemSendTo.setMenuImage("hospital");
+        bottomSheetItemArrayListSendTo.add(bottomSheetItemSendTo);
+
+        bottomSheetItemSendTo = new BottomSheetItem();
+        bottomSheetItemSendTo.setMenuId("5");
+        bottomSheetItemSendTo.setMenuName("Doctor");
+        bottomSheetItemSendTo.setMenuImage("doctor");
+        bottomSheetItemArrayListSendTo.add(bottomSheetItemSendTo);
+
+        BottomSheetAdapter mAdapterSendTo = new BottomSheetAdapter(mContext, bottomSheetItemArrayListSendTo, fl_progress_bar, null, GeneratePresNew.this);
+        recyclerView_bottom_sheet_send_to.setAdapter(mAdapterSendTo);
+
+        mAdapterSendTo.setPatientName(prescriptionItem.getPName());
+        mAdapterSendTo.setSendTo(true);
+
+        mAdapterSendTo.setOnClickListener(new BottomSheetAdapter.onClickListener() {
+            @Override
+            public void onClick(int i) {
+
+                Intent intent = new Intent(mContext, MultiplePharmacistActivity.class);
+
+                if (i == 0) {
+
+                    intent.putExtra("keywords","Pharmacy");
+
+                } else if (i == 1) {
+
+                    intent.putExtra("keywords","Path Lab");
+
+                } else if (i == 2) {
+
+                    intent.putExtra("keywords","Imaging Centre");
+
                 } else if (i == 3) {
 
-                    if (isSendPharmacy) {
-                        sendIdAndPresIdOnServer();
-                        isSendPharmacy = false;
-                    } else if (!isSendPharmacy && !TextUtils.isEmpty(message))
-                        Toast.makeText(mContext, "" + message, Toast.LENGTH_SHORT).show();
-                    else
-                        Toast.makeText(mContext, "Already sent to pharmacy", Toast.LENGTH_SHORT).show();
+                    intent.putExtra("keywords","Hospital");
+
+                }  else if (i == 4) {
+
+                    intent.putExtra("keywords","Doctor");
 
                 }
+
+                startActivityForResult(intent, 510);
 
             }
         });
@@ -4012,6 +4068,24 @@ public class GeneratePresNew extends Fragment {
         }
         if (counter == 5)
             binding.lineOfSingle.setVisibility(View.GONE);
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode == Activity.RESULT_OK) {
+
+            if (requestCode == 510 && data!=null) {
+
+                String result=data.getStringExtra("arraylist_of_details");
+                String keywordsMultiple=data.getStringExtra("keywordsMultiple");
+                sendIdAndPresIdOnServer(result,keywordsMultiple);
+
+            }
+
+        }
 
     }
 

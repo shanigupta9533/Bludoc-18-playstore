@@ -65,6 +65,9 @@ public class PrescriptionJSON{
 	@SerializedName("spo2")
 	private String spo2;
 
+	@SerializedName("hospital_code")
+	private String hospitalCode;
+
 	@SerializedName("respiration_rate")
 	private String respiration_rate;
 
@@ -99,6 +102,14 @@ public class PrescriptionJSON{
 
 	public String getDoctorId(){
 		return doctorId;
+	}
+
+	public String getHospitalCode() {
+		return hospitalCode;
+	}
+
+	public void setHospitalCode(String hospitalCode) {
+		this.hospitalCode = hospitalCode;
 	}
 
 	public String getIsCertificate() {

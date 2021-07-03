@@ -1,8 +1,11 @@
 package com.likesby.bludoc.ModelLayer.Entities;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
-public class PatientsItem{
+public class PatientsItem implements Parcelable {
 
 	@SerializedName("gender")
 	private String gender;
@@ -39,6 +42,37 @@ public class PatientsItem{
 
 	@SerializedName("p_mobile")
 	private String pMobile;
+
+	protected PatientsItem(Parcel in) {
+		gender = in.readString();
+		pEmail = in.readString();
+		patientId = in.readString();
+		pName = in.readString();
+		address = in.readString();
+		pBloodGrp = in.readString();
+		pDob = in.readString();
+		created = in.readString();
+		modified = in.readString();
+		createdBy = in.readString();
+		age = in.readString();
+		pMobile = in.readString();
+	}
+
+	public PatientsItem(){
+
+	}
+
+	public static final Creator<PatientsItem> CREATOR = new Creator<PatientsItem>() {
+		@Override
+		public PatientsItem createFromParcel(Parcel in) {
+			return new PatientsItem(in);
+		}
+
+		@Override
+		public PatientsItem[] newArray(int size) {
+			return new PatientsItem[size];
+		}
+	};
 
 	public void setGender(String gender){
 		this.gender = gender;
@@ -154,4 +188,25 @@ public class PatientsItem{
 			",p_address = '" + address + '\'' +
 			"}";
 		}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(gender);
+		dest.writeString(pEmail);
+		dest.writeString(patientId);
+		dest.writeString(pName);
+		dest.writeString(address);
+		dest.writeString(pBloodGrp);
+		dest.writeString(pDob);
+		dest.writeString(created);
+		dest.writeString(modified);
+		dest.writeString(createdBy);
+		dest.writeString(age);
+		dest.writeString(pMobile);
+	}
 }

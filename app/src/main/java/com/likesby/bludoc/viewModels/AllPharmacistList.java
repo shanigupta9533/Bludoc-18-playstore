@@ -10,6 +10,7 @@ public class AllPharmacistList implements Parcelable {
     private String pharmacist_name;
     private String pharmacist_mobile;
     private String pharmacist_email;
+    private String type;
     private String is_check="";
 
     protected AllPharmacistList(Parcel in) {
@@ -18,6 +19,7 @@ public class AllPharmacistList implements Parcelable {
         pharmacist_mobile = in.readString();
         pharmacist_email = in.readString();
         is_check = in.readString();
+        type = in.readString();
     }
 
     public static final Creator<AllPharmacistList> CREATOR = new Creator<AllPharmacistList>() {
@@ -42,6 +44,14 @@ public class AllPharmacistList implements Parcelable {
 
     public String getPharmacist_name() {
         return pharmacist_name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public void setPharmacist_name(String pharmacist_name) {
@@ -84,6 +94,7 @@ public class AllPharmacistList implements Parcelable {
         dest.writeString(pharmacist_mobile);
         dest.writeString(pharmacist_email);
         dest.writeString(is_check);
+        dest.writeString(type);
     }
 
     @Override
@@ -100,6 +111,7 @@ public class AllPharmacistList implements Parcelable {
                 ", pharmacist_name='" + pharmacist_name + '\'' +
                 ", pharmacist_mobile='" + pharmacist_mobile + '\'' +
                 ", pharmacist_email='" + pharmacist_email + '\'' +
+                ", type='" + type + '\'' +
                 '}';
     }
 

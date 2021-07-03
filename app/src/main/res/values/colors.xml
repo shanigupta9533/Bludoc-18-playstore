@@ -76,6 +76,9 @@
     <color name="dayDeselectedAndDisabled">@color/dayDeselected</color>
     <color name="dayDeselectedAndDisabledTextColor">@android:color/darker_gray</color>
     <color name="quantum_pink">#ee2e24</color>
+    <color name="blue_light_color">#43A6C6</color>
+    <color name="little_blue_invoice">#43A6C6</color>
+    <color name="dark_blue_invoice">#4472c4</color>
 
 
 </resources>

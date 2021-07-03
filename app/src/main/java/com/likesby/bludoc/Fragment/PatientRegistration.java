@@ -472,24 +472,58 @@ public class PatientRegistration extends Fragment {
         save_prescribe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                prescribeFlag = true;
+                if(manager.contains(mContext,"hospital_code") && !("").equalsIgnoreCase(manager.getPreferences(mContext,"hospital_code"))) {
+                    if (manager.getObjectProfileDetails(mContext, "profile").getSubcriptions().size() > 0) {
 
+                        if (manager.getObjectProfileDetails(mContext, "profile").getAccess().equals("Pending")) {
+                            popupAccess();
+                        } else if (manager.getObjectProfileDetails(mContext, "profile").getAccess().equals("Approve")) {
+                            prescribeFlag = true;
 
-                String state = Environment.getExternalStorageState();
-                if (Environment.MEDIA_MOUNTED.equals(state)) {
-                    if (Build.VERSION.SDK_INT >= 23) {
-                        //checkPermission();
-                        if (checkPermission()) {
-                            saveData();
+                            String state = Environment.getExternalStorageState();
+                            if (Environment.MEDIA_MOUNTED.equals(state)) {
+                                if (Build.VERSION.SDK_INT >= 23) {
+                                    //checkPermission();
+                                    if (checkPermission()) {
+                                        saveData();
+                                    } else {
+                                        requestPermission(); // Code for permission
+                                    }
+                                } else {
+                                    saveData();
+                                }
+                            }
+                        } else if (manager.getObjectProfileDetails(mContext, "profile").getAccess().equals("Rejected")) {
+                            popupHospitalCode();
                         } else {
-                            requestPermission(); // Code for permission
+                            popupAccess();
                         }
-                    } else {
-                        saveData();
+
+                    }
+                    else
+                        Toast.makeText(mContext, "Subscription Expired", Toast.LENGTH_SHORT).show();
+
+                }
+                else {
+                    prescribeFlag = true;
+
+                    String state = Environment.getExternalStorageState();
+                    if (Environment.MEDIA_MOUNTED.equals(state)) {
+                        if (Build.VERSION.SDK_INT >= 23) {
+                            //checkPermission();
+                            if (checkPermission()) {
+                                saveData();
+                            } else {
+                                requestPermission(); // Code for permission
+                            }
+                        } else {
+                            saveData();
+                        }
                     }
                 }
             }
         });
+
 
         rb_year.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -1431,6 +1465,174 @@ public class PatientRegistration extends Fragment {
 //        adLoader.loadAd(new AdRequest.Builder().build());
 //    }
 //
+
+    public void popupHospitalCode(){
+        final Dialog dialog_data = new Dialog(mContext);
+        dialog_data.setCancelable(false);
+
+        dialog_data.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        Objects.requireNonNull(dialog_data.getWindow()).setGravity(Gravity.CENTER);
+
+        dialog_data.setContentView(R.layout.popup_hospital_code);
+
+        WindowManager.LayoutParams lp_number_picker = new WindowManager.LayoutParams();
+        Window window = dialog_data.getWindow();
+        lp_number_picker.copyFrom(window.getAttributes());
+
+        lp_number_picker.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp_number_picker.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+        //window.setGravity(Gravity.CENTER);
+        window.setAttributes(lp_number_picker);
+
+        EditText et_hospital_code = dialog_data.findViewById(R.id.et_hospital_code);
+        Button btn_add = dialog_data.findViewById(R.id.popup_add);
+        Button btn_skip = dialog_data.findViewById(R.id.btn_skip);
+
+
+        btn_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (et_hospital_code.getText().toString().trim().equalsIgnoreCase("")) {
+                    et_hospital_code.setError("Hospital Code required");
+                    et_hospital_code.setFocusable(true);
+                } else {
+                    dialog_data.dismiss();
+                    try {
+                        apiViewHolder.updateHospitalCode(manager.getPreferences(mContext,"doctor_id"),et_hospital_code.getText().toString().trim())
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(responseProfile);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        });
+
+        btn_skip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog_data.dismiss();
+            }
+        });
+
+        dialog_data.show();
+
+    }
+    SingleObserver<ResponseProfileDetails> responseProfile = new SingleObserver<ResponseProfileDetails>() {
+        @Override
+        public void onSubscribe(Disposable d) {
+            mBag.add(d);
+        }
+
+        @Override
+        public void onSuccess(ResponseProfileDetails response) {
+            if (response != null) {
+
+                Log.e(TAG, "profileDetails: >> " + response.getMessage());
+
+                if (response.getMessage() == null) {
+
+                } else if (response.getMessage().equals("Profile Details")) {
+                    if(response.getStatus() != null) {
+                        if(response.getStatus().equalsIgnoreCase("Active")) {
+                            manager.setPreferences(mContext, "doctor_id", response.getDoctorId());
+                            manager.setPreferences(mContext, "name", response.getName());
+                            manager.setPreferences(mContext, "email", response.getEmail());
+                            if (!(response.getMobile().equalsIgnoreCase("")))
+                                manager.setPreferences(mContext, "mobile", response.getMobile());
+                            manager.setPreferences(mContext, "registration_no", response.getRegistrationNo());
+                            manager.setPreferences(mContext, "speciality_id", response.getSpecialityId());
+                            manager.setPreferences(mContext, "ug_id", response.getUgId());
+                            manager.setPreferences(mContext, "pg_id", response.getPgId());
+                            manager.setPreferences(mContext, "designation_id", response.getDesignationName());
+                            manager.setPreferences(mContext, "addtional_qualification", response.getAddtionalQualification());
+                            manager.setPreferences(mContext, "mobile_letter_head", response.getMobileLetterHead());
+                            manager.setPreferences(mContext, "email_letter_head", response.getEmailLetterHead());
+                            manager.setPreferences(mContext, "working_days", response.getWorkingDays());
+                            manager.setPreferences(mContext, "visiting_hr_from", response.getVisitingHrFrom());
+                            manager.setPreferences(mContext, "visiting_hr_to", response.getVisitingHrTo());
+                            manager.setPreferences(mContext, "close_day", response.getCloseDay());
+                            manager.setPreferences(mContext, "speciality_name", response.getSpecialityName());
+                            manager.setPreferences(mContext, "ug_name", response.getUgName());
+                            manager.setPreferences(mContext, "pg_name", response.getPgName());
+                            manager.setPreferences(mContext, "designation_name", response.getDesignationName());
+                            manager.setPreferences(mContext, "signature", response.getSignature());
+                            manager.setPreferences(mContext, "logo", response.getLogo());
+                            manager.setPreferences(mContext, "image", response.getImage());
+                            manager.setPreferences(mContext, "clinic_name", response.getClinicName());
+                            manager.setPreferences(mContext, "clinic_address", response.getClinicAddress());
+                            manager.setPreferences(mContext, "hospital_code", response.getHospitalCode());
+                            manager.setObjectProfileDetails(mContext, "profile", response);
+
+                        }else {
+                            // Toast.makeText(mContext, "Your account is Inactive or Deleted. Contact Admin at bludocapp@gmail.com", Toast.LENGTH_LONG).show();
+
+                        }
+                    }
+                }
+            }
+            else
+            {
+
+                Toast.makeText(mContext, ""+response.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            Log.e(TAG, "onError: profileDetails >> " + e.toString());
+            //intentCall();
+            Toast.makeText(mContext, ApplicationConstant.ANYTHING_WRONG, Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    private  void popupAccess()
+    {
+        final Dialog dialog_data = new Dialog(mContext);
+        dialog_data.setCancelable(true);
+
+        dialog_data.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        Objects.requireNonNull(dialog_data.getWindow()).setGravity(Gravity.CENTER);
+
+        dialog_data.setContentView(R.layout.popup_access);
+
+        WindowManager.LayoutParams lp_number_picker = new WindowManager.LayoutParams();
+        Window window = dialog_data.getWindow();
+        lp_number_picker.copyFrom(window.getAttributes());
+
+        lp_number_picker.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp_number_picker.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+        //window.setGravity(Gravity.CENTER);
+        window.setAttributes(lp_number_picker);
+
+        Button btn_add = dialog_data.findViewById(R.id.btn_register);
+        ImageView btn_close = dialog_data.findViewById(R.id.btn_close);
+
+
+        btn_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog_data.dismiss();
+
+            }
+        });
+
+
+        btn_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog_data.dismiss();
+
+            }
+        });
+        dialog_data.show();
+    }
 
     @Override
     public void onDetach() {

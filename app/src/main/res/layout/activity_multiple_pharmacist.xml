@@ -77,7 +77,7 @@
         </androidx.appcompat.widget.Toolbar>
 
         <TextView
-            android:id="@+id/message"
+            android:id="@+id/no_data_found_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -87,11 +87,15 @@
             android:textColor="@color/colorBlack"
             android:textSize="18dp" />
 
-        <ListView
-            android:id="@+id/list_item"
+        <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/toolbar" />
+            android:layout_below="@+id/toolbar"
+            android:id="@+id/recyclerview"
+            android:layout_height="match_parent">
+
+
+
+        </androidx.recyclerview.widget.RecyclerView>
 
         <FrameLayout
             android:id="@+id/parent_of_progress_bar"
@@ -119,7 +123,7 @@
             app:cardBackgroundColor="@color/colorBlue"
             app:cardCornerRadius="@dimen/margin_30"
             android:layout_gravity="bottom|end"
-            android:visibility="gone"
+            android:visibility="visible"
             android:layout_margin="15dp"
             >
 
@@ -151,9 +155,6 @@
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
-
-        <include layout="@layout/no_data_found"
-            />
 
     </RelativeLayout>
 

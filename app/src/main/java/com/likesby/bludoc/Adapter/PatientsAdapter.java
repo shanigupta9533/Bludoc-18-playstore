@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -45,6 +46,7 @@ import com.google.android.gms.ads.formats.UnifiedNativeAd;
 import com.google.android.gms.ads.formats.UnifiedNativeAdView;
 import com.likesby.bludoc.AllPharmacistActivity;
 import com.likesby.bludoc.Fragment.CreatePrescription;
+import com.likesby.bludoc.InvoiceActivity;
 import com.likesby.bludoc.ModelLayer.Entities.PatientsItem;
 import com.likesby.bludoc.ModelLayer.Entities.ResponsePatients;
 import com.likesby.bludoc.ModelLayer.Entities.ResponseSuccess;
@@ -196,6 +198,18 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
         } else {
             viewHolder.blood_group.setText(mFilteredList.get(i).getpBloodGrp());
         }
+
+        viewHolder.invoice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent=new Intent(mContext, InvoiceActivity.class);
+                intent.putExtra("patientName",patientsItem.getPName());
+                intent.putExtra("patientObject",patientsItem);
+                mContext.startActivity(intent);
+
+            }
+        });
 
         viewHolder.prescribe.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -386,7 +400,7 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView PATIENT_NAME, PATIENT_ID, PATIENT_MOB, date_of_birth,
-                PATIENT_EMAIL, PATIENT_CREATED, PATIENT_AGE, PATIENT_MODIFIED, blood_group,prescribe,certificate;
+                PATIENT_EMAIL, PATIENT_CREATED, PATIENT_AGE, PATIENT_MODIFIED, blood_group,prescribe,certificate,invoice;
         // FrameLayout fl;
         ProgressBar pb;
         ImageView patient_prescribe;
@@ -407,6 +421,7 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
             PATIENT_CREATED = view.findViewById(R.id.tv_patient_created);
             PATIENT_MODIFIED = view.findViewById(R.id.tv_patient_modified);
             ll_main_patient_view = view.findViewById(R.id.ll_main_patient_view);
+            invoice = view.findViewById(R.id.invoice);
             patient_edit = view.findViewById(R.id.patient_edit);
             patient_delete = view.findViewById(R.id.patient_delete);
             blood_group = view.findViewById(R.id.blood_group);
@@ -533,10 +548,10 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
 
                             } else {
 
-                                cancel_action.setVisibility(View.GONE);
-                                rb_month.setEnabled(true);
-                                et_age.setEnabled(true);
-                                et_age.setText("");
+//                                cancel_action.setVisibility(View.GONE);
+//                                rb_month.setEnabled(true);
+//                                et_age.setEnabled(true);
+//                                et_age.setText("");
 
                             }
 

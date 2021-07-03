@@ -74,7 +74,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
@@ -173,7 +173,7 @@
                                 android:background="@drawable/blue_faint_btn_gradient2"
                                 android:focusedByDefault="false"
                                 android:imeOptions="actionNext"
-                                android:inputType="number"
+                                android:inputType="number|phone"
                                 android:maxLength="6"
                                 android:padding="@dimen/margin_10"
                                 android:textColor="@color/colorBlack"
@@ -354,7 +354,9 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="3dp"
                         android:padding="4dp"
-                        android:src="@drawable/info" />
+                        android:src="@drawable/info_icon"
+
+                        />
                 </LinearLayout>
 
                 <EditText
@@ -407,7 +409,8 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="3dp"
                         android:padding="4dp"
-                        android:src="@drawable/info" />
+                        android:src="@drawable/info_icon"
+                        />
                 </LinearLayout>
 
 

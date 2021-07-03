@@ -15,6 +15,12 @@
         <item name="colorAccent">@color/colorDarkBlue</item>
     </style>
 
+    <style name="MineCustomTabText" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">@font/poppins</item>
+        <item name="textAllCaps">false</item>
+    </style>
+
     <style name="AppTheme.AdAttribution">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -185,6 +191,25 @@
 <!--    </style>-->
     <style name="SpinnerTheme" parent="android:Widget.Spinner">
         <item name="android:background">@drawable/bg_spinner</item>
+    </style>
+
+    <style name="Spinner" parent="Widget.AppCompat.Light.DropDownItem.Spinner">
+        <item name="android:paddingStart">0dp</item>
+        <item name="android:paddingEnd">0dp</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="fontFamily">@font/poppins</item>
+    </style>
+
+    <style name="SpinnerSmallFont" parent="Widget.AppCompat.Light.DropDownItem.Spinner">
+        <item name="android:paddingStart">0dp</item>
+        <item name="android:paddingEnd">0dp</item>
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="alpha">0.5</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="fontFamily">@font/poppins</item>
     </style>
 
 </resources>

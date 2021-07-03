@@ -1,6 +1,7 @@
 package com.likesby.bludoc.Adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,24 +28,23 @@ import com.likesby.bludoc.R;
 import java.util.ArrayList;
 
 
-public class AddLabTestAdapter extends RecyclerView.Adapter<AddLabTestAdapter.ViewHolder> implements Filterable
-{
+public class AddLabTestAdapter extends RecyclerView.Adapter<AddLabTestAdapter.ViewHolder> implements Filterable {
     private ArrayList<LabTestItem> mArrayList = new ArrayList<>();
     private ArrayList<LabTestItem> mFilteredList = new ArrayList<>();
     private Context ctx;
-    EditText et_no_of_days,et_additional_comments;
-    ArrayList<String> frequency_list, frequency2_list, EditText , route_list,instructions_list;
-    Spinner frequency_spinner, frequency2_spinner, route_spinner,  instructions_spinner;
-    Button btn_add,btnChooseFromTemplate,btn_prescribe;
+    EditText et_no_of_days, et_additional_comments;
+    ArrayList<String> frequency_list, frequency2_list, EditText, route_list, instructions_list;
+    Spinner frequency_spinner, frequency2_spinner, route_spinner, instructions_spinner;
+    Button btn_add, btnChooseFromTemplate, btn_prescribe;
     TextView textView3_5;
     LinearLayout ll_35;
     EditText searchBarMaterialMedicine;
     boolean count;
     RecyclerView mRecyclerViewAddedMedicines;
     static String iden;
+
     public AddLabTestAdapter(ArrayList<LabTestItem> arrayList, EditText et_additional_comments, Button btn_add, TextView textView3_5, LinearLayout ll_35, EditText searchBarMaterialMedicine, RecyclerView mRecyclerViewAddedMedicines,
-                             Button btnChooseFromTemplate, Button btn_prescribe, String iden)
-    {
+                             Button btnChooseFromTemplate, Button btn_prescribe, String iden) {
         mArrayList = arrayList;
         mFilteredList = arrayList;
 
@@ -53,15 +54,14 @@ public class AddLabTestAdapter extends RecyclerView.Adapter<AddLabTestAdapter.Vi
         this.ll_35 = ll_35;
         this.searchBarMaterialMedicine = searchBarMaterialMedicine;
         this.mRecyclerViewAddedMedicines = mRecyclerViewAddedMedicines;
-        this.btnChooseFromTemplate= btnChooseFromTemplate;
+        this.btnChooseFromTemplate = btnChooseFromTemplate;
         this.btn_prescribe = btn_prescribe;
         this.iden = iden;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i)
-    {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(
                 viewGroup.getContext()).inflate(R.layout.add_template_adapter_lab_test,
                 viewGroup, false);
@@ -73,18 +73,50 @@ public class AddLabTestAdapter extends RecyclerView.Adapter<AddLabTestAdapter.Vi
         LabTestItem medicinesItem = mFilteredList.get(i);
         viewHolder.MEDICINE_NAME.setText(medicinesItem.getLabTestName());
 
-        if(!("").equalsIgnoreCase(medicinesItem.getLabTestComment())){
+        if (!("").equalsIgnoreCase(medicinesItem.getLabTestComment())) {
             viewHolder.MEDICINE_ADD_CMMNT.setText(medicinesItem.getLabTestComment());
-        }else {
+            viewHolder.view_more.setEnabled(true);
+            viewHolder.view_more.setBackgroundResource(R.drawable.white_back_gradient);
+        } else {
             viewHolder.MEDICINE_ADD_CMMNT.setText("");
+            viewHolder.view_more.setEnabled(false);
+            viewHolder.view_more.setBackgroundResource(R.drawable.disabled_button);
         }
 
+        viewHolder.MEDICINE_ADD_CMMNT.setVisibility(View.GONE);
+        count = false;
+        viewHolder.view_more.setText("View More");
+
+        viewHolder.view_more.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View v) {
+
+                                                        LabTestItem medicinesItem = mFilteredList.get(i);
+                                                        if (count) {
+                                                            count = false;
+                                                            viewHolder.view_more.setText("View More");
+                                                            viewHolder.MEDICINE_ADD_CMMNT.setVisibility(View.GONE);
+
+                                                        } else {
+
+                                                            if (!("").equalsIgnoreCase(medicinesItem.getLabTestComment())) {
+                                                                viewHolder.MEDICINE_ADD_CMMNT.setVisibility(View.VISIBLE);
+
+                                                            } else {
+                                                                viewHolder.MEDICINE_ADD_CMMNT.setVisibility(View.GONE);
+                                                            }
+
+                                                            count = true;
+                                                            viewHolder.view_more.setText("View Less");
+                                                        }
+                                                    }
+                                                }
+        );
 
         //viewHolder.MEDICINE_CREATED.setText(medicinesItem.getCreated());
         //viewHolder.MEDICINE_MODIFIED.setText(medicinesItem.getModified());
-       // textView3_5.setText(i+"/"+mFilteredList.size());
+        // textView3_5.setText(i+"/"+mFilteredList.size());
     }
-
 
 
     @Override
@@ -95,18 +127,15 @@ public class AddLabTestAdapter extends RecyclerView.Adapter<AddLabTestAdapter.Vi
 
     @Override
     public int getItemCount() {
-       return mFilteredList.size();
+        return mFilteredList.size();
     }
 
 
     @Override
-    public Filter getFilter()
-    {
-        return new Filter()
-        {
+    public Filter getFilter() {
+        return new Filter() {
             @Override
-            protected FilterResults performFiltering(CharSequence charSequence)
-            {
+            protected FilterResults performFiltering(CharSequence charSequence) {
 
                 String charString = charSequence.toString();
 
@@ -119,8 +148,7 @@ public class AddLabTestAdapter extends RecyclerView.Adapter<AddLabTestAdapter.Vi
 
                     for (LabTestItem categories : mArrayList) {
 
-                        if (categories.getLabTestName().toLowerCase().contains(charString))
-                        {
+                        if (categories.getLabTestName().toLowerCase().contains(charString)) {
 
                             filteredList.add(categories);
                         }
@@ -142,53 +170,26 @@ public class AddLabTestAdapter extends RecyclerView.Adapter<AddLabTestAdapter.Vi
         };
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder
-    {
-        private TextView  view_more,MEDICINE_NAME,MEDICINE_ADD_CMMNT;
-       // FrameLayout fl;
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        private TextView view_more, MEDICINE_NAME, MEDICINE_ADD_CMMNT;
+        // FrameLayout fl;
         ProgressBar pb;
         //ImageButton pic;
         LinearLayout ll_medicine_main;
         ImageView imageView;
-        Button btnEdit,btnDelete;
+        Button btnEdit, btnDelete;
 
-        public ViewHolder(View view)
-        {
+        public ViewHolder(View view) {
             super(view);
             ctx = view.getContext();
 
-            MEDICINE_NAME        = view.findViewById(R.id.test_name);
-            MEDICINE_ADD_CMMNT        = view.findViewById(R.id.test_comment);
+            MEDICINE_NAME = view.findViewById(R.id.test_name);
+            MEDICINE_ADD_CMMNT = view.findViewById(R.id.test_comment);
             view_more = view.findViewById(R.id.labtest_view_more);
-            btnEdit        = view.findViewById(R.id.labtest_edit);
-            btnDelete        = view.findViewById(R.id.labtest_delete);
+            btnEdit = view.findViewById(R.id.labtest_edit);
+            btnDelete = view.findViewById(R.id.labtest_delete);
             final CreatePrescription createPrescription = new CreatePrescription();
             final AddTemplate addTemplate = new AddTemplate();
-            view_more.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    LabTestItem medicinesItem = mFilteredList.get(getAdapterPosition());
-                    if(count){
-                        count = false;
-                        view_more.setText("View More");
-
-                    }else {
-
-
-
-                        if(!("").equalsIgnoreCase(medicinesItem.getLabTestComment())){
-                            MEDICINE_ADD_CMMNT.setVisibility(View.VISIBLE);
-                        }else {
-                            MEDICINE_ADD_CMMNT.setVisibility(View.GONE);
-                        }
-
-                        count = true;
-                        view_more.setText("View Less");
-                    }
-                }
-            }
-            );
 
             btnEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -202,7 +203,7 @@ public class AddLabTestAdapter extends RecyclerView.Adapter<AddLabTestAdapter.Vi
                     HomeActivity.poss__ = getAdapterPosition();
                     mRecyclerViewAddedMedicines.setVisibility(View.GONE);
                     btn_prescribe.setVisibility(View.GONE);
-                    if(!("template").equalsIgnoreCase(iden)) {
+                    if (!("template").equalsIgnoreCase(iden)) {
                         btnChooseFromTemplate.setVisibility(View.GONE);
                     }
                 }
@@ -214,14 +215,15 @@ public class AddLabTestAdapter extends RecyclerView.Adapter<AddLabTestAdapter.Vi
 
                     mFilteredList.remove(getAdapterPosition());
                     CreatePrescription.NEWaddLabTestArrayList.remove(getAdapterPosition());
-                    if(mFilteredList.size() == 0 ){
+                    if (mFilteredList.size() == 0) {
+                        textView3_5.setVisibility(View.GONE);
                         ll_35.setVisibility(View.GONE);
-                    }else {
-                        textView3_5.setText("1/"+mFilteredList.size());
+                    } else {
+                        textView3_5.setText("1/" + mFilteredList.size());
                     }
                     notifyDataSetChanged();
                     btn_prescribe.setVisibility(View.VISIBLE);
-                    if(!("template").equalsIgnoreCase(iden)) {
+                    if (!("template").equalsIgnoreCase(iden)) {
                         if (!("temp").equalsIgnoreCase(iden)) {
                             btnChooseFromTemplate.setVisibility(View.VISIBLE);
                         } else {
@@ -230,7 +232,7 @@ public class AddLabTestAdapter extends RecyclerView.Adapter<AddLabTestAdapter.Vi
                     }
                 }
             });
-           //=============================================================================================
+            //=============================================================================================
         }
     }
 

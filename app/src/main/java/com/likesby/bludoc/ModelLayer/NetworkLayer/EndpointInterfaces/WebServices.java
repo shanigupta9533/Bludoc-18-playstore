@@ -20,6 +20,7 @@ import com.likesby.bludoc.ModelLayer.Entities.ResponseUG;
 import com.likesby.bludoc.ModelLayer.Entities.ResponseVersion;
 import com.likesby.bludoc.ModelLayer.Entities.Subscription;
 import com.likesby.bludoc.ModelLayer.Entities.UserResponse;
+import com.likesby.bludoc.ModelLayer.InvoicePresModel;
 import com.likesby.bludoc.ModelLayer.NewEntities.ResponseNewMyTemplates;
 import com.likesby.bludoc.ModelLayer.NewEntities.ResponseProfileDetails;
 import com.likesby.bludoc.ModelLayer.NewEntities.ResponseSubscriptions;
@@ -97,18 +98,32 @@ public interface WebServices {
     Call<ResultOfApi> addPharmacist(@Field("doctor_id") String doctor_id,
                                     @Field("pharmacist_name") String pharmacist_name,
                                     @Field("pharmacist_mobile") String pharmacist_mobile,
-                                    @Field("pharmacist_email") String pharmacist_email);
+                                    @Field("pharmacist_email") String pharmacist_email,
+                                    @Field("type") String type,
+                                    @Field("hospital_code") String hospital_code);
 
     @FormUrlEncoded
     @POST("AllPharmacist")
     Call<AllPharmacistModels> allPharmacist(@Field("created_by") String doctor_id);
 
     @FormUrlEncoded
+    @POST("AllInvoice")
+    Call<ResponseSuccess> allInvoicesHistory(@Field("doctor_id") String doctor_id);
+
+    @Headers("Content-Type: application/json")
+    @POST("Invoice")
+    Single<ResponseSuccess> sendDataOnInvoices(@Body String invoices);
+
+    @FormUrlEncoded
     @POST("EditPharmacist")
     Call<ResultOfApi> editPharmacist(@Field("pharmacist_id") String pharmacist_id,
                                      @Field("pharmacist_name") String pharmacist_name,
                                      @Field("pharmacist_mobile") String pharmacist_mobile,
-                                     @Field("pharmacist_email") String pharmacist_email);
+                                     @Field("pharmacist_email") String pharmacist_email,
+                                     @Field("type") String type,
+                                     @Field("hospital_code") String hospital_code
+
+                                     );
 
     @FormUrlEncoded
     @POST("DeletePharmacist")
@@ -116,7 +131,7 @@ public interface WebServices {
 
     @FormUrlEncoded
     @POST("SendPresciption")
-    Call<ResultOfApi> sendPresciption(@Field("created_by") String doctor_id,@Field("presb_patient_id") String presb_patient_id);
+    Call<ResultOfApi> sendPresciption(@Field("created_by") String doctor_id, @Field("presb_patient_id") String presb_patient_id , @Field("type") String type);
 
     @FormUrlEncoded
     @POST("Phamalist")
@@ -184,14 +199,14 @@ public interface WebServices {
     @FormUrlEncoded
     @POST("PatientEdit")
     Call<ResponseSuccess> PatientUpdateFromApi(@Field("patient_id") String patient_id,
-                                          @Field("p_name") String p_name,
-                                          @Field("age") String age,
-                                          @Field("gender") String gender,
-                                          @Field("p_mobile") String p_mobile,
-                                          @Field("p_email") String p_email,
-                                          @Field("p_address") String p_address,
-                                          @Field("p_blood_grp") String p_blood_grp,
-                                          @Field("p_dob") String p_dob
+                                               @Field("p_name") String p_name,
+                                               @Field("age") String age,
+                                               @Field("gender") String gender,
+                                               @Field("p_mobile") String p_mobile,
+                                               @Field("p_email") String p_email,
+                                               @Field("p_address") String p_address,
+                                               @Field("p_blood_grp") String p_blood_grp,
+                                               @Field("p_dob") String p_dob
 
     );
 
@@ -420,11 +435,17 @@ public interface WebServices {
     @POST("login")
     Single<UserResponse> userLogin(@Field("customer_mobile") String mobile);*/
     //@Headers("x-api-key: cw00ggcsw4co0g804gcggwo088g4kokgk88sso4s")
+ @FormUrlEncoded
+ @POST("UpdateProfile")
+ Single<ResponseProfileDetails> updateHospitalCode(@Field("doctor_id") String doctor_id,
+                                                   @Field("hospital_code") String hospital_code  );
+
 
     @FormUrlEncoded
     @POST("Login")
     Single<ResponseRegister> userLogin(
-            @Field("email") String customer_email
+            @Field("email") String customer_email,
+            @Field("hospital_code") String hospital_code
     );
 
     @FormUrlEncoded

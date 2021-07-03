@@ -42,7 +42,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins"
-                    android:text="@string/all_pharmacist"
+                    android:text="List of Referral Centre"
                     android:textColor="@color/colorBlack"
                     android:textSize="14dp" />
 
@@ -55,7 +55,7 @@
                 android:layout_centerVertical="true"
                 android:id="@+id/info"
                 android:layout_marginEnd="@dimen/font_15"
-                android:src="@drawable/info"
+                android:src="@drawable/info_icon"
                  />
 
             <View
@@ -132,7 +132,7 @@
             android:textColor="@color/white"
             android:layout_width="180dp"
             android:layout_height="@dimen/margin_40"
-            android:text="@string/add_a_pharmacist"
+            android:text="Add Referral Centre"
             android:background="@drawable/blue_round_btn_gradient"
             />
 

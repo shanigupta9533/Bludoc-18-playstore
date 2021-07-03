@@ -1,128 +1,153 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:focusable="true"
-    android:clickable="true"
     android:background="@color/colorWhite"
-    android:orientation="vertical"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical">
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
-
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/iv_close"
-            android:layout_margin="@dimen/margin_10"
-            android:padding="@dimen/margin_2"
-            android:layout_gravity="end"
             android:layout_width="@dimen/margin_30"
             android:layout_height="@dimen/margin_30"
-            android:src="@drawable/ic_close_black_48dp"
-            />
+            android:layout_gravity="end"
+            android:layout_margin="@dimen/margin_10"
+            android:padding="@dimen/margin_2"
+            android:src="@drawable/ic_close_black_48dp" />
 
 
     </FrameLayout>
 
-
     <ImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:layout_marginTop="-18dp"
         android:layout_gravity="center_horizontal"
-        android:layout_margin="@dimen/margin_40"
         android:src="@drawable/bludoc_shadow" />
 
 
     <Button
-        android:fontFamily="@font/poppins"
-        android:clickable="true"
-        android:elevation="@dimen/margin_10"
-        android:layout_marginBottom="@dimen/margin_20"
-
         android:id="@+id/btn_mobile"
         android:layout_width="230dp"
+        android:layout_marginTop="@dimen/font_20"
         android:layout_height="40dp"
         android:layout_gravity="center"
-
-
+        android:layout_marginBottom="@dimen/margin_20"
         android:background="@drawable/blue_faint_round_btn_gradient2"
+        android:clickable="true"
+        android:elevation="@dimen/margin_10"
+
+
+        android:fontFamily="@font/poppins"
         android:gravity="center"
-        android:textStyle="bold"
         android:text="Mobile View"
         android:textAllCaps="false"
         android:textColor="@color/colorDarkBlue"
         android:textColorHint="@color/colorWhite"
         android:textSize="16sp"
-        />
+        android:textStyle="bold" />
 
-
-    <TextView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/margin_40"
-        android:layout_marginRight="@dimen/margin_40"
-        android:gravity="center_horizontal"
-        android:fontFamily="@font/poppins"
-        android:layout_marginBottom   ="@dimen/margin_10"
-        android:text="Share Via : "
-        android:textSize="16sp" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView_bottom_sheet"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="@dimen/margin_5"
-        android:layout_marginBottom="@dimen/margin_40" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginStart="@dimen/font_12"
-        android:layout_marginEnd="@dimen/font_12"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/margin_20"
         android:layout_height="wrap_content">
 
-        <TextView
-            android:fontFamily="@font/poppins"
-            android:id="@+id/__bottom_sheet_name"
-            android:text="Send to Pharmacist"
-            android:maxLines="1"
-            android:minLines="1"
-            android:gravity="center"
-            android:textStyle="normal"
-            android:layout_gravity="center"
-            android:visibility="gone"
-            android:layout_width="160dp"
-            android:layout_height="32dp"
-            android:layout_marginEnd="@dimen/font_12"
-            android:textSize="12sp"
-            android:background="@drawable/faint_white_round_border_blue"
-            android:textColor="@color/colorBlue"
-            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <TextView
-            android:fontFamily="@font/poppins"
-            android:id="@+id/open_via_page_pdf"
-            android:text="View PDF"
-            android:maxLines="1"
-            android:minLines="1"
-            android:layout_marginStart="@dimen/font_12"
-            android:gravity="center"
-            android:visibility="gone"
-            android:textStyle="normal"
-            android:layout_gravity="center"
-            android:layout_width="110dp"
-            android:layout_height="32dp"
-            android:textSize="12sp"
-            android:background="@drawable/faint_white_round_border_blue"
-            android:textColor="@color/colorBlue"
-            />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_40"
+                android:layout_marginRight="@dimen/margin_40"
+                android:layout_marginBottom="@dimen/margin_10"
+                android:fontFamily="@font/poppins"
+                android:gravity="center_horizontal"
+                android:text="Select Action : "
+                android:textSize="16sp" />
 
-    </LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView_bottom_sheet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin_5"
+                android:layout_marginBottom="@dimen/margin_40" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_40"
+                android:layout_marginRight="@dimen/margin_40"
+                android:layout_marginBottom="@dimen/margin_10"
+                android:fontFamily="@font/poppins"
+                android:id="@+id/send_to"
+                android:gravity="center_horizontal"
+                android:text="Send To : "
+                android:textSize="16sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView_bottom_sheet_send_to"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/margin_5"
+                android:layout_marginBottom="@dimen/margin_40" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/font_12"
+                android:layout_marginTop="@dimen/margin_20"
+                android:layout_marginEnd="@dimen/font_12"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/__bottom_sheet_name"
+                    android:layout_width="160dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/font_12"
+                    android:background="@drawable/faint_white_round_border_blue"
+                    android:fontFamily="@font/poppins"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:minLines="1"
+                    android:text="Send to Pharmacist"
+                    android:textColor="@color/colorBlue"
+                    android:textSize="12sp"
+                    android:textStyle="normal"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/open_via_page_pdf"
+                    android:layout_width="110dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/font_12"
+                    android:background="@drawable/faint_white_round_border_blue"
+                    android:fontFamily="@font/poppins"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:minLines="1"
+                    android:text="View PDF"
+                    android:textColor="@color/colorBlue"
+                    android:textSize="12sp"
+                    android:textStyle="normal"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>
 

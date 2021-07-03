@@ -204,6 +204,41 @@ As a registered user of or subscriber to business-standard.com you may choose to
     <string name="no_data_found">No data found</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="history">History</string>
+    <string name="invoice_history">Invoice History</string>
 
+    <string-array name="select_categories">
+
+        <item>Select a category</item>
+        <item>Pharmacy</item>
+        <item>Path Lab</item>
+        <item>Doctor</item>
+        <item>Hospital</item>
+        <item>Imaging Centre</item>
+
+    </string-array>
+
+    <string-array name="selected_currency">
+
+        <item>INR</item>
+        <item>USD</item>
+        <item>AFA</item>
+        <item>BSD</item>
+        <item>DKK</item>
+        <item>EGP</item>
+
+    </string-array>
+
+    <string-array name="amount_vs_percentage_neg">
+
+        <item>Amount (-)</item>
+        <item>% (-)</item>
+
+    </string-array>
+
+    <string-array name="amount_vs_percentage_pos">
+        <item>Amount (+)</item>
+        <item>% (+)</item>
+    </string-array>
 
 </resources>

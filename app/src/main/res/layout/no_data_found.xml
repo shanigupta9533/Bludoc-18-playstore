@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
-    android:visibility="visible"
+    android:visibility="gone"
     android:clickable="true"
     android:focusable="true"
     android:id="@+id/no_data_found_id"
@@ -21,10 +21,12 @@
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            android:layout_marginTop="@dimen/font_20"
-            android:src="@drawable/ppp_images_online"
+            android:layout_marginTop="@dimen/font_10"
+            android:layout_marginStart="@dimen/font_12"
+            android:layout_marginEnd="@dimen/font_12"
+            android:src="@drawable/referral_center_image_india"
             />
 
         <TextView
@@ -32,9 +34,9 @@
             android:layout_height="wrap_content"
             android:drawablePadding="5dp"
             android:layout_gravity="center"
-            android:layout_marginTop="@dimen/margin_20"
+            android:layout_marginTop="@dimen/font_16"
             android:fontFamily="@font/poppinsbold"
-            android:text="No Pharmacy added"
+            android:text="No  Referral Centre Added"
             android:alpha="0.8"
             android:textColor="@color/colorBlack"
             android:textSize="14sp" />
@@ -45,7 +47,7 @@
             android:fontFamily="@font/poppinsmedium"
             android:layout_marginTop="@dimen/margin_30"
             android:layout_marginStart="@dimen/font_12"
-            android:text="Add Pharmacy"
+            android:text="About Save Referral Centre"
             android:textColor="@color/colorBlack"
             android:textSize="13dp" />
 
@@ -58,10 +60,10 @@
             android:letterSpacing="0.01"
             android:layout_marginEnd="@dimen/font_12"
             android:fontFamily="@font/open_sans"
-            android:text="- you can customise and directly send a copy of e-prescription to the pharmacy/pharmacist.
-                \n\n- Pharmacist can keep the medications/products ready
-
-                \n\n- Patient can directly collect the medications/products from the counter"
+            android:text="- You can customise &amp; directly send a copy of patient’s record and e-prescription to Pharmacy, Path Lab, Imaging Centre, Hospital &amp; Doctor of your choice\n\n
+- By sending referrals to pharmacy, pharmacist can keep the medications/products ready. Patient can directly collect the items from the counter\n\n
+- By sending referrals to Path Lab, Imaging Centre, Hospital &amp; Doctor will guide them to do needful
+"
             android:textColor="@color/colorBlack"
             android:textSize="12dp" />
 
@@ -84,36 +86,46 @@
             android:letterSpacing="0.01"
             android:layout_marginTop="@dimen/margin_5"
             android:layout_marginStart="@dimen/font_13"
-            android:text="- Add &amp; save the details of Pharmacy.
-             \n\n - Select the pharmacy you would like to send a copy of prescription. Prescription
-will be sent to selected pharmacy only.
-\n\n - You can choose to send a copy of prescription to selected pharmacy at sharing page by clicking on 'Send to Pharmacy' button.
-                \n\n- Copy to pharmacy will not contain patient case history, only patient's basic details and medications will be included."
+            android:text="- Click on Add Referral Centre, select the category (Pharmacy, Path Lab, Imaging Centre, Hospital &amp; Doctor), fill details and click on Save \n\n
+- You can then choose to send a copy to referrals at sharing page of prescription. This will directly mail a copy of prescription to the referrals \n\n
+- Copy to Path Lab, Imaging Centre, Hospital &amp; Doctor will contain complete prescription including case history of the patient \n\n
+- Copy to Pharmacy will not contain patient case history only patient’s basic details and medications will be included."
+
             android:textColor="@color/colorBlack"
             android:textSize="12dp" />
-
-        <RelativeLayout
-            android:id="@+id/refresh_button_no_data"
-            android:layout_width="179dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="22dp"
-            android:background="@drawable/blue_round_btn_gradient">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:fontFamily="@font/poppinsmedium"
-                android:text="Add Pharmacy"
-                android:textColor="@color/white"
-                android:textSize="14dp" />
-
-        </RelativeLayout>
-
 
     </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:background="#30ffffff"
+        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/refresh_button_no_data"
+        android:layout_width="179dp"
+        android:layout_centerInParent="true"
+        android:layout_height="40dp"
+        android:layout_marginBottom="@dimen/font_12"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="22dp"
+        android:background="@drawable/blue_round_btn_gradient">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:fontFamily="@font/poppinsmedium"
+            android:text="Add Referral Centre"
+            android:textColor="@color/white"
+            android:textSize="14dp" />
+
+    </RelativeLayout>
+
+    </RelativeLayout>
 
 </RelativeLayout>

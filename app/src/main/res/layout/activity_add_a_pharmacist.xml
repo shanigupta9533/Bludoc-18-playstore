@@ -44,7 +44,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins"
-                        android:text="@string/add_a_pharmacist"
+                        android:text="Add Referral Centre"
                         android:id="@+id/title_on_toolbar"
                         android:textColor="@color/colorBlack"
                         android:textSize="14dp" />
@@ -68,7 +68,59 @@
             android:layout_below="@+id/toolbar"
             android:layout_height="match_parent">
 
-        <LinearLayout
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_marginTop="@dimen/font_20"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_30"
+                    android:layout_marginRight="@dimen/margin_30"
+                    android:layout_marginEnd="@dimen/margin_30"
+                    android:layout_marginStart="@dimen/margin_30"
+                    android:layout_marginTop="@dimen/margin_10"
+                    android:gravity="center"
+                    android:text="Select referral category"
+                    android:textColor="@color/colorDarkGrey"
+                    android:textSize="13dp"
+                    android:fontFamily="@font/poppins"
+                    />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="@dimen/margin_20"
+                    android:layout_marginRight="@dimen/margin_20"
+                    android:layout_marginEnd="@dimen/margin_20"
+                    android:background="@drawable/blue_faint_btn_gradient2"
+                    android:layout_marginStart="@dimen/margin_20"
+                    android:layout_marginTop="@dimen/margin_10"
+                    android:layout_height="wrap_content">
+
+                    <androidx.appcompat.widget.AppCompatSpinner
+                        android:entries="@array/select_categories"
+                        android:layout_width="match_parent"
+                        android:theme="@style/Spinner"
+                        android:id="@+id/category_type"
+                        android:layout_height="@dimen/margin_40"
+                        />
+
+                    <ImageView
+                        android:layout_width="@dimen/margin_25"
+                        android:layout_height="@dimen/margin_25"
+                        android:src="@drawable/ic_action_drop_down"
+                        android:layout_gravity="end|center"
+                        android:layout_marginEnd="@dimen/margin_12"
+                        app:tint="@color/colorBlack" />
+
+                </FrameLayout>
+
+            </LinearLayout>
+
+
+            <LinearLayout
             android:layout_width="match_parent"
             android:orientation="vertical"
             android:layout_height="wrap_content">
@@ -81,9 +133,9 @@
                 android:layout_marginRight="@dimen/margin_30"
                 android:layout_marginEnd="@dimen/margin_30"
                 android:layout_marginStart="@dimen/margin_30"
-                android:layout_marginTop="@dimen/margin_20"
+                android:layout_marginTop="@dimen/margin_25"
                 android:gravity="center"
-                android:text="@string/pharmacist_s_full_name"
+                android:text="Name of Referral Centre*"
                 android:textColor="@color/colorDarkGrey"
                 android:textSize="13dp"
                 android:fontFamily="@font/poppins"
@@ -136,7 +188,7 @@
                         android:id="@+id/email_title_info"
                         android:layout_marginTop="@dimen/margin_10"
                         android:gravity="center"
-                        android:text="@string/pharmacist_s_email_id"
+                        android:text="Email id"
                         android:textColor="@color/colorDarkGrey"
                         android:textSize="13dp"
                         android:fontFamily="@font/poppins"
@@ -150,7 +202,7 @@
                         android:layout_marginTop="@dimen/margin_20"
                         android:layout_centerVertical="true"
                         android:layout_toEndOf="@+id/email_title_info"
-                        android:src="@drawable/info"
+                        android:src="@drawable/info_icon"
                          />
 
                 </RelativeLayout>
@@ -199,7 +251,7 @@
                 android:layout_marginStart="@dimen/margin_30"
                 android:layout_marginTop="@dimen/margin_10"
                 android:gravity="center"
-                android:text="@string/pharmacist_s_whatsnumber"
+                android:text="Contact number"
                 android:textColor="@color/colorDarkGrey"
                 android:textSize="13dp"
                 android:fontFamily="@font/poppins"
@@ -247,7 +299,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_centerInParent="true"
                 android:layout_height="@dimen/margin_40"
-                android:text="Add Pharmacy"
+                android:text="Save Referral Centre"
                 android:background="@drawable/blue_round_btn_gradient"
                 />
 

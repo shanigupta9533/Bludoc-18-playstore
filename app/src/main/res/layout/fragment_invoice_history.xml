@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".Fragment.InvoiceHistoryFragment">
+
+        <EditText
+            android:id="@+id/add_pharmacist_serachView"
+            style="@style/MaterialSearchBarLight"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="@dimen/margin_20"
+            android:layout_marginTop="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_20"
+            android:layout_marginBottom="@dimen/margin_10"
+            android:background="@drawable/spinner_background_white"
+            android:fontFamily="@font/poppins"
+            android:hint="@string/search_pharmacist_here"
+            android:imeOptions="actionNext"
+            android:inputType="text"
+            android:lines="1"
+            android:maxLines="1"
+            android:minLines="1"
+            android:paddingStart="@dimen/margin_12"
+            android:paddingLeft="@dimen/margin_4"
+            android:paddingEnd="@dimen/margin_12"
+            android:paddingRight="@dimen/margin_4"
+            android:textColor="#000"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <com.yalantis.phoenix.PullToRefreshView
+            android:id="@+id/pullToRefresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/add_pharmacist_serachView"
+            android:layout_marginTop="@dimen/margin_5"
+            >
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </com.yalantis.phoenix.PullToRefreshView>
+
+        <include layout="@layout/progress_bar_layout"/>
+
+        <include layout="@layout/no_data_found_container"/>
+
+    </RelativeLayout>
+
+</layout>

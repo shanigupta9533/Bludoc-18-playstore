@@ -120,13 +120,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/add_pharmacist"
+            android:visibility="visible"
             android:orientation="horizontal"
             android:padding="16dp">
 
             <ImageView
                 android:layout_width="22dp"
                 android:layout_height="22dp"
-                android:src="@drawable/ic_pharmacy_icon"
+                android:src="@drawable/pin_referral_centre"
                 android:layout_gravity="center"
                 android:alpha="0.7"
                 android:contentDescription="@null" />
@@ -141,7 +142,7 @@
                 android:layout_weight="1"
                 android:textColor="@color/colorBlack"
                 android:textSize="@dimen/font_15"
-                android:text="@string/add_pharmacist" />
+                android:text="Add Referral Centre" />
 
         </LinearLayout>
 

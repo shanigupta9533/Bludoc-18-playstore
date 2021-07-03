@@ -151,7 +151,7 @@ public class AllPharmacistActivity extends AppCompatActivity {
             public void onDelete(final AllPharmacistList s, final int position) {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(AllPharmacistActivity.this, R.style.AlertDialog));
-                builder.setMessage("Do you wish to delete the pharmacy?")
+                builder.setMessage("Do you wish to delete the Referral Centre?")
                         .setCancelable(false)
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {

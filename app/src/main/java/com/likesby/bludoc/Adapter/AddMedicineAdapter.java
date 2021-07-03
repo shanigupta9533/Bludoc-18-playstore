@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -329,10 +330,12 @@ public class AddMedicineAdapter extends RecyclerView.Adapter<AddMedicineAdapter.
                 public void onClick(View v) {
                     fl_progress_bar.setVisibility(View.VISIBLE);
                     mFilteredList.remove(getAdapterPosition());
+
                     if (CreatePrescription.NEWaddMedicinesArrayList != null)
                         if (CreatePrescription.NEWaddMedicinesArrayList.size() != 0)
                             CreatePrescription.NEWaddMedicinesArrayList.remove(getAdapterPosition());
                     if (mFilteredList.size() == 0) {
+                        textView3_5.setVisibility(View.GONE);
                         ll_35.setVisibility(View.GONE);
                     } else {
                         textView3_5.setText("1/" + mFilteredList.size());
