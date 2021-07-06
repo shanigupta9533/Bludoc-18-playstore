@@ -269,6 +269,7 @@ public class MySubscription extends AppCompatActivity
                     if(response.getMessage().equals("My Subscriptions")){
                         SubscriptionsArrayList = new ArrayList<>();
                         SubscriptionsArrayList = response.getMySubscriptions();
+
                         mySubscriptionAdapter = new MySubscriptionAdapter(SubscriptionsArrayList,mContext,mLocationViewHolder,mBag,activity);
                         recyclerView.setAdapter(mySubscriptionAdapter);
                     }

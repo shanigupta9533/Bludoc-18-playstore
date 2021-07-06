@@ -673,6 +673,7 @@
                         android:textSize="@dimen/font_14"
                         android:background="@drawable/blue_round_btn_gradient"
                         android:text="Save and Add next"
+                        android:stateListAnimator="@null"
                         android:textAllCaps="false"
                         android:textColor="@color/white"
                         app:layout_constraintEnd_toEndOf="parent" />

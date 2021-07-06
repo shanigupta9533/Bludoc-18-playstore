@@ -16,6 +16,7 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -601,25 +602,91 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View v) {
 
-                if(!("").equalsIgnoreCase(manager.getPreferences(mContext,"registration_no"))) {
+                if (!("").equalsIgnoreCase(manager.getPreferences(mContext, "registration_no"))) {
                     ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
-                    if ( !("").equalsIgnoreCase(responseProfileDetails.getHospitalCode())) {
+                    if (!("").equalsIgnoreCase(responseProfileDetails.getHospitalCode())) {
 
                         if (responseProfileDetails.getAccess().equals("Pending")) {
-                            popupAccess();
-                        } else if (responseProfileDetails.getAccess().equals("Approve")) {
 
+
+                            String sub_valid = "", premium_valid = "";
+                            boolean flag_reset_paid = false;
+                            Date date1 = null, date2 = null;
+                            int days_left_free = 0, days_left_paid = 0;
+                            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                            ResponseProfileDetails profileDetails = manager.getObjectProfileDetails(mContext, "profile");
+                            if (profileDetails.getSubcriptions() != null) {
+                                if (profileDetails.getSubcriptions().size() != 0) {
+                                    for (SubcriptionsItem si : profileDetails.getSubcriptions()) {
+                                        if (si.getUseFor().equals("Hospital_name")) {
+                                            try {
+                                                Calendar c2 = Calendar.getInstance();
+                                                DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+                                                Date dateEnd = dateFormat.parse(si.getEnd());
+                                                Date c = Calendar.getInstance().getTime();
+                                                assert dateEnd != null;
+                                                //premium_valid = si.getDays();
+                                                Log.e("DATE_____1 = ", DateUtils.printDifference(c, dateEnd));
+                                                // Log.e("DATE_____2 = ",DateUtils.outFormatsetMMM(DateUtils.printDifference(c,dateEnd)));
+                                                // Log.e("DATE_____3 = ",DateUtils.outFormatset(DateUtils.printDifference(c,dateEnd)));
+
+
+                                                try {
+                                                    date1 = dateFormat.parse(dateFormat.format(c2.getTime()));
+                                                    date2 = dateFormat.parse(si.getEnd());
+                                                    Log.e("DATE_____1 = ", DateUtils.printDifference(date1, date2) + " left");
+                                                    flag_reset_free = true;
+
+                                                    String[] splited = DateUtils.printDifference(date1, date2).split("\\s+");
+
+                                                    days_left_free = days_left_free + Integer.parseInt(splited[0]);
+                                                    // popupFreeSubscription(DateUtils.printDifference(date1,date2),true);
+                                                    // break;
+                                                    sub_valid = si.getEnd();
+                                                } catch (ParseException e) {
+                                                    e.printStackTrace();
+                                                }
+
+                                                //viewHolder.expiry.setText(DateUtils.printDifference(date1,date2)+" left");
+
+                                            } catch (ParseException pe) {
+                                                // handle the failure
+                                                flag_reset_free = false;
+                                            }
+
+                                        }
+                                    }
+                                }
+                                else
+                                    popupAccess();
+                            }
+                            else
+                                popupAccess();
+                            if(days_left_free<1){
+                                        Toast.makeText(HomeActivity.this, "Subscription Expired", Toast.LENGTH_SHORT).show();
+                                    }
+                                    else {
+                                        popupAccess();
+                                    }
+
+                                    } else if (responseProfileDetails.getAccess().equals("Approve")) {
                             startActivity(new Intent(HomeActivity.this, AllPharmacistActivity.class));
                         } else if (responseProfileDetails.getAccess().equals("Rejected")) {
                             //popupHospitalCode();
+                        } else if (responseProfileDetails.getAccess().equals("Paused")) {
+
+                            popupPaused("Your subscription is paused. Please contact ‘" + responseProfileDetails.getSubcriptions().get(0).getNameHospital() + "’ for the same");
+
                         } else {
                             popupAccess();
                         }
+
                     } else {
+
                         startActivity(new Intent(HomeActivity.this, AllPharmacistActivity.class));
+
                     }
-                }
-                else {
+                } else {
                     popup();
                 }
 
@@ -628,8 +695,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         //transparentStatusAndNavigation();
         //  setState();
     }
-    private  void popupAccess()
-    {
+
+    private void popupAccess() {
         final Dialog dialog_data = new Dialog(mContext);
         dialog_data.setCancelable(true);
 
@@ -650,6 +717,51 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         window.setAttributes(lp_number_picker);
 
         Button btn_add = dialog_data.findViewById(R.id.btn_register);
+        ImageView btn_close = dialog_data.findViewById(R.id.btn_close);
+
+
+        btn_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog_data.dismiss();
+
+            }
+        });
+
+
+        btn_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog_data.dismiss();
+
+            }
+        });
+        dialog_data.show();
+    }
+
+    private void popupPaused(String s) {
+        final Dialog dialog_data = new Dialog(mContext);
+        dialog_data.setCancelable(true);
+
+        dialog_data.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        Objects.requireNonNull(dialog_data.getWindow()).setGravity(Gravity.CENTER);
+
+        dialog_data.setContentView(R.layout.popup_access);
+
+        WindowManager.LayoutParams lp_number_picker = new WindowManager.LayoutParams();
+        Window window = dialog_data.getWindow();
+        lp_number_picker.copyFrom(window.getAttributes());
+
+        lp_number_picker.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp_number_picker.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+        //window.setGravity(Gravity.CENTER);
+        window.setAttributes(lp_number_picker);
+
+        Button btn_add = dialog_data.findViewById(R.id.btn_register);
+        TextView tv_no_template = dialog_data.findViewById(R.id.tv_no_template);
+        tv_no_template.setText(s);
         ImageView btn_close = dialog_data.findViewById(R.id.btn_close);
 
 
@@ -855,9 +967,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View v) {
 
-                if(!("").equalsIgnoreCase(manager.getPreferences(mContext,"registration_no"))) {
+                if (!("").equalsIgnoreCase(manager.getPreferences(mContext, "registration_no"))) {
                     ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
-                    if ( !("").equalsIgnoreCase(responseProfileDetails.getHospitalCode())) {
+                    if (!("").equalsIgnoreCase(responseProfileDetails.getHospitalCode())) {
 
                         if (responseProfileDetails.getAccess().equals("Pending")) {
                             popupAccess();
@@ -866,14 +978,18 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                             startActivity(new Intent(HomeActivity.this, HistoryActivity.class));
                         } else if (responseProfileDetails.getAccess().equals("Rejected")) {
                             //popupHospitalCode();
+                        } else if (responseProfileDetails.getAccess().equals("Paused")) {
+
+                            popupPaused("Your subscription is paused. Please contact ‘" + responseProfileDetails.getSubcriptions().get(0).getNameHospital() + "’ for the same");
+
                         } else {
                             popupAccess();
                         }
                     } else {
                         startActivity(new Intent(HomeActivity.this, HistoryActivity.class));
+
                     }
-                }
-                else {
+                } else {
                     popup();
                 }
 
@@ -885,13 +1001,31 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View v) {
 
-            if(!("").equalsIgnoreCase(manager.getPreferences(mContext,"registration_no"))) {
-                ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
-                if ( !("").equalsIgnoreCase(responseProfileDetails.getHospitalCode())) {
+                if (!("").equalsIgnoreCase(manager.getPreferences(mContext, "registration_no"))) {
+                    ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
+                    if (!("").equalsIgnoreCase(responseProfileDetails.getHospitalCode())) {
 
-                    if (responseProfileDetails.getAccess().equals("Pending")) {
-                        popupAccess();
-                    } else if (responseProfileDetails.getAccess().equals("Approve")) {
+                        if (responseProfileDetails.getAccess().equals("Pending")) {
+                            popupAccess();
+                        } else if (responseProfileDetails.getAccess().equals("Approve")) {
+
+                            CreatePrescription.backCheckerFlag = false;
+                            CreatePrescription.NEWaddMedicinesArrayList = new ArrayList<>();
+                            CreatePrescription.NEWaddLabTestArrayList = new ArrayList<>();
+                            CreatePrescription myFragment = new CreatePrescription();
+                            getSupportFragmentManager().beginTransaction().replace(R.id.homePageContainer, myFragment, "prescription").addToBackStack(null).commit();
+
+                        } else if (responseProfileDetails.getAccess().equals("Paused")) {
+
+                            popupPaused("Your subscription is paused. Please contact ‘" +responseProfileDetails.getSubcriptions().get(0).getNameHospital()+ "’ for the same");
+
+                        } else if (responseProfileDetails.getAccess().equals("Rejected")) {
+                            //popupHospitalCode();
+                        } else {
+                            popupAccess();
+                        }
+                    } else {
+
 
                         CreatePrescription.backCheckerFlag = false;
                         CreatePrescription.NEWaddMedicinesArrayList = new ArrayList<>();
@@ -899,24 +1033,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         CreatePrescription myFragment = new CreatePrescription();
                         getSupportFragmentManager().beginTransaction().replace(R.id.homePageContainer, myFragment, "prescription").addToBackStack(null).commit();
 
-                    } else if (responseProfileDetails.getAccess().equals("Rejected")) {
-                        //popupHospitalCode();
-                    } else {
-                        popupAccess();
+
                     }
                 } else {
-
-                    CreatePrescription.backCheckerFlag = false;
-                    CreatePrescription.NEWaddMedicinesArrayList = new ArrayList<>();
-                    CreatePrescription.NEWaddLabTestArrayList = new ArrayList<>();
-                    CreatePrescription myFragment = new CreatePrescription();
-                    getSupportFragmentManager().beginTransaction().replace(R.id.homePageContainer, myFragment, "prescription").addToBackStack(null).commit();
-
+                    popup();
                 }
-            }
-            else {
-                popup();
-            }
             }
         });
 
@@ -925,18 +1046,19 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View v) {
 
-                if(!("").equalsIgnoreCase(manager.getPreferences(mContext,"registration_no")))
-                {
+                ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
+
+                if (!("").equalsIgnoreCase(manager.getPreferences(mContext, "registration_no"))) {
                     PatientRegistration myFragment = new PatientRegistration();
-                    Bundle bundle=new Bundle();
-                    bundle.putBoolean("isFromHome",true);
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean("isFromHome", true);
                     myFragment.setArguments(bundle);
                     getSupportFragmentManager().beginTransaction().replace(R.id.homePageContainer, myFragment, "first").addToBackStack(null).commit();
 
-                }
-                else
-                {
+                } else {
+
                     popup();
+
                 }
 
             }
@@ -945,9 +1067,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View v) {
 
-                if(!("").equalsIgnoreCase(manager.getPreferences(mContext,"registration_no"))) {
+                if (!("").equalsIgnoreCase(manager.getPreferences(mContext, "registration_no"))) {
                     ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
-                    if ( !("").equalsIgnoreCase(responseProfileDetails.getHospitalCode())) {
+
+                    if (!("").equalsIgnoreCase(responseProfileDetails.getHospitalCode())) {
 
                         if (responseProfileDetails.getAccess().equals("Pending")) {
                             popupAccess();
@@ -961,8 +1084,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                             myFragment.setArguments(bundle);
                             getSupportFragmentManager().beginTransaction().replace(R.id.homePageContainer, myFragment, "first").addToBackStack(null).commit();
 
-                        } else if (responseProfileDetails.getAccess().equals("Rejected")) {
-                            //popupHospitalCode();
+                        } else if (responseProfileDetails.getAccess().equals("Paused")) {
+
+                            popupPaused("Your subscription is paused. Please contact ‘" + responseProfileDetails.getSubcriptions().get(0).getNameHospital() + "’ for the same");
+
                         } else {
                             popupAccess();
                         }
@@ -976,9 +1101,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         myFragment.setArguments(bundle);
                         getSupportFragmentManager().beginTransaction().replace(R.id.homePageContainer, myFragment, "first").addToBackStack(null).commit();
 
+
                     }
-                }
-                else {
+                } else {
                     popup();
                 }
 
@@ -1381,8 +1506,20 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.logout) {
             popuplogout();
         } else if (id == R.id.Subscription_packages) {
-            Intent intent1 = new Intent(HomeActivity.this, SubscriptionPackages.class);
-            startActivity(intent1);
+
+            ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
+
+            if (TextUtils.isEmpty(responseProfileDetails.getHospitalCode())) {
+
+                Intent intent1 = new Intent(HomeActivity.this, SubscriptionPackages.class);
+                startActivity(intent1);
+
+            } else {
+
+                Toast.makeText(mContext, "You cannot access this page...", Toast.LENGTH_SHORT).show();
+
+            }
+
         }
 
 
@@ -1576,8 +1713,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         ll_premium.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent intent = new Intent(mContext, SubscriptionPackages.class);
-                                startActivity(intent);
+                                ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
+                                if (TextUtils.isEmpty(responseProfileDetails.getHospitalCode())) {
+
+                                    Intent intent1 = new Intent(HomeActivity.this, SubscriptionPackages.class);
+                                    startActivity(intent1);
+
+                                } else {
+
+                                    Toast.makeText(mContext, "You cannot access this page...", Toast.LENGTH_SHORT).show();
+
+                                }
                             }
                         });
                     } else {
@@ -1592,21 +1738,44 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                             ll_premium.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Intent intent = new Intent(mContext, SubscriptionPackages.class);
-                                    startActivity(intent);
+                                    ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
+
+                                    if (TextUtils.isEmpty(responseProfileDetails.getHospitalCode())) {
+
+                                        Intent intent1 = new Intent(HomeActivity.this, SubscriptionPackages.class);
+                                        startActivity(intent1);
+
+                                    } else {
+
+                                        Toast.makeText(mContext, "You cannot access this page...", Toast.LENGTH_SHORT).show();
+
+                                    }
                                 }
                             });
                         } else {
                             showNativeAdFlag = false;
                             ll_premium.setVisibility(View.VISIBLE);
+
                             if (manager.contains(mContext, "show_banner_ad"))
                                 manager.deletePreferences(mContext, "show_banner_ad");
                             tv_days_left.setText("Your subscription is valid till " + sub_valid + ".");
                             ll_premium.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Intent intent = new Intent(mContext, SubscriptionPackages.class);
-                                    startActivity(intent);
+
+                                    ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
+
+                                    if (TextUtils.isEmpty(responseProfileDetails.getHospitalCode())) {
+
+                                        Intent intent1 = new Intent(HomeActivity.this, SubscriptionPackages.class);
+                                        startActivity(intent1);
+
+                                    } else {
+
+                                        Toast.makeText(mContext, "You cannot access this page...", Toast.LENGTH_SHORT).show();
+
+                                    }
+
                                 }
                             });
 
@@ -1644,12 +1813,30 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         ll_premium.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent intent = new Intent(mContext, SubscriptionPackages.class);
-                                startActivity(intent);
+
+                                ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
+
+                                if (TextUtils.isEmpty(responseProfileDetails.getHospitalCode())) {
+
+                                    Intent intent1 = new Intent(HomeActivity.this, SubscriptionPackages.class);
+                                    startActivity(intent1);
+
+                                } else {
+
+                                    Toast.makeText(mContext, "You cannot access this page...", Toast.LENGTH_SHORT).show();
+
+                                }
+
                             }
                         });
                     } else {
+
                         manager.setPreferences(mContext, "show_banner_ad", "true");
+
+                        ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
+                        if (!("").equalsIgnoreCase(responseProfileDetails.getHospitalCode()))
+                            popupPaused("Your subscription has expired "+responseProfileDetails.getSubcriptions().get(0).getNameHospital());
+
                         BannerAd(adRequest);
                         addflag = true;
                         ll_premium.setVisibility(View.GONE);
@@ -1660,8 +1847,20 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                         ll_premium.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent intent = new Intent(mContext, SubscriptionPackages.class);
-                                startActivity(intent);
+
+                                ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
+
+                                if (TextUtils.isEmpty(responseProfileDetails.getHospitalCode())) {
+
+                                    Intent intent1 = new Intent(HomeActivity.this, SubscriptionPackages.class);
+                                    startActivity(intent1);
+
+                                } else {
+
+                                    Toast.makeText(mContext, "You cannot access this page...", Toast.LENGTH_SHORT).show();
+
+                                }
+
                             }
                         });
                     }
@@ -1680,8 +1879,20 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 ll_premium.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(mContext, SubscriptionPackages.class);
-                        startActivity(intent);
+
+                        ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
+
+                        if (TextUtils.isEmpty(responseProfileDetails.getHospitalCode())) {
+
+                            Intent intent1 = new Intent(HomeActivity.this, SubscriptionPackages.class);
+                            startActivity(intent1);
+
+                        } else {
+
+                            Toast.makeText(mContext, "You cannot access this page...", Toast.LENGTH_SHORT).show();
+
+                        }
+
                     }
                 });
 
@@ -2197,8 +2408,20 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View v) {
                 dialog_data.dismiss();
-                Intent intent = new Intent(mContext, SubscriptionPackages.class);
-                startActivity(intent);
+
+                ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
+
+                if (TextUtils.isEmpty(responseProfileDetails.getHospitalCode())) {
+
+                    Intent intent1 = new Intent(HomeActivity.this, SubscriptionPackages.class);
+                    startActivity(intent1);
+
+                } else {
+
+                    Toast.makeText(mContext, "You cannot access this page...", Toast.LENGTH_SHORT).show();
+
+                }
+
             }
         });
 

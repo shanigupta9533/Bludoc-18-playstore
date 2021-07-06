@@ -3,7 +3,6 @@ package com.likesby.bludoc.ModelLayer;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.gson.annotations.SerializedName;
 import com.likesby.bludoc.ModelLayer.InvoicesModel.InvoicesDataModel;
 
 import java.util.ArrayList;
@@ -14,7 +13,7 @@ public class InvoicePresModel implements Parcelable {
     private String doctor_id ="";
     private String patient_id ="";
     private String invoice_title ="";
-    private String invoice_number ="";
+    private String invoice_no ="";
     private String currency="";
     private String discount_title ="";
     private String advance_amount_title ="";
@@ -32,6 +31,7 @@ public class InvoicePresModel implements Parcelable {
     private String p_mobile ="";
     private String p_email ="";
     private String p_address ="";
+    private String date="";
     private String p_name ="";
     private String hospital_code;
     private String status="Completed";
@@ -47,6 +47,7 @@ public class InvoicePresModel implements Parcelable {
         doctor_id = in.readString();
         patient_id = in.readString();
         invoice_title = in.readString();
+        invoice_no = in.readString();
         currency = in.readString();
         discount_title = in.readString();
         advance_amount_title = in.readString();
@@ -64,46 +65,11 @@ public class InvoicePresModel implements Parcelable {
         p_mobile = in.readString();
         p_email = in.readString();
         p_address = in.readString();
+        date = in.readString();
         p_name = in.readString();
-        status = in.readString();
-        invoice_number = in.readString();
         hospital_code = in.readString();
+        status = in.readString();
         Items = in.createTypedArrayList(InvoicesDataModel.CREATOR);
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(invoice_name);
-        dest.writeString(doctor_id);
-        dest.writeString(patient_id);
-        dest.writeString(invoice_title);
-        dest.writeString(currency);
-        dest.writeString(discount_title);
-        dest.writeString(advance_amount_title);
-        dest.writeString(tax_title);
-        dest.writeString(note);
-        dest.writeString(discount);
-        dest.writeString(advance_amount);
-        dest.writeString(final_amount);
-        dest.writeString(tax);
-        dest.writeString(pay_status);
-        dest.writeString(total_amount);
-        dest.writeString(discount_percentage);
-        dest.writeString(advance_amount_percentage);
-        dest.writeString(tax_percentage);
-        dest.writeString(p_mobile);
-        dest.writeString(p_email);
-        dest.writeString(p_address);
-        dest.writeString(p_name);
-        dest.writeString(status);
-        dest.writeString(hospital_code);
-        dest.writeString(invoice_number);
-        dest.writeTypedList(Items);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
     }
 
     public static final Creator<InvoicePresModel> CREATOR = new Creator<InvoicePresModel>() {
@@ -158,12 +124,12 @@ public class InvoicePresModel implements Parcelable {
         this.invoice_title = invoice_title;
     }
 
-    public String getInvoice_number() {
-        return invoice_number;
+    public String getInvoice_no() {
+        return invoice_no;
     }
 
-    public void setInvoice_number(String invoice_number) {
-        this.invoice_number = invoice_number;
+    public void setInvoice_no(String invoice_no) {
+        this.invoice_no = invoice_no;
     }
 
     public String getCurrency() {
@@ -324,5 +290,49 @@ public class InvoicePresModel implements Parcelable {
 
     public void setP_name(String p_name) {
         this.p_name = p_name;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(invoice_name);
+        dest.writeString(doctor_id);
+        dest.writeString(patient_id);
+        dest.writeString(invoice_title);
+        dest.writeString(invoice_no);
+        dest.writeString(currency);
+        dest.writeString(discount_title);
+        dest.writeString(advance_amount_title);
+        dest.writeString(tax_title);
+        dest.writeString(note);
+        dest.writeString(discount);
+        dest.writeString(advance_amount);
+        dest.writeString(final_amount);
+        dest.writeString(tax);
+        dest.writeString(pay_status);
+        dest.writeString(total_amount);
+        dest.writeString(discount_percentage);
+        dest.writeString(advance_amount_percentage);
+        dest.writeString(tax_percentage);
+        dest.writeString(p_mobile);
+        dest.writeString(p_email);
+        dest.writeString(p_address);
+        dest.writeString(date);
+        dest.writeString(p_name);
+        dest.writeString(hospital_code);
+        dest.writeString(status);
+        dest.writeTypedList(Items);
     }
 }

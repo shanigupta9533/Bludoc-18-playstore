@@ -23,6 +23,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,6 +38,8 @@ import com.likesby.bludoc.ModelLayer.Entities.PatientsItem;
 import com.likesby.bludoc.ModelLayer.InvoicePresModel;
 import com.likesby.bludoc.ModelLayer.InvoicesModel.InvoicesDataModel;
 import com.likesby.bludoc.databinding.ActivityInvoiceBinding;
+import com.mynameismidori.currencypicker.CurrencyPicker;
+import com.mynameismidori.currencypicker.CurrencyPickerListener;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -61,8 +64,9 @@ public class InvoiceActivity extends AppCompatActivity {
     private String payStatus = "Paid";
     DecimalFormat formatter = new DecimalFormat("#,###,###");
     private float calculateFromTotal = 0;
-    private long price2=0;
-    private float price3=0f;
+    private long price2 = 0;
+    private float price3 = 0f;
+    private String currency="₹";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +80,8 @@ public class InvoiceActivity extends AppCompatActivity {
         activity.countDown.setVisibility(View.GONE);
 
         activity.taxTitleSpinner.setSelection(1);
+
+        activity.currency.setText(currency);
 
         Intent intent = getIntent();
         if (intent != null) {
@@ -115,8 +121,8 @@ public class InvoiceActivity extends AppCompatActivity {
                     activity.totalAmountTextView.setText("Total Amount");
 
                     // after delete all items then price will we zero
-                     totalAmount=0;
-                     totalPriceGlobal=0;
+                    totalAmount = 0;
+                    totalPriceGlobal = 0;
 
                 } else if (invoicesDataModels.size() == 1) {
 
@@ -241,7 +247,7 @@ public class InvoiceActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                if (!s.toString().isEmpty() && activity.taxTitleSpinner.getSelectedItemPosition()!=0){ // empty nahi hona chahiye aur spinner amount per set naa ho
+                if (!s.toString().isEmpty() && activity.taxTitleSpinner.getSelectedItemPosition() != 0) { // empty nahi hona chahiye aur spinner amount per set naa ho
 
                     String str2 = PerfectDecimal(s.toString(), 3, 2);
 
@@ -307,22 +313,31 @@ public class InvoiceActivity extends AppCompatActivity {
 
         });
 
-        activity.currency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        activity.currency.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onClick(View v) {
 
-                if (activity.currency.getSelectedItemPosition() == 0)
-                    activity.totalAmountTextView.setText("Total Amount  ₹ " + formatter.format(totalAmount));
-                else
-                    activity.totalAmountTextView.setText("Total Amount " + activity.currency.getSelectedItem().toString() + " " + formatter.format(totalAmount));
+                CurrencyPicker picker = CurrencyPicker.newInstance("Select Currency");  // dialog title
+                picker.setListener(new CurrencyPickerListener() {
+                    @Override
+                    public void onSelectCurrency(String name, String code, String symbol, int flagDrawableResID) {
 
-            }
+                        activity.totalAmountTextView.setText("Total Amount " + getDecideCurrency(code) + " " + formatter.format(totalAmount));
+                        invoicesAdapter.setCurrency(code);
+                        invoicesAdapter.notifyDataSetChanged();
+                        currency = code;
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                        activity.currency.setText(currency);
+
+                        picker.dismiss();
+
+                    }
+                });
+                picker.show(getSupportFragmentManager(), "CURRENCY_PICKER");
 
             }
         });
+
 
         activity.invoicesInRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -356,6 +371,11 @@ public class InvoiceActivity extends AppCompatActivity {
 
                 activity.amoutInvoiceDetails.requestFocus();
                 activity.amoutInvoiceDetails.setError("Invalid Amount");
+
+            } else if(totalAmount+Double.parseDouble(activity.amoutInvoiceDetails.getText().toString())>100000){
+
+                activity.amoutInvoiceDetails.requestFocus();
+                activity.amoutInvoiceDetails.setError("Amount Exceed...");
 
             } else if (isEdit) {
 
@@ -439,12 +459,26 @@ public class InvoiceActivity extends AppCompatActivity {
 
     }
 
+    private String getDecideCurrency(String selectedItemPosition) {
+
+        if (selectedItemPosition.equalsIgnoreCase("INR")) {
+
+            return "₹";
+
+        } else {
+
+            return selectedItemPosition;
+
+        }
+
+    }
+
     private InvoicePresModel setInvoicesDataInModel() {
 
         InvoicePresModel invoicePresModel = new InvoicePresModel();
         invoicePresModel.setInvoice_name(activity.patientName.getText().toString());
         invoicePresModel.setInvoice_title(activity.invoiceTitle.getText().toString());
-        invoicePresModel.setCurrency(activity.currency.getSelectedItem().toString());
+        invoicePresModel.setCurrency(currency);
         invoicePresModel.setTotal_amount(String.valueOf(totalAmount));
         invoicePresModel.setDiscount_title(activity.discountTitleHeading.getText().toString());
         invoicePresModel.setAdvance_amount_title(activity.advancePartialTitle.getText().toString());
@@ -481,7 +515,7 @@ public class InvoiceActivity extends AppCompatActivity {
             invoicePresModel.setTax_percentage("");
         } else {
 
-            if(price3<=0) {
+            if (price3 <= 0) {
                 invoicePresModel.setTax("");
             } else {
                 invoicePresModel.setTax(String.valueOf(price3));
@@ -558,11 +592,7 @@ public class InvoiceActivity extends AppCompatActivity {
         if (!TextUtils.isEmpty(s) && (totalAmount <= 0 || calculateFromTotal < 0)) {
 
             amountMoreDetails.setError("Invalid Amount");
-
-            if (activity.currency.getSelectedItemPosition() == 0)
-                activity.totalAmountTextView.setText("Total Amount  ₹ " + formatter.format(totalAmount));
-            else
-                activity.totalAmountTextView.setText("Total Amount " + activity.currency.getSelectedItem().toString() + " " + formatter.format(totalAmount));
+            activity.totalAmountTextView.setText("Total Amount " + currency + " " + formatter.format(totalAmount));
 
         } else if (!TextUtils.isEmpty(s)) {
 
@@ -583,10 +613,7 @@ public class InvoiceActivity extends AppCompatActivity {
 
         if (totalAmount <= 0 || calculateFromTotal < 0) {
 
-            if (activity.currency.getSelectedItemPosition() == 0)
-                activity.totalAmountTextView.setText("Total Amount  ₹ " + formatter.format(totalAmount));
-            else
-                activity.totalAmountTextView.setText("Total Amount " + activity.currency.getSelectedItem().toString() + " " + formatter.format(totalAmount));
+            activity.totalAmountTextView.setText("Total Amount " + currency + " " + formatter.format(totalAmount));
 
         } else {
 
@@ -611,7 +638,7 @@ public class InvoiceActivity extends AppCompatActivity {
         }
 
         if (!TextUtils.isEmpty(activity.taxTitle.getText().toString()) && activity.taxTitleSpinner.getSelectedItemPosition() == 1) {
-            price3 = calulatedPercentageForFloat(activity.taxTitle.getText().toString(),totalAmount-price2);
+            price3 = calulatedPercentageForFloat(activity.taxTitle.getText().toString(), totalAmount - price2);
         }
 
         return totalAmount - price1 - price2 + price3;
@@ -624,28 +651,30 @@ public class InvoiceActivity extends AppCompatActivity {
 
     }
 
-    public String PerfectDecimal(String str, int MAX_BEFORE_POINT, int MAX_DECIMAL){
-        if(str.charAt(0) == '.') str = "0"+str;
+    public String PerfectDecimal(String str, int MAX_BEFORE_POINT, int MAX_DECIMAL) {
+        if (str.charAt(0) == '.') str = "0" + str;
         int max = str.length();
 
         String rFinal = "";
         boolean after = false;
-        int i = 0, up = 0, decimal = 0; char t;
-        while(i < max){
+        int i = 0, up = 0, decimal = 0;
+        char t;
+        while (i < max) {
             t = str.charAt(i);
-            if(t != '.' && after == false){
+            if (t != '.' && after == false) {
                 up++;
-                if(up > MAX_BEFORE_POINT) return rFinal;
-            }else if(t == '.'){
+                if (up > MAX_BEFORE_POINT) return rFinal;
+            } else if (t == '.') {
                 after = true;
-            }else{
+            } else {
                 decimal++;
-                if(decimal > MAX_DECIMAL)
+                if (decimal > MAX_DECIMAL)
                     return rFinal;
             }
             rFinal = rFinal + t;
             i++;
-        }return rFinal;
+        }
+        return rFinal;
     }
 
     private float calulatedPercentageForFloat(String enterData, long price) {
@@ -667,10 +696,7 @@ public class InvoiceActivity extends AppCompatActivity {
         totalAmount = Amount;
         totalPriceGlobal = Amount;
 
-        if (activity.currency.getSelectedItemPosition() == 0)
-            activity.totalAmountTextView.setText("Total Amount  ₹ " + formatter.format(totalAmount));
-        else
-            activity.totalAmountTextView.setText("Total Amount " + activity.currency.getSelectedItem().toString() + " " + formatter.format(totalAmount));
+        activity.totalAmountTextView.setText("Total Amount " + currency + " " + formatter.format(totalAmount));
 
         calculateValueAndAssignWithNoParameter(); // after add and delete item on recycler then them value change ...... via more details
 

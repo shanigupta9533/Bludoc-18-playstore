@@ -22,12 +22,19 @@ public class InvoicesAdapter extends RecyclerView.Adapter<InvoicesAdapter.viewHo
     private final Context context;
     private final ArrayList<InvoicesDataModel> invoicesDataModelList;
     private OnClickListener onClickListener;
+    private String decideCurrency;
 
 
     public InvoicesAdapter(Context context, ArrayList<InvoicesDataModel> stringList) {
 
         this.context = context;
         this.invoicesDataModelList = stringList;
+
+    }
+
+    public void setCurrency(String decideCurrency) {
+
+        this.decideCurrency=decideCurrency;
 
     }
 
@@ -59,7 +66,7 @@ public class InvoicesAdapter extends RecyclerView.Adapter<InvoicesAdapter.viewHo
         InvoicesDataModel invoicesDataModel = invoicesDataModelList.get(position);
         holder.title.setText(invoicesDataModel.getInvoicesTitle());
         holder.items.setText(invoicesDataModel.getItem_name());
-        holder.amount.setText("Amount - "+invoicesDataModel.getAmount());
+        holder.amount.setText("Amount - "+decide(decideCurrency)+" "+invoicesDataModel.getAmount());
 
         holder.edit_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,6 +87,20 @@ public class InvoicesAdapter extends RecyclerView.Adapter<InvoicesAdapter.viewHo
 
             }
         });
+
+    }
+
+    private String decide(String decideCurrency) {
+
+        if(decideCurrency==null || decideCurrency.equalsIgnoreCase("INR")){
+
+            return "₹";
+
+        } else {
+
+            return decideCurrency;
+
+        }
 
     }
 

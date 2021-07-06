@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -101,12 +102,19 @@ public class MySubscriptionAdapter extends RecyclerView.Adapter<MySubscriptionAd
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
 
         viewHolder.packagename.setText(mFilteredList.get(i).getSubscriptionName());
-        viewHolder.validity.setText("Validity : "+mFilteredList.get(i).getDays() + " Days");
-        viewHolder.dateofpurchase.setText("Purchase Date : " + mFilteredList.get(i).getDate());
-        viewHolder.dateofstart.setText("Start Date : " + mFilteredList.get(i).getStart());
-        viewHolder.dateofend.setText("End Date : " + mFilteredList.get(i).getEnd());
-        viewHolder.txnid.setText("Transaction Id : " + mFilteredList.get(i).getTransactionId());
-        viewHolder.amount.setText("Amount Paid : " +mContext.getResources().getString(R.string.Rs)+ " "+ mFilteredList.get(i).getAmount() + " /  USD " + String.format("%.2f",Float.parseFloat(mFilteredList.get(i).getAmount())/60));
+
+        if(!TextUtils.isEmpty(mFilteredList.get(i).getHospitalCode())) {
+            viewHolder.id_notify.setVisibility(View.GONE);
+            viewHolder.validity.setText("Validity : " + mFilteredList.get(i).getDays() + " Days");
+            viewHolder.dateofpurchase.setText("Purchase Date : " + mFilteredList.get(i).getDate());
+            viewHolder.dateofstart.setText("Start Date : " + mFilteredList.get(i).getStart());
+            viewHolder.dateofend.setText("End Date : " + mFilteredList.get(i).getEnd());
+            viewHolder.txnid.setText("Transaction Id : " + mFilteredList.get(i).getTransactionId());
+            viewHolder.amount.setText("Amount Paid : " + mContext.getResources().getString(R.string.Rs) + " " + mFilteredList.get(i).getAmount() + " /  USD " + String.format("%.2f", Float.parseFloat(mFilteredList.get(i).getAmount()) / 60));
+        } else {
+            viewHolder.id_notify.setVisibility(View.VISIBLE);
+            viewHolder.id_notify.setText("Your subscription is purchased by ‘"+mFilteredList.get(i).getName()+"’ valid till : "+mFilteredList.get(i).getDate());
+        }
 
         viewHolder.copy.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,7 +141,7 @@ public class MySubscriptionAdapter extends RecyclerView.Adapter<MySubscriptionAd
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView amount,packagename, validity,dateofpurchase, txnid,dateofstart,dateofend;
+        private TextView amount,packagename, validity,dateofpurchase, txnid,dateofstart,dateofend,id_notify;
         ImageView copy;
         Button btnSubscribe;
         NestedScrollView ll_subscriptions;
@@ -152,6 +160,7 @@ public class MySubscriptionAdapter extends RecyclerView.Adapter<MySubscriptionAd
             amount= view.findViewById(R.id.amount);
             dateofstart= view.findViewById(R.id.dateofstart);
             dateofend= view.findViewById(R.id.dateofend);
+            id_notify= view.findViewById(R.id.id_notify);
         }
     }
 }

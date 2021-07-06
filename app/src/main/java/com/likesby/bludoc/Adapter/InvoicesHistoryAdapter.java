@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.likesby.bludoc.InvoiceActivity;
 import com.likesby.bludoc.InvoicesPresActivity;
 import com.likesby.bludoc.ModelLayer.Entities.PatientsItem;
 import com.likesby.bludoc.ModelLayer.InvoicePresModel;
@@ -54,6 +53,7 @@ public class InvoicesHistoryAdapter extends RecyclerView.Adapter<InvoicesHistory
     public interface OnClickListener {
 
         void onDelete(AllPharmacistList s, int position);
+        void onSearch(int i);
 
     }
 
@@ -72,7 +72,8 @@ public class InvoicesHistoryAdapter extends RecyclerView.Adapter<InvoicesHistory
         holder.patient_name.setText("Name : "+checkValue(invoicePresModel.getP_name()));
         holder.tv_email.setText("Email : "+checkValue(invoicePresModel.getP_email()));
         holder.tv_mobile.setText("Mobile Number : "+checkValue(invoicePresModel.getP_mobile()));
-        holder.invoice_number.setText("#"+invoicePresModel.getInvoice_number());
+        holder.invoice_number.setText("#"+invoicePresModel.getInvoice_no());
+        holder.date.setText("Date : "+checkValue(invoicePresModel.getDate()));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,7 +125,7 @@ public class InvoicesHistoryAdapter extends RecyclerView.Adapter<InvoicesHistory
                 } else {
                     ArrayList<InvoicePresModel> filteredList = new ArrayList<>();
                     for (InvoicePresModel row : invoicePresModels) {
-                        if (row.getInvoice_title().toLowerCase().contains(charString.toLowerCase())) {
+                        if (row.getInvoice_title().toLowerCase().contains(charString.toLowerCase()) || row.getInvoice_no().toLowerCase().contains(charString.toLowerCase())) {
                             Log.d(TAG, "performFiltering: " + charString + " == " + row);
                             filteredList.add(row);
                         }
@@ -142,6 +143,7 @@ public class InvoicesHistoryAdapter extends RecyclerView.Adapter<InvoicesHistory
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
 
                 listFilter = (ArrayList<InvoicePresModel>) filterResults.values;
+                onClickListener.onSearch(listFilter.size());
                 notifyDataSetChanged();
 
             }
@@ -155,6 +157,7 @@ public class InvoicesHistoryAdapter extends RecyclerView.Adapter<InvoicesHistory
         private final TextView tv_mobile;
         private final TextView tv_email;
         private final TextView invoice_number;
+        private final TextView date;
         ProgressBar pb;
         LinearLayout ll_main_patient_view;
         ImageView imageView;
@@ -168,6 +171,7 @@ public class InvoicesHistoryAdapter extends RecyclerView.Adapter<InvoicesHistory
             tv_mobile = view.findViewById(R.id.tv_mobile);
             tv_email = view.findViewById(R.id.tv_email);
             invoice_number = view.findViewById(R.id.invoice_number);
+            date = view.findViewById(R.id.date);
 
         }
     }

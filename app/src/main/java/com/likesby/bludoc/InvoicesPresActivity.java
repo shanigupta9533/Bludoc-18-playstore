@@ -81,6 +81,7 @@ public class InvoicesPresActivity extends AppCompatActivity {
     private CompositeDisposable mBag = new CompositeDisposable();
     DecimalFormat formatter = new DecimalFormat("#,###,###");
     private ProgressDialog progressDialog;
+    private String date;
 
     private void initViewHolder() {
         apiViewHolder = ViewModelProviders.of(this).get(ApiViewHolder.class);
@@ -107,6 +108,7 @@ public class InvoicesPresActivity extends AppCompatActivity {
             String advancePercentage = invoicePewModel.getAdvance_amount_percentage();
             String discountPercentage = invoicePewModel.getDiscount_percentage();
             String taxPercentage = invoicePewModel.getTax_percentage();
+            date = invoicePewModel.getDate();
 
             String currency;
 
@@ -123,7 +125,7 @@ public class InvoicesPresActivity extends AppCompatActivity {
                 activity.totalAmount.setText("₹ " + formatter.format(Float.parseFloat(checkNullValues(invoicePewModel.getFinal_amount(), activity.totalAmount))));
                 currency = "₹ ";
             } else {
-                activity.totalAmount.setText(invoicePewModel.getCurrency() + " " + formatter.format(Long.parseLong(checkNullValues(invoicePewModel.getFinal_amount(), activity.totalAmount))));
+                activity.totalAmount.setText(invoicePewModel.getCurrency() + " " + formatter.format(Float.parseFloat(checkNullValues(invoicePewModel.getFinal_amount(), activity.totalAmount))));
                 currency = invoicePewModel.getCurrency() + " ";
             }
 
@@ -134,14 +136,14 @@ public class InvoicesPresActivity extends AppCompatActivity {
             activity.taxAmount.setText(taxPercentage + " " + currency + formatter.format(Float.parseFloat(checkNullValues(invoicePewModel.getTax(), activity.parentOfTax))));
             activity.endNote.setText("Remarks - " + checkNullValues(invoicePewModel.getNote(), activity.endNote));
 
-            if (TextUtils.isEmpty(invoicePewModel.getInvoice_number())) {
+            if (TextUtils.isEmpty(invoicePewModel.getInvoice_no())) {
 
                 long invoiceNumber=new Date().getTime() / 1000;
                 activity.invoiceNumber.setText("Invoice Number - #" + invoiceNumber);
-                invoicePewModel.setInvoice_number(String.valueOf(invoiceNumber));
+                invoicePewModel.setInvoice_no(String.valueOf(invoiceNumber));
 
             } else
-                activity.invoiceNumber.setText("Invoice Number - #" + invoicePewModel.getInvoice_number());
+                activity.invoiceNumber.setText("Invoice Number - #" + invoicePewModel.getInvoice_no());
 
             if (!TextUtils.isEmpty(invoicePewModel.getPay_status()) && invoicePewModel.getPay_status().equalsIgnoreCase("None"))
                 activity.parentOfPaymentStatus.setVisibility(View.GONE);
@@ -164,6 +166,7 @@ public class InvoicesPresActivity extends AppCompatActivity {
                 activity.invoicesInRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
                 InvoicesPresAdapter invoicesPresAdapter = new InvoicesPresAdapter(this, invoicePewModel.getItems());
                 activity.invoicesInRecyclerView.setAdapter(invoicesPresAdapter);
+                invoicesPresAdapter.setCurrenyDecide(currency);
             }
 
         }
@@ -347,10 +350,15 @@ public class InvoicesPresActivity extends AppCompatActivity {
         }
 
         //todo set date of doctor =========>
-        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
-        Calendar c2 = Calendar.getInstance();
-        String formattedDate = df.format(c2.getTime());
-        activity.textViewDate.setText("Date : " + formattedDate);
+
+        if(TextUtils.isEmpty(date)) {
+            SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
+            Calendar c2 = Calendar.getInstance();
+            String formattedDate = df.format(c2.getTime());
+            activity.textViewDate.setText("Date : " + formattedDate);
+        } else {
+            activity.textViewDate.setText("Date : " + date);
+        }
 
     }
 

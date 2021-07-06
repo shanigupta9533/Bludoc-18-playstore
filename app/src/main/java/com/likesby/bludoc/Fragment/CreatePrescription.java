@@ -64,6 +64,7 @@ import com.google.android.gms.ads.formats.MediaView;
 import com.google.android.gms.ads.formats.NativeAdOptions;
 import com.google.android.gms.ads.formats.UnifiedNativeAd;
 import com.google.android.gms.ads.formats.UnifiedNativeAdView;
+import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 import com.likesby.bludoc.Adapter.AddLabTestAdapter;
 import com.likesby.bludoc.Adapter.AddMedicineAdapter;
@@ -2657,6 +2658,40 @@ public class CreatePrescription extends Fragment {
 
                     }
                 });
+
+            }
+        });
+
+        binding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+
+                if(tab.getPosition()==0){
+
+                    hideKeyboard(mContext);
+                    setActiveEdit_Note();
+
+                } else if(tab.getPosition()==1){
+
+                    hideKeyboard(mContext);
+                    setActiveMedicine_Product();
+
+                } else{
+
+                    hideKeyboard(mContext);
+                    setActiveMedicine_LAB();
+
+                }
+
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
 
             }
         });

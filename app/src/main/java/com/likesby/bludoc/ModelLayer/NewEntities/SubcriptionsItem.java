@@ -10,6 +10,12 @@ public class SubcriptionsItem{
 	@SerializedName("date")
 	private String date;
 
+	@SerializedName("name")
+	private String nameHospital;
+
+	@SerializedName("useFor")
+	private String useFor;
+
 	@SerializedName("doctor_id")
 	private String doctorId;
 
@@ -106,12 +112,28 @@ public class SubcriptionsItem{
 		return end;
 	}
 
+	public String getUseFor() {
+		return useFor;
+	}
+
+	public void setUseFor(String useFor) {
+		this.useFor = useFor;
+	}
+
 	public void setType(String type){
 		this.type = type;
 	}
 
 	public String getType(){
 		return type;
+	}
+
+	public String getNameHospital() {
+		return nameHospital;
+	}
+
+	public void setNameHospital(String nameHospital) {
+		this.nameHospital = nameHospital;
 	}
 
 	@Override

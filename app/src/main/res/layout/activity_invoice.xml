@@ -248,12 +248,16 @@
                                 android:background="@drawable/blue_faint_btn_gradient_changes"
                                 android:layout_height="wrap_content">
 
-                                <androidx.appcompat.widget.AppCompatSpinner
+                                <TextView
                                     android:entries="@array/selected_currency"
                                     android:layout_width="match_parent"
-                                    android:theme="@style/Spinner"
                                     android:layout_marginStart="@dimen/margin_4"
                                     android:id="@+id/currency"
+                                    android:paddingStart="@dimen/m_margin_4"
+                                    android:paddingEnd="0dp"
+                                    android:gravity="center_vertical"
+                                    android:text="Choose"
+                                    android:textSize="@dimen/margin_12"
                                     android:layout_height="40dp"
                                     />
 
@@ -413,6 +417,7 @@
                             android:paddingStart="@dimen/margin_14"
                             android:paddingEnd="@dimen/margin_14"
                             android:text="Choose From Template"
+                            android:stateListAnimator="@null"
                             android:textAllCaps="false"
                             android:textColor="@color/white"
                             android:textSize="12sp" />

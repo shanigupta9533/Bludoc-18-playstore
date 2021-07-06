@@ -141,6 +141,34 @@
                     android:textSize="@dimen/font_14"
                     android:textStyle="bold" />
 
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tab_layout"
+                    android:layout_width="match_parent"
+                    app:tabMode="scrollable"
+                    android:layout_below="@+id/patientdetails"
+                    android:layout_height="wrap_content"
+                    app:tabIndicatorColor="@color/colorBlack"
+                    android:visibility="gone"
+                    app:tabSelectedTextColor="@color/colorBlack"
+                    app:tabTextAppearance="@style/MineCustomTabText2">
+
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Case History" />
+
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Medicine/Product" />
+
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Lab Test/Imaging" />
+
+                </com.google.android.material.tabs.TabLayout>
+
                 <LinearLayout
                     android:id="@+id/lay1"
                     android:layout_width="match_parent"
@@ -148,6 +176,7 @@
                     android:layout_below="@+id/patientdetails"
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/margin_5"
+                    android:visibility="visible"
                     android:gravity="center"
                     android:weightSum="0">
 
@@ -321,7 +350,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_above="@+id/btn_prescribe"
-                    android:layout_below="@+id/lay1">
+                    android:layout_below="@+id/tab_layout">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -538,6 +567,8 @@
                                         android:layout_marginRight="5dp"
                                         android:layout_marginBottom="@dimen/margin_3"
                                         android:layout_weight="2"
+                                        android:elevation="0dp"
+                                        android:stateListAnimator="@null"
                                         android:background="@drawable/blue_round_btn_gradient_mojito"
                                         android:fontFamily="@font/poppinsmedium"
                                         android:foreground="?android:attr/selectableItemBackground"
@@ -567,6 +598,7 @@
                                         android:fontFamily="@font/poppinsmedium"
                                         android:foreground="?android:attr/selectableItemBackground"
                                         android:paddingLeft="10dp"
+                                        android:stateListAnimator="@null"
                                         android:paddingRight="10dp"
                                         android:text="Choose from Template"
                                         android:textAllCaps="false"
@@ -1066,6 +1098,7 @@
                                         android:textAllCaps="false"
                                         android:textColor="@color/colorBlue"
                                         android:elevation="0dp"
+                                        android:stateListAnimator="@null"
                                         android:textSize="@dimen/font_14"
                                         android:textStyle="normal"
                                         app:layout_constraintEnd_toEndOf="parent"
@@ -1090,6 +1123,7 @@
                                         android:paddingRight="10dp"
                                         android:text="Choose from Template"
                                         android:textAllCaps="false"
+                                        android:stateListAnimator="@null"
                                         android:elevation="0dp"
                                         android:textColor="@color/colorBlue"
                                         android:textSize="@dimen/font_14"

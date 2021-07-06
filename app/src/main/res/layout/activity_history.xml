@@ -10,6 +10,55 @@
         android:orientation="vertical"
         tools:context=".HistoryActivity">
 
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_invite_member"
+            app:contentInsetLeft="0dp"
+            app:contentInsetStart="0dp"
+            app:contentInsetStartWithNavigation="0dp"
+            app:layout_collapseMode="pin"
+            app:titleTextColor="@color/colorWhite"
+            app:subtitleTextColor="@color/colorWhite"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:padding="-48dp"
+            android:visibility="gone"
+            app:popupTheme="@style/AppThemeNOAC">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <FrameLayout
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+
+                    <ImageView
+                        android:id="@+id/btn_back_edit_profile"
+                        android:layout_margin="@dimen/margin_10"
+                        android:layout_gravity="center|start"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/ic_back_button"
+                        app:tint="@color/colorBlack" />
+
+                    <TextView
+                        android:fontFamily="@font/poppinsmedium"
+                        android:layout_gravity="center"
+                        android:textSize="15sp"
+                        android:textColor="@color/colorBlack"
+                        android:gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="History"
+                        android:typeface="sans"
+                        />
+
+                </FrameLayout>
+
+
+            </FrameLayout>
+        </androidx.appcompat.widget.Toolbar>
 
         <FrameLayout
             android:id="@+id/homePageContainer"

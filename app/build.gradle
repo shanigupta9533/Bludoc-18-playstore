@@ -137,6 +137,8 @@ dependencies {
     //apache scape string
     implementation 'org.apache.commons:commons-text:1.9'
 
+    implementation 'com.github.midorikocak:currency-picker-android:1.2.1'
+
     implementation project(':nativetemplates')
 }
 

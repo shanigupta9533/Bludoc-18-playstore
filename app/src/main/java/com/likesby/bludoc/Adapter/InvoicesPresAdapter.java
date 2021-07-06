@@ -27,12 +27,19 @@ public class InvoicesPresAdapter extends RecyclerView.Adapter<InvoicesPresAdapte
     private final ArrayList<InvoicesDataModel> invoicesDataModelList;
     private InvoicesAdapter.OnClickListener onClickListener;
     DecimalFormat formatter = new DecimalFormat("#,###,###");
+    private String currency;
 
 
     public InvoicesPresAdapter(Context context, ArrayList<InvoicesDataModel> stringList) {
 
         this.context = context;
         this.invoicesDataModelList = stringList;
+
+    }
+
+    public void setCurrenyDecide(String currency) {
+
+        this.currency=currency;
 
     }
 
@@ -64,7 +71,7 @@ public class InvoicesPresAdapter extends RecyclerView.Adapter<InvoicesPresAdapte
 
         InvoicesDataModel invoicesDataModel = invoicesDataModelList.get(position);
         holder.invoicesHeading.setText(invoicesDataModel.getItem_name());
-        holder.price.setText(formatter.format(Long.parseLong(invoicesDataModel.getAmount())));
+        holder.price.setText(currency+" "+formatter.format(Long.parseLong(invoicesDataModel.getAmount())));
         holder.position.setText((position+1)+". ");
 
         if(position%2==0){

@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -219,7 +220,7 @@ public class BottomShareAdapter extends RecyclerView.Adapter<BottomShareAdapter.
         boolean isFolderCreated = true;
 
         if (!root.exists()) {
-            isFolderCreated = root.mkdirs();
+            isFolderCreated = root.mkdir();
         }
 
         if (isFolderCreated) {
@@ -252,6 +253,7 @@ public class BottomShareAdapter extends RecyclerView.Adapter<BottomShareAdapter.
     private File createPDFWithMultipleImage(ArrayList<Uri> files) {
 
         File file = getOutputFile();
+
         if (file != null) {
             try {
                 FileOutputStream fileOutputStream = new FileOutputStream(file);

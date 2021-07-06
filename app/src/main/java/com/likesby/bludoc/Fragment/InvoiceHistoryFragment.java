@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -83,6 +85,43 @@ public class InvoiceHistoryFragment extends Fragment {
         invoicesPresAdapter=new InvoicesHistoryAdapter(invoicePresModelArrayList,getContext());
         binding.recyclerview.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
         binding.recyclerview.setAdapter(invoicesPresAdapter);
+
+        invoicesPresAdapter.setOnClickListener(new InvoicesHistoryAdapter.OnClickListener() {
+            @Override
+            public void onDelete(AllPharmacistList s, int position) {
+
+            }
+
+            @Override
+            public void onSearch(int i) {
+
+                if(i<=0)
+                    no_data_found_id.setVisibility(View.VISIBLE);
+                else
+                    no_data_found_id.setVisibility(View.GONE);
+
+
+            }
+        });
+
+        binding.toolbar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                invoicesPresAdapter.getFilter().filter(s);
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         AllGetInvoicesHistory();
 

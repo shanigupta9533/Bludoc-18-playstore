@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
+<FrameLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/ll_subscriptions"
@@ -131,6 +131,21 @@
         </LinearLayout>
 
 
-
     </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+
+    <TextView
+        android:fontFamily="@font/poppins"
+        android:text="Package Name"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:background="@color/colorWhite"
+        android:id="@+id/id_notify"
+        android:elevation="@dimen/margin_10"
+        android:textStyle="bold"
+        android:textAllCaps="true"
+        android:textColor="@color/colorDarkstGrey"
+        />
+
+</FrameLayout>

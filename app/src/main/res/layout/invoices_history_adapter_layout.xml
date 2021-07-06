@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:fontFamily="@font/poppins"
-                android:text="Invoice title : "
+                android:text="Invoice Number : "
                 android:textColor="@color/colorBlack"
                 android:textSize="13sp"
                 />
@@ -75,6 +75,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="10"
+            android:layout_marginTop="@dimen/margin_12"
             android:fontFamily="@font/poppins"
             android:text="Patient Name"
             android:textColor="@color/colorDarkGrey"
@@ -123,15 +124,16 @@
 
 
     <TextView
-        android:id="@+id/tv_patient_id"
+        android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_2"
+        android:layout_weight="1"
         android:fontFamily="@font/poppins"
-        android:text=""
+        android:text="Date"
         android:textColor="@color/colorDarkGrey"
-        android:textSize="10sp"
-        android:textStyle="bold"
-        android:visibility="gone" />
+        android:textSize="12sp"
+        android:textStyle="bold" />
 
 
     <TextView

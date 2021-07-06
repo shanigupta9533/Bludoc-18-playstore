@@ -2,9 +2,11 @@ package com.likesby.bludoc;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentSender;
@@ -478,8 +480,14 @@ public class EmpLogin extends AppCompatActivity implements GoogleApiClient.Conne
                     popuplogout();
                 }
                 else if(response.getMessage().equals("Your account is inactive or deleted please contact admin")){
+
                     Toast.makeText(mContext, "Your account is Inactive or Deleted. Contact Admin.", Toast.LENGTH_SHORT).show();
                     popuplogout();
+
+                } else if(response.getMessage().equals("You have already registered as hospital")){
+
+                    popupSubAdmin();
+
                 }
             }else  if (response.getMessage().equals("Your profile is deleted"))  {
                 frameLayoutProgressMainl.setVisibility(View.GONE);
@@ -562,6 +570,48 @@ public class EmpLogin extends AppCompatActivity implements GoogleApiClient.Conne
                 Intent i  = new Intent(mContext, SplashActivity.class);
                 startActivity(i);
                 finishAffinity();
+            }
+        });
+
+        if(dialog_data!=null && !dialog_data.isShowing())
+            dialog_data.show();
+    }
+
+
+    private  void popupSubAdmin()
+    {
+        final Dialog dialog_data = new Dialog(mContext);
+        dialog_data.setCancelable(true);
+
+        dialog_data.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        Objects.requireNonNull(dialog_data.getWindow()).setGravity(Gravity.CENTER);
+
+        dialog_data.setContentView(R.layout.popup_logout);
+
+        WindowManager.LayoutParams lp_number_picker = new WindowManager.LayoutParams();
+        Window window = dialog_data.getWindow();
+        lp_number_picker.copyFrom(window.getAttributes());
+
+        lp_number_picker.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp_number_picker.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+        //window.setGravity(Gravity.CENTER);
+        window.setAttributes(lp_number_picker);
+
+        Button btn_no = dialog_data.findViewById(R.id.btn_no);
+        btn_no.setVisibility(View.GONE);
+        Button btn_yes = dialog_data.findViewById(R.id.btn_yes);
+        TextView text1 = dialog_data.findViewById(R.id.tv_no_template);
+        ImageView img= dialog_data.findViewById(R.id.iv_no_template);
+        img.setVisibility(View.GONE);
+        btn_yes.setText("Okay");
+        text1.setText("This mail id is already registered as BluDoc Admin. Try login with another mail Id.\n" +
+                "For any query contact us on bludocapp@gmail.com\n");
+        btn_yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
             }
         });
 

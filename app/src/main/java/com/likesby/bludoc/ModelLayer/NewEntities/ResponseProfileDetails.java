@@ -59,6 +59,12 @@ public class ResponseProfileDetails{
 	@SerializedName("ug_id")
 	private String ugId;
 
+	@SerializedName("name")
+	private String name;
+
+	@SerializedName("use_for")
+	private String useFor;
+
 	@SerializedName("clinic_name")
 	private String clinicName;
 
@@ -120,9 +126,6 @@ public class ResponseProfileDetails{
 
 	@SerializedName("clinic_address")
 	private String clinicAddress;
-
-	@SerializedName("name")
-	private String name;
 
 	@SerializedName("pg_name")
 	private String pgName;
@@ -283,6 +286,14 @@ public class ResponseProfileDetails{
 
 	public String getRegistrationNo(){
 		return registrationNo;
+	}
+
+	public String getUseFor() {
+		return useFor;
+	}
+
+	public void setUseFor(String useFor) {
+		this.useFor = useFor;
 	}
 
 	public void setAddtionalQualification(String addtionalQualification){

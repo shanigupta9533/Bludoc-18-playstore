@@ -9,6 +9,15 @@ public class MySubscription {
     @SerializedName("doctor_subscription_id")
     @Expose
     private String doctorSubscriptionId;
+
+    @SerializedName("name")
+    @Expose
+    private String name;
+
+    @SerializedName("hospital_code")
+    @Expose
+    private String hospitalCode;
+
     @SerializedName("doctor_id")
     @Expose
     private String doctorId;
@@ -67,6 +76,14 @@ public class MySubscription {
         this.subscriptionId = subscriptionId;
     }
 
+    public String getHospitalCode() {
+        return hospitalCode;
+    }
+
+    public void setHospitalCode(String hospitalCode) {
+        this.hospitalCode = hospitalCode;
+    }
+
     public String getSubscriptionName() {
         return subscriptionName;
     }
@@ -105,6 +122,14 @@ public class MySubscription {
 
     public void setDays(String days) {
         this.days = days;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getType() {
