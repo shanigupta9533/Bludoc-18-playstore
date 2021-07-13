@@ -30,6 +30,13 @@ public class MySubscription {
     @SerializedName("start")
     @Expose
     private String start;
+
+    @Expose
+    @SerializedName("use_for")
+    private String useFor;
+
+
+
     @SerializedName("end")
     @Expose
     private String end;
@@ -91,6 +98,15 @@ public class MySubscription {
     public void setSubscriptionName(String subscriptionName) {
         this.subscriptionName = subscriptionName;
     }
+
+    public String getUseFor() {
+        return useFor;
+    }
+
+    public void setUseFor(String useFor) {
+        this.useFor = useFor;
+    }
+
 
     public String getStart() {
         return start;

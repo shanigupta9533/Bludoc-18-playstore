@@ -83,7 +83,7 @@
                 android:fontFamily="@font/poppinsmedium"
                 android:layout_marginTop="@dimen/margin_30"
                 android:layout_marginStart="@dimen/font_12"
-                android:text="About Save Referral Centre"
+                android:text="About Add Referral Centre"
                 android:textColor="@color/colorBlack"
                 android:textSize="14dp" />
 
@@ -123,9 +123,7 @@
                 android:layout_marginTop="@dimen/font_14"
                 android:layout_marginStart="@dimen/font_13"
                 android:text="- Click on Add Referral Centre, select the category (Pharmacy, Path Lab, Imaging Centre, Hospital &amp; Doctor), fill details and click on Save \n\n
-- You can then choose to send a copy to referrals at sharing page of prescription. This will directly mail a copy of prescription to the referrals \n\n
-- Copy to Path Lab, Imaging Centre, Hospital &amp; Doctor will contain complete prescription including case history of the patient \n\n
-- Copy to Pharmacy will not contain patient case history only patient’s basic details and medications will be included."
+- You can then choose to send a copy to referrals at sharing page of prescription. This will directly mail a copy of prescription to the referrals \n\n"
                 android:textColor="@color/colorBlack"
                 android:textSize="13dp" />
 

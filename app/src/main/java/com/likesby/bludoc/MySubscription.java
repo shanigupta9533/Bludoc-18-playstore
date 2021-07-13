@@ -43,15 +43,14 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class MySubscription extends AppCompatActivity
-{
+public class MySubscription extends AppCompatActivity {
     private static final String TAG = "SubPackages___";
     ApiViewHolder mLocationViewHolder;
     Context mContext;
     CompositeDisposable mBag = new CompositeDisposable();
     ArrayList<com.likesby.bludoc.ModelLayer.Entities.MySubscription> SubscriptionsArrayList;
 
-    private RadioButton rb_Family,rb_Business;
+    private RadioButton rb_Family, rb_Business;
     RecyclerView recyclerView;
     MySubscriptionAdapter mySubscriptionAdapter;
 
@@ -73,8 +72,8 @@ public class MySubscription extends AppCompatActivity
         activity = MySubscription.this;
 
 
-        Calendar c2 = Calendar .getInstance();
-        System.out.println("Current time => "+c2.getTime());
+        Calendar c2 = Calendar.getInstance();
+        System.out.println("Current time => " + c2.getTime());
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         String date2 = df.format(c2.getTime());
 
@@ -102,6 +101,34 @@ public class MySubscription extends AppCompatActivity
         recyclerView = findViewById(R.id.recycler_packages);
         fl_subscription = findViewById(R.id.fl_subscription);
         tv_msg = findViewById(R.id.tv_msg);
+
+        if (!("").equalsIgnoreCase(manager.getPreferences(mContext, "registration_no"))) {
+            ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
+            if (!("").equalsIgnoreCase(responseProfileDetails.getHospitalCode())) {
+                if (responseProfileDetails.getAccess().equals("Pending")) {
+
+                    tv_msg.setText("Your account is pending for approval. Please contact " + responseProfileDetails.getHospital_name());
+                    return;
+
+                }
+            }
+        }
+
+        if (!("").equalsIgnoreCase(manager.getPreferences(mContext, "registration_no"))) {
+
+            ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
+            if (!("").equalsIgnoreCase(responseProfileDetails.getHospitalCode())) {
+
+                if (responseProfileDetails.getAccess().equals("Pause")) {
+
+                    tv_msg.setText("Your subscription is paused. Please contact to hospital");
+                    return;
+
+                }
+
+            }
+
+        }
 
         String sub_valid = "", premium_valid = "";
         boolean flag_reset_free = false, flag_reset_paid = false;
@@ -205,7 +232,7 @@ public class MySubscription extends AppCompatActivity
                 {
                     if (flag_reset_free) {
 
-                        tv_msg.setText("Congratulations!! \n You have been offered "+ premium_valid+" days free trial.\nValid Till " + sub_valid + "\nUpgrade to premium for an ad free experience.");
+                        tv_msg.setText("Congratulations!! \n You have been offered " + premium_valid + " days free trial.\nValid Till " + sub_valid + "\nUpgrade to premium for an ad free experience.");
 
                     } else {
 
@@ -219,15 +246,16 @@ public class MySubscription extends AppCompatActivity
             } else {
                 tv_msg.setText("Your Subscription has Ended, \n Kindly upgrade to Premium!");
             }
-        }else {
+        } else {
             tv_msg.setText("Your Subscription has Ended, \n Kindly upgrade to Premium!");
         }
+
+
     }
 
 
     //================     Main  Categories       ==============================================
-    private void initRecyclerViewCategories()
-    {
+    private void initRecyclerViewCategories() {
         recyclerView = findViewById(R.id.recycler_packages);
         //Create new GridLayoutManager
         @SuppressLint("WrongConstant") GridLayoutManager gridLayoutManagerr = new GridLayoutManager(this,
@@ -266,18 +294,35 @@ public class MySubscription extends AppCompatActivity
             if (response != null) {
                 fl_subscription.setVisibility(View.GONE);
                 if (response.getMessage() != null) {
-                    if(response.getMessage().equals("My Subscriptions")){
+                    if (response.getMessage().equals("My Subscriptions")) {
                         SubscriptionsArrayList = new ArrayList<>();
                         SubscriptionsArrayList = response.getMySubscriptions();
 
-                        mySubscriptionAdapter = new MySubscriptionAdapter(SubscriptionsArrayList,mContext,mLocationViewHolder,mBag,activity);
+                        mySubscriptionAdapter = new MySubscriptionAdapter(SubscriptionsArrayList, mContext, mLocationViewHolder, mBag, activity);
                         recyclerView.setAdapter(mySubscriptionAdapter);
+                        com.likesby.bludoc.ModelLayer.Entities.MySubscription siLatest = new com.likesby.bludoc.ModelLayer.Entities.MySubscription();
+
+                        if (SubscriptionsArrayList.size() != 0) {
+                            for (com.likesby.bludoc.ModelLayer.Entities.MySubscription si : SubscriptionsArrayList) {
+                                if (si.getHospitalCode() != null && !si.getHospitalCode().equals("")) {
+                                    siLatest = si;
+
+
+                                    // tv_msg.setText("Your Subscription has Ended, \n Kindly upgrade to Premium!");
+
+                                }
+
+                            }
+
+                        }
+                        if (siLatest.getName() != null && !siLatest.getName().equals(""))
+                            tv_msg.setText("Your subscription is purchased by " + siLatest.getName() + " valid till : \n" + siLatest.getEnd());
+
                     }
                 } else {
                     Toast.makeText(mContext, "" + response.getMessage(), Toast.LENGTH_SHORT).show();
                 }
-            }
-            else
+            } else
                 fl_subscription.setVisibility(View.GONE);
         }
 

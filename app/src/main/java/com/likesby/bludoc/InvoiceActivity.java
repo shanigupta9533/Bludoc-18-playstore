@@ -1,6 +1,7 @@
 package com.likesby.bludoc;
 
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Gravity;
@@ -21,6 +23,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,10 +47,14 @@ import com.mynameismidori.currencypicker.CurrencyPickerListener;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
-@SuppressLint("SetTextI18n")
+@SuppressLint("SetTextI18n|ClickableViewAccessibility")
 public class InvoiceActivity extends AppCompatActivity {
 
     private ActivityInvoiceBinding activity;
@@ -63,11 +70,13 @@ public class InvoiceActivity extends AppCompatActivity {
     private PatientsItem patientsItem;
     private String payStatus = "Paid";
     DecimalFormat formatter = new DecimalFormat("#,###,###");
-    private float calculateFromTotal = 0;
+    private long calculateFromTotal = 0;
     private long price2 = 0;
     private float price3 = 0f;
-    private String currency="₹";
+    private String currency = "₹";
+    private long price1 = 0;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,6 +146,43 @@ public class InvoiceActivity extends AppCompatActivity {
             }
         });
 
+        activity.invoiceDate.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if (s.length() > 0) {
+
+                    activity.cancelAction.setVisibility(View.VISIBLE);
+
+                } else {
+
+                    activity.cancelAction.setVisibility(View.GONE);
+
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        activity.cancelAction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                activity.invoiceDate.setText("");
+
+            }
+        });
+
         activity.chooseFromTemplate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,14 +192,72 @@ public class InvoiceActivity extends AppCompatActivity {
             }
         });
 
+        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+        Calendar c2 = Calendar.getInstance();
+        String formattedDate = df.format(c2.getTime());
+        activity.invoiceDate.setText(formattedDate);
+
+        activity.invoiceDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                final Calendar myCalendar = Calendar.getInstance();
+                DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        // TODO Auto-generated method stub
+                        myCalendar.set(Calendar.YEAR, year);
+                        myCalendar.set(Calendar.MONTH, monthOfYear);
+                        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                        String myFormat = "dd-MM-yyyy"; // your format
+                        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
+
+                        activity.invoiceDate.setText(sdf.format(myCalendar.getTime()));
+                    }
+
+                };
+                DatePickerDialog datePickerDialog = new DatePickerDialog(InvoiceActivity.this, R.style.DialogTheme, date, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH));
+
+                datePickerDialog.show();
+
+            }
+        });
+
         activity.createInvoice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                activity.amountMoreDetails.setError(null);
+                activity.discountTitle.setError(null);
+                activity.taxTitle.setError(null);
 
                 if (TextUtils.isEmpty(activity.invoiceTitle.getText())) {
 
                     activity.invoiceTitle.requestFocus();
                     activity.invoiceTitle.setError("can't be blank");
+
+                } else if (activity.discountTitleSpinner.getSelectedItemPosition() == 1 && !TextUtils.isEmpty(activity.discountTitle.getText().toString()) && Long.parseLong(activity.discountTitle.getText().toString()) > 100) {
+
+                    activity.discountTitle.requestFocus();
+                    activity.discountTitle.setError("Percentage Exceeded");
+
+                } else if (activity.advancePartialAmount.getSelectedItemPosition() == 1 && !TextUtils.isEmpty(activity.amountMoreDetails.getText().toString()) && Long.parseLong(activity.amountMoreDetails.getText().toString()) > 100) {
+
+                    activity.amountMoreDetails.requestFocus();
+                    activity.amountMoreDetails.setError("Percentage Exceeded");
+
+                } else if (activity.taxTitleSpinner.getSelectedItemPosition() == 1 && !TextUtils.isEmpty(activity.taxTitle.getText().toString()) && Float.parseFloat(activity.taxTitle.getText().toString()) > 100) {
+
+                    activity.taxTitle.requestFocus();
+                    activity.taxTitle.setError("Percentage Exceeded");
+
+                } else if (calculatedFromTotal() < 0) {
+
+                    activity.discountTitle.requestFocus();
+                    activity.amountMoreDetails.setError("Amount exceeded.");
+                    activity.discountTitle.setError("Amount exceeded.");
+                    activity.taxTitle.setError("Amount exceeded.");
 
                 } else {
 
@@ -179,6 +283,12 @@ public class InvoiceActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
+                if (!TextUtils.isEmpty(s) && Long.parseLong(s.toString()) > 100 && activity.advancePartialAmount.getSelectedItemPosition() == 1) {
+                    Toast.makeText(InvoiceActivity.this, "Percentage Invalid", Toast.LENGTH_SHORT).show();
+                    activity.amountMoreDetails.setError("Percentage Invalid");
+                    return;
+                }
+
                 calculateValueAndAssign(s.toString(), activity.advancePartialAmount, activity.amountMoreDetails);
 
             }
@@ -189,11 +299,25 @@ public class InvoiceActivity extends AppCompatActivity {
             }
         });
 
+        activity.btnBackEditProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                onBackPressed();
+
+            }
+        });
+
         activity.advancePartialAmount.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                calculateValueAndAssign(activity.amountMoreDetails.getText().toString(), activity.advancePartialAmount, activity.amountMoreDetails);
+                if (position == 0)
+                    setEditTextMaxLength(activity.amountMoreDetails, 6);
+                else
+                    setEditTextMaxLength(activity.amountMoreDetails, 3);
+
+                activity.amountMoreDetails.setText("");
 
             }
 
@@ -213,6 +337,13 @@ public class InvoiceActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
+                if (!TextUtils.isEmpty(s) && Long.parseLong(s.toString()) > 100 && activity.discountTitleSpinner.getSelectedItemPosition() == 1) {
+
+                    Toast.makeText(InvoiceActivity.this, "Percentage Invalid", Toast.LENGTH_SHORT).show();
+                    activity.discountTitle.setError("Percentage Invalid");
+                    return;
+                }
+
                 calculateValueAndAssign(s.toString(), activity.discountTitleSpinner, activity.discountTitle);
 
             }
@@ -227,7 +358,12 @@ public class InvoiceActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                calculateValueAndAssign(activity.discountTitle.getText().toString(), activity.discountTitleSpinner, activity.discountTitle);
+                if (position == 0)
+                    setEditTextMaxLength(activity.discountTitle, 6);
+                else
+                    setEditTextMaxLength(activity.discountTitle, 3);
+
+                activity.discountTitle.setText("");
 
             }
 
@@ -283,7 +419,9 @@ public class InvoiceActivity extends AppCompatActivity {
             }
         });
 
-        activity.paid.setOnClickListener(v -> {
+        activity.paid.setOnClickListener(v ->
+
+        {
 
             activity.paid.setBackgroundResource(R.drawable.blue_faint_btn_gradient_changes);
             activity.toPay.setBackgroundColor(Color.parseColor("#ffffff"));
@@ -293,7 +431,9 @@ public class InvoiceActivity extends AppCompatActivity {
 
         });
 
-        activity.toPay.setOnClickListener(v -> {
+        activity.toPay.setOnClickListener(v ->
+
+        {
 
             activity.toPay.setBackgroundResource(R.drawable.blue_faint_btn_gradient_changes);
             activity.paid.setBackgroundColor(Color.parseColor("#ffffff"));
@@ -303,7 +443,9 @@ public class InvoiceActivity extends AppCompatActivity {
 
         });
 
-        activity.now.setOnClickListener(v -> {
+        activity.now.setOnClickListener(v ->
+
+        {
 
             activity.now.setBackgroundResource(R.drawable.blue_faint_btn_gradient_changes);
             activity.toPay.setBackgroundColor(Color.parseColor("#ffffff"));
@@ -355,7 +497,8 @@ public class InvoiceActivity extends AppCompatActivity {
             }
         });
 
-        activity.addData.setOnClickListener(v -> {
+        activity.addData.setOnClickListener(v ->
+        {
 
             if (TextUtils.isEmpty(activity.invoiceTitle.getText())) {
 
@@ -370,9 +513,9 @@ public class InvoiceActivity extends AppCompatActivity {
             } else if (TextUtils.isEmpty(activity.amoutInvoiceDetails.getText())) {
 
                 activity.amoutInvoiceDetails.requestFocus();
-                activity.amoutInvoiceDetails.setError("Invalid Amount");
+                activity.amoutInvoiceDetails.setError("Input Amount");
 
-            } else if(totalAmount+Double.parseDouble(activity.amoutInvoiceDetails.getText().toString())>100000){
+            } else if (totalAmount + Double.parseDouble(activity.amoutInvoiceDetails.getText().toString()) > 1000000) {
 
                 activity.amoutInvoiceDetails.requestFocus();
                 activity.amoutInvoiceDetails.setError("Amount Exceed...");
@@ -455,7 +598,9 @@ public class InvoiceActivity extends AppCompatActivity {
             }
         });
 
-        activity.parentOfRelative.getViewTreeObserver().addOnGlobalLayoutListener(keyboardLayoutListener);
+        activity.parentOfRelative.getViewTreeObserver().
+
+                addOnGlobalLayoutListener(keyboardLayoutListener);
 
     }
 
@@ -473,6 +618,12 @@ public class InvoiceActivity extends AppCompatActivity {
 
     }
 
+    public void setEditTextMaxLength(EditText editText, int length) {
+        InputFilter[] FilterArray = new InputFilter[1];
+        FilterArray[0] = new InputFilter.LengthFilter(length);
+        editText.setFilters(FilterArray);
+    }
+
     private InvoicePresModel setInvoicesDataInModel() {
 
         InvoicePresModel invoicePresModel = new InvoicePresModel();
@@ -483,6 +634,9 @@ public class InvoiceActivity extends AppCompatActivity {
         invoicePresModel.setDiscount_title(activity.discountTitleHeading.getText().toString());
         invoicePresModel.setAdvance_amount_title(activity.advancePartialTitle.getText().toString());
         invoicePresModel.setTax_title(activity.taxTitleHeading.getText().toString());
+
+        if (!TextUtils.isEmpty(activity.invoiceDate.getText().toString()))
+            invoicePresModel.setDate(activity.invoiceDate.getText().toString());
 
         if (calculateFromTotal == 0)
             calculateFromTotal = totalAmount;
@@ -591,16 +745,16 @@ public class InvoiceActivity extends AppCompatActivity {
 
         if (!TextUtils.isEmpty(s) && (totalAmount <= 0 || calculateFromTotal < 0)) {
 
-            amountMoreDetails.setError("Invalid Amount");
+            amountMoreDetails.setError("Input Amount");
             activity.totalAmountTextView.setText("Total Amount " + currency + " " + formatter.format(totalAmount));
 
         } else if (!TextUtils.isEmpty(s)) {
 
-            activity.totalAmountTextView.setText("Total Amount " + (calculateFromTotal));
+            activity.totalAmountTextView.setText("Total Amount " + currency + " " + formatter.format(calculateFromTotal));
 
         } else {
 
-            activity.totalAmountTextView.setText("Total Amount " + calculateFromTotal);
+            activity.totalAmountTextView.setText("Total Amount " + currency + " " + formatter.format(calculateFromTotal));
 
         }
 
@@ -617,15 +771,15 @@ public class InvoiceActivity extends AppCompatActivity {
 
         } else {
 
-            activity.totalAmountTextView.setText("Total Amount " + calculateFromTotal);
+            activity.totalAmountTextView.setText("Total Amount " + currency + " " + formatter.format(calculateFromTotal));
 
         }
 
     }
 
-    private float calculatedFromTotal() {
+    private long calculatedFromTotal() {
 
-        long price1 = !TextUtils.isEmpty(activity.amountMoreDetails.getText().toString()) ? Long.parseLong(activity.amountMoreDetails.getText().toString()) : 0;
+        price1 = !TextUtils.isEmpty(activity.amountMoreDetails.getText().toString()) ? Long.parseLong(activity.amountMoreDetails.getText().toString()) : 0;
         price2 = !TextUtils.isEmpty(activity.discountTitle.getText().toString()) ? Long.parseLong(activity.discountTitle.getText().toString()) : 0;
         price3 = !TextUtils.isEmpty(activity.taxTitle.getText().toString()) ? Float.parseFloat(activity.taxTitle.getText().toString()) : 0;
 
@@ -641,7 +795,7 @@ public class InvoiceActivity extends AppCompatActivity {
             price3 = calulatedPercentageForFloat(activity.taxTitle.getText().toString(), totalAmount - price2);
         }
 
-        return totalAmount - price1 - price2 + price3;
+        return (long) (totalAmount - price1 - price2 + price3);
 
     }
 

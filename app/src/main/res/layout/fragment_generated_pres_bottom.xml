@@ -127,10 +127,10 @@
             <ImageView
                 android:layout_width="22dp"
                 android:layout_height="22dp"
-                android:src="@drawable/pin_referral_centre"
+                android:src="@drawable/referral_center_icons"
                 android:layout_gravity="center"
-                android:alpha="0.7"
-                android:contentDescription="@null" />
+                android:contentDescription="@null"
+                app:tint="@color/colorBlack" />
 
             <TextView
                 android:layout_width="0dp"

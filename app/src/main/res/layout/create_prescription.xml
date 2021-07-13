@@ -17,7 +17,6 @@
             android:clickable="true"
             android:orientation="vertical">
 
-
             <com.google.android.material.appbar.AppBarLayout
                 android:id="@+id/appbar_layout"
                 android:layout_width="match_parent"
@@ -173,9 +172,9 @@
                     android:id="@+id/lay1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/patientdetails"
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/margin_5"
+                    android:layout_below="@+id/patientdetails"
                     android:visibility="visible"
                     android:gravity="center"
                     android:weightSum="0">
@@ -203,17 +202,10 @@
                         android:paddingRight="@dimen/margin_8"
                         android:paddingBottom="@dimen/margin_8">
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_edit_note" />
-
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins"
-                            android:paddingStart="@dimen/margin_5"
-                            android:paddingLeft="@dimen/margin_5"
+                            android:fontFamily="@font/poppinsmedium"
                             android:text="Case History"
                             android:textColor="@color/colorBlue"
                             android:textSize="10sp"
@@ -242,17 +234,10 @@
                         android:paddingRight="@dimen/margin_8"
                         android:paddingBottom="@dimen/margin_8">
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_medicine_product" />
-
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins"
-                            android:paddingStart="@dimen/margin_5"
-                            android:paddingLeft="@dimen/margin_5"
+                            android:fontFamily="@font/poppinsmedium"
                             android:text="Medicine/Product"
                             android:textColor="@color/colorBlue"
                             android:textSize="10sp"
@@ -282,20 +267,13 @@
                         android:paddingRight="@dimen/margin_8"
                         android:paddingBottom="@dimen/margin_8">
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_microscope" />
-
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins"
-                            android:paddingStart="@dimen/margin_5"
-                            android:paddingLeft="@dimen/margin_5"
+                            android:fontFamily="@font/poppinsmedium"
                             android:text="Lab Test/Imaging"
                             android:textColor="@color/colorBlue"
-                            android:textSize="10sp"
+                            android:textSize="9sp"
                             />
                     </LinearLayout>
 
@@ -350,7 +328,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_above="@+id/btn_prescribe"
-                    android:layout_below="@+id/tab_layout">
+                    android:layout_below="@+id/lay1">
 
                     <LinearLayout
                         android:layout_width="match_parent"

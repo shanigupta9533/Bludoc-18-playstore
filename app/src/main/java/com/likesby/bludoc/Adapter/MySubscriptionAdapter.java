@@ -103,7 +103,8 @@ public class MySubscriptionAdapter extends RecyclerView.Adapter<MySubscriptionAd
 
         viewHolder.packagename.setText(mFilteredList.get(i).getSubscriptionName());
 
-        if(!TextUtils.isEmpty(mFilteredList.get(i).getHospitalCode())) {
+        if(TextUtils.isEmpty(mFilteredList.get(i).getHospitalCode())) {
+
             viewHolder.id_notify.setVisibility(View.GONE);
             viewHolder.validity.setText("Validity : " + mFilteredList.get(i).getDays() + " Days");
             viewHolder.dateofpurchase.setText("Purchase Date : " + mFilteredList.get(i).getDate());
@@ -111,10 +112,16 @@ public class MySubscriptionAdapter extends RecyclerView.Adapter<MySubscriptionAd
             viewHolder.dateofend.setText("End Date : " + mFilteredList.get(i).getEnd());
             viewHolder.txnid.setText("Transaction Id : " + mFilteredList.get(i).getTransactionId());
             viewHolder.amount.setText("Amount Paid : " + mContext.getResources().getString(R.string.Rs) + " " + mFilteredList.get(i).getAmount() + " /  USD " + String.format("%.2f", Float.parseFloat(mFilteredList.get(i).getAmount()) / 60));
+
         } else {
-            viewHolder.id_notify.setVisibility(View.VISIBLE);
-            viewHolder.id_notify.setText("Your subscription is purchased by ‘"+mFilteredList.get(i).getName()+"’ valid till : "+mFilteredList.get(i).getDate());
+
+            viewHolder.itemView.setVisibility(View.GONE);
+
         }
+            //        } else {
+//            viewHolder.id_notify.setVisibility(View.VISIBLE);
+//            viewHolder.id_notify.setText("Your subscription is purchased by ‘"+mFilteredList.get(i).getName()+"’ valid till : "+mFilteredList.get(i).getDate());
+//        }
 
         viewHolder.copy.setOnClickListener(new View.OnClickListener() {
             @Override

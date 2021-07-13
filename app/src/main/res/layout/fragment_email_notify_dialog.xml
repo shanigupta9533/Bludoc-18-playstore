@@ -24,7 +24,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Copy of prescription to pharmacy will be sent on this mail id."
+        android:text="Copy of prescription will be sent on this email id."
         android:layout_marginTop="6dp"
         android:textSize="13sp"
         android:layout_marginEnd="@dimen/font_12"

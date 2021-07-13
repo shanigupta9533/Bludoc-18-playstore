@@ -28,6 +28,8 @@ public class InvoicesPresAdapter extends RecyclerView.Adapter<InvoicesPresAdapte
     private InvoicesAdapter.OnClickListener onClickListener;
     DecimalFormat formatter = new DecimalFormat("#,###,###");
     private String currency;
+    private boolean countBool;
+    private int countModel;
 
 
     public InvoicesPresAdapter(Context context, ArrayList<InvoicesDataModel> stringList) {
@@ -39,7 +41,20 @@ public class InvoicesPresAdapter extends RecyclerView.Adapter<InvoicesPresAdapte
 
     public void setCurrenyDecide(String currency) {
 
-        this.currency=currency;
+        this.currency = currency;
+
+    }
+
+    public void refreshList() {
+
+        notifyDataSetChanged();
+
+    }
+
+    public void setCountModel(int i, boolean b) {
+
+        this.countModel = i;
+        this.countBool = b;
 
     }
 
@@ -71,10 +86,14 @@ public class InvoicesPresAdapter extends RecyclerView.Adapter<InvoicesPresAdapte
 
         InvoicesDataModel invoicesDataModel = invoicesDataModelList.get(position);
         holder.invoicesHeading.setText(invoicesDataModel.getItem_name());
-        holder.price.setText(currency+" "+formatter.format(Long.parseLong(invoicesDataModel.getAmount())));
-        holder.position.setText((position+1)+". ");
+        holder.price.setText(currency + " " + formatter.format(Long.parseLong(invoicesDataModel.getAmount())));
 
-        if(position%2==0){
+        if (countBool)
+            holder.position.setText((position + 1) + (countModel*5) + ". ");
+        else
+            holder.position.setText((position + 1) + ". ");
+
+        if (position % 2 == 0) {
             Typeface typeface = ResourcesCompat.getFont(context, R.font.poppins);
             holder.invoicesHeading.setTypeface(typeface);      // for Normal Text
             holder.price.setTypeface(typeface);      // for Normal Text

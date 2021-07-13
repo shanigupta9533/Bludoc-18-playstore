@@ -291,11 +291,11 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/margin_5"
                                 android:background="@drawable/background_underground"
-                                android:fontFamily="@font/poppinsbold"
+                                android:fontFamily="@font/whitneysemibold"
                                 android:gravity="center"
                                 android:text="Invoices Title"
                                 android:textColor="@color/dark_blue_invoice"
-                                android:textSize="15sp" />
+                                android:textSize="16sp" />
 
                         </LinearLayout>
 
@@ -317,23 +317,23 @@
                         android:layout_marginTop="@dimen/margin_5"
                         android:alpha="0.8"
                         android:background="@drawable/background_underground"
-                        android:fontFamily="@font/poppinsbold"
+                        android:fontFamily="@font/whitneysemibold"
                         android:text="Invoice"
                         android:textColor="@color/colorBlack"
-                        android:textSize="12sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/patient_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_10"
-                        android:layout_marginTop="@dimen/margin_5"
+                        android:layout_marginTop="@dimen/margin_8"
                         android:alpha="0.8"
                         android:background="@drawable/background_underground"
-                        android:fontFamily="@font/poppinsbold"
+                        android:fontFamily="@font/whitneysemibold"
                         android:text="Name"
                         android:textColor="@color/colorBlack"
-                        android:textSize="12sp" />
+                        android:textSize="14sp" />
 
                 </LinearLayout>
 
@@ -350,10 +350,10 @@
                         android:layout_weight="0.4"
                         android:gravity="center"
                         android:background="@drawable/background_underground"
-                        android:fontFamily="@font/poppinsmedium"
+                        android:fontFamily="@font/whitneysemibold"
                         android:text="Sr. No"
                         android:textColor="@color/colorBlack"
-                        android:textSize="13sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -361,10 +361,10 @@
                         android:layout_marginTop="@dimen/margin_5"
                         android:layout_weight="1.7"
                         android:background="@drawable/background_underground"
-                        android:fontFamily="@font/poppinsmedium"
+                        android:fontFamily="@font/whitneysemibold"
                         android:text="Items / particulars"
                         android:textColor="@color/colorBlack"
-                        android:textSize="13sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -375,10 +375,10 @@
                         android:layout_weight="0.5"
                         android:layout_marginEnd="@dimen/margin_20"
                         android:background="@drawable/background_underground"
-                        android:fontFamily="@font/poppinsmedium"
+                        android:fontFamily="@font/whitneysemibold"
                         android:text="Amount"
                         android:textColor="@color/colorBlack"
-                        android:textSize="13sp" />
+                        android:textSize="14sp" />
 
                 </LinearLayout>
 
@@ -402,6 +402,7 @@
                     android:layout_gravity="end"
                     android:layout_marginEnd="@dimen/font_10"
                     android:orientation="vertical"
+                    android:id="@+id/parentOfFinalAmount"
                     android:layout_height="wrap_content">
 
                     <LinearLayout
@@ -509,23 +510,25 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:background="@drawable/background_underground"
-                            android:fontFamily="@font/poppinsmedium"
+                            android:fontFamily="@font/whitneysemibold"
                             android:text="Total Amount"
                             android:layout_weight="1"
+                            android:alpha="0.8"
                             android:textColor="@color/colorBlack"
-                            android:textSize="11sp" />
+                            android:textSize="13sp" />
 
                         <TextView
                             android:id="@+id/totalAmount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
-                            android:background="@drawable/background_underground"
-                            android:fontFamily="@font/poppinsmedium"
-                            android:text="100"
                             android:layout_marginEnd="@dimen/font_8"
+                            android:background="@drawable/background_underground"
+                            android:fontFamily="@font/whitneysemibold"
+                            android:text="100"
+                            android:alpha="0.8"
                             android:textColor="@color/colorBlack"
-                            android:textSize="11sp" />
+                            android:textSize="13sp" />
 
                     </LinearLayout>
 

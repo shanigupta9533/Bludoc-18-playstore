@@ -223,6 +223,7 @@
                         android:id="@+id/whatsnumber"
                         android:paddingEnd="@dimen/font_14"
                         android:paddingStart="@dimen/margin_10"
+                        android:maxLength="14"
                         android:textColor="@color/colorBlack"
                         android:textColorHint="@color/colorBlack"
                         android:layout_width="match_parent"

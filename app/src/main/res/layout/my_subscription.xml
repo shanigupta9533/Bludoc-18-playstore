@@ -1,72 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    android:background="@color/colorWhite"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
+    android:background="@color/colorWhite"
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/ll_invite_member"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbar_layout"
-            android:animateLayoutChanges="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.NoActionBar"
-            >
+            android:animateLayoutChanges="true"
+            android:theme="@style/AppTheme.NoActionBar">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar_invite_member"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@color/white"
+                android:padding="-48dp"
                 app:contentInsetLeft="0dp"
                 app:contentInsetStart="0dp"
                 app:contentInsetStartWithNavigation="0dp"
                 app:layout_collapseMode="pin"
-                app:titleTextColor="@color/colorWhite"
+                app:popupTheme="@style/AppThemeNOAC"
                 app:subtitleTextColor="@color/colorWhite"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                android:padding="-48dp"
+                app:titleTextColor="@color/colorWhite">
 
-
-                app:popupTheme="@style/AppThemeNOAC">
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <LinearLayout
-                        android:layout_gravity="center|start"
-                        android:gravity="center"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        >
+                        android:layout_gravity="center|start"
+                        android:gravity="center">
+
                         <ImageView
                             android:id="@+id/btn_back"
-                            android:layout_margin="@dimen/margin_10"
-                            android:layout_gravity="center|start"
                             android:layout_width="@dimen/margin_25"
                             android:layout_height="@dimen/margin_25"
+                            android:layout_gravity="center|start"
+                            android:layout_margin="@dimen/margin_10"
                             android:src="@drawable/ic_back_button"
-                            />
+                            app:tint="@color/colorBlack" />
+
                         <TextView
-                            android:fontFamily="@font/poppinsmedium"
-                            android:layout_gravity="start|center"
-                            android:textSize="18sp"
-                            android:textColor="@color/colorWhite"
-                            android:gravity="center"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="start|center"
+                            android:fontFamily="@font/poppins"
+                            android:gravity="center"
                             android:text="My Subscriptions"
-                            android:typeface="sans"
-                            />
+                            android:textColor="@color/colorBlack"
+                            android:textSize="15sp"
+                            android:typeface="sans" />
 
                     </LinearLayout>
 
@@ -76,126 +72,118 @@
         </com.google.android.material.appbar.AppBarLayout>
 
 
+        <LinearLayout
+            android:id="@+id/ll_premium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_10"
+            android:background="@drawable/no_border"
+            android:elevation="@dimen/margin_2"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="visible">
 
-         <LinearLayout
-                android:elevation="@dimen/margin_5"
-                android:background="@drawable/no_border"
-                android:layout_margin="@dimen/margin_10"
-                android:gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:id="@+id/ll_premium"
-                android:visibility="visible"
-                >
+            <ImageView
+                android:id="@+id/iv_no_template"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="top|center"
 
-             <ImageView
-                 android:id="@+id/iv_no_template"
-                 android:layout_gravity="top|center"
-                 android:layout_width="40dp"
-                 android:layout_height="40dp"
-
-                 android:layout_marginTop="@dimen/margin_10"
-                 android:src="@drawable/my_subscription"
-
-                 />
-
-             <TextView
-                 android:fontFamily="@font/poppins"
-                android:id="@+id/tv_msg"
                 android:layout_marginTop="@dimen/margin_10"
-                android:layout_marginBottom="@dimen/margin_10"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:layout_marginLeft="@dimen/margin_20"
-                android:layout_marginStart="@dimen/margin_20"
-                android:layout_marginRight="@dimen/margin_20"
-                android:layout_marginEnd="@dimen/margin_20"
+                android:src="@drawable/my_subscription"
+
+                />
+
+            <TextView
+                android:id="@+id/tv_msg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAllCaps="false"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/margin_20"
+                android:layout_marginLeft="@dimen/margin_20"
+                android:layout_marginTop="@dimen/margin_10"
+                android:layout_marginEnd="@dimen/margin_20"
+                android:layout_marginRight="@dimen/margin_20"
+                android:layout_marginBottom="@dimen/margin_10"
+                android:fontFamily="@font/poppins"
+                android:gravity="center"
                 android:text="@string/subscrip"
-                android:textColor="@color/colorDarkstGrey"
-                android:textSize="16sp"
+                android:textAllCaps="false"
+                android:textColor="@color/colorBlack"
+                android:textSize="13sp"
                 android:textStyle="normal"
-                android:typeface="sans"
-                />
+                android:typeface="sans" />
 
 
         </LinearLayout>
 
-        <LinearLayout android:background="@color/colorWhite"
-
-            android:layout_marginTop   ="@dimen/margin_10"
-
-            android:orientation="vertical"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:context=".SubscriptionPackages"
-            xmlns:tools="http://schemas.android.com/tools">
+            android:layout_marginTop="@dimen/margin_10"
+            android:background="@color/colorWhite"
+            android:orientation="vertical"
+            tools:context=".SubscriptionPackages">
 
             <LinearLayout
-                android:visibility="gone"
                 android:id="@+id/ll_radiobtn"
-
-                android:layout_margin="@dimen/margin_10"
                 android:layout_width="match_parent"
+
                 android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_10"
                 android:orientation="horizontal"
+                android:visibility="gone"
                 android:weightSum="0">
 
                 <RadioButton
-                    android:fontFamily="@font/poppins"
-                    android:textSize="18sp"
-                    android:buttonTint="@color/colorBlack"
-                    android:textColor="@color/colorBlack"
-                    android:text="Personal"
+                    android:id="@+id/rb_family"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/rb_family"
                     android:layout_weight="1"
-                    />
+                    android:buttonTint="@color/colorBlack"
+                    android:fontFamily="@font/poppins"
+                    android:text="Personal"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="18sp" />
 
                 <RadioButton
-                    android:fontFamily="@font/poppins"
-                    android:textSize="18sp"
-                    android:textColor="@color/colorBlack"
-                    android:buttonTint="@color/colorBlack"
-                    android:text="Business"
+                    android:id="@+id/rb_business"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/rb_business"
                     android:layout_weight="1"
-                    />
+                    android:buttonTint="@color/colorBlack"
+                    android:fontFamily="@font/poppins"
+                    android:text="Business"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="18sp" />
 
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:paddingLeft   ="@dimen/margin_10"
-                android:paddingStart  ="@dimen/margin_10"
-
-                android:layout_gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
                 android:id="@+id/recycler_packages"
-                />
+                android:layout_width="match_parent"
+
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:paddingStart="@dimen/margin_10"
+                android:paddingLeft="@dimen/margin_10" />
 
         </LinearLayout>
 
 
     </LinearLayout>
+
     <FrameLayout
-        android:visibility="gone"
         android:id="@+id/fl_subscription"
-        android:background="@color/colorWhite"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        >
+        android:background="@color/colorWhite"
+        android:visibility="gone">
+
         <ProgressBar
-            android:layout_gravity="center"
+            android:id="@+id/pb_subscription"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:id="@+id/pb_subscription"
-            />
+            android:layout_gravity="center" />
     </FrameLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

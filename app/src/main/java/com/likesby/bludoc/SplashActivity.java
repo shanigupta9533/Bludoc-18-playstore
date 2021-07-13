@@ -173,6 +173,8 @@ public class SplashActivity extends AppCompatActivity
 
 
     private void finalMethod() {
+        Log.e(TAG, "finalMethod: >> " + x1+", "+ x3+", "+ x4+", "+ x5+", ");
+
         if(x1==1&&x3==1 &&x4==1 && x5==1){
 //set the new Content of your activity
             if(start == 0) {

@@ -272,6 +272,7 @@
                     android:inputType="number"
                     android:imeOptions="actionNext"
                     android:padding="@dimen/margin_10"
+                    android:maxLength="14"
                     android:id="@+id/whatsnumber"
                     android:paddingEnd="@dimen/font_14"
                     android:paddingStart="@dimen/margin_10"

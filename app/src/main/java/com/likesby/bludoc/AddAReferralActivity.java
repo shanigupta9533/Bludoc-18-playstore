@@ -57,7 +57,7 @@ public class AddAReferralActivity extends AppCompatActivity {
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(AddAReferralActivity.this, R.style.AlertDialog);
                 alertDialogBuilder.setCancelable(false);
 
-                alertDialogBuilder.setMessage("Copy of prescription to pharmacy will be sent on this mail id.");
+                alertDialogBuilder.setMessage("Copy of prescription will be sent on this email id.");
 
                 alertDialogBuilder.setPositiveButton("Okay",
                         new DialogInterface.OnClickListener() {

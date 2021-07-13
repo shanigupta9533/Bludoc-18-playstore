@@ -17,57 +17,64 @@
     android:paddingBottom="@dimen/margin_8">
 
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/invoice_title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
+            android:gravity="center"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:textStyle="bold"
             android:fontFamily="@font/poppins"
             android:text="Invoice title"
+            android:layout_marginTop="@dimen/margin_5"
+            android:layout_marginStart="@dimen/margin_4"
             android:textColor="@color/colorBlack"
             android:textSize="13sp"
             />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:orientation="horizontal"
-            android:layout_alignParentEnd="true"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:fontFamily="@font/poppins"
-                android:text="Invoice Number : "
-                android:textColor="@color/colorBlack"
-                android:textSize="13sp"
-                />
-
-            <TextView
-                android:id="@+id/invoice_number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:fontFamily="@font/poppins"
-                android:layout_gravity="center_vertical"
-                android:text="Invoice title"
-                android:textColor="@color/colorBlack"
-                android:textSize="11sp"
-                />
-
-        </LinearLayout>
-
     </RelativeLayout>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/margin_5"
+        android:id="@+id/date_invoice_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:layout_marginTop="@dimen/margin_8"
+            android:fontFamily="@font/poppins"
+            android:text="Invoice Number : "
+            android:textStyle="bold"
+            android:textColor="@color/colorBlack"
+            android:textSize="12sp"
+            />
+
+        <TextView
+            android:id="@+id/invoice_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:layout_marginTop="@dimen/margin_3"
+            android:fontFamily="@font/poppins"
+            android:layout_gravity="center_vertical"
+            android:text="Invoice title"
+            android:textColor="@color/colorBlack"
+            android:textSize="12sp"
+            />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/margin_8"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_2"
         android:weightSum="0">
 
         <TextView
@@ -75,10 +82,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="10"
-            android:layout_marginTop="@dimen/margin_12"
             android:fontFamily="@font/poppins"
             android:text="Patient Name"
-            android:textColor="@color/colorDarkGrey"
+            android:textColor="@color/colorBlack"
             android:textSize="12sp"
             android:textStyle="bold" />
 
@@ -102,11 +108,11 @@
         android:id="@+id/tv_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_2"
+        android:layout_marginTop="@dimen/margin_5"
         android:layout_weight="1"
         android:fontFamily="@font/poppins"
         android:text="Email Id"
-        android:textColor="@color/colorDarkGrey"
+        android:textColor="@color/colorBlack"
         android:textSize="12sp"
         android:textStyle="bold" />
 
@@ -114,11 +120,11 @@
         android:id="@+id/tv_mobile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_2"
+        android:layout_marginTop="@dimen/margin_5"
         android:layout_weight="1"
         android:fontFamily="@font/poppins"
         android:text="Mobile"
-        android:textColor="@color/colorDarkGrey"
+        android:textColor="@color/colorBlack"
         android:textSize="12sp"
         android:textStyle="bold" />
 
@@ -127,11 +133,11 @@
         android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_2"
+        android:layout_marginTop="@dimen/margin_5"
         android:layout_weight="1"
         android:fontFamily="@font/poppins"
         android:text="Date"
-        android:textColor="@color/colorDarkGrey"
+        android:textColor="@color/colorBlack"
         android:textSize="12sp"
         android:textStyle="bold" />
 

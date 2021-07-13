@@ -17,7 +17,8 @@ public class ResponseProfileDetails{
 	@SerializedName("access")
 	private String access;
 
-
+	@SerializedName("hospital_name")
+	private String hospital_name;
 
 	public String getHospitalCode() {
 		return hospitalCode;
@@ -318,6 +319,14 @@ public class ResponseProfileDetails{
 
 	public String getSuccess(){
 		return success;
+	}
+
+	public String getHospital_name() {
+		return hospital_name;
+	}
+
+	public void setHospital_name(String hospital_name) {
+		this.hospital_name = hospital_name;
 	}
 
 	public void setClinicAddress(String clinicAddress){

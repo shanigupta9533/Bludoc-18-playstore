@@ -19,9 +19,13 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +45,7 @@ import com.likesby.bludoc.ModelLayer.Entities.BottomSheetItem;
 import com.likesby.bludoc.ModelLayer.Entities.PatientsItem;
 import com.likesby.bludoc.ModelLayer.Entities.ResponseSuccess;
 import com.likesby.bludoc.ModelLayer.InvoicePresModel;
+import com.likesby.bludoc.ModelLayer.InvoicesModel.InvoicesDataModel;
 import com.likesby.bludoc.ModelLayer.NewEntities.ResponseProfileDetails;
 import com.likesby.bludoc.ModelLayer.NewEntities3.Doctor;
 import com.likesby.bludoc.SessionManager.SessionManager;
@@ -48,6 +53,7 @@ import com.likesby.bludoc.databinding.ActivityInvoicesPresBinding;
 import com.likesby.bludoc.viewModels.ApiViewHolder;
 import com.squareup.picasso.Picasso;
 
+import org.apache.commons.collections4.ListUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayOutputStream;
@@ -57,6 +63,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -73,6 +80,7 @@ public class InvoicesPresActivity extends AppCompatActivity {
     private int counter;
     SessionManager manager;
     private InvoicePresModel invoicePewModel;
+    private final ArrayList<InvoicesDataModel> invoicesDataModels = new ArrayList<>();
     private BottomShareAdapter mAdapter;
     private static ArrayList<Uri> filesGlobal = new ArrayList<>();
     private String patientName;
@@ -82,6 +90,9 @@ public class InvoicesPresActivity extends AppCompatActivity {
     DecimalFormat formatter = new DecimalFormat("#,###,###");
     private ProgressDialog progressDialog;
     private String date;
+    private InvoicesPresAdapter invoicesPresAdapter;
+    private String currency;
+    private int sizeGlobal;
 
     private void initViewHolder() {
         apiViewHolder = ViewModelProviders.of(this).get(ApiViewHolder.class);
@@ -110,8 +121,6 @@ public class InvoicesPresActivity extends AppCompatActivity {
             String taxPercentage = invoicePewModel.getTax_percentage();
             date = invoicePewModel.getDate();
 
-            String currency;
-
             if (!TextUtils.isEmpty(advancePercentage))
                 advancePercentage = "(" + advancePercentage + "%)";
 
@@ -122,23 +131,23 @@ public class InvoicesPresActivity extends AppCompatActivity {
                 taxPercentage = "(" + taxPercentage + "%)";
 
             if (invoicePewModel.getCurrency().equalsIgnoreCase("INR")) {
-                activity.totalAmount.setText("₹ " + formatter.format(Float.parseFloat(checkNullValues(invoicePewModel.getFinal_amount(), activity.totalAmount))));
+                activity.totalAmount.setText("₹ " + formatter.format(Long.parseLong(checkNullValues(invoicePewModel.getFinal_amount(), activity.totalAmount))));
                 currency = "₹ ";
             } else {
-                activity.totalAmount.setText(invoicePewModel.getCurrency() + " " + formatter.format(Float.parseFloat(checkNullValues(invoicePewModel.getFinal_amount(), activity.totalAmount))));
+                activity.totalAmount.setText(invoicePewModel.getCurrency() + " " + formatter.format(Long.parseLong(checkNullValues(invoicePewModel.getFinal_amount(), activity.totalAmount))));
                 currency = invoicePewModel.getCurrency() + " ";
             }
 
             activity.patientName.setText("Name - " + checkNullValues(invoicePewModel.getInvoice_name(), activity.patientName));
             activity.invoicesTitle.setText(checkNullValues(invoicePewModel.getInvoice_title(), activity.invoicesTitle));
-            activity.discountAmount.setText(discountPercentage + " " + currency + formatter.format(Long.parseLong(checkNullValues(invoicePewModel.getDiscount(), activity.parentOfDiscount))));
-            activity.advancePartialAmount.setText(advancePercentage + " " + currency + formatter.format(Long.parseLong(checkNullValues(invoicePewModel.getAdvance_amount(), activity.parentOfAmountPaid))));
+            activity.discountAmount.setText(discountPercentage + " " + currency + formatter.format(Float.parseFloat(checkNullValues(invoicePewModel.getDiscount(), activity.parentOfDiscount))));
+            activity.advancePartialAmount.setText(advancePercentage + " " + currency + formatter.format(Float.parseFloat(checkNullValues(invoicePewModel.getAdvance_amount(), activity.parentOfAmountPaid))));
             activity.taxAmount.setText(taxPercentage + " " + currency + formatter.format(Float.parseFloat(checkNullValues(invoicePewModel.getTax(), activity.parentOfTax))));
             activity.endNote.setText("Remarks - " + checkNullValues(invoicePewModel.getNote(), activity.endNote));
 
             if (TextUtils.isEmpty(invoicePewModel.getInvoice_no())) {
 
-                long invoiceNumber=new Date().getTime() / 1000;
+                long invoiceNumber = new Date().getTime() / 1000;
                 activity.invoiceNumber.setText("Invoice Number - #" + invoiceNumber);
                 invoicePewModel.setInvoice_no(String.valueOf(invoiceNumber));
 
@@ -163,8 +172,13 @@ public class InvoicesPresActivity extends AppCompatActivity {
             }
 
             if (invoicePewModel.getItems() != null) {
+
+                invoicesDataModels.clear();
+                invoicesDataModels.addAll(invoicePewModel.getItems());
+
                 activity.invoicesInRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-                InvoicesPresAdapter invoicesPresAdapter = new InvoicesPresAdapter(this, invoicePewModel.getItems());
+                invoicesPresAdapter = new InvoicesPresAdapter(this, invoicesDataModels);
+                invoicesPresAdapter.setCountModel(0,false);
                 activity.invoicesInRecyclerView.setAdapter(invoicesPresAdapter);
                 invoicesPresAdapter.setCurrenyDecide(currency);
             }
@@ -175,11 +189,11 @@ public class InvoicesPresActivity extends AppCompatActivity {
 
             progressDialog = new ProgressDialog(InvoicesPresActivity.this);
             progressDialog.setMessage("Please Wait ....");
-            progressDialog.setTitle("Generate Invoices");
+            progressDialog.setTitle("Generating Invoice");
             progressDialog.setCancelable(false);
             progressDialog.show();
 
-            setViewInInches(4.7f, 4.7f, activity.parentOfInvoices);
+            setViewInInches(6.5f, 6.5f, activity.parentOfInvoices);
 
             if (invoicePewModel != null) {
 
@@ -190,7 +204,7 @@ public class InvoicesPresActivity extends AppCompatActivity {
 
         });
 
-        activity.btnBackbtnEditProfile.setOnClickListener(new View.OnClickListener() {
+        activity.btnBackEditProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -351,12 +365,13 @@ public class InvoicesPresActivity extends AppCompatActivity {
 
         //todo set date of doctor =========>
 
-        if(TextUtils.isEmpty(date)) {
-            SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
+        if (TextUtils.isEmpty(date)) {
+            SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
             Calendar c2 = Calendar.getInstance();
             String formattedDate = df.format(c2.getTime());
             activity.textViewDate.setText("Date : " + formattedDate);
         } else {
+
             activity.textViewDate.setText("Date : " + date);
         }
 
@@ -377,12 +392,14 @@ public class InvoicesPresActivity extends AppCompatActivity {
                 progressDialog.dismiss();
                 if (jsonResponse.getSuccess().equalsIgnoreCase("success")) {
 
-                    Bitmap screen1 = getBitmapFromView(activity.nestedParentLinear);  // here give id of our root layout (here its my RelativeLayout's id)
-                    filesGlobal.clear();
-                    filesGlobal.add(getImageUri(InvoicesPresActivity.this, screen1, "" + patientName));
-                    //progressDialog.dismiss();
-                    popupBottomMenu();
-
+                    if (invoicePewModel!=null && !invoicePewModel.getItems().isEmpty())
+                        generateBitmapScreenShots(invoicePewModel);
+                    else {
+                        filesGlobal.clear();
+                        Bitmap screen1 = getBitmapFromView(activity.nestedParentLinear);  // here give id of our root layout (here its my RelativeLayout's id)
+                        filesGlobal.add(getImageUri(InvoicesPresActivity.this, screen1, "" + patientName));
+                        popupBottomMenu();
+                    }
 
                 } else {
 
@@ -401,6 +418,70 @@ public class InvoicesPresActivity extends AppCompatActivity {
 
         }
     };
+
+    private void generateBitmapScreenShots(InvoicePresModel invoicePewModel) {
+
+        List<List<InvoicesDataModel>> partition = ListUtils.partition(invoicePewModel.getItems(), 5);
+        filesGlobal.clear();
+        activity.parentOfFinalAmount.setVisibility(View.GONE);
+
+        final boolean[] isLoop = {true};
+        final boolean[] isExecuteValue = {true};
+        final int[] i = {0};
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                while (isLoop[0]) {
+
+                    if(isExecuteValue[0]) {
+
+                        invoicesDataModels.clear();
+                        invoicesDataModels.addAll(partition.get(i[0]));
+                        isExecuteValue[0] = false;
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                invoicesPresAdapter.setCountModel(i[0],true);
+                                invoicesPresAdapter.notifyDataSetChanged();
+
+                                if (partition.size() - 1 == i[0]) {
+                                    activity.parentOfFinalAmount.setVisibility(View.VISIBLE);
+                                }
+
+                                new Handler(Looper.myLooper()).postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+
+                                        Bitmap screen1 = getBitmapFromView(activity.nestedParentLinear);  // here give id of our root layout (here its my RelativeLayout's id)
+                                        filesGlobal.add(getImageUri(InvoicesPresActivity.this, screen1, "" + patientName));
+
+                                        if(partition.size()-1 == i[0]){
+                                            popupBottomMenu();
+                                            isLoop[0] = false;
+                                        }
+
+                                        isExecuteValue[0] = true;
+                                        i[0]++;
+
+                                    }
+                                },500);
+
+                            }
+                        });
+
+                    }
+
+                }
+
+
+            }
+        }).start();
+
+    }
 
     private void sendModelOnServer(InvoicePresModel invoicePewModel, ProgressDialog progressDialog) {
 
@@ -465,7 +546,7 @@ public class InvoicesPresActivity extends AppCompatActivity {
 
     private String checkNullValues(String invoicePatientName, View edittext) {
 
-        if (TextUtils.isEmpty(invoicePatientName)) {
+        if (TextUtils.isEmpty(invoicePatientName) || (!TextUtils.isEmpty(invoicePatientName) && invoicePatientName.equalsIgnoreCase("0"))) {
             edittext.setVisibility(View.GONE);
             return "0";
         }
@@ -505,11 +586,13 @@ public class InvoicesPresActivity extends AppCompatActivity {
     }
 
     public void setViewInInches(float width, float height, View v) {
-        DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
-        int widthInches = Math.round(width * 300);
-        int heightInches = Math.round(height * 300);
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        int width1 = displayMetrics.widthPixels;
+        int height1 = displayMetrics.heightPixels;
+
+        int widthInches = Math.round((int) ((width1 * 180) / 100));
+        int heightInches = Math.round((int) ((height1 * 180) / 100));
 
         v.setLayoutParams(new FrameLayout.LayoutParams(widthInches, heightInches));
         v.requestLayout();
@@ -669,10 +752,15 @@ public class InvoicesPresActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-
                 dialog_dataShareMenu.dismiss();
 
-                activity.parentOfInvoices.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+                Intent intent = new Intent(InvoicesPresActivity.this, InvoicesPresActivity.class);
+                intent.putExtra("patientName", patientName);
+                intent.putExtra("patientObject", patientsItem);
+                intent.putExtra("invoicePewModel", invoicePewModel);
+                startActivity(intent);
+
+                finish();
 
                 /*assert getFragmentManager() != null;
                 getFragmentManager().popBackStackImmediate();*/

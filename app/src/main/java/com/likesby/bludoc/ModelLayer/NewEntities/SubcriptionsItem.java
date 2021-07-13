@@ -13,8 +13,19 @@ public class SubcriptionsItem{
 	@SerializedName("name")
 	private String nameHospital;
 
-	@SerializedName("useFor")
+	@SerializedName("use_for")
 	private String useFor;
+
+	public String getHospital_code() {
+		return hospital_code;
+	}
+
+	public void setHospital_code(String hospital_code) {
+		this.hospital_code = hospital_code;
+	}
+
+	@SerializedName("hospital_code")
+	private String hospital_code;
 
 	@SerializedName("doctor_id")
 	private String doctorId;

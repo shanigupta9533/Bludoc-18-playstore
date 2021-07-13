@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
@@ -34,7 +33,7 @@
                 <ImageView
                     android:id="@+id/btn_back_edit_profile"
                     android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center|start"
                     android:layout_margin="@dimen/margin_10"
                     android:src="@drawable/ic_back_button"
@@ -43,7 +42,7 @@
                 <TextView
                     android:id="@+id/header"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_centerInParent="true"
                     android:layout_gravity="center"
                     android:fontFamily="@font/poppinsmedium"
@@ -329,6 +328,7 @@
                                     android:layout_height="@dimen/margin_40"
                                     android:layout_marginTop="@dimen/margin_3"
                                     android:layout_weight="1"
+                                    android:maxLength="80"
                                     android:background="@drawable/blue_faint_btn_gradient_changes"
                                     android:fontFamily="@font/poppins"
                                     android:hint="Enter Here"
@@ -556,7 +556,7 @@
                                 android:background="@drawable/blue_faint_btn_gradient_changes"
                                 android:digits="0123456789"
                                 android:fontFamily="@font/poppins"
-                                android:maxLength="7"
+                                android:maxLength="6"
                                 android:inputType="number|phone|textCapSentences"
                                 android:paddingStart="@dimen/margin_8"
                                 android:id="@+id/discount_title"
@@ -643,14 +643,13 @@
                                 android:layout_height="wrap_content">
 
                                 <androidx.appcompat.widget.AppCompatSpinner
-                                    android:layout_width="match_parent"
-                                    android:layout_height="20dp"
                                     android:id="@+id/advance_partial_amount"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
                                     android:layout_marginStart="-3dp"
                                     android:entries="@array/amount_vs_percentage_neg"
-                                    android:theme="@style/SpinnerSmallFont"
                                     android:fontFamily="@font/poppins"
-                                    />
+                                    android:theme="@style/SpinnerSmallFont" />
 
                                 <ImageView
                                     android:layout_width="@dimen/font_19"
@@ -669,7 +668,7 @@
                                 android:background="@drawable/blue_faint_btn_gradient_changes"
                                 android:digits="0123456789"
                                 android:id="@+id/amount_more_details"
-                                android:maxLength="7"
+                                android:maxLength="6"
                                 android:fontFamily="@font/poppins"
                                 android:inputType="number|phone|textCapSentences"
                                 android:paddingStart="@dimen/margin_8"
@@ -854,6 +853,57 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
+                        android:orientation="vertical"
+                        android:layout_marginLeft="@dimen/font_12"
+                        android:layout_marginRight="@dimen/font_12"
+                        android:layout_marginEnd="@dimen/font_14"
+                        android:layout_marginStart="@dimen/font_14"
+                        android:layout_marginTop="@dimen/margin_20"
+                        android:visibility="visible"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:fontFamily="@font/poppins"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="Select a date for invoice"
+                            android:textColor="@color/colorDarkGrey"
+                            android:textSize="12dp"
+                            />
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_marginTop="@dimen/margin_5"
+                            android:background="@drawable/blue_faint_btn_gradient_changes"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:fontFamily="@font/poppinsmedium"
+                                android:textSize="13sp"
+                                android:padding="@dimen/margin_10"
+                                android:textColor="@color/colorBlack"
+                                android:textColorHint="@color/colorBlack"
+                                android:id="@+id/invoice_date"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/margin_40"
+                                />
+
+                            <ImageView
+                                android:layout_width="@dimen/font_22"
+                                android:layout_height="@dimen/font_22"
+                                android:id="@+id/cancel_action"
+                                android:layout_marginEnd="@dimen/margin_10"
+                                android:src="@drawable/ic_action_clear_name"
+                                android:layout_gravity="end|center_vertical"
+                                app:tint="@color/colorBlack" />
+
+                        </FrameLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="@dimen/margin_25"
                         android:layout_marginStart="@dimen/margin_12"
                         android:layout_marginTop="25dp"
@@ -915,15 +965,15 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/margin_25"
                     android:background="@drawable/blue_faint_btn_gradient_changes"
-                    android:fontFamily="@font/poppinsmedium"
+                    android:fontFamily="@font/whitneysemibold"
                     android:gravity="center"
                     android:inputType="textCapSentences"
                     android:maxLines="2"
                     android:paddingStart="@dimen/font_14"
                     android:paddingEnd="@dimen/margin_14"
-                    android:text="Not Available"
+                    android:text="Total Amount ₹ 0"
                     android:textColor="@color/blue_light_color"
-                    android:textSize="12sp" />
+                    android:textSize="13sp" />
 
 
             </LinearLayout>

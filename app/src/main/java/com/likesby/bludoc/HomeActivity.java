@@ -20,6 +20,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -606,8 +607,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
                     if (!("").equalsIgnoreCase(responseProfileDetails.getHospitalCode())) {
 
-                        if (responseProfileDetails.getAccess().equals("Pending")) {
-
+                        if (responseProfileDetails.getAccess().equals("Approve")) {
 
                             String sub_valid = "", premium_valid = "";
                             boolean flag_reset_paid = false;
@@ -618,13 +618,14 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                             if (profileDetails.getSubcriptions() != null) {
                                 if (profileDetails.getSubcriptions().size() != 0) {
                                     for (SubcriptionsItem si : profileDetails.getSubcriptions()) {
-                                        if (si.getUseFor().equals("Hospital_name")) {
+                                        if (!si.getHospital_code().equals("")) {
                                             try {
                                                 Calendar c2 = Calendar.getInstance();
                                                 DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
                                                 Date dateEnd = dateFormat.parse(si.getEnd());
                                                 Date c = Calendar.getInstance().getTime();
                                                 assert dateEnd != null;
+
                                                 //premium_valid = si.getDays();
                                                 Log.e("DATE_____1 = ", DateUtils.printDifference(c, dateEnd));
                                                 // Log.e("DATE_____2 = ",DateUtils.outFormatsetMMM(DateUtils.printDifference(c,dateEnd)));
@@ -656,26 +657,28 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
                                         }
                                     }
-                                }
-                                else
-                                    popupAccess();
+
+                                } else
+                                    popupPaused("Your subscription has expired. Please contact to " + profileDetails.getHospital_name());
+                            } else
+                                popupPaused("Your subscription has expired. Please contact to " + profileDetails.getHospital_name());
+
+                            if (days_left_free < 1) {
+                                popupPaused("Your subscription has expired. Please contact to " + profileDetails.getHospital_name());
+                            } else {
+                                startActivity(new Intent(HomeActivity.this, AllPharmacistActivity.class));
                             }
-                            else
-                                popupAccess();
-                            if(days_left_free<1){
-                                        Toast.makeText(HomeActivity.this, "Subscription Expired", Toast.LENGTH_SHORT).show();
-                                    }
-                                    else {
-                                        popupAccess();
-                                    }
+//Now run it
+                        } else if (responseProfileDetails.getAccess().equals("Pending")) {
 
-                                    } else if (responseProfileDetails.getAccess().equals("Approve")) {
-                            startActivity(new Intent(HomeActivity.this, AllPharmacistActivity.class));
-                        } else if (responseProfileDetails.getAccess().equals("Rejected")) {
+                            popupPaused("Your account is pending for approval. Please contact " + responseProfileDetails.getHospital_name());
+
+                        } else if (responseProfileDetails.getAccess().equals("Remove")) {
+                            popupPaused("You have been removed from " + responseProfileDetails.getHospital_name() + ". You now have accesses like BluDoc standard user");
                             //popupHospitalCode();
-                        } else if (responseProfileDetails.getAccess().equals("Paused")) {
+                        } else if (responseProfileDetails.getAccess().equals("Pause")) {
 
-                            popupPaused("Your subscription is paused. Please contact ‘" + responseProfileDetails.getSubcriptions().get(0).getNameHospital() + "’ for the same");
+                            popupPaused("Your subscription is paused. Please contact to " + responseProfileDetails.getHospital_name());
 
                         } else {
                             popupAccess();
@@ -847,6 +850,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         TextView Log_name = headerView.findViewById(R.id.Log_name);
 
+        ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
+
+        if (!TextUtils.isEmpty(responseProfileDetails.getHospitalCode())) {
+
+            Menu nav_Menu = navigationView.getMenu();
+            nav_Menu.findItem(R.id.Subscription_packages).setVisible(false);
+
+        }
+
         /*String name_ = manager.getPreferences(mContext,"name").trim();
         if(name_.contains("Dr.")) {
             name_ = name_.replace("Dr.", "");
@@ -971,28 +983,90 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
                     if (!("").equalsIgnoreCase(responseProfileDetails.getHospitalCode())) {
 
-                        if (responseProfileDetails.getAccess().equals("Pending")) {
-                            popupAccess();
-                        } else if (responseProfileDetails.getAccess().equals("Approve")) {
+                        if (responseProfileDetails.getAccess().equals("Approve")) {
 
-                            startActivity(new Intent(HomeActivity.this, HistoryActivity.class));
-                        } else if (responseProfileDetails.getAccess().equals("Rejected")) {
+                            String sub_valid = "", premium_valid = "";
+                            boolean flag_reset_paid = false;
+                            Date date1 = null, date2 = null;
+                            int days_left_free = 0, days_left_paid = 0;
+                            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                            ResponseProfileDetails profileDetails = manager.getObjectProfileDetails(mContext, "profile");
+                            if (profileDetails.getSubcriptions() != null) {
+                                if (profileDetails.getSubcriptions().size() != 0) {
+                                    for (SubcriptionsItem si : profileDetails.getSubcriptions()) {
+                                        if (!si.getHospital_code().equals("")) {
+                                            try {
+                                                Calendar c2 = Calendar.getInstance();
+                                                DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+                                                Date dateEnd = dateFormat.parse(si.getEnd());
+                                                Date c = Calendar.getInstance().getTime();
+                                                assert dateEnd != null;
+
+                                                //premium_valid = si.getDays();
+                                                Log.e("DATE_____1 = ", DateUtils.printDifference(c, dateEnd));
+                                                // Log.e("DATE_____2 = ",DateUtils.outFormatsetMMM(DateUtils.printDifference(c,dateEnd)));
+                                                // Log.e("DATE_____3 = ",DateUtils.outFormatset(DateUtils.printDifference(c,dateEnd)));
+
+
+                                                try {
+                                                    date1 = dateFormat.parse(dateFormat.format(c2.getTime()));
+                                                    date2 = dateFormat.parse(si.getEnd());
+                                                    Log.e("DATE_____1 = ", DateUtils.printDifference(date1, date2) + " left");
+                                                    flag_reset_free = true;
+
+                                                    String[] splited = DateUtils.printDifference(date1, date2).split("\\s+");
+
+                                                    days_left_free = days_left_free + Integer.parseInt(splited[0]);
+                                                    // popupFreeSubscription(DateUtils.printDifference(date1,date2),true);
+                                                    // break;
+                                                    sub_valid = si.getEnd();
+                                                } catch (ParseException e) {
+                                                    e.printStackTrace();
+                                                }
+
+                                                //viewHolder.expiry.setText(DateUtils.printDifference(date1,date2)+" left");
+
+                                            } catch (ParseException pe) {
+                                                // handle the failure
+                                                flag_reset_free = false;
+                                            }
+
+                                        }
+                                    }
+
+                                } else
+                                    popupPaused("Your subscription has expired. Please contact to " + profileDetails.getHospital_name());
+                            } else
+                                popupPaused("Your subscription has expired. Please contact to " + profileDetails.getHospital_name());
+
+                            if (days_left_free < 1) {
+                                popupPaused("Your subscription has expired. Please contact to hospital  admin");
+                            } else {
+                                startActivity(new Intent(HomeActivity.this, HistoryActivity.class));
+                            }
+//Now run it
+                        } else if (responseProfileDetails.getAccess().equals("Pending")) {
+                            popupPaused("Your account is pending for approval. Please contact " + responseProfileDetails.getHospital_name());
+
+                        } else if (responseProfileDetails.getAccess().equals("Remove")) {
+                            popupPaused("You have been removed from " + responseProfileDetails.getHospital_name() + ". You now have accesses like BluDoc standard user");
                             //popupHospitalCode();
-                        } else if (responseProfileDetails.getAccess().equals("Paused")) {
+                        } else if (responseProfileDetails.getAccess().equals("Pause")) {
 
-                            popupPaused("Your subscription is paused. Please contact ‘" + responseProfileDetails.getSubcriptions().get(0).getNameHospital() + "’ for the same");
+                            popupPaused("Your subscription is paused. Please contact to " + responseProfileDetails.getHospital_name());
 
                         } else {
                             popupAccess();
                         }
+
                     } else {
+
                         startActivity(new Intent(HomeActivity.this, HistoryActivity.class));
 
                     }
                 } else {
                     popup();
                 }
-
             }
         });
 
@@ -1005,34 +1079,93 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
                     if (!("").equalsIgnoreCase(responseProfileDetails.getHospitalCode())) {
 
-                        if (responseProfileDetails.getAccess().equals("Pending")) {
-                            popupAccess();
-                        } else if (responseProfileDetails.getAccess().equals("Approve")) {
+                        if (responseProfileDetails.getAccess().equals("Approve")) {
 
-                            CreatePrescription.backCheckerFlag = false;
-                            CreatePrescription.NEWaddMedicinesArrayList = new ArrayList<>();
-                            CreatePrescription.NEWaddLabTestArrayList = new ArrayList<>();
-                            CreatePrescription myFragment = new CreatePrescription();
-                            getSupportFragmentManager().beginTransaction().replace(R.id.homePageContainer, myFragment, "prescription").addToBackStack(null).commit();
+                            String sub_valid = "", premium_valid = "";
+                            boolean flag_reset_paid = false;
+                            Date date1 = null, date2 = null;
+                            int days_left_free = 0, days_left_paid = 0;
+                            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                            ResponseProfileDetails profileDetails = manager.getObjectProfileDetails(mContext, "profile");
+                            if (profileDetails.getSubcriptions() != null) {
+                                if (profileDetails.getSubcriptions().size() != 0) {
+                                    for (SubcriptionsItem si : profileDetails.getSubcriptions()) {
+                                        if (!si.getHospital_code().equals("")) {
+                                            try {
+                                                Calendar c2 = Calendar.getInstance();
+                                                DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+                                                Date dateEnd = dateFormat.parse(si.getEnd());
+                                                Date c = Calendar.getInstance().getTime();
+                                                assert dateEnd != null;
 
-                        } else if (responseProfileDetails.getAccess().equals("Paused")) {
+                                                //premium_valid = si.getDays();
+                                                Log.e("DATE_____1 = ", DateUtils.printDifference(c, dateEnd));
+                                                // Log.e("DATE_____2 = ",DateUtils.outFormatsetMMM(DateUtils.printDifference(c,dateEnd)));
+                                                // Log.e("DATE_____3 = ",DateUtils.outFormatset(DateUtils.printDifference(c,dateEnd)));
 
-                            popupPaused("Your subscription is paused. Please contact ‘" +responseProfileDetails.getSubcriptions().get(0).getNameHospital()+ "’ for the same");
 
-                        } else if (responseProfileDetails.getAccess().equals("Rejected")) {
+                                                try {
+                                                    date1 = dateFormat.parse(dateFormat.format(c2.getTime()));
+                                                    date2 = dateFormat.parse(si.getEnd());
+                                                    Log.e("DATE_____1 = ", DateUtils.printDifference(date1, date2) + " left");
+                                                    flag_reset_free = true;
+
+                                                    String[] splited = DateUtils.printDifference(date1, date2).split("\\s+");
+
+                                                    days_left_free = days_left_free + Integer.parseInt(splited[0]);
+                                                    // popupFreeSubscription(DateUtils.printDifference(date1,date2),true);
+                                                    // break;
+                                                    sub_valid = si.getEnd();
+                                                } catch (ParseException e) {
+                                                    e.printStackTrace();
+                                                }
+
+                                                //viewHolder.expiry.setText(DateUtils.printDifference(date1,date2)+" left");
+
+                                            } catch (ParseException pe) {
+                                                // handle the failure
+                                                flag_reset_free = false;
+                                            }
+
+                                        }
+                                    }
+
+                                } else
+                                    popupPaused("Your subscription has expired. Please contact to " + profileDetails.getHospital_name());
+                            } else
+                                popupPaused("Your subscription has expired. Please contact to " + profileDetails.getHospital_name());
+
+                            if (days_left_free < 1) {
+                                popupPaused("Your subscription has expired. Please contact to " + profileDetails.getHospital_name());
+                            } else {
+                                CreatePrescription.backCheckerFlag = false;
+                                CreatePrescription.NEWaddMedicinesArrayList = new ArrayList<>();
+                                CreatePrescription.NEWaddLabTestArrayList = new ArrayList<>();
+                                CreatePrescription myFragment = new CreatePrescription();
+                                getSupportFragmentManager().beginTransaction().replace(R.id.homePageContainer, myFragment, "prescription").addToBackStack(null).commit();
+                            }
+//Now run it
+                        } else if (responseProfileDetails.getAccess().equals("Pending")) {
+                            popupPaused("Your account is pending for approval. Please contact " + responseProfileDetails.getHospital_name());
+
+                        } else if (responseProfileDetails.getAccess().equals("Remove")) {
+                            popupPaused("You have been removed from " + responseProfileDetails.getHospital_name() + ". You now have accesses like BluDoc standard user");
                             //popupHospitalCode();
+                        } else if (responseProfileDetails.getAccess().equals("Pause")) {
+
+                            popupPaused("Your subscription is paused. Please contact to " + responseProfileDetails.getHospital_name());
+
                         } else {
                             popupAccess();
                         }
-                    } else {
 
+                    } else {
 
                         CreatePrescription.backCheckerFlag = false;
                         CreatePrescription.NEWaddMedicinesArrayList = new ArrayList<>();
                         CreatePrescription.NEWaddLabTestArrayList = new ArrayList<>();
                         CreatePrescription myFragment = new CreatePrescription();
                         getSupportFragmentManager().beginTransaction().replace(R.id.homePageContainer, myFragment, "prescription").addToBackStack(null).commit();
-
 
                     }
                 } else {
@@ -1046,19 +1179,101 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View v) {
 
-                ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
-
                 if (!("").equalsIgnoreCase(manager.getPreferences(mContext, "registration_no"))) {
-                    PatientRegistration myFragment = new PatientRegistration();
-                    Bundle bundle = new Bundle();
-                    bundle.putBoolean("isFromHome", true);
-                    myFragment.setArguments(bundle);
-                    getSupportFragmentManager().beginTransaction().replace(R.id.homePageContainer, myFragment, "first").addToBackStack(null).commit();
+                    ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
+                    if (!("").equalsIgnoreCase(responseProfileDetails.getHospitalCode())) {
 
+                        if (responseProfileDetails.getAccess().equals("Approve")) {
+
+                            String sub_valid = "", premium_valid = "";
+                            boolean flag_reset_paid = false;
+                            Date date1 = null, date2 = null;
+                            int days_left_free = 0, days_left_paid = 0;
+                            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                            ResponseProfileDetails profileDetails = manager.getObjectProfileDetails(mContext, "profile");
+                            if (profileDetails.getSubcriptions() != null) {
+                                if (profileDetails.getSubcriptions().size() != 0) {
+                                    for (SubcriptionsItem si : profileDetails.getSubcriptions()) {
+                                        if (!si.getHospital_code().equals("")) {
+                                            try {
+                                                Calendar c2 = Calendar.getInstance();
+                                                DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+                                                Date dateEnd = dateFormat.parse(si.getEnd());
+                                                Date c = Calendar.getInstance().getTime();
+                                                assert dateEnd != null;
+
+                                                //premium_valid = si.getDays();
+                                                Log.e("DATE_____1 = ", DateUtils.printDifference(c, dateEnd));
+                                                // Log.e("DATE_____2 = ",DateUtils.outFormatsetMMM(DateUtils.printDifference(c,dateEnd)));
+                                                // Log.e("DATE_____3 = ",DateUtils.outFormatset(DateUtils.printDifference(c,dateEnd)));
+
+
+                                                try {
+                                                    date1 = dateFormat.parse(dateFormat.format(c2.getTime()));
+                                                    date2 = dateFormat.parse(si.getEnd());
+                                                    Log.e("DATE_____1 = ", DateUtils.printDifference(date1, date2) + " left");
+                                                    flag_reset_free = true;
+
+                                                    String[] splited = DateUtils.printDifference(date1, date2).split("\\s+");
+
+                                                    days_left_free = days_left_free + Integer.parseInt(splited[0]);
+                                                    // popupFreeSubscription(DateUtils.printDifference(date1,date2),true);
+                                                    // break;
+                                                    sub_valid = si.getEnd();
+                                                } catch (ParseException e) {
+                                                    e.printStackTrace();
+                                                }
+
+                                                //viewHolder.expiry.setText(DateUtils.printDifference(date1,date2)+" left");
+
+                                            } catch (ParseException pe) {
+                                                // handle the failure
+                                                flag_reset_free = false;
+                                            }
+
+                                        }
+                                    }
+
+                                } else
+                                    popupPaused("Your subscription has expired. Please contact to " + profileDetails.getHospital_name());
+                            } else
+                                popupPaused("Your subscription has expired. Please contact to " + profileDetails.getHospital_name());
+
+                            if (days_left_free < 1) {
+                                popupPaused("Your subscription has expired. Please contact to " + profileDetails.getHospital_name());
+                            } else {
+                                PatientRegistration myFragment = new PatientRegistration();
+                                Bundle bundle = new Bundle();
+                                bundle.putBoolean("isFromHome", true);
+                                myFragment.setArguments(bundle);
+                                getSupportFragmentManager().beginTransaction().replace(R.id.homePageContainer, myFragment, "first").addToBackStack(null).commit();
+                            }
+//Now run it
+                        } else if (responseProfileDetails.getAccess().equals("Pending")) {
+                            popupPaused("Your account is pending for approval. Please contact " + responseProfileDetails.getHospital_name());
+
+                        } else if (responseProfileDetails.getAccess().equals("Remove")) {
+                            popupPaused("You have been removed from " + responseProfileDetails.getHospital_name() + ". You now have accesses like BluDoc standard user");
+                            //popupHospitalCode();
+                        } else if (responseProfileDetails.getAccess().equals("Pause")) {
+
+                            popupPaused("Your subscription is paused. Please contact to " + responseProfileDetails.getHospital_name());
+
+                        } else {
+                            popupAccess();
+                        }
+
+                    } else {
+
+                        PatientRegistration myFragment = new PatientRegistration();
+                        Bundle bundle = new Bundle();
+                        bundle.putBoolean("isFromHome", true);
+                        myFragment.setArguments(bundle);
+                        getSupportFragmentManager().beginTransaction().replace(R.id.homePageContainer, myFragment, "first").addToBackStack(null).commit();
+
+                    }
                 } else {
-
                     popup();
-
                 }
 
             }
@@ -1069,28 +1284,90 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
                 if (!("").equalsIgnoreCase(manager.getPreferences(mContext, "registration_no"))) {
                     ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
-
                     if (!("").equalsIgnoreCase(responseProfileDetails.getHospitalCode())) {
 
-                        if (responseProfileDetails.getAccess().equals("Pending")) {
-                            popupAccess();
-                        } else if (responseProfileDetails.getAccess().equals("Approve")) {
+                        if (responseProfileDetails.getAccess().equals("Approve")) {
 
-                            TemplateSelection myFragment = new TemplateSelection();
-                            Bundle bundle = new Bundle();
-                            bundle.putString("patient_id", "");
-                            bundle.putString("definer", "home");
+                            String sub_valid = "", premium_valid = "";
+                            boolean flag_reset_paid = false;
+                            Date date1 = null, date2 = null;
+                            int days_left_free = 0, days_left_paid = 0;
+                            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                            ResponseProfileDetails profileDetails = manager.getObjectProfileDetails(mContext, "profile");
+                            if (profileDetails.getSubcriptions() != null) {
+                                if (profileDetails.getSubcriptions().size() != 0) {
+                                    for (SubcriptionsItem si : profileDetails.getSubcriptions()) {
+                                        if (!si.getHospital_code().equals("")) {
+                                            try {
+                                                Calendar c2 = Calendar.getInstance();
+                                                DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+                                                Date dateEnd = dateFormat.parse(si.getEnd());
+                                                Date c = Calendar.getInstance().getTime();
+                                                assert dateEnd != null;
 
-                            myFragment.setArguments(bundle);
-                            getSupportFragmentManager().beginTransaction().replace(R.id.homePageContainer, myFragment, "first").addToBackStack(null).commit();
+                                                //premium_valid = si.getDays();
+                                                Log.e("DATE_____1 = ", DateUtils.printDifference(c, dateEnd));
+                                                // Log.e("DATE_____2 = ",DateUtils.outFormatsetMMM(DateUtils.printDifference(c,dateEnd)));
+                                                // Log.e("DATE_____3 = ",DateUtils.outFormatset(DateUtils.printDifference(c,dateEnd)));
 
-                        } else if (responseProfileDetails.getAccess().equals("Paused")) {
 
-                            popupPaused("Your subscription is paused. Please contact ‘" + responseProfileDetails.getSubcriptions().get(0).getNameHospital() + "’ for the same");
+                                                try {
+                                                    date1 = dateFormat.parse(dateFormat.format(c2.getTime()));
+                                                    date2 = dateFormat.parse(si.getEnd());
+                                                    Log.e("DATE_____1 = ", DateUtils.printDifference(date1, date2) + " left");
+                                                    flag_reset_free = true;
+
+                                                    String[] splited = DateUtils.printDifference(date1, date2).split("\\s+");
+
+                                                    days_left_free = days_left_free + Integer.parseInt(splited[0]);
+                                                    // popupFreeSubscription(DateUtils.printDifference(date1,date2),true);
+                                                    // break;
+                                                    sub_valid = si.getEnd();
+                                                } catch (ParseException e) {
+                                                    e.printStackTrace();
+                                                }
+
+                                                //viewHolder.expiry.setText(DateUtils.printDifference(date1,date2)+" left");
+
+                                            } catch (ParseException pe) {
+                                                // handle the failure
+                                                flag_reset_free = false;
+                                            }
+
+                                        }
+                                    }
+
+                                } else
+                                    popupPaused("Your subscription has expired. Please contact to " + profileDetails.getHospital_name());
+                            } else
+                                popupPaused("Your subscription has expired. Please contact to " + profileDetails.getHospital_name());
+
+                            if (days_left_free < 1) {
+                                popupPaused("Your subscription has expired. Please contact to " + profileDetails.getHospital_name());
+                            } else {
+                                TemplateSelection myFragment = new TemplateSelection();
+                                Bundle bundle = new Bundle();
+                                bundle.putString("patient_id", "");
+                                bundle.putString("definer", "home");
+
+                                myFragment.setArguments(bundle);
+                                getSupportFragmentManager().beginTransaction().replace(R.id.homePageContainer, myFragment, "first").addToBackStack(null).commit();
+                            }
+//Now run it
+                        } else if (responseProfileDetails.getAccess().equals("Pending")) {
+                            popupPaused("Your account is pending for approval. Please contact " + responseProfileDetails.getHospital_name());
+
+                        } else if (responseProfileDetails.getAccess().equals("Remove")) {
+                            popupPaused("You have been removed from " + responseProfileDetails.getHospital_name() + ". You now have accesses like BluDoc standard user");
+                            //popupHospitalCode();
+                        } else if (responseProfileDetails.getAccess().equals("Pause")) {
+
+                            popupPaused("Your subscription is paused. Please contact to " + responseProfileDetails.getHospital_name());
 
                         } else {
                             popupAccess();
                         }
+
                     } else {
 
                         TemplateSelection myFragment = new TemplateSelection();
@@ -1100,7 +1377,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
                         myFragment.setArguments(bundle);
                         getSupportFragmentManager().beginTransaction().replace(R.id.homePageContainer, myFragment, "first").addToBackStack(null).commit();
-
 
                     }
                 } else {
@@ -1137,6 +1413,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(responsePatients);*/
+
         CreatePrescription myFragment = new CreatePrescription();
 
         fragmanager.beginTransaction().replace(R.id.homePageContainer, myFragment, "prescription").addToBackStack(null).commit();
@@ -1506,20 +1783,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.logout) {
             popuplogout();
         } else if (id == R.id.Subscription_packages) {
-
-            ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
-
-            if (TextUtils.isEmpty(responseProfileDetails.getHospitalCode())) {
-
-                Intent intent1 = new Intent(HomeActivity.this, SubscriptionPackages.class);
-                startActivity(intent1);
-
-            } else {
-
-                Toast.makeText(mContext, "You cannot access this page...", Toast.LENGTH_SHORT).show();
-
-            }
-
+            Intent intent1 = new Intent(HomeActivity.this, SubscriptionPackages.class);
+            startActivity(intent1);
         }
 
 
@@ -1624,122 +1889,181 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onResume() {
         super.onResume();
-        String sub_valid = "", premium_valid = "";
-        boolean flag_reset_paid = false;
-        Date date1 = null, date2 = null;
-        int days_left_free = 0, days_left_paid = 0;
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         ResponseProfileDetails profileDetails = manager.getObjectProfileDetails(mContext, "profile");
-        if (profileDetails.getSubcriptions() != null) {
-            if (profileDetails.getSubcriptions().size() != 0) {
-                for (SubcriptionsItem si : profileDetails.getSubcriptions()) {
-                    if (si.getType().equals("Free")) {
-                        try {
-                            Calendar c2 = Calendar.getInstance();
-                            DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
-                            Date dateEnd = dateFormat.parse(si.getEnd());
-                            Date c = Calendar.getInstance().getTime();
-                            assert dateEnd != null;
-                            premium_valid = si.getDays();
-                            Log.e("DATE_____1 = ", DateUtils.printDifference(c, dateEnd));
-                            // Log.e("DATE_____2 = ",DateUtils.outFormatsetMMM(DateUtils.printDifference(c,dateEnd)));
-                            // Log.e("DATE_____3 = ",DateUtils.outFormatset(DateUtils.printDifference(c,dateEnd)));
+
+        if ((profileDetails.getHospitalCode() != null && !profileDetails.getHospitalCode().equals(""))) {
+            if (profileDetails.getAccess().equals("Pause")) {
+                popupPaused("Your subscription is paused. Please contact to " + profileDetails.getHospital_name());
+
+                tv_days_left.setText("Your subscription is paused");
+                showNativeAdFlag = false;
+                ll_premium.setVisibility(View.VISIBLE);
+
+                if (manager.contains(mContext, "show_banner_ad"))
+                    manager.deletePreferences(mContext, "show_banner_ad");
+
+            } else if (profileDetails.getAccess().equals("Approve")) {
+
+                String sub_valid = "", premium_valid = "";
+                boolean flag_reset_paid = false;
+                Date date1 = null, date2 = null;
+                int days_left_free = 0, days_left_paid = 0;
+                SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                ResponseProfileDetails profileDetailsSubmit = manager.getObjectProfileDetails(mContext, "profile");
+                if (profileDetailsSubmit.getSubcriptions() != null) {
+                    if (profileDetailsSubmit.getSubcriptions().size() != 0) {
+                        for (SubcriptionsItem si : profileDetailsSubmit.getSubcriptions()) {
+                            if (!si.getHospital_code().equals("")) {
+                                try {
+                                    Calendar c2 = Calendar.getInstance();
+                                    DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+                                    Date dateEnd = dateFormat.parse(si.getEnd());
+                                    Date c = Calendar.getInstance().getTime();
+                                    assert dateEnd != null;
+
+                                    //premium_valid = si.getDays();
+                                    Log.e("DATE_____1 = ", DateUtils.printDifference(c, dateEnd));
+                                    // Log.e("DATE_____2 = ",DateUtils.outFormatsetMMM(DateUtils.printDifference(c,dateEnd)));
+                                    // Log.e("DATE_____3 = ",DateUtils.outFormatset(DateUtils.printDifference(c,dateEnd)));
 
 
+                                    try {
+                                        date1 = dateFormat.parse(dateFormat.format(c2.getTime()));
+                                        date2 = dateFormat.parse(si.getEnd());
+                                        Log.e("DATE_____1 = ", DateUtils.printDifference(date1, date2) + " left");
+                                        flag_reset_free = true;
+
+                                        String[] splited = DateUtils.printDifference(date1, date2).split("\\s+");
+
+                                        days_left_free = days_left_free + Integer.parseInt(splited[0]);
+                                        // popupFreeSubscription(DateUtils.printDifference(date1,date2),true);
+                                        // break;
+                                        sub_valid = si.getEnd();
+                                        tv_days_left.setText("Your subscription is valid till " + sub_valid + ".");
+
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    //viewHolder.expiry.setText(DateUtils.printDifference(date1,date2)+" left");
+
+                                } catch (ParseException pe) {
+                                    // handle the failure
+                                    flag_reset_free = false;
+                                }
+
+                            }
+                        }
+
+                    } else {
+                        popupPaused("Your subscription has expired. Please contact to " + profileDetails.getHospital_name());
+                        tv_days_left.setText("Your subscription has expired. Please contact " + profileDetails.getHospital_name());
+                    }
+                } else {
+                    popupPaused("Your subscription has expired. Please contact to " + profileDetails.getHospital_name());
+                    tv_days_left.setText("Your subscription has expired. Please contact to " + profileDetails.getHospital_name());
+                }
+
+                if (days_left_free < 1) {
+                    popupPaused("Your subscription has expired. Please contact to " + profileDetails.getHospital_name());
+                    tv_days_left.setText("Your subscription has expired. Please contact to " + profileDetails.getHospital_name());
+                }
+//Now run it
+            } else if (profileDetails.getAccess().equals("Pending")) {
+                tv_days_left.setText("Pending for Approval");
+            }
+
+        } else {
+
+            String sub_valid = "", premium_valid = "";
+            boolean flag_reset_paid = false;
+            Date date1 = null, date2 = null;
+            int days_left_free = 0, days_left_paid = 0;
+            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+            if (profileDetails.getSubcriptions() != null) {
+                if (profileDetails.getSubcriptions().size() != 0) {
+                    for (SubcriptionsItem si : profileDetails.getSubcriptions()) {
+                        if (si.getType().equals("Free")) {
                             try {
+                                Calendar c2 = Calendar.getInstance();
+                                DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+                                Date dateEnd = dateFormat.parse(si.getEnd());
+                                Date c = Calendar.getInstance().getTime();
+                                assert dateEnd != null;
+                                premium_valid = si.getDays();
+                                Log.e("DATE_____1 = ", DateUtils.printDifference(c, dateEnd));
+                                // Log.e("DATE_____2 = ",DateUtils.outFormatsetMMM(DateUtils.printDifference(c,dateEnd)));
+                                // Log.e("DATE_____3 = ",DateUtils.outFormatset(DateUtils.printDifference(c,dateEnd)));
+
+
+                                try {
+                                    date1 = dateFormat.parse(dateFormat.format(c2.getTime()));
+                                    date2 = dateFormat.parse(si.getEnd());
+                                    Log.e("DATE_____1 = ", DateUtils.printDifference(date1, date2) + " left");
+                                    flag_reset_free = true;
+
+                                    String[] splited = DateUtils.printDifference(date1, date2).split("\\s+");
+
+                                    days_left_free = days_left_free + Integer.parseInt(splited[0]);
+                                    // popupFreeSubscription(DateUtils.printDifference(date1,date2),true);
+                                    // break;
+                                    sub_valid = si.getEnd();
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+
+                                //viewHolder.expiry.setText(DateUtils.printDifference(date1,date2)+" left");
+
+                            } catch (ParseException pe) {
+                                // handle the failure
+                                flag_reset_free = false;
+                            }
+
+                        } else if (si.getType().equals("Paid")) {
+                            try {
+                                Calendar c2 = Calendar.getInstance();
+                                DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+                                Date dateEnd = dateFormat.parse(si.getEnd());
+                                Date c = Calendar.getInstance().getTime();
+                                assert dateEnd != null;
+                                premium_valid = si.getDays();
+                                Log.e("DATE_____1 = ", DateUtils.printDifference(c, dateEnd));
+                                // Log.e("DATE_____2 = ",DateUtils.outFormatsetMMM(DateUtils.printDifference(c,dateEnd)));
+                                // Log.e("DATE_____3 = ",DateUtils.outFormatset(DateUtils.printDifference(c,dateEnd)));
+
+
                                 date1 = dateFormat.parse(dateFormat.format(c2.getTime()));
                                 date2 = dateFormat.parse(si.getEnd());
+                                // date2 = dateFormat.parse("12-12-2020");
                                 Log.e("DATE_____1 = ", DateUtils.printDifference(date1, date2) + " left");
-                                flag_reset_free = true;
+                                flag_reset_paid = true;
 
                                 String[] splited = DateUtils.printDifference(date1, date2).split("\\s+");
 
-                                days_left_free = days_left_free + Integer.parseInt(splited[0]);
-                                // popupFreeSubscription(DateUtils.printDifference(date1,date2),true);
-                                // break;
+                                days_left_paid = days_left_paid + Integer.parseInt(splited[0]);
                                 sub_valid = si.getEnd();
+                                // break;
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
-
-                            //viewHolder.expiry.setText(DateUtils.printDifference(date1,date2)+" left");
-
-                        } catch (ParseException pe) {
-                            // handle the failure
-                            flag_reset_free = false;
-                        }
-
-                    } else if (si.getType().equals("Paid")) {
-                        try {
-                            Calendar c2 = Calendar.getInstance();
-                            DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
-                            Date dateEnd = dateFormat.parse(si.getEnd());
-                            Date c = Calendar.getInstance().getTime();
-                            assert dateEnd != null;
-                            premium_valid = si.getDays();
-                            Log.e("DATE_____1 = ", DateUtils.printDifference(c, dateEnd));
-                            // Log.e("DATE_____2 = ",DateUtils.outFormatsetMMM(DateUtils.printDifference(c,dateEnd)));
-                            // Log.e("DATE_____3 = ",DateUtils.outFormatset(DateUtils.printDifference(c,dateEnd)));
-
-
-                            date1 = dateFormat.parse(dateFormat.format(c2.getTime()));
-                            date2 = dateFormat.parse(si.getEnd());
-                            // date2 = dateFormat.parse("12-12-2020");
-                            Log.e("DATE_____1 = ", DateUtils.printDifference(date1, date2) + " left");
-                            flag_reset_paid = true;
-
-                            String[] splited = DateUtils.printDifference(date1, date2).split("\\s+");
-
-                            days_left_paid = days_left_paid + Integer.parseInt(splited[0]);
-                            sub_valid = si.getEnd();
-                            // break;
-                        } catch (ParseException e) {
-                            e.printStackTrace();
                         }
                     }
-                }
-                if (flag_reset_paid) {   //Premium Subscription
-                    if (days_left_paid < 1) {
-                        tv_premium_top.setVisibility(View.GONE);
-                        showNativeAdFlag = false;
-                        // popupFreeSubscription("",false);
-                        manager.setPreferences(mContext, "show_banner_ad", "true");
-                        BannerAd(adRequest);
-                        addflag = true;
-                        ll_premium.setVisibility(View.VISIBLE);
-                        ll_premium.setBackgroundDrawable(getResources().getDrawable(R.drawable.blue_btn_gradient));
-                        ll_premium.setPadding(20, 30, 20, 30);
-                        tv_days_left.setText("Expired!! Upgrade to premium for an ad free experience.");
-                        ll_premium.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
-                                if (TextUtils.isEmpty(responseProfileDetails.getHospitalCode())) {
-
-                                    Intent intent1 = new Intent(HomeActivity.this, SubscriptionPackages.class);
-                                    startActivity(intent1);
-
-                                } else {
-
-                                    Toast.makeText(mContext, "You cannot access this page...", Toast.LENGTH_SHORT).show();
-
-                                }
-                            }
-                        });
-                    } else {
-                        showNativeAdFlag = false;
-                        //  popupFreeSubscription("",false);
-                        //   Toast.makeText(mContext, ""+days_left_paid, Toast.LENGTH_SHORT).show();
-                        if (days_left_paid < 11) {
+                    if (flag_reset_paid) {   //Premium Subscription
+                        if (days_left_paid < 1) {
+                            tv_premium_top.setVisibility(View.GONE);
+                            showNativeAdFlag = false;
+                            // popupFreeSubscription("",false);
+                            manager.setPreferences(mContext, "show_banner_ad", "true");
+                            BannerAd(adRequest);
+                            addflag = true;
                             ll_premium.setVisibility(View.VISIBLE);
-                            if (manager.contains(mContext, "show_banner_ad"))
-                                manager.deletePreferences(mContext, "show_banner_ad");
-                            tv_days_left.setText("Your subscription will end on " + sub_valid + ".\n Click here to renew");
+                            ll_premium.setBackgroundDrawable(getResources().getDrawable(R.drawable.blue_btn_gradient));
+                            ll_premium.setPadding(20, 30, 20, 30);
+                            tv_days_left.setText("Expired!! Upgrade to premium for an ad free experience.");
                             ll_premium.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
-
                                     if (TextUtils.isEmpty(responseProfileDetails.getHospitalCode())) {
 
                                         Intent intent1 = new Intent(HomeActivity.this, SubscriptionPackages.class);
@@ -1747,18 +2071,94 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
                                     } else {
 
-                                        Toast.makeText(mContext, "You cannot access this page...", Toast.LENGTH_SHORT).show();
+//                                        Toast.makeText(mContext, "You cannot access this page...", Toast.LENGTH_SHORT).show();
 
                                     }
                                 }
                             });
                         } else {
                             showNativeAdFlag = false;
-                            ll_premium.setVisibility(View.VISIBLE);
+                            //  popupFreeSubscription("",false);
+                            //   Toast.makeText(mContext, ""+days_left_paid, Toast.LENGTH_SHORT).show();
+                            if (days_left_paid < 11) {
+                                ll_premium.setVisibility(View.VISIBLE);
+                                if (manager.contains(mContext, "show_banner_ad"))
+                                    manager.deletePreferences(mContext, "show_banner_ad");
+                                tv_days_left.setText("Your subscription will end on " + sub_valid + ".\n Click here to renew");
+                                ll_premium.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
+                                        if (TextUtils.isEmpty(responseProfileDetails.getHospitalCode())) {
 
+                                            Intent intent1 = new Intent(HomeActivity.this, SubscriptionPackages.class);
+                                            startActivity(intent1);
+
+                                        } else {
+
+//                                            Toast.makeText(mContext, "You cannot access this page...", Toast.LENGTH_SHORT).show();
+
+                                        }
+                                    }
+                                });
+                            } else {
+                                showNativeAdFlag = false;
+                                ll_premium.setVisibility(View.VISIBLE);
+
+                                if (manager.contains(mContext, "show_banner_ad"))
+                                    manager.deletePreferences(mContext, "show_banner_ad");
+                                tv_days_left.setText("Your subscription is valid till " + sub_valid + ".");
+                                ll_premium.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+
+                                        ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
+
+                                        if (TextUtils.isEmpty(responseProfileDetails.getHospitalCode())) {
+
+                                            Intent intent1 = new Intent(HomeActivity.this, SubscriptionPackages.class);
+                                            startActivity(intent1);
+
+                                        } else {
+
+//                                            Toast.makeText(mContext, "You cannot access this page...", Toast.LENGTH_SHORT).show();
+
+                                        }
+
+                                    }
+                                });
+
+                            /*ll_premium.setBackgroundDrawable(getResources().getDrawable(R.drawable.green_gradient));
+                            ll_premium.setPadding(20,30,20,30);
+
+                            tv_days_left.setTextColor(getResources().getColor(R.color.colorWhite));*/
+                            }
+
+                            if (manager.contains(mContext, "purchased_new")) {
+                                if (manager.contains(mContext, "show_banner_ad"))
+                                    manager.deletePreferences(mContext, "show_banner_ad");
+                                if (manager.getPreferences(mContext, "purchased_new").equalsIgnoreCase("true")) {
+                                    ll_premium.setBackgroundDrawable(getResources().getDrawable(R.drawable.green_gradient));
+                                    ll_premium.setPadding(20, 30, 20, 30);
+                                    tv_days_left.setText("Congratulations!! \n You are now a premium member. \n Your subscription is valid till " + sub_valid);
+                                    tv_days_left.setTextColor(mContext.getResources().getColor(R.color.white));
+                                    showNativeAdFlag = false;
+                                } else {
+                                    ll_premium.setVisibility(View.GONE);
+                                }
+                            }
+                        }
+                    } else   //Free Subscription
+                    {
+                        if (flag_reset_free) {
                             if (manager.contains(mContext, "show_banner_ad"))
                                 manager.deletePreferences(mContext, "show_banner_ad");
-                            tv_days_left.setText("Your subscription is valid till " + sub_valid + ".");
+                            manager.setPreferences(mContext, "show_banner_ad", "true");
+                            BannerAd(adRequest);
+                            //  popupFreeSubscription(""+days_left_free,true);
+                            tv_days_left.setText("Congratulations!! \nYou have been offered a " + premium_valid + " days free trial.\nValid till - " + sub_valid + " \nUpgrade to premium for an ad free experience.\nClick here to upgrade");
+                            tv_premium_top.setVisibility(View.VISIBLE);
+                            showNativeAdFlag = false;
                             ll_premium.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -1772,157 +2172,124 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
                                     } else {
 
-                                        Toast.makeText(mContext, "You cannot access this page...", Toast.LENGTH_SHORT).show();
+//                                        Toast.makeText(mContext, "You cannot access this page...", Toast.LENGTH_SHORT).show();
 
                                     }
 
                                 }
                             });
+                        } else { // Expired
+//                        if (profileDetails.getHospitalCode()!= null && !profileDetails.getHospitalCode().equals("") ) {
+//                            if(profileDetails.getAccess().equals("Paused"))
+//                            popupPaused("Your subscription is paused. Please contact hospital");
+//
+//                        }
 
-                            /*ll_premium.setBackgroundDrawable(getResources().getDrawable(R.drawable.green_gradient));
-                            ll_premium.setPadding(20,30,20,30);
+                            if (profileDetails.getHospitalCode() != null && !profileDetails.getHospitalCode().equals("")) {
 
-                            tv_days_left.setTextColor(getResources().getColor(R.color.colorWhite));*/
+                                popupPaused("Your subscription has expired. Please contact " + profileDetails.getHospital_name());
+
+                            }
+
+
+                            manager.setPreferences(mContext, "show_banner_ad", "true");
+                            BannerAd(adRequest);
+                            addflag = true;
+                            ll_premium.setVisibility(View.GONE);
+                            ll_premium.setBackgroundDrawable(getResources().getDrawable(R.drawable.blue_btn_gradient));
+                            ll_premium.setPadding(20, 30, 20, 30);
+                            tv_days_left.setText("Upgrade to premium for an ad free experience.\nClick here to upgrade");
+                            showNativeAdFlag = true;
+                            ll_premium.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                    ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
+
+                                    if (TextUtils.isEmpty(responseProfileDetails.getHospitalCode())) {
+
+                                        Intent intent1 = new Intent(HomeActivity.this, SubscriptionPackages.class);
+                                        startActivity(intent1);
+
+                                    } else {
+
+//                                        Toast.makeText(mContext, "You cannot access this page...", Toast.LENGTH_SHORT).show();
+
+                                    }
+
+                                }
+                            });
                         }
 
-                        if (manager.contains(mContext, "purchased_new")) {
-                            if (manager.contains(mContext, "show_banner_ad"))
-                                manager.deletePreferences(mContext, "show_banner_ad");
-                            if (manager.getPreferences(mContext, "purchased_new").equalsIgnoreCase("true")) {
-                                ll_premium.setBackgroundDrawable(getResources().getDrawable(R.drawable.green_gradient));
-                                ll_premium.setPadding(20, 30, 20, 30);
-                                tv_days_left.setText("Congratulations!! \n You are now a premium member. \n Your subscription is valid till " + sub_valid);
-                                tv_days_left.setTextColor(mContext.getResources().getColor(R.color.white));
-                                showNativeAdFlag = false;
+                    }
+                } else if (!flag_reset_free) {
+//                if (profileDetails.getHospitalCode() != null && !profileDetails.getHospitalCode().equals("")) {
+//                    if (profileDetails.getAccess().equals("Paused"))
+//                        popupPaused("Your subscription is paused. Please contact hospital");
+//
+//                }
+
+                    if (profileDetails.getHospitalCode() != null && !profileDetails.getHospitalCode().equals("")) {
+
+                        popupPaused("Your subscription has expired. Please contact hospital admin");
+                    }
+
+                    BannerAd(adRequest);
+                    addflag = true;
+                    manager.setPreferences(mContext, "show_banner_ad", "true");
+                    tv_premium_top.setVisibility(View.GONE);
+                    ll_premium.setBackgroundDrawable(getResources().getDrawable(R.drawable.blue_round_btn_gradient_mojito));
+                    showNativeAdFlag = true;
+                    // popupFreeSubscription("", false);
+                    tv_days_left.setTextColor(getResources().getColor(R.color.colorBlue));
+                    tv_days_left.setText("Upgrade to Premium");
+                    ll_premium.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
+
+                            if (TextUtils.isEmpty(responseProfileDetails.getHospitalCode())) {
+
+                                Intent intent1 = new Intent(HomeActivity.this, SubscriptionPackages.class);
+                                startActivity(intent1);
+
                             } else {
-                                ll_premium.setVisibility(View.GONE);
+
+//                                Toast.makeText(mContext, "You cannot access this page...", Toast.LENGTH_SHORT).show();
+
                             }
+
                         }
-                    }
-                } else   //Free Subscription
-                {
-                    if (flag_reset_free) {
-                        if (manager.contains(mContext, "show_banner_ad"))
-                            manager.deletePreferences(mContext, "show_banner_ad");
-                        manager.setPreferences(mContext, "show_banner_ad", "true");
-                        BannerAd(adRequest);
-                        //  popupFreeSubscription(""+days_left_free,true);
-                        tv_days_left.setText("Congratulations!! \nYou have been offered a " + premium_valid + " days free trial.\nValid till - " + sub_valid + " \nUpgrade to premium for an ad free experience.\nClick here to upgrade");
-                        tv_premium_top.setVisibility(View.VISIBLE);
-                        showNativeAdFlag = false;
-                        ll_premium.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-
-                                ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
-
-                                if (TextUtils.isEmpty(responseProfileDetails.getHospitalCode())) {
-
-                                    Intent intent1 = new Intent(HomeActivity.this, SubscriptionPackages.class);
-                                    startActivity(intent1);
-
-                                } else {
-
-                                    Toast.makeText(mContext, "You cannot access this page...", Toast.LENGTH_SHORT).show();
-
-                                }
-
-                            }
-                        });
-                    } else {
-
-                        manager.setPreferences(mContext, "show_banner_ad", "true");
-
-                        ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
-                        if (!("").equalsIgnoreCase(responseProfileDetails.getHospitalCode()))
-                            popupPaused("Your subscription has expired "+responseProfileDetails.getSubcriptions().get(0).getNameHospital());
-
-                        BannerAd(adRequest);
-                        addflag = true;
-                        ll_premium.setVisibility(View.GONE);
-                        ll_premium.setBackgroundDrawable(getResources().getDrawable(R.drawable.blue_btn_gradient));
-                        ll_premium.setPadding(20, 30, 20, 30);
-                        tv_days_left.setText("Upgrade to premium for an ad free experience.\nClick here to upgrade");
-                        showNativeAdFlag = true;
-                        ll_premium.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-
-                                ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
-
-                                if (TextUtils.isEmpty(responseProfileDetails.getHospitalCode())) {
-
-                                    Intent intent1 = new Intent(HomeActivity.this, SubscriptionPackages.class);
-                                    startActivity(intent1);
-
-                                } else {
-
-                                    Toast.makeText(mContext, "You cannot access this page...", Toast.LENGTH_SHORT).show();
-
-                                }
-
-                            }
-                        });
-                    }
+                    });
 
                 }
-            } else if (!flag_reset_free) {
+            } else {
+                manager.setPreferences(mContext, "show_banner_ad", "true");
                 BannerAd(adRequest);
                 addflag = true;
-                manager.setPreferences(mContext, "show_banner_ad", "true");
-                tv_premium_top.setVisibility(View.GONE);
-                ll_premium.setBackgroundDrawable(getResources().getDrawable(R.drawable.blue_round_btn_gradient_mojito));
                 showNativeAdFlag = true;
-                // popupFreeSubscription("", false);
-                tv_days_left.setTextColor(getResources().getColor(R.color.colorBlue));
-                tv_days_left.setText("Upgrade to Premium");
-                ll_premium.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
-
-                        if (TextUtils.isEmpty(responseProfileDetails.getHospitalCode())) {
-
-                            Intent intent1 = new Intent(HomeActivity.this, SubscriptionPackages.class);
-                            startActivity(intent1);
-
-                        } else {
-
-                            Toast.makeText(mContext, "You cannot access this page...", Toast.LENGTH_SHORT).show();
-
-                        }
-
-                    }
-                });
-
             }
-        } else {
-            manager.setPreferences(mContext, "show_banner_ad", "true");
-            BannerAd(adRequest);
-            addflag = true;
-            showNativeAdFlag = true;
-        }
 
-        if (manager.contains(mContext, "show_banner_ad")) {
-            if (manager.contains(mContext, "show_time")) {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy, HH:mm");
-                Log.e("DIFF", "____________________ " + DateUtils.getDateDiff(dateFormat, manager.getPreferences(mContext, "show_time"), DateUtils.currentDateTime()));
+            if (manager.contains(mContext, "show_banner_ad")) {
+                if (manager.contains(mContext, "show_time")) {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy, HH:mm");
+                    Log.e("DIFF", "____________________ " + DateUtils.getDateDiff(dateFormat, manager.getPreferences(mContext, "show_time"), DateUtils.currentDateTime()));
 
-                if (DateUtils.getDateDiff(dateFormat, manager.getPreferences(mContext, "show_time"), DateUtils.currentDateTime()) > 0) {
+                    if (DateUtils.getDateDiff(dateFormat, manager.getPreferences(mContext, "show_time"), DateUtils.currentDateTime()) > 0) {
+                        manager.setPreferences(mContext, "show_time", DateUtils.currentDateTime());
+                        initInterstitialAd(adRequestInterstitial);
+                    }
+
+
+                } else {
                     manager.setPreferences(mContext, "show_time", DateUtils.currentDateTime());
+
                     initInterstitialAd(adRequestInterstitial);
                 }
 
-
-            } else {
-                manager.setPreferences(mContext, "show_time", DateUtils.currentDateTime());
-
-                initInterstitialAd(adRequestInterstitial);
             }
-
         }
-
         //  BannerAd();
         // popupFreeSubscription();
         // Toast.makeText(mContext, ""+CreatePrescription.backCheckerFlag, Toast.LENGTH_SHORT).show();

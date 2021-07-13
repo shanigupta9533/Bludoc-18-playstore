@@ -562,6 +562,7 @@ public class EmpLogin extends AppCompatActivity implements GoogleApiClient.Conne
         btn_yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 mContext.getSharedPreferences("status", 0).edit().clear().commit();
                 myDB.deleteAllMedicines();
                 myDB.deleteAllLabTests();
@@ -611,6 +612,7 @@ public class EmpLogin extends AppCompatActivity implements GoogleApiClient.Conne
         btn_yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                manager.setPreferences(mContext,"verify_email","");
                 onBackPressed();
             }
         });

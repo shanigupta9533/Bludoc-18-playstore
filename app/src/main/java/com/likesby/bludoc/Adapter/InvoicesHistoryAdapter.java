@@ -125,8 +125,9 @@ public class InvoicesHistoryAdapter extends RecyclerView.Adapter<InvoicesHistory
                 } else {
                     ArrayList<InvoicePresModel> filteredList = new ArrayList<>();
                     for (InvoicePresModel row : invoicePresModels) {
-                        if (row.getInvoice_title().toLowerCase().contains(charString.toLowerCase()) || row.getInvoice_no().toLowerCase().contains(charString.toLowerCase())) {
-                            Log.d(TAG, "performFiltering: " + charString + " == " + row);
+                        if (row.getInvoice_title().toLowerCase().contains(charString.toLowerCase()) ||
+                                row.getInvoice_no().toLowerCase().contains(charString.toLowerCase()) ||
+                                row.getP_name().toLowerCase().contains(charString.toLowerCase())) {
                             filteredList.add(row);
                         }
                     }
