@@ -155,7 +155,9 @@ public class AddAPharmacistActivity extends AppCompatActivity {
             Retrofit retrofit = RetrofitClient.getInstance();
             final WebServices request = retrofit.create(WebServices.class);
 
-            Call<ResultOfApi> call = request.editPharmacist(pharmacist_id, activity.etName.getText().toString(), activity.whatsnumber.getText().toString(), activity.emailId.getText().toString(),activity.categoryType.getSelectedItem().toString(),manager.getPreferences(this,"hospital_code"));
+            ResponseProfileDetails profileDetails = manager.getObjectProfileDetails(this, "profile");
+
+            Call<ResultOfApi> call = request.editPharmacist(pharmacist_id, activity.etName.getText().toString(), activity.whatsnumber.getText().toString(), activity.emailId.getText().toString(),activity.categoryType.getSelectedItem().toString(),profileDetails.getHospitalCode());
 
             call.enqueue(new Callback<ResultOfApi>() {
                 @Override

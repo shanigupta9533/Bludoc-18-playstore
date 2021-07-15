@@ -53,7 +53,6 @@ public class MySubscription extends AppCompatActivity {
     private RadioButton rb_Family, rb_Business;
     RecyclerView recyclerView;
     MySubscriptionAdapter mySubscriptionAdapter;
-
     FrameLayout fl_subscription;
     SessionManager manager;
     MyDB myDB;

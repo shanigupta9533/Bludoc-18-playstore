@@ -176,7 +176,6 @@ public class InvoiceHistoryFragment extends Fragment {
 
                         pullToRefresh.setRefreshing(false);
                         no_data_found_id.setVisibility(View.VISIBLE);
-                        Toast.makeText(fragmentActivity, jsonResponse.getMessage(), Toast.LENGTH_SHORT).show();
 
                     }
                 }

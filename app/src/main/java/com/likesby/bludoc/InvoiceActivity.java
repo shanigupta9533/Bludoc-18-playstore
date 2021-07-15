@@ -68,7 +68,7 @@ public class InvoiceActivity extends AppCompatActivity {
     private long totalPriceGlobal;
     private String patientName;
     private PatientsItem patientsItem;
-    private String payStatus = "Paid";
+    private String payStatus = "None";
     DecimalFormat formatter = new DecimalFormat("#,###,###");
     private long calculateFromTotal = 0;
     private long price2 = 0;
@@ -598,9 +598,9 @@ public class InvoiceActivity extends AppCompatActivity {
             }
         });
 
-        activity.parentOfRelative.getViewTreeObserver().
-
-                addOnGlobalLayoutListener(keyboardLayoutListener);
+//        activity.parentOfRelative.getViewTreeObserver().
+//
+//                addOnGlobalLayoutListener(keyboardLayoutListener);
 
     }
 
