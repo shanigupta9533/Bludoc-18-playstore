@@ -9,15 +9,23 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.github.chrisbanes.photoview.PhotoView;
 import com.likesby.bludoc.ModelLayer.Entities.MedicinesItem;
 import com.likesby.bludoc.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SampleAdapter extends RecyclerView.Adapter<SampleAdapter.ViewHolder> {
+    private final List<Integer> stringList;
     Context context;
 
-    public SampleAdapter() {
+    public SampleAdapter(Context context , List<Integer> stringList) {
+
+        this.context = context;
+        this.stringList=stringList;
 
     }
 
@@ -33,6 +41,8 @@ public class SampleAdapter extends RecyclerView.Adapter<SampleAdapter.ViewHolder
     @Override
     public void onBindViewHolder(SampleAdapter.ViewHolder viewHolder, final int position) {
 
+        Glide.with(context).asBitmap().load(stringList.get(position)).diskCacheStrategy(DiskCacheStrategy.NONE).into(viewHolder.imageView);
+
     }
 
 
@@ -46,14 +56,13 @@ public class SampleAdapter extends RecyclerView.Adapter<SampleAdapter.ViewHolder
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tab_name,med,tab_comments;
-        RelativeLayout card_view;
+
+        private PhotoView imageView;
 
         public ViewHolder(View view) {
             super(view);
-            tab_name        = view.findViewById(R.id.tab_name);
-            med        = view.findViewById(R.id.med);
-            tab_comments= view.findViewById(R.id.tab_comments);
+            imageView = view.findViewById(R.id.imageOfProduct);
+
         }
     }
 }

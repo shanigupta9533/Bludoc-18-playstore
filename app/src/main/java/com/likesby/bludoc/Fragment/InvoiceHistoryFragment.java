@@ -37,6 +37,7 @@ import com.yalantis.phoenix.PullToRefreshView;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -159,25 +160,35 @@ public class InvoiceHistoryFragment extends Fragment {
             call.enqueue(new Callback<ResponseSuccess>() {
                 @Override
                 public void onResponse(@NonNull Call<ResponseSuccess> call, @NonNull retrofit2.Response<ResponseSuccess> response) {
-                    ResponseSuccess jsonResponse = response.body();
-                    pullToRefresh.setRefreshing(false);
-                    assert jsonResponse != null;
-                    progressBar.setVisibility(View.GONE);
-                    if (jsonResponse.getSuccess().equalsIgnoreCase("Success")) {
 
-                        ArrayList<InvoicePresModel> invoicesPresModel = jsonResponse.getInvoice();
-                        invoicePresModelArrayList.clear();
-                        invoicePresModelArrayList.addAll(invoicesPresModel);
-                        invoicesPresAdapter.notifyDataSetChanged();
+                    if(response.isSuccessful() && response.body() != null){
+
+                        ResponseSuccess jsonResponse = response.body();
                         pullToRefresh.setRefreshing(false);
-                        no_data_found_id.setVisibility(View.GONE);
+                        assert jsonResponse != null;
+                        progressBar.setVisibility(View.GONE);
+                        if (jsonResponse.getSuccess().equalsIgnoreCase("Success")) {
+
+                            ArrayList<InvoicePresModel> invoicesPresModel = jsonResponse.getInvoice();
+                            invoicePresModelArrayList.clear();
+                            invoicePresModelArrayList.addAll(invoicesPresModel);
+                            invoicesPresAdapter.notifyDataSetChanged();
+                            pullToRefresh.setRefreshing(false);
+                            no_data_found_id.setVisibility(View.GONE);
+
+                        } else {
+
+                            pullToRefresh.setRefreshing(false);
+                            no_data_found_id.setVisibility(View.VISIBLE);
+
+                        }
 
                     } else {
 
-                        pullToRefresh.setRefreshing(false);
-                        no_data_found_id.setVisibility(View.VISIBLE);
+                        Toast.makeText(fragmentActivity, "Something went wrong...", Toast.LENGTH_SHORT).show();
 
                     }
+
                 }
 
                 @Override

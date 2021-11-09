@@ -52,34 +52,33 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                >
-                    <ImageView
-                        android:id="@+id/iv_no_template"
-                        android:layout_width="130dp"
-                        android:layout_height="130dp"
-                        android:layout_gravity="top|center"
-                        android:layout_marginTop="170dp"
-                        />
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/iv_no_template"
+                    android:layout_width="130dp"
+                    android:layout_height="130dp"
+                    android:layout_gravity="top|center"
+                    android:layout_marginTop="170dp" />
 
 
-                    <TextView
-                        android:fontFamily="@font/poppins"
-                        android:id="@+id/tv_no_template"
-                        android:layout_marginTop="@dimen/margin_30"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:layout_marginLeft="@dimen/margin_30"
-                        android:layout_marginStart="@dimen/margin_30"
-                        android:layout_marginRight="@dimen/margin_30"
-                        android:layout_marginEnd="@dimen/margin_30"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Create &amp; customise templates of your routinely prescribed medications"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="15sp"
-                        android:textStyle="normal"
-                        android:typeface="sans"/>
+                <TextView
+                    android:id="@+id/tv_no_template"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/margin_30"
+                    android:layout_marginLeft="@dimen/margin_30"
+                    android:layout_marginTop="@dimen/margin_30"
+                    android:layout_marginEnd="@dimen/margin_30"
+                    android:layout_marginRight="@dimen/margin_30"
+                    android:fontFamily="@font/poppins"
+                    android:gravity="center"
+                    android:text="Create &amp; customise templates of your routinely prescribed medications"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="15sp"
+                    android:textStyle="normal"
+                    android:typeface="sans" />
             </LinearLayout>
         </FrameLayout>
     </LinearLayout>

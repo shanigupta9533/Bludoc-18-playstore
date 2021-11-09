@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,16 +17,17 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.likesby.bludoc.ModelLayer.Entities.MedicinesItem;
 
 import com.likesby.bludoc.R;
-import com.mancj.materialsearchbar.MaterialSearchBar;
 
 import java.util.ArrayList;
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> implements Filterable
 {
+    private final EditText medicineQty;
     private ArrayList<MedicinesItem> mArrayList = new ArrayList<>();
     private ArrayList<MedicinesItem> mFilteredList = new ArrayList<>();
     private Context ctx ;
@@ -39,7 +41,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                          ArrayList<String> frequency2_list, EditText et_no_of_days, ArrayList<String> route_list,
                          ArrayList<String> instructions_list, Spinner frequency_spinner,
                          Spinner frequency2_spinner, Spinner route_spinner, Spinner instructions_spinner,
-                         EditText et_additional_comments, RecyclerView mRecyclerViewMedicines, EditText searchBarMaterialMedicine)
+                         EditText et_additional_comments, RecyclerView mRecyclerViewMedicines, EditText searchBarMaterialMedicine, EditText medicineQty)
     {
         mArrayList = arrayList;
         mFilteredList = arrayList;
@@ -55,6 +57,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         this.et_additional_comments = et_additional_comments;
         this.mRecyclerViewMedicines = mRecyclerViewMedicines;
         this.searchBarMaterialMedicine = searchBarMaterialMedicine;
+        this.medicineQty = medicineQty;
 
     }
 
@@ -234,6 +237,11 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                    // mRecyclerViewMedicines.setVisibility(View.GONE);
                     et_no_of_days.setText(medicinesItem.getNoOfDays());
                     searchBarMaterialMedicine.setText(medicinesItem.getMedicineName());
+
+                    if(!TextUtils.isEmpty(medicinesItem.getQty()) && !medicinesItem.getQty().equalsIgnoreCase("0")){
+                        medicineQty.setText(medicinesItem.getQty());
+                    }
+
                     et_additional_comments.setText(medicinesItem.getAdditionaComment());
 
                     int pos = 0;

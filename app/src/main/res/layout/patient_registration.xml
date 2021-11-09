@@ -1,78 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    android:background="@color/colorWhite"
-    android:clickable="true"
-    android:focusable="true"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    android:clickable="true"
+    android:focusable="true"
     android:orientation="vertical"
     tools:context=".RegisterDetails">
 
     <LinearLayout
-        android:background="@color/colorDarkBlue"
         android:id="@+id/ll_invite_member"
-        android:orientation="vertical"
-        android:layout_above="@+id/adView"
-        android:clickable="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_above="@+id/adView"
+        android:background="@color/colorDarkBlue"
+        android:clickable="true"
+        android:orientation="vertical">
 
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbar_layout"
-            android:animateLayoutChanges="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.NoActionBar"
-            >
+            android:animateLayoutChanges="true"
+            android:theme="@style/AppTheme.NoActionBar">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar_invite_member"
-                app:contentInsetLeft="0dp"
-                app:contentInsetStart="0dp"
-                app:contentInsetStartWithNavigation="0dp"
-                app:layout_collapseMode="pin"
-                app:titleTextColor="@color/colorWhite"
-                app:subtitleTextColor="@color/colorWhite"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
                 android:padding="-48dp"
+                app:contentInsetLeft="0dp"
+                app:contentInsetStart="0dp"
+                app:contentInsetStartWithNavigation="0dp"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/AppThemeNOAC"
+                app:subtitleTextColor="@color/colorWhite"
 
 
-                app:popupTheme="@style/AppThemeNOAC">
+                app:titleTextColor="@color/colorWhite">
+
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
                     <FrameLayout
-                        android:gravity="center"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        >
+                        android:gravity="center">
 
                         <ImageView
                             android:id="@+id/btn_back_edit_profile"
-                            android:layout_margin="@dimen/margin_10"
-                            android:layout_gravity="center|start"
                             android:layout_width="25dp"
                             android:layout_height="25dp"
-                            android:src="@drawable/ic_back_button"
-                            />
+                            android:layout_gravity="center|start"
+                            android:layout_margin="@dimen/margin_10"
+                            android:src="@drawable/ic_back_button" />
 
                         <TextView
-                            android:fontFamily="@font/poppinsmedium"
-                            android:layout_gravity="center"
-                            android:textSize="18sp"
-                            android:textColor="@color/colorWhite"
-                            android:gravity="center"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:fontFamily="@font/poppinsmedium"
+                            android:gravity="center"
                             android:text="Patient Registration"
-                            android:typeface="sans"
-                            />
+                            android:textColor="@color/colorWhite"
+                            android:textSize="18sp"
+                            android:typeface="sans" />
 
                     </FrameLayout>
 
@@ -84,128 +81,321 @@
         <ScrollView
             android:id="@+id/scrollview_edit_profile"
             android:layout_width="match_parent"
-            android:background="#fff"
             android:layout_height="match_parent"
-            >
-
+            android:background="#fff">
 
 
             <LinearLayout
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
                 <!--        Name       -->
 
                 <TextView
-                    android:fontFamily="@font/poppins"
                     android:id="@+id/textView3_5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|top"
                     android:layout_margin="@dimen/margin_10"
-                    
+                    android:fontFamily="@font/poppins"
+
                     android:gravity="center"
                     android:text="Kindly fill basic details of patient"
                     android:textColor="@color/colorBlack"
                     android:textSize="15sp"
-                    android:textStyle="normal"/>
+                    android:textStyle="normal" />
 
                 <TextView
-                    
+
                     android:id="@+id/textView_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_30"
-                    android:layout_marginRight="@dimen/margin_30"
-                    android:layout_marginEnd="@dimen/margin_30"
                     android:layout_marginStart="@dimen/margin_30"
+                    android:layout_marginLeft="@dimen/margin_30"
                     android:layout_marginTop="@dimen/margin_10"
+                    android:layout_marginEnd="@dimen/margin_30"
+                    android:layout_marginRight="@dimen/margin_30"
+                    android:fontFamily="@font/poppins"
                     android:gravity="center"
                     android:text="Patient's Full Name *"
                     android:textColor="@color/colorDarkGrey"
-                    android:fontFamily="@font/poppins"
                     android:textSize="15sp"
-                    android:textStyle="bold"
-                    />
+                    android:textStyle="bold" />
 
                 <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_marginLeft="@dimen/margin_20"
-                    android:layout_marginRight="@dimen/margin_20"
-                    android:layout_marginEnd="@dimen/margin_20"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_20"
+                    android:layout_marginLeft="@dimen/margin_20"
                     android:layout_marginTop="@dimen/margin_10"
-                    android:layout_height="wrap_content">
+                    android:layout_marginEnd="@dimen/margin_20"
+                    android:layout_marginRight="@dimen/margin_20">
 
-                <EditText
-                    android:fontFamily="@font/poppins"
-                    android:focusedByDefault="false"
-                    android:textSize="15sp"
-                    android:maxLines="1"
-                    android:inputType="text"
-                    android:imeOptions="actionNext"
-                    android:padding="@dimen/margin_10"
-                    android:paddingEnd="@dimen/font_14"
-                    android:paddingStart="@dimen/margin_10"
-                    android:textColor="@color/colorBlack"
-                    android:textColorHint="@color/colorBlack"
-                    android:id="@+id/et_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/margin_40"
-                    android:background="@drawable/blue_faint_btn_gradient2"/>
+                    <EditText
+                        android:id="@+id/et_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/margin_40"
+                        android:background="@drawable/blue_faint_btn_gradient2"
+                        android:focusedByDefault="false"
+                        android:fontFamily="@font/poppins"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:padding="@dimen/margin_10"
+                        android:paddingStart="@dimen/margin_10"
+                        android:paddingEnd="@dimen/font_14"
+                        android:textColor="@color/colorBlack"
+                        android:textColorHint="@color/colorBlack"
+                        android:textSize="15sp" />
 
                 </FrameLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:orientation="vertical"
-                    android:visibility="gone"
-                    android:layout_height="wrap_content">
-
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/font_14"
+                    android:orientation="vertical">
+                    <!--        Org Name       -->
                     <TextView
-                        android:fontFamily="@font/poppins"
+                        android:id="@+id/textView_gender"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/margin_30"
-                        android:layout_marginRight="@dimen/margin_30"
-                        android:layout_marginEnd="@dimen/margin_30"
+
                         android:layout_marginStart="@dimen/margin_30"
-                        android:layout_marginTop="@dimen/margin_20"
+                        android:layout_marginLeft="@dimen/margin_30"
+                        android:layout_marginTop="@dimen/margin_15"
+                        android:layout_marginEnd="@dimen/margin_30"
+                        android:layout_marginRight="@dimen/margin_30"
+                        android:fontFamily="@font/poppins"
+
                         android:gravity="center"
-                        android:text="Patient's Date Of Birth"
+                        android:text="Gender *"
+                        android:textColor="@color/colorDarkGrey"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_20"
+                        android:layout_marginLeft="@dimen/margin_20"
+                        android:layout_marginTop="@dimen/margin_10"
+                        android:layout_marginEnd="@dimen/margin_20"
+                        android:layout_marginRight="@dimen/margin_20"
+                        android:orientation="horizontal"
+                        android:weightSum="0">
+
+
+                        <RadioButton
+                            android:id="@+id/rb_male"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/poppins"
+                            android:text="Male"
+                            android:textColor="@color/colorDarkGrey"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <RadioButton
+                            android:id="@+id/rb_female"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/poppins"
+                            android:text="Female"
+                            android:textColor="@color/colorDarkGrey"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <RadioButton
+                            android:id="@+id/rb_other"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/poppins"
+                            android:text="Other"
+                            android:textColor="@color/colorDarkGrey"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_25"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <!--        Org Name       -->
+                        <TextView
+                            android:id="@+id/textView_age"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_30"
+                            android:layout_marginLeft="@dimen/margin_30"
+                            android:layout_marginEnd="@dimen/margin_30"
+                            android:layout_marginRight="@dimen/margin_30"
+                            android:fontFamily="@font/poppins"
+                            android:gravity="center"
+                            android:text="Age (Optional)"
+                            android:textColor="@color/colorDarkGrey"
+                            android:textSize="15sp"
+                            />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/font_14"
+                            android:weightSum="0"
+                            >
+
+                            <EditText
+                                android:id="@+id/et_age"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/margin_40"
+                                android:layout_marginLeft="@dimen/margin_20"
+                                android:layout_marginRight="@dimen/margin_20"
+                                android:layout_weight="1"
+                                android:background="@drawable/blue_faint_btn_gradient2"
+                                android:focusedByDefault="false"
+                                android:fontFamily="@font/poppins"
+                                android:imeOptions="actionNext"
+                                android:inputType="number"
+                                android:maxLength="6"
+                                android:padding="@dimen/margin_10"
+                                android:textColor="@color/colorBlack"
+                                android:textColorHint="@color/colorBlack"
+                                android:textSize="15sp" />
+
+                            <RadioButton
+                                android:id="@+id/rb_year"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/poppins"
+
+                                android:text="Year"
+                                android:textColor="@color/colorDarkGrey"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+
+                            <RadioButton
+                                android:id="@+id/rb_month"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/poppins"
+                                android:text="Month"
+                                android:textColor="@color/colorDarkGrey"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_marginStart="@dimen/margin_50"
+                    android:layout_marginEnd="58dp"
+                    android:visibility="visible"
+                    android:layout_marginTop="16dp"
+                    android:layout_height="wrap_content">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="@dimen/font_16"
+                        android:layout_gravity="center_vertical"
+                        android:background="#dcdcdc"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins"
+                        android:text="OR"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="12dp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="@dimen/margin_16"
+                        android:layout_weight="1"
+                        android:layout_gravity="center_vertical"
+                        android:background="#dcdcdc"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_30"
+                        android:layout_marginLeft="@dimen/margin_30"
+                        android:layout_marginTop="@dimen/margin_20"
+                        android:layout_marginEnd="@dimen/margin_30"
+                        android:layout_marginRight="@dimen/margin_30"
+                        android:fontFamily="@font/poppins"
+                        android:gravity="center"
+                        android:text="Patient's Date Of Birth (Optional)"
                         android:textColor="@color/colorDarkGrey"
                         android:textSize="14dp"
-                        android:textStyle="bold"
-                        />
+                        android:textStyle="bold" />
 
                     <FrameLayout
                         android:layout_width="match_parent"
-                        android:layout_marginLeft="@dimen/margin_20"
-                        android:layout_marginRight="@dimen/margin_20"
-                        android:layout_marginEnd="@dimen/margin_20"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_20"
+                        android:layout_marginLeft="@dimen/margin_20"
                         android:layout_marginTop="@dimen/margin_10"
-                        android:layout_height="wrap_content">
+                        android:layout_marginEnd="@dimen/margin_20"
+                        android:layout_marginRight="@dimen/margin_20">
 
-                    <TextView
-                        android:fontFamily="@font/poppins"
-                        android:textSize="14sp"
-                        android:padding="@dimen/margin_10"
-                        android:textColor="@color/colorBlack"
-                        android:textColorHint="@color/colorBlack"
-                        android:id="@+id/date_of_birth"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/margin_40"
-                        android:background="@drawable/blue_faint_btn_gradient2"/>
+                        <TextView
+                            android:id="@+id/date_of_birth"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/margin_40"
+                            android:background="@drawable/blue_faint_btn_gradient2"
+                            android:fontFamily="@font/poppins"
+                            android:padding="@dimen/margin_10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorBlack"
+                            android:textSize="14sp" />
 
-                    <ImageView
-                        android:layout_width="@dimen/margin_25"
-                        android:layout_height="@dimen/margin_25"
-                        android:id="@+id/cancel_action"
-                        android:layout_marginEnd="@dimen/margin_10"
-                        android:src="@drawable/ic_action_clear_name"
-                        android:layout_gravity="end|center_vertical"
-                        app:tint="@color/colorBlack" />
+                        <ImageView
+                            android:id="@+id/cancel_action"
+                            android:layout_width="@dimen/margin_25"
+                            android:layout_height="@dimen/margin_25"
+                            android:layout_gravity="end|center_vertical"
+                            android:layout_marginEnd="@dimen/margin_10"
+                            android:src="@drawable/ic_action_clear_name"
+                            app:tint="@color/colorBlack" />
 
                     </FrameLayout>
 
@@ -214,207 +404,38 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:weightSum="2"
-                    android:orientation="horizontal">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-                        <!--        Org Name       -->
-                        <TextView
-                            android:fontFamily="@font/poppins"
-                            android:id="@+id/textView_age"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/margin_30"
-                            android:layout_marginRight="@dimen/margin_30"
-                            android:layout_marginEnd="@dimen/margin_30"
-                            android:layout_marginStart="@dimen/margin_30"
-                            android:layout_marginTop="@dimen/margin_15"
-                            
-                            android:gravity="center"
-                            android:text="Age *"
-                            android:textColor="@color/colorDarkGrey"
-                            android:textSize="15sp"
-                            android:textStyle="bold"
-                            />
-            <LinearLayout
-                android:weightSum="0"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_5"
-
-                >
-
-                        <EditText
-                            android:fontFamily="@font/poppins"
-                            android:layout_weight="1"
-                            android:focusedByDefault="false"
-                            android:textSize="15sp"
-                            android:imeOptions="actionNext"
-                            android:inputType="number"
-                            android:padding="@dimen/margin_10"
-                            android:maxLength="6"
-                            android:textColor="@color/colorBlack"
-                            android:layout_marginLeft="@dimen/margin_20"
-                            android:layout_marginRight="@dimen/margin_20"
-                            android:textColorHint="@color/colorBlack"
-                            android:id="@+id/et_age"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/margin_40"
-                            android:background="@drawable/blue_faint_btn_gradient2"
-                            />
-
-                        <RadioButton
-                            android:fontFamily="@font/poppins"
-                            android:id="@+id/rb_year"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_gravity="center"
-                            
-                            android:text="Year"
-                            android:textColor="@color/colorDarkGrey"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            />
-
-                        <RadioButton
-                            android:fontFamily="@font/poppins"
-                            android:id="@+id/rb_month"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_gravity="center"
-                            android:text="Month"
-                            android:textColor="@color/colorDarkGrey"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            />
-
-                    </LinearLayout>
-
-                    </LinearLayout>
-
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_8"
                     android:orientation="vertical">
-                    <!--        Org Name       -->
-                    <TextView
-                        android:id="@+id/textView_gender"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-
-                        android:layout_marginLeft="@dimen/margin_30"
-                        android:layout_marginRight="@dimen/margin_30"
-                        android:layout_marginEnd="@dimen/margin_30"
-                        android:layout_marginStart="@dimen/margin_30"
-                        android:layout_marginTop="@dimen/margin_15"
-                        android:fontFamily="@font/poppins"
-                        
-                        android:gravity="center"
-                        android:text="Gender *"
-                        android:textColor="@color/colorDarkGrey"
-                        android:textSize="15sp"
-                        android:textStyle="bold"
-                        />
-
-
-                    <LinearLayout
-                        android:layout_marginTop="@dimen/margin_10"
-                        android:layout_marginLeft="@dimen/margin_20"
-                        android:layout_marginRight="@dimen/margin_20"
-                        android:layout_marginEnd="@dimen/margin_20"
-                        android:layout_marginStart="@dimen/margin_20"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:weightSum="0"
-                        android:orientation="horizontal">
-
-
-                        <RadioButton
-                            android:id="@+id/rb_male"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_gravity="center"
-                            android:fontFamily="@font/poppins"
-                            android:text="Male"
-                            android:textColor="@color/colorDarkGrey"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            />
-
-                        <RadioButton
-                            android:id="@+id/rb_female"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_gravity="center"
-                            android:fontFamily="@font/poppins"
-                            android:text="Female"
-                            android:textColor="@color/colorDarkGrey"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            />
-
-                        <RadioButton
-                            android:id="@+id/rb_other"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_gravity="center"
-                            android:fontFamily="@font/poppins"
-                            android:text="Other"
-                            android:textColor="@color/colorDarkGrey"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:orientation="vertical"
-                    android:layout_height="wrap_content">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/margin_30"
-                        android:layout_marginRight="@dimen/margin_30"
-                        android:layout_marginEnd="@dimen/margin_30"
                         android:layout_marginStart="@dimen/margin_30"
+                        android:layout_marginLeft="@dimen/margin_30"
                         android:layout_marginTop="@dimen/margin_20"
-                        android:gravity="center"
+                        android:layout_marginEnd="@dimen/margin_30"
+                        android:layout_marginRight="@dimen/margin_30"
                         android:fontFamily="@font/poppins"
+                        android:gravity="center"
                         android:text="Blood Group  (optional)"
                         android:textColor="@color/colorDarkGrey"
                         android:textSize="15sp"
-                        android:textStyle="bold"
-                        />
+                        android:textStyle="bold" />
 
                     <EditText
-                        android:fontFamily="@font/poppins"
-                        android:textSize="15sp"
-                        android:padding="@dimen/margin_10"
-                        android:textColor="@color/colorBlack"
-                        android:layout_marginLeft="@dimen/margin_20"
-                        android:layout_marginRight="@dimen/margin_20"
-                        android:layout_marginEnd="@dimen/margin_20"
-                        android:layout_marginStart="@dimen/margin_20"
-                        android:layout_marginTop="@dimen/margin_10"
-                        android:textColorHint="@color/colorBlack"
                         android:id="@+id/blood_group"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/margin_40"
-                        android:background="@drawable/blue_faint_btn_gradient2"/>
+                        android:layout_marginStart="@dimen/margin_20"
+                        android:layout_marginLeft="@dimen/margin_20"
+                        android:layout_marginTop="@dimen/margin_10"
+                        android:layout_marginEnd="@dimen/margin_20"
+                        android:layout_marginRight="@dimen/margin_20"
+                        android:background="@drawable/blue_faint_btn_gradient2"
+                        android:fontFamily="@font/poppins"
+                        android:padding="@dimen/margin_10"
+                        android:textColor="@color/colorBlack"
+                        android:textColorHint="@color/colorBlack"
+                        android:textSize="15sp" />
 
                 </LinearLayout>
 
@@ -423,66 +444,66 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_marginLeft="@dimen/margin_30"
-                    android:layout_marginRight="@dimen/margin_30"
-                    android:layout_marginEnd="@dimen/margin_30"
                     android:layout_marginStart="@dimen/margin_30"
-                    android:layout_marginTop="@dimen/margin_15">
-                <TextView
-                    android:id="@+id/textView_whtsapp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins"
-                    android:gravity="center"
-                    android:text="WhatsApp Number (optional)"
-                    android:textColor="@color/colorDarkGrey"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    />
+                    android:layout_marginLeft="@dimen/margin_30"
+                    android:layout_marginTop="@dimen/margin_15"
+                    android:layout_marginEnd="@dimen/margin_30"
+                    android:layout_marginRight="@dimen/margin_30"
+                    android:gravity="center">
 
-                <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:padding="4dp"
-                    android:layout_marginLeft="3dp"
-                    android:id="@+id/info"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/info_icon"
-                    />
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/textView_whtsapp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins"
+                        android:gravity="center"
+                        android:text="WhatsApp Number (optional)"
+                        android:textColor="@color/colorDarkGrey"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/info"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="3dp"
+                        android:padding="4dp"
+                        android:src="@drawable/info_icon" />
+                </LinearLayout>
 
                 <EditText
-                    android:fontFamily="@font/poppins"
-                    android:maxLength="18"
-                    android:textSize="15sp"
-                    android:focusedByDefault="false"
-                    android:padding="@dimen/margin_10"
-                    android:imeOptions="actionNext"
-                    android:textColor="@color/colorBlack"
-                    android:layout_marginLeft="@dimen/margin_20"
-                    android:layout_marginRight="@dimen/margin_20"
-                    android:layout_marginEnd="@dimen/margin_20"
-                    android:layout_marginStart="@dimen/margin_20"
-                    android:layout_marginTop="@dimen/margin_5"
-                    android:textColorHint="@color/colorBlack"
                     android:id="@+id/et_whtsapp"
-                    android:inputType="number"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/margin_40"
-                    android:background="@drawable/blue_faint_btn_gradient2"/>
+                    android:layout_marginStart="@dimen/margin_20"
+                    android:layout_marginLeft="@dimen/margin_20"
+                    android:layout_marginTop="@dimen/margin_5"
+                    android:layout_marginEnd="@dimen/margin_20"
+                    android:layout_marginRight="@dimen/margin_20"
+                    android:background="@drawable/blue_faint_btn_gradient2"
+                    android:focusedByDefault="false"
+                    android:fontFamily="@font/poppins"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="18"
+                    android:padding="@dimen/margin_10"
+                    android:textColor="@color/colorBlack"
+                    android:textColorHint="@color/colorBlack"
+                    android:textSize="15sp" />
 
                 <!--        Org Name       -->
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_marginLeft="@dimen/margin_30"
-                    android:layout_marginRight="@dimen/margin_30"
-                    android:layout_marginEnd="@dimen/margin_30"
                     android:layout_marginStart="@dimen/margin_30"
-                    android:layout_marginTop="@dimen/margin_15">
+                    android:layout_marginLeft="@dimen/margin_30"
+                    android:layout_marginTop="@dimen/margin_15"
+                    android:layout_marginEnd="@dimen/margin_30"
+                    android:layout_marginRight="@dimen/margin_30"
+                    android:gravity="center">
+
                     <TextView
                         android:id="@+id/textView_mail"
                         android:layout_width="wrap_content"
@@ -492,151 +513,144 @@
                         android:text="Email Id (optional)"
                         android:textColor="@color/colorDarkGrey"
                         android:textSize="15sp"
-                        android:textStyle="bold"
-                        />
+                        android:textStyle="bold" />
 
                     <ImageView
+                        android:id="@+id/info1"
                         android:layout_width="28dp"
                         android:layout_height="28dp"
-                        android:padding="4dp"
-                        android:layout_marginLeft="3dp"
-                        android:id="@+id/info1"
                         android:layout_gravity="center_vertical"
-                        android:src="@drawable/info_icon"
-                        />
+                        android:layout_marginLeft="3dp"
+                        android:padding="4dp"
+                        android:src="@drawable/info_icon" />
                 </LinearLayout>
 
 
                 <EditText
-                    android:fontFamily="@font/poppins"
-                    android:focusedByDefault="false"
-                    android:textSize="15sp"
-                    android:padding="@dimen/margin_10"
-                    android:imeOptions="actionDone"
-                    android:maxLines="1"
-                    android:inputType="textEmailAddress"
-                    android:textColor="@color/colorBlack"
-                    android:layout_marginLeft="@dimen/margin_20"
-                    android:layout_marginRight="@dimen/margin_20"
-                    android:layout_marginEnd="@dimen/margin_20"
-                    android:layout_marginStart="@dimen/margin_20"
-                    android:layout_marginTop="@dimen/margin_5"
-                    android:textColorHint="@color/colorBlack"
                     android:id="@+id/et_mail"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/margin_40"
+                    android:layout_marginStart="@dimen/margin_20"
+                    android:layout_marginLeft="@dimen/margin_20"
+                    android:layout_marginTop="@dimen/margin_5"
+                    android:layout_marginEnd="@dimen/margin_20"
+                    android:layout_marginRight="@dimen/margin_20"
                     android:background="@drawable/blue_faint_btn_gradient2"
-                    />
+                    android:focusedByDefault="false"
+                    android:fontFamily="@font/poppins"
+                    android:imeOptions="actionDone"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1"
+                    android:padding="@dimen/margin_10"
+                    android:textColor="@color/colorBlack"
+                    android:textColorHint="@color/colorBlack"
+                    android:textSize="15sp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:orientation="vertical"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/margin_30"
-                        android:layout_marginRight="@dimen/margin_30"
-                        android:layout_marginEnd="@dimen/margin_30"
                         android:layout_marginStart="@dimen/margin_30"
+                        android:layout_marginLeft="@dimen/margin_30"
                         android:layout_marginTop="@dimen/margin_20"
+                        android:layout_marginEnd="@dimen/margin_30"
+                        android:layout_marginRight="@dimen/margin_30"
+                        android:fontFamily="@font/poppins"
                         android:gravity="center"
                         android:text="Address  (optional)"
                         android:textColor="@color/colorDarkGrey"
                         android:textSize="15sp"
-                        android:fontFamily="@font/poppins"
-                        android:textStyle="bold"
-                        />
+                        android:textStyle="bold" />
 
                     <EditText
-                        android:fontFamily="@font/poppins"
-                        android:textSize="15sp"
-                        android:padding="@dimen/margin_10"
-                        android:textColor="@color/colorBlack"
-                        android:gravity="top"
-                        android:layout_marginLeft="@dimen/margin_20"
-                        android:layout_marginRight="@dimen/margin_20"
-                        android:layout_marginEnd="@dimen/margin_20"
-                        android:layout_marginStart="@dimen/margin_20"
-                        android:layout_marginTop="@dimen/margin_10"
-                        android:textColorHint="@color/colorBlack"
                         android:id="@+id/address"
-                        android:lines="4"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/blue_faint_btn_gradient2"/>
+                        android:layout_marginStart="@dimen/margin_20"
+                        android:layout_marginLeft="@dimen/margin_20"
+                        android:layout_marginTop="@dimen/margin_10"
+                        android:layout_marginEnd="@dimen/margin_20"
+                        android:layout_marginRight="@dimen/margin_20"
+                        android:background="@drawable/blue_faint_btn_gradient2"
+                        android:fontFamily="@font/poppins"
+                        android:gravity="top"
+                        android:lines="4"
+                        android:padding="@dimen/margin_10"
+                        android:textColor="@color/colorBlack"
+                        android:textColorHint="@color/colorBlack"
+                        android:textSize="15sp" />
 
                 </LinearLayout>
 
                 <Button
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:textStyle="normal"
                     android:id="@+id/save_prescribe"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
                     android:layout_width="wrap_content"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
                     android:layout_height="@dimen/margin_35"
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/margin_20"
-                    android:textSize="15sp"
-                    android:fontFamily="@font/poppinsmedium"
                     android:background="@drawable/blue_faint_btn_gradient"
+                    android:fontFamily="@font/poppinsmedium"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
                     android:text="Create Patient"
                     android:textAllCaps="false"
                     android:textColor="@color/colorWhite"
+                    android:textSize="15sp"
+                    android:textStyle="normal"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     tools:layout_editor_absoluteY="27dp" />
 
                 <Button
-                    android:textStyle="normal"
                     android:id="@+id/save_later"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
                     android:layout_width="wrap_content"
-                    android:paddingLeft="20dp"
-                    android:layout_marginBottom   ="@dimen/margin_10"
-                    android:visibility="gone"
-                    android:paddingRight="20dp"
                     android:layout_height="@dimen/margin_35"
                     android:layout_gravity="center"
-                    android:textSize="15sp"
-                    android:fontFamily="@font/poppinsmedium"
+                    android:layout_marginBottom="@dimen/margin_10"
                     android:background="@drawable/grey_darkest_btn_gradient"
+                    android:fontFamily="@font/poppinsmedium"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
                     android:text="Save and Prescribe Later"
                     android:textAllCaps="false"
                     android:textColor="@color/colorWhite"
+                    android:textSize="15sp"
+                    android:textStyle="normal"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     tools:layout_editor_absoluteY="27dp" />
 
             </LinearLayout>
 
 
-
-</ScrollView>
+        </ScrollView>
 
     </LinearLayout>
-    <include layout="@layout/progress_bar_layout"
-        />
 
-    <com.google.android.gms.ads.AdView
-        android:visibility="visible"
-        xmlns:ads="http://schemas.android.com/apk/res-auto"
+    <include layout="@layout/progress_bar_layout" />
+
+    <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
         android:id="@+id/adView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@android:color/transparent"
+        android:visibility="visible"
+        ads:adSize="BANNER"
+        ads:adUnitId="cca-app-pub-9225891557304181/8155019478"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        ads:adSize="BANNER"
 
-        ads:adUnitId="ca-app-pub-3940256099942544/6300978111">
-    </com.google.android.gms.ads.AdView>
+        app:layout_constraintTop_toTopOf="parent"></com.google.android.gms.ads.AdView>
 
 </RelativeLayout>

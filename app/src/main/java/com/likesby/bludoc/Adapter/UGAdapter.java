@@ -28,7 +28,6 @@ package com.likesby.bludoc.Adapter;
 
         import io.reactivex.disposables.CompositeDisposable;
 
-        import static com.likesby.bludoc.RegisterDetails.textView__select_ug;
         import static com.likesby.bludoc.RegisterDetails.ug_id__;
         import static com.likesby.bludoc.RegisterDetails.ug_name__;
 
@@ -156,8 +155,6 @@ public class UGAdapter extends RecyclerView.Adapter<UGAdapter.ViewHolder> implem
 
                         registerDetails.addUG();
                     }
-                    else
-                        textView__select_ug.setText(ug_name__);
 
                 }
             });

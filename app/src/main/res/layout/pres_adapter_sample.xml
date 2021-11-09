@@ -1,68 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:id="@+id/card_view"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-
-    <LinearLayout
+    <com.github.chrisbanes.photoview.PhotoView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_3"
-        android:orientation="horizontal">
-        <TextView
-            android:fontFamily="@font/poppins"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="@dimen/font_16"
-            android:text=" - "/>
-        <TextView
-            android:fontFamily="@font/poppinsmedium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#000"
-            android:id="@+id/tab_name"
-            android:textSize="@dimen/font_16"
-            android:text="Tab Augmentin 625mg"
-            android:textStyle="bold"/>
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/imageOfProduct"
+        />
 
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/margin_20"
-        android:orientation="horizontal">
-
-        <TextView
-            android:fontFamily="@font/poppins"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#000"
-            android:id="@+id/med"
-            android:textSize="@dimen/font_12"
-            android:text="(2 times a day) for 5 days after meals (route-oral)"  />
-
-    </LinearLayout>
-
-
-
-    <TextView
-        android:fontFamily="@font/poppins"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/margin_20"
-        android:textColor="#000"
-        android:layout_marginTop="@dimen/margin_3"
-        android:id="@+id/tab_comments"
-        android:textSize="@dimen/font_12"
-        android:text="(additional comment - for 15 mins before meals)" />
-
-
-
-
-</LinearLayout>
+</RelativeLayout>

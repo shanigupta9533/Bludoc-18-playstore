@@ -37,6 +37,7 @@ import com.likesby.bludoc.BuildConfig;
 import com.likesby.bludoc.Fragment.GeneratePres;
 import com.likesby.bludoc.Fragment.GeneratePresNew;
 import com.likesby.bludoc.ModelLayer.Entities.BottomSheetItem;
+import com.likesby.bludoc.ModelLayer.NewEntities3.PrescriptionItem;
 import com.likesby.bludoc.R;
 import com.likesby.bludoc.SessionManager.SessionManager;
 import com.likesby.bludoc.utils.FileUtils;
@@ -57,6 +58,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.ViewHolder> implements Filterable {
 
+    private final PrescriptionItem prescriptionItem;
     private ArrayList<BottomSheetItem> mArryCountries, mFilteredList;
     private Context mContext;
     int[] image_array_setup = new int[]{R.drawable.ic_view_pdf, R.drawable.ic_share_icon, R.drawable.ic_download_share, R.drawable.ic_envelope_icon, R.drawable.ic_whatsapp_updated};
@@ -72,7 +74,7 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
     private boolean sendTo;
 
     public BottomSheetAdapter(Context mContext,
-                              ArrayList<BottomSheetItem> objects, FrameLayout fl_progress_bar, GeneratePres generatePres, GeneratePresNew generatePresNew) {
+                              ArrayList<BottomSheetItem> objects, FrameLayout fl_progress_bar, GeneratePres generatePres, GeneratePresNew generatePresNew, PrescriptionItem prescriptionItem) {
         mArryCountries = objects;
         mFilteredList = mArryCountries;
         this.mContext = mContext;
@@ -80,6 +82,9 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
         this.fl_progress_bar = fl_progress_bar;
         this.generatePres = generatePres;
         this.generatePresNew = generatePresNew;
+
+        this.prescriptionItem = prescriptionItem;
+
     }
 
     public void setPatientName(String pName) {
@@ -234,10 +239,10 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
         File root = null;
         if (Build.VERSION_CODES.R > Build.VERSION.SDK_INT) {
             root = new File(Environment.getExternalStorageDirectory().getPath()
-                    + "//MyApp");
+                    + "//My PDF Folder");
         } else {
             root = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getPath()
-                    + "//MyApp");
+                    + "//My PDF Folder");
         }
 
         boolean isFolderCreated = true;
@@ -316,14 +321,14 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
                     String p_name = "", smsNumber = "", p_email = "";
                     if (generatePres == null) {
                         files = GeneratePresNew.getFiles();
-                        smsNumber = GeneratePresNew.patient_item.getPMobile().trim();
-                        p_name = GeneratePresNew.patient_item.getPName().trim();
-                        p_email = GeneratePresNew.patient_item.getPEmail().trim();
+                        smsNumber = prescriptionItem.getPMobile().trim();
+                        p_name = prescriptionItem.getPName().trim();
+                        p_email = prescriptionItem.getPEmail().trim();
                     } else if (generatePresNew == null) {
                         files = GeneratePres.getFiles();
-                        smsNumber = GeneratePres.patient_item.getPMobile().trim();
-                        p_name = GeneratePres.patient_item.getPName().trim();
-                        p_email = GeneratePres.patient_item.getPEmail().trim();
+                        smsNumber = prescriptionItem.getPMobile().trim();
+                        p_name = prescriptionItem.getPName().trim();
+                        p_email = prescriptionItem.getPEmail().trim();
 
                     }
 
@@ -572,6 +577,7 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
                     @Override
                     public void onClick(View v) {
 
+                        if(onClickListener!=null)
                         onClickListener.onClick(getAdapterPosition());
 
                     }

@@ -2,6 +2,8 @@ package com.likesby.bludoc.Adapter;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +26,8 @@ import com.likesby.bludoc.ModelLayer.NewEntities3.LabTestItem;
 import com.likesby.bludoc.ModelLayer.NewEntities3.PrescriptionItem;
 import com.likesby.bludoc.R;
 import com.likesby.bludoc.utils.DateUtils;
+
+import org.joda.time.DateTime;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -64,11 +68,21 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
         viewHolder.patient_name.setText("Name : "+mFilteredList.get(i).getPName());
         String age___ = "";
-        if(mFilteredList.get(i).getAge().contains("yr") || mFilteredList.get(i).getAge().contains("month"))
-            age___ = mFilteredList.get(i).getAge();
-        else
-            age___ = mFilteredList.get(i).getAge() + " yr";
-        viewHolder.tv_gender.setText(mFilteredList.get(i).getGender()+" / " +age___);
+
+        if (TextUtils.isEmpty(mFilteredList.get(i).getpDob()))
+
+            if (TextUtils.isEmpty(mFilteredList.get(i).getAge()))
+                viewHolder.tv_gender.setText(mFilteredList.get(i).getGender());
+            else
+                viewHolder.tv_gender.setText(mFilteredList.get(i).getAge() + " / " + mFilteredList.get(i).getGender());
+
+        else {
+
+            String[] split = mFilteredList.get(i).getpDob().split("-");
+            String return_value = decideMonthOrYear(split);
+            viewHolder.tv_gender.setText(return_value + " / " + mFilteredList.get(i).getGender());
+
+        }
 
 //
 //   //     viewHolder.tv_patient_created.setText("Date : "+ DateUtils.outFormatset(mFilteredList.get(i).getDate()));
@@ -111,7 +125,11 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         String formattedDate = targetFormat.format(date);
         System.out.println(formattedDate);*/
 
-        viewHolder.tv_patient_created.setText(DateUtils.outFormatsetMMM(mFilteredList.get(i).getDate()));
+        try {
+            viewHolder.tv_patient_created.setText(DateUtils.outFormatsetMMM(mFilteredList.get(i).getDate()));
+        } catch (Exception e){
+            Log.i("TAG", "onBindViewHolder: Exception"+mFilteredList.get(i).getDate());
+        }
 
         if(!("").equalsIgnoreCase(mFilteredList.get(i).getPMobile())) {
             viewHolder.tv_mobile.setText("Mobile : " + mFilteredList.get(i).getPMobile());
@@ -162,7 +180,25 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
     }
 
+    private String decideMonthOrYear(String[] split) {
 
+        DateTime dateTime = new DateTime();
+        int year = Integer.parseInt(split[2]);
+        int month = Integer.parseInt(split[1]);
+
+        if (dateTime.getYear() - year > 0) {
+
+            return dateTime.getYear() - year + " yr";
+
+        } else {
+
+            if (dateTime.getMonthOfYear() - (month) == 0)
+                return "1 month";
+            else
+                return dateTime.getMonthOfYear() - (month) + " month";
+        }
+
+    }
 
     @Override
     public int getItemViewType(int position) {

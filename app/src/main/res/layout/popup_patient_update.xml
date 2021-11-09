@@ -74,145 +74,6 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:visibility="gone"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:fontFamily="@font/poppins"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_30"
-                        android:layout_marginLeft="@dimen/margin_30"
-                        android:layout_marginTop="@dimen/margin_20"
-                        android:layout_marginEnd="@dimen/margin_30"
-                        android:layout_marginRight="@dimen/margin_30"
-                        android:gravity="center"
-                        android:text="Patient's Date Of Birth"
-                        android:textColor="@color/colorDarkGrey"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_marginLeft="@dimen/margin_20"
-                        android:layout_marginRight="@dimen/margin_20"
-                        android:layout_marginEnd="@dimen/margin_20"
-                        android:layout_marginStart="@dimen/margin_20"
-                        android:layout_marginTop="@dimen/margin_10"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:fontFamily="@font/poppins"
-                            android:textSize="15sp"
-                            android:padding="@dimen/margin_10"
-                            android:textColor="@color/colorBlack"
-                            android:textColorHint="@color/colorBlack"
-                            android:id="@+id/date_of_birth"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/margin_40"
-                            android:background="@drawable/blue_faint_btn_gradient2"/>
-
-                        <ImageView
-                            android:layout_width="@dimen/margin_25"
-                            android:layout_height="@dimen/margin_25"
-                            android:id="@+id/cancel_action"
-                            android:layout_marginEnd="@dimen/margin_10"
-                            android:src="@drawable/ic_action_clear_name"
-                            android:layout_gravity="end|center_vertical"
-                            app:tint="@color/colorBlack" />
-
-                    </FrameLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="2">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-                        <!--        Org Name       -->
-                        <TextView
-                            android:fontFamily="@font/poppins"
-                            android:id="@+id/textView_age"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/margin_30"
-                            android:layout_marginLeft="@dimen/margin_30"
-                            android:layout_marginTop="@dimen/margin_15"
-                            android:layout_marginEnd="@dimen/margin_30"
-                            android:layout_marginRight="@dimen/margin_30"
-                            
-                            android:gravity="center"
-                            android:text="Age *"
-                            android:textColor="@color/colorDarkGrey"
-                            android:textSize="15sp"
-                            />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/margin_5"
-                            android:weightSum="0"
-
-                            >
-
-                            <EditText
-                                android:fontFamily="@font/poppins"
-                                android:id="@+id/et_age"
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/margin_40"
-                                android:layout_marginLeft="@dimen/margin_20"
-                                android:layout_marginRight="@dimen/margin_20"
-                                android:layout_weight="1"
-                                android:background="@drawable/blue_faint_btn_gradient2"
-                                android:focusedByDefault="false"
-                                android:imeOptions="actionNext"
-                                android:inputType="number|phone"
-                                android:maxLength="6"
-                                android:padding="@dimen/margin_10"
-                                android:textColor="@color/colorBlack"
-                                android:textColorHint="@color/colorBlack"
-                                android:textSize="15sp" />
-
-                            <RadioButton
-                                android:fontFamily="@font/poppins"
-                                android:id="@+id/rb_year"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_weight="1"
-                                android:text="Year"
-                                android:textColor="@color/colorDarkGrey"
-                                android:textSize="14sp"
-                                android:textStyle="bold" />
-
-                            <RadioButton
-                                android:id="@+id/rb_month"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_weight="1"
-                                android:fontFamily="@font/poppins"
-                                android:text="Month"
-                                android:textColor="@color/colorDarkGrey"
-                                android:textSize="14sp"
-                                android:textStyle="bold" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
                     android:layout_marginTop="@dimen/margin_10"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -227,13 +88,12 @@
                         android:layout_marginTop="@dimen/margin_15"
                         android:layout_marginEnd="@dimen/margin_30"
                         android:layout_marginRight="@dimen/margin_30"
-
                         android:fontFamily="@font/poppins"
                         android:gravity="center"
                         android:text="Gender *"
                         android:textColor="@color/colorDarkGrey"
                         android:textSize="15sp"
-                         />
+                        />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -283,6 +143,183 @@
                             android:textSize="14sp"
                             android:textStyle="bold" />
                     </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_25"
+                        android:orientation="vertical">
+                        <!--        Org Name       -->
+                        <TextView
+                            android:id="@+id/textView_age"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_30"
+                            android:layout_marginLeft="@dimen/margin_30"
+                            android:layout_marginEnd="@dimen/margin_30"
+                            android:layout_marginRight="@dimen/margin_30"
+                            android:fontFamily="@font/poppins"
+                            android:gravity="center"
+                            android:text="Age (Optional)"
+                            android:textColor="@color/colorDarkGrey"
+                            android:textSize="15sp"
+                             />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/font_12"
+                            android:weightSum="0"
+
+                            >
+
+                            <EditText
+                                android:id="@+id/et_age"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/margin_40"
+                                android:layout_marginLeft="@dimen/margin_20"
+                                android:layout_marginRight="@dimen/margin_20"
+                                android:layout_weight="1"
+                                android:background="@drawable/blue_faint_btn_gradient2"
+                                android:focusedByDefault="false"
+                                android:fontFamily="@font/poppins"
+                                android:imeOptions="actionNext"
+                                android:inputType="number"
+                                android:maxLength="6"
+                                android:padding="@dimen/margin_10"
+                                android:textColor="@color/colorBlack"
+                                android:textColorHint="@color/colorBlack"
+                                android:textSize="15sp" />
+
+                            <RadioButton
+                                android:id="@+id/rb_year"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/poppins"
+
+                                android:text="Year"
+                                android:textColor="@color/colorDarkGrey"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+
+                            <RadioButton
+                                android:id="@+id/rb_month"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/poppins"
+                                android:text="Month"
+                                android:textColor="@color/colorDarkGrey"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_marginStart="@dimen/margin_50"
+                    android:layout_marginEnd="58dp"
+                    android:visibility="visible"
+                    android:layout_marginTop="@dimen/font_20"
+                    android:layout_height="wrap_content">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="@dimen/font_16"
+                        android:layout_gravity="center_vertical"
+                        android:background="#dcdcdc"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins"
+                        android:text="OR"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="12dp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="@dimen/margin_16"
+                        android:layout_weight="1"
+                        android:layout_gravity="center_vertical"
+                        android:background="#dcdcdc"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:visibility="visible"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:fontFamily="@font/poppins"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_30"
+                        android:layout_marginLeft="@dimen/margin_30"
+                        android:layout_marginTop="@dimen/margin_20"
+                        android:layout_marginEnd="@dimen/margin_30"
+                        android:layout_marginRight="@dimen/margin_30"
+                        android:gravity="center"
+                        android:text="Patient's Date Of Birth (Optional)"
+                        android:textColor="@color/colorDarkGrey"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_marginLeft="@dimen/margin_20"
+                        android:layout_marginRight="@dimen/margin_20"
+                        android:layout_marginEnd="@dimen/margin_20"
+                        android:layout_marginStart="@dimen/margin_20"
+                        android:layout_marginTop="@dimen/margin_10"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:fontFamily="@font/poppins"
+                            android:textSize="15sp"
+                            android:padding="@dimen/margin_10"
+                            android:textColor="@color/colorBlack"
+                            android:textColorHint="@color/colorBlack"
+                            android:id="@+id/date_of_birth"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/margin_40"
+                            android:background="@drawable/blue_faint_btn_gradient2"/>
+
+                        <ImageView
+                            android:layout_width="@dimen/margin_25"
+                            android:layout_height="@dimen/margin_25"
+                            android:id="@+id/cancel_action"
+                            android:layout_marginEnd="@dimen/margin_10"
+                            android:src="@drawable/ic_action_clear_name"
+                            android:layout_gravity="end|center_vertical"
+                            app:tint="@color/colorBlack" />
+
+                    </FrameLayout>
+
                 </LinearLayout>
 
                 <LinearLayout

@@ -25,6 +25,9 @@ public class SubscriptionsItem{
 	@SerializedName("type")
 	private String type;
 
+	@SerializedName("payment_type")
+	private String payment_type;
+
 	public void setSubscriptionId(String subscriptionId){
 		this.subscriptionId = subscriptionId;
 	}
@@ -65,6 +68,14 @@ public class SubscriptionsItem{
 		return days;
 	}
 
+	public String getPayment_type() {
+		return payment_type;
+	}
+
+	public void setPayment_type(String payment_type) {
+		this.payment_type = payment_type;
+	}
+
 	public void setMrp(String mrp){
 		this.mrp = mrp;
 	}
@@ -82,16 +93,17 @@ public class SubscriptionsItem{
 	}
 
 	@Override
- 	public String toString(){
-		return 
-			"SubscriptionsItem{" + 
-			"subscription_id = '" + subscriptionId + '\'' + 
-			",sell = '" + sell + '\'' + 
-			",subscription_description = '" + subscriptionDescription + '\'' + 
-			",subscription_name = '" + subscriptionName + '\'' + 
-			",days = '" + days + '\'' + 
-			",mrp = '" + mrp + '\'' + 
-			",type = '" + type + '\'' + 
-			"}";
-		}
+	public String toString(){
+		return
+				"SubscriptionsItem{" +
+						"subscription_id = '" + subscriptionId + '\'' +
+						",sell = '" + sell + '\'' +
+						",subscription_description = '" + subscriptionDescription + '\'' +
+						",subscription_name = '" + subscriptionName + '\'' +
+						",days = '" + days + '\'' +
+						",mrp = '" + mrp + '\'' +
+						",type = '" + type + '\'' +
+						",paymentType = '" + payment_type + '\'' +
+						"}";
+	}
 }

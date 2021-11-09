@@ -6,6 +6,7 @@ import com.likesby.bludoc.ModelLayer.Entities.CmsResponse;
 import com.likesby.bludoc.ModelLayer.Entities.FaqsResponse;
 import com.likesby.bludoc.ModelLayer.Entities.History;
 import com.likesby.bludoc.ModelLayer.Entities.OtpResponse;
+import com.likesby.bludoc.ModelLayer.Entities.PatientsItem;
 import com.likesby.bludoc.ModelLayer.Entities.ProfileDetails;
 import com.likesby.bludoc.ModelLayer.Entities.Response;
 import com.likesby.bludoc.ModelLayer.Entities.ResponseAddPatient;
@@ -238,7 +239,10 @@ public class NetworkLayer {
         return services.Register2( doctor_id,  registration_no,  designation_name,  ug_id,pg_id,addtional_qualification);
     }
 
-
+    public Single<ResponseRegister> registerQualifications(String addtional_qualification, String doctor_id){
+        services = ApiClient.createService(WebServices.class);
+        return services.registerQualification(addtional_qualification,doctor_id);
+    }
 
     public Single<ResponseRegister> Register3(String doctor_id, String mobile_letter_head,String email_letter_head,
                                              String working_days,String visiting_hr_from, String visiting_hr_to,
@@ -254,6 +258,12 @@ public class NetworkLayer {
                                                       String created_by, String p_mobile, String p_email,String address,String bloud_group,String dob ){
         services = ApiClient.createService(WebServices.class);
         return services.PatientRegister( p_name,  age,  gender,    created_by,  p_mobile,  p_email, address,bloud_group,dob ) ;
+    }
+
+    public Single<PatientsItem> PatientRegisterWithPatientItem(String p_name, String age, String gender,
+                                                               String created_by, String p_mobile, String p_email, String address, String bloud_group, String dob ){
+        services = ApiClient.createService(WebServices.class);
+        return services.PatientRegisterWithPatientItem( p_name,  age,  gender,    created_by,  p_mobile,  p_email, address,bloud_group,dob ) ;
     }
 
     public Single<ResponseSuccess> PatientUpdate(String patient_id, String p_name, String age, String gender,

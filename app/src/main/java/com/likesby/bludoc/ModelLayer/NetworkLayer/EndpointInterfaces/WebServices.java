@@ -1,8 +1,10 @@
 package com.likesby.bludoc.ModelLayer.NetworkLayer.EndpointInterfaces;
 
+import com.likesby.bludoc.ModelLayer.AppointmentModel;
 import com.likesby.bludoc.ModelLayer.Entities.CmsResponse;
 import com.likesby.bludoc.ModelLayer.Entities.FaqsResponse;
 import com.likesby.bludoc.ModelLayer.Entities.OtpResponse;
+import com.likesby.bludoc.ModelLayer.Entities.PatientsItem;
 import com.likesby.bludoc.ModelLayer.Entities.Response;
 import com.likesby.bludoc.ModelLayer.Entities.ResponseAddPatient;
 import com.likesby.bludoc.ModelLayer.Entities.ResponseAddUG;
@@ -26,10 +28,14 @@ import com.likesby.bludoc.ModelLayer.NewEntities.ResponseProfileDetails;
 import com.likesby.bludoc.ModelLayer.NewEntities.ResponseSubscriptions;
 import com.likesby.bludoc.ModelLayer.NewEntities2.ResponseLabTemplates;
 import com.likesby.bludoc.ModelLayer.NewEntities3.ResponseHistory;
+import com.likesby.bludoc.ModelLayer.ResultOfSuccess;
+import com.likesby.bludoc.ModelLayer.StaticsModel;
+import com.likesby.bludoc.ModelLayer.SubscriptionModels;
 import com.likesby.bludoc.viewModels.AllPharmacistModels;
 import com.likesby.bludoc.viewModels.ResultOfApi;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.Single;
 import okhttp3.MultipartBody;
@@ -103,8 +109,106 @@ public interface WebServices {
                                     @Field("hospital_code") String hospital_code);
 
     @FormUrlEncoded
+    @POST("AddAppt")
+    Call<AppointmentModel> addDoctorDetails(@Field("doctor_id") String doctor_id,
+                                            @Field("doc_name") String doc_name,
+                                            @Field("reg_no") String reg_no,
+                                            @Field("qualification") String qualification,
+                                            @Field("note") String note,
+                                            @Field("cont_no") String cont_no,
+                                            @Field("mail_id") String mail_id,
+                                            @Field("about_me") String about_me);
+
+    @FormUrlEncoded
+    @POST("AddAppt")
+    Call<AppointmentModel> addClinicDetails(@Field("doctor_id") String doctor_id,
+                                            @Field("doc_name") String doc_name,
+                                            @Field("reg_no") String reg_no,
+                                            @Field("clinic_name") String clinic_name,
+                                            @Field("days") String days,
+                                            @Field("currency") String currency,
+                                            @Field("clinic_add") String clinic_add,
+                                            @Field("visiting_hr_from") String visiting_hr_from,
+                                            @Field("visiting_hr_to") String visiting_hr_to,
+                                            @Field("cons_charges") String cons_charges
+    );
+
+    @FormUrlEncoded
+    @POST("AddAppt")
+    Call<AppointmentModel> addPaymentsDetails(@Field("doctor_id") String doctor_id,
+                                              @Field("doc_name") String doc_name,
+                                              @Field("reg_no") String reg_no,
+                                              @Field("g_pay") String clinic_name,
+                                              @Field("paytm") String paytm,
+                                              @Field("phone_pe") String clinic_add,
+                                              @Field("amazon") String visiting_hr_from,
+                                              @Field("upi_id") String visiting_hr_to,
+                                              @Field("pmt_link") String cons_charges
+    );
+
+    @FormUrlEncoded
+    @POST("GetAppt")
+    Call<ResultOfApi> getAppointment(
+            @Field("doctor_id") String doctor_id
+    );
+
+    @Multipart
+    @POST("AddAppt")
+    Call<AppointmentModel> addProfileAndImage(
+            @Part("doctor_id") RequestBody doctor_id,
+            @Part("doc_name") RequestBody doc_name,
+            @Part("reg_no") RequestBody reg_no,
+            @Part List<MultipartBody.Part> file
+    );
+
+    @FormUrlEncoded
+    @POST("AddAppList")
+    Call<ResultOfApi> addAppointmentList(@Field("doctor_id") String doctor_id,
+                                         @Field("patient_id") String patient_id,
+                                         @Field("p_name") String pharmacist_mobile,
+                                         @Field("p_email") String pharmacist_email,
+                                         @Field("p_mobile") String type,
+                                         @Field("p_age") String p_age,
+                                         @Field("p_gender") String p_gender,
+                                         @Field("app_date") String app_date,
+                                         @Field("app_time") String app_time,
+                                         @Field("purpose") String purpose,
+                                         @Field("status") String status
+    );
+
+    @FormUrlEncoded
+    @POST("AddAppList")
+    Call<ResultOfApi> editAppointment(@Field("doctor_id") String doctor_id,
+                                      @Field("app_list_id") String app_list_id,
+                                      @Field("patient_id") String patient_id,
+                                      @Field("p_name") String pharmacist_mobile,
+                                      @Field("p_email") String pharmacist_email,
+                                      @Field("p_mobile") String type,
+                                      @Field("p_age") String p_age,
+                                      @Field("p_gender") String p_gender,
+                                      @Field("app_date") String app_date,
+                                      @Field("app_time") String app_time,
+                                      @Field("purpose") String purpose,
+                                      @Field("status") String status
+
+
+    );
+
+    @FormUrlEncoded
+    @POST("DeleteAppList")
+    Call<ResultOfApi> deleteAppointment(@Field("app_list_id") String app_list_id);
+
+    @FormUrlEncoded
+    @POST("GetApptList")
+    Call<ResultOfSuccess> getAppointmentList(@Field("doctor_id") String doctor_id,@Field("Sort") String sort);
+
+    @FormUrlEncoded
     @POST("AllPharmacist")
     Call<AllPharmacistModels> allPharmacist(@Field("created_by") String doctor_id);
+
+    @FormUrlEncoded
+    @POST("Dash")
+    Call<StaticsModel> getStaticsModel(@Field("doctor_id") String doctor_id, @Field("Date") String Date);
 
     @FormUrlEncoded
     @POST("AllInvoice")
@@ -123,7 +227,11 @@ public interface WebServices {
                                      @Field("type") String type,
                                      @Field("hospital_code") String hospital_code
 
-                                     );
+    );
+
+    @FormUrlEncoded
+    @POST("AddServerSubsciption")
+    Call<SubscriptionModels> RazorSubscriptionId(@Field("subscription_id") String subscription_id, @Field("doctor_id") String doctor_id);
 
     @FormUrlEncoded
     @POST("DeletePharmacist")
@@ -131,7 +239,7 @@ public interface WebServices {
 
     @FormUrlEncoded
     @POST("SendPresciption")
-    Call<ResultOfApi> sendPresciption(@Field("created_by") String doctor_id, @Field("presb_patient_id") String presb_patient_id , @Field("type") String type);
+    Call<ResultOfApi> sendPresciption(@Field("created_by") String doctor_id, @Field("presb_patient_id") String presb_patient_id, @Field("type") String type);
 
     @FormUrlEncoded
     @POST("Phamalist")
@@ -181,6 +289,20 @@ public interface WebServices {
 
     );
 
+    @FormUrlEncoded
+    @POST("PatientRegister")
+    Single<PatientsItem> PatientRegisterWithPatientItem(@Field("p_name") String p_name,
+                                         @Field("age") String age,
+                                         @Field("gender") String gender,
+                                         @Field("created_by") String created_by,
+                                         @Field("p_mobile") String p_mobile,
+                                         @Field("p_email") String p_email,
+                                         @Field("p_address") String p_address,
+                                         @Field("p_blood_grp") String p_blood_grp,
+                                         @Field("p_dob") String p_dob
+
+    );
+
 
     @FormUrlEncoded
     @POST("PatientEdit")
@@ -219,6 +341,10 @@ public interface WebServices {
                                        @Field("ug_id") String ug_id,
                                        @Field("pg_id") String pg_id,
                                        @Field("addtional_qualification") String addtional_qualification);
+
+    @FormUrlEncoded
+    @POST("UpdateProfile")
+    Single<ResponseRegister> registerQualification(@Field("addtional_qualification") String addtional_qualification, @Field("doctor_id") String doctor_id);
 
 
     @FormUrlEncoded
@@ -359,6 +485,7 @@ public interface WebServices {
                                                  @Field("payment_status") String payment_status,
                                                  @Field("transaction_id") String transaction_id,
                                                  @Field("transaction_amount") String transaction_amount
+
     );
 
 
@@ -403,6 +530,9 @@ public interface WebServices {
     @POST("DeletePatient")
     Call<ResponseSuccess> deletePatientFromApi(@Field("patient_id") String patient_id);
 
+    @FormUrlEncoded
+    @POST("DeleteApt")
+    Call<ResponseSuccess> deleteApptImage(@Field("app_id") String app_id, @Field("type") String type);
 
     @FormUrlEncoded
     @POST("AllPrescription")
@@ -431,14 +561,14 @@ public interface WebServices {
 //    Single<Response> customerSubscriptionUpdate(@Field("customers_subscription_id") String customers_subscription_id,
 //                                                @Field("payment_id") String payment_id);
 
- /*   @FormUrlEncoded
-    @POST("login")
-    Single<UserResponse> userLogin(@Field("customer_mobile") String mobile);*/
+    /*   @FormUrlEncoded
+       @POST("login")
+       Single<UserResponse> userLogin(@Field("customer_mobile") String mobile);*/
     //@Headers("x-api-key: cw00ggcsw4co0g804gcggwo088g4kokgk88sso4s")
- @FormUrlEncoded
- @POST("UpdateProfile")
- Single<ResponseProfileDetails> updateHospitalCode(@Field("doctor_id") String doctor_id,
-                                                   @Field("hospital_code") String hospital_code  );
+    @FormUrlEncoded
+    @POST("UpdateProfile")
+    Single<ResponseProfileDetails> updateHospitalCode(@Field("doctor_id") String doctor_id,
+                                                      @Field("hospital_code") String hospital_code);
 
 
     @FormUrlEncoded
@@ -451,7 +581,12 @@ public interface WebServices {
     @FormUrlEncoded
     @POST("Otp")
     Single<OtpResponse> getOtpFromBackEnd(@Field("email") String email);
-//
+
+    @FormUrlEncoded
+    @POST("CancelSubscriptions")
+    Call<ResponseSuccess> cancelSubscription(@Field("doctor_subscription_id") String doctor_subscription_id);
+
+    //
 //    @FormUrlEncoded
 //    @POST("Myinvites")
 //    Single<MyInvitesResponse> MyInvites(@Field("customer_id") String customer_id);

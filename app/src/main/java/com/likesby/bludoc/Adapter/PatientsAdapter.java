@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -44,27 +45,35 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.ads.formats.UnifiedNativeAd;
 import com.google.android.gms.ads.formats.UnifiedNativeAdView;
-import com.likesby.bludoc.AllPharmacistActivity;
+import com.likesby.bludoc.AppointmentActivity;
+import com.likesby.bludoc.CreateAppointmentActivity;
+import com.likesby.bludoc.DigitalClinicActivity;
+import com.likesby.bludoc.DigitalClinicConfirmationActivity;
 import com.likesby.bludoc.Fragment.CreatePrescription;
+import com.likesby.bludoc.Fragment.PopUpSubscriptionDialogFragment;
+import com.likesby.bludoc.HomeActivity;
 import com.likesby.bludoc.InvoiceActivity;
 import com.likesby.bludoc.ModelLayer.Entities.PatientsItem;
 import com.likesby.bludoc.ModelLayer.Entities.ResponsePatients;
 import com.likesby.bludoc.ModelLayer.Entities.ResponseSuccess;
 import com.likesby.bludoc.ModelLayer.NetworkLayer.EndpointInterfaces.WebServices;
 import com.likesby.bludoc.ModelLayer.NetworkLayer.Helpers.RetrofitClient;
+import com.likesby.bludoc.ModelLayer.NewEntities.ResponseProfileDetails;
+import com.likesby.bludoc.ModelLayer.NewEntities.SubcriptionsItem;
 import com.likesby.bludoc.R;
 import com.likesby.bludoc.SessionManager.SessionManager;
 import com.likesby.bludoc.SplashActivity;
 import com.likesby.bludoc.constants.ApplicationConstant;
 import com.likesby.bludoc.utils.DateUtils;
 import com.likesby.bludoc.utils.Utils;
-import com.likesby.bludoc.viewModels.AllPharmacistList;
-import com.likesby.bludoc.viewModels.AllPharmacistModels;
 import com.likesby.bludoc.viewModels.ApiViewHolder;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -82,8 +91,11 @@ import static com.likesby.bludoc.Fragment.CreatePrescription.certificate_selecti
 import static com.likesby.bludoc.Fragment.CreatePrescription.patient_id;
 import static com.likesby.bludoc.Fragment.CreatePrescription.pos;
 
+import org.joda.time.DateTime;
+
 public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHolder> implements Filterable {
     private final FragmentActivity fragmentActivity;
+    private final DateTime dateTime;
     private ArrayList<PatientsItem> mArrayList = new ArrayList<>();
     private ArrayList<PatientsItem> mFilteredList = new ArrayList<>();
     private Context mContext;
@@ -96,7 +108,7 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
     ApiViewHolder apiViewHolder;
     CompositeDisposable mBag;
     String gender_ = "";
-    SessionManager manager=new SessionManager();
+    SessionManager manager = new SessionManager();
     FrameLayout fl_progress_bar;
     LinearLayout ll_medicinal_lab, ll_medicine_product, ll_end_note, ll_certificate;
     LinearLayout ll_main_medicine_details, ll_main_lab_test_details, ll_main_end_note_details, ll_main_certificate_details;
@@ -122,6 +134,8 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
         this.showNativeAdFlag = showNativeAdFlag;
         this.createPrescription = createPrescription;
 
+        dateTime = new DateTime();
+
         this.btn_create_patient = btn_create_patient;
         this.patientdetails = patientdetails;
         this.apiViewHolder = apiViewHolder;
@@ -135,22 +149,25 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
         this.ll_main_end_note_details = ll_main_end_note_details;
         this.ll_main_certificate_details = ll_main_certificate_details;
 
-        fragmentActivity= (FragmentActivity) context;
+        fragmentActivity = (FragmentActivity) context;
         this.fl_progress_bar = fl_progress_bar;
     }
 
-    public interface onClickListener{
+    public interface onClickListener {
 
         void onClick();
+
         void onDestroy();
+
         void onLoadCertificated();
+
         void onLoadPrescribe();
 
     }
 
-    public void setOnClickLsitener(onClickListener onClickLsitener){
+    public void setOnClickLsitener(onClickListener onClickLsitener) {
 
-        this.onClickLsitener=onClickLsitener;
+        this.onClickLsitener = onClickLsitener;
 
     }
 
@@ -164,14 +181,134 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull final ViewHolder viewHolder,int i) {
 
         PatientsItem patientsItem = mFilteredList.get(i);
 
         viewHolder.PATIENT_NAME.setText(mFilteredList.get(i).getPName());
         viewHolder.PATIENT_ID.setText(mFilteredList.get(i).getPatientId());
 
-        viewHolder.PATIENT_AGE.setText(mFilteredList.get(i).getAge() + " / " + mFilteredList.get(i).getGender());
+        if (TextUtils.isEmpty(mFilteredList.get(i).getpDob())) {
+
+            Log.i(TAG, "onBindViewHolder:" + mFilteredList.get(i).getAge());
+
+            if (TextUtils.isEmpty(mFilteredList.get(i).getAge())
+                    || mFilteredList.get(i).getAge().trim().equalsIgnoreCase("0 yr")
+                    || mFilteredList.get(i).getAge().trim().equalsIgnoreCase("yr"))
+                viewHolder.PATIENT_AGE.setText(mFilteredList.get(i).getGender());
+            else
+                viewHolder.PATIENT_AGE.setText(mFilteredList.get(i).getAge() + " / " + mFilteredList.get(i).getGender());
+
+        } else {
+
+            String[] split = mFilteredList.get(i).getpDob().split("-");
+            String return_value = decideMonthOrYear(split);
+            viewHolder.PATIENT_AGE.setText(return_value + " / " + mFilteredList.get(i).getGender());
+
+        }
+
+        viewHolder.book_appointment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (!("").equalsIgnoreCase(manager.getPreferences(mContext, "registration_no"))) {
+                    ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
+                    if (!("").equalsIgnoreCase(responseProfileDetails.getHospitalCode())) {
+
+                        if (responseProfileDetails.getAccess().equals("Approve")) {
+
+                            String sub_valid = "", premium_valid = "";
+                            boolean flag_reset_paid = false;
+                            Date date1 = null, date2 = null;
+                            int days_left_free = 0, days_left_paid = 0;
+                            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                            ResponseProfileDetails profileDetails = manager.getObjectProfileDetails(mContext, "profile");
+                            if (profileDetails.getSubcriptions() != null) {
+                                if (profileDetails.getSubcriptions().size() != 0) {
+                                    for (SubcriptionsItem si : profileDetails.getSubcriptions()) {
+                                        if (!si.getHospital_code().equals("")) {
+                                            try {
+                                                Calendar c2 = Calendar.getInstance();
+                                                DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+                                                Date dateEnd = dateFormat.parse(si.getEnd());
+                                                Date c = Calendar.getInstance().getTime();
+                                                assert dateEnd != null;
+
+                                                //premium_valid = si.getDays();
+                                                Log.e("DATE_____1 = ", DateUtils.printDifference(c, dateEnd));
+                                                // Log.e("DATE_____2 = ",DateUtils.outFormatsetMMM(DateUtils.printDifference(c,dateEnd)));
+                                                // Log.e("DATE_____3 = ",DateUtils.outFormatset(DateUtils.printDifference(c,dateEnd)));
+
+
+                                                try {
+                                                    date1 = dateFormat.parse(dateFormat.format(c2.getTime()));
+                                                    date2 = dateFormat.parse(si.getEnd());
+                                                    Log.e("DATE_____1 = ", DateUtils.printDifference(date1, date2) + " left");
+
+                                                    String[] splited = DateUtils.printDifference(date1, date2).split("\\s+");
+
+                                                    days_left_free = days_left_free + Integer.parseInt(splited[0]);
+                                                    // popupFreeSubscription(DateUtils.printDifference(date1,date2),true);
+                                                    // break;
+                                                    sub_valid = si.getEnd();
+                                                } catch (ParseException e) {
+                                                    e.printStackTrace();
+                                                }
+
+                                                //viewHolder.expiry.setText(DateUtils.printDifference(date1,date2)+" left");
+
+                                            } catch (ParseException pe) {
+                                                // handle the failure
+                                            }
+
+                                        }
+                                    }
+
+                                } else {
+                                    popupPaused("Your subscription has expired. Please contact to " + profileDetails.getHospital_name());
+                                    return;
+                                }
+                            } else {
+                                popupPaused("Your subscription has expired. Please contact to " + profileDetails.getHospital_name());
+                                return;
+                            }
+
+                            if (days_left_free < 0) {
+                                popupPaused("Your subscription has expired. Please contact to hospital  admin");
+                                return;
+                            } else {
+                                Intent intent = new Intent(mContext,CreateAppointmentActivity.class);
+                                intent.putExtra("patientItem",patientsItem);
+                                mContext.startActivity(intent);
+                            }
+//Now run it
+                        } else if (responseProfileDetails.getAccess().equals("Pending")) {
+                            popupPaused("Your account is pending for approval. Please contact " + responseProfileDetails.getHospital_name());
+
+                        } else if (responseProfileDetails.getAccess().equals("Remove")) {
+                            popupPaused("You have been removed from " + responseProfileDetails.getHospital_name() + ". You now have accesses like BluDoc standard user");
+                            //popupHospitalCode();
+                        } else if (responseProfileDetails.getAccess().equals("Pause")) {
+
+                            popupPaused("Your subscription is paused. Please contact to " + responseProfileDetails.getHospital_name());
+
+                        } else {
+                            popupAccess();
+                        }
+
+                    } else {
+
+                        checkSubsciptionForAppointment(patientsItem);
+
+                    }
+                } else {
+                    popup();
+                }
+
+            }
+
+
+        });
 
         if (("").equalsIgnoreCase(mFilteredList.get(i).getpDob())) {
             viewHolder.date_of_birth.setText("____");
@@ -203,10 +340,84 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
             @Override
             public void onClick(View v) {
 
-                Intent intent=new Intent(mContext, InvoiceActivity.class);
-                intent.putExtra("patientName",patientsItem.getPName());
-                intent.putExtra("patientObject",patientsItem);
-                mContext.startActivity(intent);
+                if (!("").equalsIgnoreCase(manager.getPreferences(mContext, "registration_no"))) {
+                    ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
+                    if (("").equalsIgnoreCase(responseProfileDetails.getHospitalCode())) {
+
+                        String sub_valid = "", premium_valid = "";
+                        boolean flag_reset_paid = false;
+                        Date date1 = null, date2 = null;
+                        int days_left_free = 0, days_left_paid = 0;
+                        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                        ResponseProfileDetails profileDetails = manager.getObjectProfileDetails(mContext, "profile");
+                        if (profileDetails.getSubcriptions() != null) {
+                            if (profileDetails.getSubcriptions().size() != 0) {
+                                for (SubcriptionsItem si : profileDetails.getSubcriptions()) {
+                                    if (!si.getHospital_code().equals("")) {
+                                        boolean flag_reset_free;
+                                        try {
+                                            Calendar c2 = Calendar.getInstance();
+                                            DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+                                            Date dateEnd = dateFormat.parse(si.getEnd());
+                                            Date c = Calendar.getInstance().getTime();
+                                            assert dateEnd != null;
+
+                                            //premium_valid = si.getDays();
+                                            Log.e("DATE_____1 = ", DateUtils.printDifference(c, dateEnd));
+                                            // Log.e("DATE_____2 = ",DateUtils.outFormatsetMMM(DateUtils.printDifference(c,dateEnd)));
+                                            // Log.e("DATE_____3 = ",DateUtils.outFormatset(DateUtils.printDifference(c,dateEnd)));
+
+
+                                            try {
+                                                date1 = dateFormat.parse(dateFormat.format(c2.getTime()));
+                                                date2 = dateFormat.parse(si.getEnd());
+                                                Log.e("DATE_____1 = ", DateUtils.printDifference(date1, date2) + " left");
+                                                flag_reset_free = true;
+
+                                                String[] splited = DateUtils.printDifference(date1, date2).split("\\s+");
+
+                                                days_left_free = days_left_free + Integer.parseInt(splited[0]);
+                                                // popupFreeSubscription(DateUtils.printDifference(date1,date2),true);
+                                                // break;
+                                                sub_valid = si.getEnd();
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                            }
+
+                                            //viewHolder.expiry.setText(DateUtils.printDifference(date1,date2)+" left");
+
+                                        } catch (ParseException pe) {
+                                            // handle the failure
+                                            flag_reset_free = false;
+                                        }
+
+                                    }
+                                }
+
+                            } else {
+                                popupPaused("Invoice");
+                                return;
+
+                            }
+                        } else {
+                            popupPaused("Invoice");
+                            return;
+                        }
+
+                        if (days_left_free < 0) {
+                            popupPaused("Invoice");
+                        } else {
+
+                            Intent intent = new Intent(mContext, InvoiceActivity.class);
+                            intent.putExtra("patientName", patientsItem.getPName());
+                            intent.putExtra("patientObject", patientsItem);
+                            mContext.startActivity(intent);
+                        }
+
+                    }
+                } else {
+                    popup();
+                }
 
             }
         });
@@ -215,71 +426,367 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
             @Override
             public void onClick(View v) {
 
-                manager.setPreferences(mContext,"isOnPrescribe","true");
-
-                patient_id = viewHolder.PATIENT_ID.getText().toString().trim();
-                pos=findBypatientId(patientsItem.getPatientId());
-                btn_create_patient.setVisibility(View.GONE);
-                ll_patients_view.setVisibility(View.GONE);
-                ll_prescription_view.setVisibility(View.VISIBLE);
-                top_view.setVisibility(View.VISIBLE);
-                ll_certificate.setVisibility(View.GONE);
-                ll_main_certificate_details.setVisibility(View.GONE);
-                ll_medicinal_lab.setVisibility(View.VISIBLE);
-                ll_main_lab_test_details.setVisibility(View.GONE);
-                ll_medicine_product.setVisibility(View.VISIBLE);
-                ll_main_medicine_details.setVisibility(View.GONE);
-                ll_end_note.setVisibility(View.VISIBLE);
-                ll_main_end_note_details.setVisibility(View.VISIBLE);
-                certificate_selection = false;
-                patientdetails.setText(patientsItem.getPName() + " - " + patientsItem.getGender() + " / " + patientsItem.getAge());
-
-                if(onClickLsitener!=null)
-                    onClickLsitener.onLoadPrescribe();
+                popUpPrescription(viewHolder,patientsItem,i);
 
             }
         });
 
-        viewHolder.certificate.setOnClickListener(new View.OnClickListener() {
+        viewHolder.certificate.setOnClickListener(v -> {
+
+            if (!("").equalsIgnoreCase(manager.getPreferences(mContext, "registration_no"))) {
+                ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
+                if (("").equalsIgnoreCase(responseProfileDetails.getHospitalCode())) {
+
+                    String sub_valid = "", premium_valid = "";
+                    boolean flag_reset_paid = false;
+                    Date date1 = null, date2 = null;
+                    int days_left_free = 0, days_left_paid = 0;
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                    ResponseProfileDetails profileDetails = manager.getObjectProfileDetails(mContext, "profile");
+                    if (profileDetails.getSubcriptions() != null) {
+                        if (profileDetails.getSubcriptions().size() != 0) {
+                            for (SubcriptionsItem si : profileDetails.getSubcriptions()) {
+                                if (!si.getHospital_code().equals("")) {
+                                    boolean flag_reset_free;
+                                    try {
+                                        Calendar c2 = Calendar.getInstance();
+                                        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+                                        Date dateEnd = dateFormat.parse(si.getEnd());
+                                        Date c = Calendar.getInstance().getTime();
+                                        assert dateEnd != null;
+
+                                        //premium_valid = si.getDays();
+                                        Log.e("DATE_____1 = ", DateUtils.printDifference(c, dateEnd));
+                                        // Log.e("DATE_____2 = ",DateUtils.outFormatsetMMM(DateUtils.printDifference(c,dateEnd)));
+                                        // Log.e("DATE_____3 = ",DateUtils.outFormatset(DateUtils.printDifference(c,dateEnd)));
+
+
+                                        try {
+                                            date1 = dateFormat.parse(dateFormat.format(c2.getTime()));
+                                            date2 = dateFormat.parse(si.getEnd());
+                                            Log.e("DATE_____1 = ", DateUtils.printDifference(date1, date2) + " left");
+                                            flag_reset_free = true;
+
+                                            String[] splited = DateUtils.printDifference(date1, date2).split("\\s+");
+
+                                            days_left_free = days_left_free + Integer.parseInt(splited[0]);
+                                            // popupFreeSubscription(DateUtils.printDifference(date1,date2),true);
+                                            // break;
+                                            sub_valid = si.getEnd();
+                                        } catch (ParseException e) {
+                                            e.printStackTrace();
+                                        }
+
+                                        //viewHolder.expiry.setText(DateUtils.printDifference(date1,date2)+" left");
+
+                                    } catch (ParseException pe) {
+                                        // handle the failure
+                                        flag_reset_free = false;
+                                    }
+
+                                }
+                            }
+
+                        } else {
+                            popupPaused("Medical certificate");
+                            return;
+
+                        }
+                    } else {
+                        popupPaused("Medical certificate");
+                        return;
+                    }
+
+                    if (days_left_free < 0) {
+                        popupPaused("Medical certificate");
+                    } else {
+                        certificateOpenModel(viewHolder, patientsItem,i);
+
+                    }
+
+                }
+            } else {
+                popup();
+            }
+
+        });
+
+    }
+
+    private void checkSubsciptionForAppointment(PatientsItem patientsItem) {
+
+        String sub_valid = "", premium_valid = "";
+        boolean flag_reset_paid = false;
+        Date date1 = null, date2 = null;
+        int days_left_free = 0, days_left_paid = 0;
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        ResponseProfileDetails profileDetails = manager.getObjectProfileDetails(fragmentActivity, "profile");
+        if (profileDetails.getSubcriptions() != null) {
+            if (profileDetails.getSubcriptions().size() != 0) {
+                for (SubcriptionsItem si : profileDetails.getSubcriptions()) {
+                    if (!si.getHospital_code().equals("")) {
+                        boolean flag_reset_free;
+                        try {
+                            Calendar c2 = Calendar.getInstance();
+                            DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+                            Date dateEnd = dateFormat.parse(si.getEnd());
+                            Date c = Calendar.getInstance().getTime();
+                            assert dateEnd != null;
+
+                            //premium_valid = si.getDays();
+                            Log.e("DATE_____1 = ", DateUtils.printDifference(c, dateEnd));
+                            // Log.e("DATE_____2 = ",DateUtils.outFormatsetMMM(DateUtils.printDifference(c,dateEnd)));
+                            // Log.e("DATE_____3 = ",DateUtils.outFormatset(DateUtils.printDifference(c,dateEnd)));
+
+
+                            try {
+                                date1 = dateFormat.parse(dateFormat.format(c2.getTime()));
+                                date2 = dateFormat.parse(si.getEnd());
+                                Log.e("DATE_____1 = ", DateUtils.printDifference(date1, date2) + " left");
+                                flag_reset_free = true;
+
+                                String[] splited = DateUtils.printDifference(date1, date2).split("\\s+");
+
+                                days_left_free = days_left_free + Integer.parseInt(splited[0]);
+                                // popupFreeSubscription(DateUtils.printDifference(date1,date2),true);
+                                // break;
+                                sub_valid = si.getEnd();
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+                            //viewHolder.expiry.setText(DateUtils.printDifference(date1,date2)+" left");
+
+                        } catch (ParseException pe) {
+                            // handle the failure
+                            flag_reset_free = false;
+                        }
+
+                    }
+                }
+
+            } else {
+                popupPausedForChecking("Doctor Appointment");
+                return;
+
+            }
+        } else {
+            popupPausedForChecking("Doctor Appointment");
+            return;
+        }
+
+        if (days_left_free < 0) {
+            popupPausedForChecking("Doctor Appointment");
+        } else {
+            Intent intent = new Intent(mContext,CreateAppointmentActivity.class);
+            intent.putExtra("patientItem",patientsItem);
+            mContext.startActivity(intent);
+        }
+
+    }
+
+    private void popupPausedForChecking(String keywords) {
+
+        PopUpSubscriptionDialogFragment popUpSubscriptionDialogFragment= new PopUpSubscriptionDialogFragment();
+        popUpSubscriptionDialogFragment.setCancelable(false);
+        Bundle bundle = new Bundle();
+        bundle.putString("keywords", keywords);
+        popUpSubscriptionDialogFragment.setArguments(bundle);
+        popUpSubscriptionDialogFragment.show(fragmentActivity.getSupportFragmentManager(),"");
+
+    }
+
+    private void popupAccess() {
+
+        final Dialog dialog_data = new Dialog(mContext);
+        dialog_data.setCancelable(true);
+
+        dialog_data.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        Objects.requireNonNull(dialog_data.getWindow()).setGravity(Gravity.CENTER);
+
+        dialog_data.setContentView(R.layout.popup_access);
+
+        WindowManager.LayoutParams lp_number_picker = new WindowManager.LayoutParams();
+        Window window = dialog_data.getWindow();
+        lp_number_picker.copyFrom(window.getAttributes());
+
+        lp_number_picker.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp_number_picker.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+        //window.setGravity(Gravity.CENTER);
+        window.setAttributes(lp_number_picker);
+
+        Button btn_add = dialog_data.findViewById(R.id.btn_register);
+        ImageView btn_close = dialog_data.findViewById(R.id.btn_close);
+
+
+        btn_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog_data.dismiss();
+
+            }
+        });
+
+
+        btn_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog_data.dismiss();
+
+            }
+        });
+        dialog_data.show();
+    }
+
+    private void popUpPrescription(ViewHolder viewHolder, PatientsItem patientsItem, int i) {
+
+        manager.setPreferences(mContext, "isOnPrescribe", "true");
+
+        patient_id = viewHolder.PATIENT_ID.getText().toString().trim();
+        pos = findBypatientId(patientsItem.getPatientId());
+        btn_create_patient.setVisibility(View.GONE);
+        ll_patients_view.setVisibility(View.GONE);
+        ll_prescription_view.setVisibility(View.VISIBLE);
+        top_view.setVisibility(View.VISIBLE);
+        ll_certificate.setVisibility(View.GONE);
+        ll_main_certificate_details.setVisibility(View.GONE);
+        ll_medicinal_lab.setVisibility(View.VISIBLE);
+        ll_main_lab_test_details.setVisibility(View.GONE);
+        ll_medicine_product.setVisibility(View.VISIBLE);
+        ll_main_medicine_details.setVisibility(View.GONE);
+        ll_end_note.setVisibility(View.VISIBLE);
+        ll_main_end_note_details.setVisibility(View.VISIBLE);
+        certificate_selection = false;
+
+        String age = "";
+
+        if (!TextUtils.isEmpty(patientsItem.getAge())) {
+            age = " / " + patientsItem.getAge();
+        }
+
+        if (patientsItem.getAge().equalsIgnoreCase("yr")) {
+            age = "";
+        }
+
+        patientdetails.setText(patientsItem.getPName() + " - " + patientsItem.getGender() + age);
+
+        if (onClickLsitener != null)
+            onClickLsitener.onLoadPrescribe();
+
+    }
+
+    private  void popup()
+    {
+        final Dialog dialog_data = new Dialog(mContext);
+        dialog_data.setCancelable(true);
+
+        dialog_data.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        Objects.requireNonNull(dialog_data.getWindow()).setGravity(Gravity.CENTER);
+
+        dialog_data.setContentView(R.layout.feedback);
+
+        WindowManager.LayoutParams lp_number_picker = new WindowManager.LayoutParams();
+        Window window = dialog_data.getWindow();
+        lp_number_picker.copyFrom(window.getAttributes());
+
+        lp_number_picker.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp_number_picker.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+        //window.setGravity(Gravity.CENTER);
+        window.setAttributes(lp_number_picker);
+
+        ImageView btn_close = dialog_data.findViewById(R.id.btn_close);
+
+        btn_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                isOnCertificate=true;
-                manager.setPreferences(mContext,"isOnCertificate","true");
-                patient_id = viewHolder.PATIENT_ID.getText().toString().trim();
-                pos=findBypatientId(patientsItem.getPatientId());
-                btn_create_patient.setVisibility(View.GONE);
-                ll_patients_view.setVisibility(View.GONE);
-                ll_prescription_view.setVisibility(View.VISIBLE);
-                top_view.setVisibility(View.VISIBLE);
-                ll_certificate.setVisibility(View.VISIBLE);
-                ll_main_certificate_details.setVisibility(View.VISIBLE);
-                ll_medicinal_lab.setVisibility(View.GONE);
-                ll_main_lab_test_details.setVisibility(View.GONE);
-                ll_medicine_product.setVisibility(View.GONE);
-                ll_main_medicine_details.setVisibility(View.GONE);
-                ll_end_note.setVisibility(View.GONE);
-                ll_main_end_note_details.setVisibility(View.GONE);
-                certificate_selection = true;
-                patientdetails.setText(patientsItem.getPName() + " - " + patientsItem.getGender() + " / " + patientsItem.getAge());
-
-                if(onClickLsitener!=null)
-                    onClickLsitener.onLoadCertificated();
-
+                dialog_data.dismiss();
 
             }
         });
+        dialog_data.show();
+    }
+
+    private void popupPaused(String keywords) {
+
+        PopUpSubscriptionDialogFragment popUpSubscriptionDialogFragment= new PopUpSubscriptionDialogFragment();
+        popUpSubscriptionDialogFragment.setCancelable(false);
+        Bundle bundle = new Bundle();
+        bundle.putString("keywords",keywords);
+        popUpSubscriptionDialogFragment.setArguments(bundle);
+        popUpSubscriptionDialogFragment.show(fragmentActivity.getSupportFragmentManager(),"");
+
+    }
+
+    private void certificateOpenModel(ViewHolder viewHolder, PatientsItem patientsItem, int i) {
+        isOnCertificate = true;
+        manager.setPreferences(mContext, "isOnCertificate", "true");
+        patient_id = viewHolder.PATIENT_ID.getText().toString().trim();
+        pos = findBypatientId(patientsItem.getPatientId());
+        btn_create_patient.setVisibility(View.GONE);
+        ll_patients_view.setVisibility(View.GONE);
+        ll_prescription_view.setVisibility(View.VISIBLE);
+        top_view.setVisibility(View.VISIBLE);
+        ll_certificate.setVisibility(View.VISIBLE);
+        ll_main_certificate_details.setVisibility(View.VISIBLE);
+        ll_medicinal_lab.setVisibility(View.GONE);
+        ll_main_lab_test_details.setVisibility(View.GONE);
+        ll_medicine_product.setVisibility(View.GONE);
+        ll_main_medicine_details.setVisibility(View.GONE);
+        ll_end_note.setVisibility(View.GONE);
+        ll_main_end_note_details.setVisibility(View.GONE);
+        certificate_selection = true;
+
+        String age = "";
+
+        if (!TextUtils.isEmpty(patientsItem.getAge())) {
+            age = " / " + patientsItem.getAge();
+        }
+
+        if (patientsItem.getAge().equalsIgnoreCase("yr")) {
+            age = "";
+        }
+
+        patientdetails.setText(patientsItem.getPName() + " - " + patientsItem.getGender() + age);
+
+        if (onClickLsitener != null)
+            onClickLsitener.onLoadCertificated();
 
         // viewHolder.PATIENT_CREATED.setText(formattedDate);
         viewHolder.PATIENT_CREATED.setText(DateUtils.outFormatsetMMM(mFilteredList.get(i).getCreated().trim()));
         viewHolder.PATIENT_MODIFIED.setText(mFilteredList.get(i).getModified());
+
+    }
+
+    private String decideMonthOrYear(String[] split) {
+
+        DateTime dateTime = new DateTime();
+        int year = Integer.parseInt(split[2]);
+        int month = Integer.parseInt(split[1]);
+
+        if (dateTime.getYear() - year > 0) {
+
+            return dateTime.getYear() - year + " yr";
+
+        } else {
+
+            if (dateTime.getMonthOfYear() - (month) == 0)
+                return "1 month";
+            else
+                return dateTime.getMonthOfYear() - (month) + " month";
+        }
+
     }
 
     private int findBypatientId(String patientId) {
 
         for (int i = 0; i < mArrayList.size(); i++) {
 
-            if(patientId.equalsIgnoreCase(mArrayList.get(i).getPatientId())){
+            if (patientId.equalsIgnoreCase(mArrayList.get(i).getPatientId())) {
 
                 return i;
 
@@ -332,7 +839,7 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
 
-                mFilteredList= (ArrayList<PatientsItem>) filterResults.values;
+                mFilteredList = (ArrayList<PatientsItem>) filterResults.values;
                 notifyDataSetChanged();
 
             }
@@ -341,7 +848,7 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
 
     public void onBackPressedHappen() {
 
-        if(manager.getPreferences(fragmentActivity,"isOnPrescribe").equalsIgnoreCase("true")){
+        if (manager.getPreferences(fragmentActivity, "isOnPrescribe").equalsIgnoreCase("true")) {
 
             btn_create_patient.setVisibility(View.VISIBLE);
             ll_patients_view.setVisibility(View.VISIBLE);
@@ -356,15 +863,14 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
             ll_end_note.setVisibility(View.GONE);
             ll_main_end_note_details.setVisibility(View.VISIBLE);
 
-            manager.setPreferences(fragmentActivity,"isOnPrescribe","false");
+            manager.setPreferences(fragmentActivity, "isOnPrescribe", "false");
 
-            if(onClickLsitener!=null){
+            if (onClickLsitener != null) {
                 onClickLsitener.onClick();
             }
 
 
-
-        } else if(manager.getPreferences(fragmentActivity,"isOnCertificate").equalsIgnoreCase("true")){
+        } else if (manager.getPreferences(fragmentActivity, "isOnCertificate").equalsIgnoreCase("true")) {
 
             btn_create_patient.setVisibility(View.VISIBLE);
             ll_patients_view.setVisibility(View.VISIBLE);
@@ -379,20 +885,21 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
             ll_end_note.setVisibility(View.GONE);
             ll_main_end_note_details.setVisibility(View.VISIBLE);
 
-            manager.setPreferences(fragmentActivity,"isOnCertificate","false");
+            manager.setPreferences(fragmentActivity, "isOnCertificate", "false");
 
-            if(onClickLsitener!=null){
+            if (onClickLsitener != null) {
                 onClickLsitener.onClick();
             }
 
-        } else  {
+        } else {
 
             try {
 
-                onClickLsitener.onDestroy();
+                if (onClickLsitener != null)
+                    onClickLsitener.onDestroy();
 
-            } catch (IllegalStateException e){
-                Log.i("TAG", "onBackPressedHappen: "+e.getMessage());
+            } catch (IllegalStateException e) {
+                Log.i("TAG", "onBackPressedHappen: " + e.getMessage());
             }
         }
 
@@ -400,7 +907,7 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView PATIENT_NAME, PATIENT_ID, PATIENT_MOB, date_of_birth,
-                PATIENT_EMAIL, PATIENT_CREATED, PATIENT_AGE, PATIENT_MODIFIED, blood_group,prescribe,certificate,invoice;
+                PATIENT_EMAIL, PATIENT_CREATED, PATIENT_AGE, PATIENT_MODIFIED, blood_group, prescribe, certificate, invoice,book_appointment;
         // FrameLayout fl;
         ProgressBar pb;
         ImageView patient_prescribe;
@@ -428,7 +935,7 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
             patient_prescribe = view.findViewById(R.id.patient_prescribe);
             prescribe = view.findViewById(R.id.prescribe);
             certificate = view.findViewById(R.id.certificate);
-
+            book_appointment = view.findViewById(R.id.book_appointment);
 
             patient_prescribe.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -443,7 +950,6 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
                     ll_main_patient_view.performClick();
                 }
             });
-
 
 
             ll_main_patient_view.setOnClickListener(new View.OnClickListener() {
@@ -461,21 +967,23 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
 
                     dialog_data = new Dialog(mContext);
                     dialog_data.setCancelable(false);
-                   dialog_data.setOnKeyListener(new DialogInterface.OnKeyListener() {
+                    dialog_data.setOnKeyListener(new DialogInterface.OnKeyListener() {
 
-                       @Override
-                       public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                        @Override
+                        public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
 
-                           if(keyCode == KeyEvent.KEYCODE_BACK){
+                            if (keyCode == KeyEvent.KEYCODE_BACK) {
 
-                               dialog_data.dismiss();
+                                dialog_data.dismiss();
 
-                               return true;
-                           }
-                           return false;
+                                hideKeyboard(fragmentActivity);
 
-                       }
-                   });
+                                return true;
+                            }
+                            return false;
+
+                        }
+                    });
 
                     dialog_data.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
@@ -499,7 +1007,7 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
 
                     progress_bar = dialog_data.findViewById(R.id.progress_bar);
 
-                    final ImageView cancel_action=dialog_data.findViewById(R.id.cancel_action);
+                    final ImageView cancel_action = dialog_data.findViewById(R.id.cancel_action);
                     cancel_action.setVisibility(View.GONE);
 
                     final EditText et_age = dialog_data.findViewById(R.id.et_age);
@@ -520,11 +1028,16 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
                     rb_other = dialog_data.findViewById(R.id.rb_other);
                     final TextView date_f_birth = dialog_data.findViewById(R.id.date_of_birth);
 
+                    final PatientsItem patientsItem = mFilteredList.get(getAdapterPosition());
+
+                    date_f_birth.setText(patientsItem.getpDob());
+
                     cancel_action.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
 
                             date_f_birth.setText("");
+
 
                         }
                     });
@@ -532,7 +1045,6 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
                     date_f_birth.addTextChangedListener(new TextWatcher() {
                         @Override
                         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
 
 
                         }
@@ -544,14 +1056,16 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
 
                                 cancel_action.setVisibility(View.VISIBLE);
                                 rb_month.setEnabled(false);
+                                rb_year.setEnabled(false);
                                 et_age.setEnabled(false);
 
                             } else {
 
-//                                cancel_action.setVisibility(View.GONE);
-//                                rb_month.setEnabled(true);
-//                                et_age.setEnabled(true);
-//                                et_age.setText("");
+                                cancel_action.setVisibility(View.GONE);
+                                rb_month.setEnabled(true);
+                                et_age.setEnabled(true);
+                                rb_year.setEnabled(true);
+                                et_age.setEnabled(true);
 
                             }
 
@@ -571,34 +1085,60 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
                             DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
                                 @Override
                                 public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                    // TODO Auto-generated method stub
+
                                     myCalendar.set(Calendar.YEAR, year);
                                     myCalendar.set(Calendar.MONTH, monthOfYear);
                                     myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                                    DateTime dateTime = new DateTime();
+
+                                    if (dateTime.getYear() - year > 1) {
+
+                                        isConstant = true;
+                                        String age = getAge(year, monthOfYear, dayOfMonth);
+
+                                        if (Integer.parseInt(age) < 0) {
+                                            age = "0";
+                                        }
+
+                                        et_age.setText(age);
+                                        et_age.setSelection(et_age.getText().toString().length());
+                                        rb_year.setChecked(true);
+
+                                    }
+                                    if (dateTime.getYear() - year == 1) {
+                                        et_age.setText("1");
+                                        et_age.setSelection(et_age.getText().toString().length());
+                                        rb_year.setChecked(true);
+
+                                    } else {
+
+                                        isConstant = true;
+
+                                        if (dateTime.getMonthOfYear() - (monthOfYear + 1) == 0)
+                                            et_age.setText("1");
+                                        else
+                                            et_age.setText(String.valueOf(dateTime.getMonthOfYear() - (monthOfYear + 1)));
+
+                                        et_age.setSelection(et_age.getText().toString().length());
+                                        rb_month.setChecked(true);
+
+                                    }
 
                                     String myFormat = "dd-MM-yyyy"; // your format
                                     SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
 
                                     date_f_birth.setText(sdf.format(myCalendar.getTime()));
 
-                                    isConstant = true;
-                                    String age = getAge(year, monthOfYear, dayOfMonth);
-
-                                    if (Integer.parseInt(age) < 0) {
-
-                                        age = "0";
-
-                                    }
-
-                                    et_age.setText(age);
-                                    et_age.setSelection(et_age.getText().toString().length());
-                                    rb_year.setChecked(true);
-
                                 }
 
                             };
-                            new DatePickerDialog(mContext, R.style.DialogTheme, date, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)).show();
 
+                            DatePickerDialog datePickerDialog = new DatePickerDialog(mContext, R.style.DialogTheme, date, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH));
+
+                            datePickerDialog.getDatePicker().setMaxDate(new Date(System.currentTimeMillis() - 24 * 60 * 60 * 1000).getTime());
+
+                            datePickerDialog.show();
 
                         }
                     });
@@ -619,6 +1159,9 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
                                         @Override
                                         public void onClick(DialogInterface arg0, int arg1) {
                                             alertDialog.dismiss();
+
+                                            hideKeyboard(fragmentActivity);
+
                                         }
                                     });
                             alertDialog = alertDialogBuilder.create();
@@ -638,6 +1181,9 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
                                         @Override
                                         public void onClick(DialogInterface arg0, int arg1) {
                                             alertDialog.dismiss();
+
+                                            hideKeyboard(fragmentActivity);
+
                                         }
                                     });
                             alertDialog = alertDialogBuilder.create();
@@ -727,8 +1273,6 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
                         }
                     });
 
-                    final PatientsItem patientsItem = mFilteredList.get(getAdapterPosition());
-
                     if (patientsItem.getAge().contains("yr") || patientsItem.getAge().contains("Yr"))
                         rb_year.setChecked(true);
                     else if (patientsItem.getAge().contains("month") || patientsItem.getAge().contains("Month"))
@@ -800,56 +1344,58 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
                                 et_name.setFocusable(true);
                                 et_name.setError("Patient's Full Name");
                             } else {
-                                if (et_age.getText().toString().trim().equalsIgnoreCase("")) {
+                                if (et_age.getText().toString().trim().equalsIgnoreCase("0")) {
                                     et_age.setFocusable(true);
-                                    et_age.setError("Age");
-                                    Toast.makeText(mContext, "Age required", Toast.LENGTH_SHORT).show();
+                                    et_age.setError("Zero Not Allowed");
+                                    Toast.makeText(mContext, "Zero not allowed", Toast.LENGTH_SHORT).show();
 
                                 } else {
-                                    if (et_age.getText().toString().trim().equalsIgnoreCase("0")) {
-                                        et_age.setFocusable(true);
-                                        et_age.setError("Zero Not Allowed");
-                                        Toast.makeText(mContext, "Zero not allowed", Toast.LENGTH_SHORT).show();
+                                    String strEnteredVal = et_age.getText().toString().trim();
+                                    if (!strEnteredVal.equals("")) {
+                                        int num = Integer.parseInt(strEnteredVal);
+                                        if (age_type[0].equals("yr") && num < 151) {
+                                            et_age.setText("" + num);
+
+                                            fl_progress_bar.setVisibility(View.VISIBLE);
+                                            et_name.getText().toString().trim();
+
+                                            editPatients(patientsItem.getPatientId(), et_name.getText().toString().trim(),
+                                                    et_age.getText().toString().trim() + " " + age_type[0], gender_,
+                                                    et_whtsapp.getText().toString().trim(), et_mail.getText().toString().trim(), address.getText().toString().trim(), blood_group.getText().toString().trim(), date_f_birth.getText().toString());
+
+                                            progress_bar.setVisibility(View.VISIBLE);
+
+                                        } else if (age_type[0].equals("month") || age_type[0].equals("months")) {
+                                            et_age.setText("" + num);
+
+                                            fl_progress_bar.setVisibility(View.VISIBLE);
+                                            et_name.getText().toString().trim();
+                                            if (age_type[0].equals("months"))
+                                                if (et_age.getText().toString().trim().equals("1"))
+                                                    age_type[0] = "month";
+
+
+                                            editPatients(patientsItem.getPatientId(), et_name.getText().toString().trim(),
+                                                    et_age.getText().toString().trim() + " " + age_type[0], gender_,
+                                                    et_whtsapp.getText().toString().trim(), et_mail.getText().toString().trim(), address.getText().toString().trim(), blood_group.getText().toString().trim(), date_f_birth.getText().toString());
+
+                                            progress_bar.setVisibility(View.VISIBLE);
+
+                                        } else {
+                                            et_age.setFocusable(true);
+                                            et_age.setError("Age not allowed");
+                                            Toast.makeText(mContext, "Age not allowed", Toast.LENGTH_SHORT).show();
+                                        }
 
                                     } else {
-                                        String strEnteredVal = et_age.getText().toString().trim();
 
-                                        if (!strEnteredVal.equals("")) {
-                                            int num = Integer.parseInt(strEnteredVal);
-                                            if (age_type[0].equals("yr") && num < 151) {
-                                                et_age.setText("" + num);
+                                        fl_progress_bar.setVisibility(View.VISIBLE);
+                                        editPatients(patientsItem.getPatientId(), et_name.getText().toString().trim(),
+                                                et_age.getText().toString().trim(), gender_,
+                                                et_whtsapp.getText().toString().trim(), et_mail.getText().toString().trim(), address.getText().toString().trim(), blood_group.getText().toString().trim(), date_f_birth.getText().toString());
 
-                                                fl_progress_bar.setVisibility(View.VISIBLE);
-                                                et_name.getText().toString().trim();
+                                        progress_bar.setVisibility(View.VISIBLE);
 
-                                                editPatients(patientsItem.getPatientId(), et_name.getText().toString().trim(),
-                                                        et_age.getText().toString().trim() + " " + age_type[0], gender_,
-                                                        et_whtsapp.getText().toString().trim(), et_mail.getText().toString().trim(), address.getText().toString().trim(), blood_group.getText().toString().trim(), date_f_birth.getText().toString());
-
-                                                progress_bar.setVisibility(View.VISIBLE);
-
-                                            } else if (age_type[0].equals("month") || age_type[0].equals("months")) {
-                                                et_age.setText("" + num);
-
-                                                fl_progress_bar.setVisibility(View.VISIBLE);
-                                                et_name.getText().toString().trim();
-                                                if (age_type[0].equals("months"))
-                                                    if (et_age.getText().toString().trim().equals("1"))
-                                                        age_type[0] = "month";
-
-
-                                                editPatients(patientsItem.getPatientId(), et_name.getText().toString().trim(),
-                                                        et_age.getText().toString().trim() + " " + age_type[0], gender_,
-                                                        et_whtsapp.getText().toString().trim(), et_mail.getText().toString().trim(), address.getText().toString().trim(), blood_group.getText().toString().trim(), date_f_birth.getText().toString());
-
-                                                progress_bar.setVisibility(View.VISIBLE);
-
-                                            } else {
-                                                et_age.setFocusable(true);
-                                                et_age.setError("Age not allowed");
-                                                Toast.makeText(mContext, "Age not allowed", Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
                                     }
                                 }
                             }
@@ -860,6 +1406,9 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
                         @Override
                         public void onClick(View v) {
                             dialog_data.dismiss();
+
+                            hideKeyboard(fragmentActivity);
+
                         }
                     });
 
@@ -914,15 +1463,15 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
                 public void onResponse(@NonNull Call<ResponseSuccess> call, @NonNull retrofit2.Response<ResponseSuccess> response) {
                     ResponseSuccess jsonResponse = response.body();
                     fl_progress_bar.setVisibility(View.GONE);
-                    if (jsonResponse!=null && jsonResponse.getSuccess().equalsIgnoreCase("Success")) {
+                    if (jsonResponse != null && jsonResponse.getSuccess().equalsIgnoreCase("Success")) {
 
                         Toast.makeText(mContext, "Delete SuccessFully", Toast.LENGTH_SHORT).show();
 
                         AllGetPatients();
 
-                    } else if(jsonResponse!=null) {
+                    } else if (jsonResponse != null) {
 
-                        Toast.makeText(mContext, ""+jsonResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, "" + jsonResponse.getMessage(), Toast.LENGTH_SHORT).show();
 
                     }
                 }
@@ -940,8 +1489,25 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
         }
     }
 
+    private String convertFormat(String date) {
+
+        DateFormat inputFormat = new SimpleDateFormat("dd-MM-yyyy");
+        DateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date dateInput = null;
+        try {
+            dateInput = inputFormat.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        if (dateInput == null)
+            return "";
+
+        return outputFormat.format(dateInput);
+    }
+
     public void editPatients(String patient_id, String p_name, String age, String gender,
-                             String p_mobile, String p_email,String address,String bloud_group,String dob) {
+                             String p_mobile, String p_email, String address, String bloud_group, String dob) {
 
         if (Utils.isConnectingToInternet(mContext)) {
 
@@ -949,27 +1515,30 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
 
             final WebServices request = retrofit.create(WebServices.class);
 
-            Call<ResponseSuccess> call = request.PatientUpdateFromApi( patient_id, p_name,  age,  gender, p_mobile,  p_email,address,bloud_group,dob);
+            Call<ResponseSuccess> call = request.PatientUpdateFromApi(patient_id, p_name, age, gender, p_mobile, p_email, address, bloud_group, convertFormat(dob));
 
             call.enqueue(new Callback<ResponseSuccess>() {
                 @Override
                 public void onResponse(@NonNull Call<ResponseSuccess> call, @NonNull retrofit2.Response<ResponseSuccess> response) {
 
-                    if(progress_bar!=null && dialog_data!=null) {
+                    if (progress_bar != null && dialog_data != null) {
                         progress_bar.setVisibility(View.GONE);
                         dialog_data.dismiss();
+
+                        hideKeyboard(fragmentActivity);
+
                     }
 
                     ResponseSuccess jsonResponse = response.body();
-                    if (jsonResponse!=null && jsonResponse.getSuccess().equalsIgnoreCase("Success")) {
+                    if (jsonResponse != null && jsonResponse.getSuccess().equalsIgnoreCase("Success")) {
 
                         Toast.makeText(mContext, "Updated Successfully", Toast.LENGTH_SHORT).show();
 
                         AllGetPatients();
 
-                    } else if(jsonResponse!=null) {
+                    } else if (jsonResponse != null) {
 
-                        Toast.makeText(mContext, ""+jsonResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, "" + jsonResponse.getMessage(), Toast.LENGTH_SHORT).show();
 
                     }
                 }
@@ -1019,9 +1588,9 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
                                     CreatePrescription myFragment = new CreatePrescription();
                                     manager.beginTransaction().replace(R.id.homePageContainer, myFragment, "prescription").addToBackStack(null).commit();
 
-                                } catch (IllegalStateException e){
+                                } catch (IllegalStateException e) {
 
-                                    Log.i("TAG", "onSuccess: "+e.getMessage());
+                                    Log.i("TAG", "onSuccess: " + e.getMessage());
 
                                 }
 
@@ -1038,9 +1607,9 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
                                     CreatePrescription myFragment = new CreatePrescription();
                                     manager.beginTransaction().replace(R.id.homePageContainer, myFragment, "prescription").addToBackStack(null).commit();
 
-                                }catch (IllegalStateException e){
+                                } catch (IllegalStateException e) {
 
-                                    Log.i("TAG", "onSuccess: "+e.getMessage());
+                                    Log.i("TAG", "onSuccess: " + e.getMessage());
 
                                 }
                             }
@@ -1129,7 +1698,7 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
         @Override
         public void onSuccess(ResponseSuccess response) {
 
-            if(progress_bar!=null){
+            if (progress_bar != null) {
                 progress_bar.setVisibility(View.GONE);
             }
 
@@ -1140,8 +1709,11 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
 
                     Toast.makeText(fragmentActivity, "Updated successfully", Toast.LENGTH_SHORT).show();
 
-                    if(dialog_data!=null) {
+                    if (dialog_data != null) {
                         dialog_data.dismiss();
+
+                        hideKeyboard(fragmentActivity);
+
                     }
 
                     apiViewHolder.getPatients(manager.getPreferences(mContext, "doctor_id"))
@@ -1200,14 +1772,14 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
                             splashActivity.setPatients(response.getPatients());
 
                             FragmentManager manager = ((AppCompatActivity) mContext).getSupportFragmentManager();
-                            manager.popBackStack();
-
                             CreatePrescription myFragment = new CreatePrescription();
                             manager.beginTransaction().replace(R.id.homePageContainer, myFragment, "prescription").addToBackStack(null).commit();
 
-                        } catch (IllegalStateException e){
+                            manager.popBackStack();
 
-                            Log.i("TAG", "onSuccess: "+e.getMessage());
+                        } catch (IllegalStateException e) {
+
+                            Log.i("TAG", "onSuccess: " + e.getMessage());
 
                         }
 
@@ -1224,9 +1796,9 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
                             CreatePrescription myFragment = new CreatePrescription();
                             manager.beginTransaction().replace(R.id.homePageContainer, myFragment, "prescription").addToBackStack(null).commit();
 
-                        }catch (IllegalStateException e){
+                        } catch (IllegalStateException e) {
 
-                            Log.i("TAG", "onSuccess: "+e.getMessage());
+                            Log.i("TAG", "onSuccess: " + e.getMessage());
 
                         }
                     }
@@ -1431,7 +2003,6 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
 
         adLoader.loadAd(new AdRequest.Builder().build());
     }*/
-
 
 }
 

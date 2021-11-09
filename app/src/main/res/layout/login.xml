@@ -263,19 +263,22 @@
                         android:background="@drawable/faint_white_round"/>
 
                     <com.chaos.view.PinView
-                        android:fontFamily="@font/poppins"
                         android:id="@+id/login_editTextOTP"
+                        style="@style/PinWidget.PinView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/PinWidget.PinView"
+                        android:layout_below="@+id/submit_resend"
+                        android:layout_centerHorizontal="true"
                         android:layout_marginStart="@dimen/margin_16"
                         android:layout_marginTop="@dimen/margin_15"
                         android:layout_marginEnd="@dimen/margin_16"
-                        android:ems="10"
-                        android:gravity="center"
-                        android:inputType="phone"
                         android:cursorVisible="true"
+                        android:ems="10"
+                        android:fontFamily="@font/poppins"
+                        android:gravity="center"
                         android:hint=""
+                        android:inputType="phone"
+                        android:textColor="@android:color/black"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         app:cursorColor="@color/colorDarkBlue"
@@ -288,10 +291,7 @@
                         app:itemWidth="@dimen/margin_30"
                         app:lineColor="@color/colorRed"
                         app:lineWidth="@dimen/margin_2"
-                        app:viewType="rectangle"
-                        android:textColor="@android:color/black"
-                        android:layout_below="@+id/submit_resend"
-                        android:layout_centerHorizontal="true"/>
+                        app:viewType="rectangle" />
 
                     <TextView
                         android:layout_centerHorizontal="true"

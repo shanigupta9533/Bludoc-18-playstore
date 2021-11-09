@@ -75,7 +75,19 @@ public class MySubscriptionAdapter extends RecyclerView.Adapter<MySubscriptionAd
     AppCompatActivity activity;
     LinearLayout ll_promo;
     boolean flag_renew = false;
+    private onClickListener onClickListener;
 
+    public interface onClickListener{
+
+        void onClick(String doctorSubscriptionId);
+
+    }
+
+    public void setOnClickListener(onClickListener onclickListener){
+
+        this.onClickListener = onclickListener;
+
+    }
 
     public MySubscriptionAdapter(ArrayList<com.likesby.bludoc.ModelLayer.Entities.MySubscription> arrayList, Context context, ApiViewHolder mapiViewHolder, CompositeDisposable bag, AppCompatActivity activity) {
         mContext = context;
@@ -90,7 +102,7 @@ public class MySubscriptionAdapter extends RecyclerView.Adapter<MySubscriptionAd
     @SuppressLint("NewApi")
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int position) {
         View view = LayoutInflater.from(
                 viewGroup.getContext()).inflate(R.layout.my_subscriptions,
                 viewGroup, false);
@@ -99,39 +111,56 @@ public class MySubscriptionAdapter extends RecyclerView.Adapter<MySubscriptionAd
 
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
+    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, @SuppressLint("RecyclerView") int position) {
 
-        viewHolder.packagename.setText(mFilteredList.get(i).getSubscriptionName());
+        viewHolder.packagename.setText(mFilteredList.get(position).getSubscriptionName());
 
-        if(TextUtils.isEmpty(mFilteredList.get(i).getHospitalCode())) {
+        if(TextUtils.isEmpty(mFilteredList.get(position).getHospitalCode())) {
 
             viewHolder.id_notify.setVisibility(View.GONE);
-            viewHolder.validity.setText("Validity : " + mFilteredList.get(i).getDays() + " Days");
-            viewHolder.dateofpurchase.setText("Purchase Date : " + mFilteredList.get(i).getDate());
-            viewHolder.dateofstart.setText("Start Date : " + mFilteredList.get(i).getStart());
-            viewHolder.dateofend.setText("End Date : " + mFilteredList.get(i).getEnd());
-            viewHolder.txnid.setText("Transaction Id : " + mFilteredList.get(i).getTransactionId());
-            viewHolder.amount.setText("Amount Paid : " + mContext.getResources().getString(R.string.Rs) + " " + mFilteredList.get(i).getAmount() + " /  USD " + String.format("%.2f", Float.parseFloat(mFilteredList.get(i).getAmount()) / 60));
+            viewHolder.validity.setText("Validity : " + mFilteredList.get(position).getDays() + " Days");
+            viewHolder.dateofpurchase.setText("Purchase Date : " + mFilteredList.get(position).getDate());
+            viewHolder.dateofstart.setText("Start Date : " + mFilteredList.get(position).getStart());
+            viewHolder.dateofend.setText("End Date : " + mFilteredList.get(position).getEnd());
+            viewHolder.txnid.setText("Transaction Id : " + mFilteredList.get(position).getTransactionId());
+            viewHolder.amount.setText("Amount Paid : " + mContext.getResources().getString(R.string.Rs) + " " + mFilteredList.get(position).getAmount() + " /  USD " + String.format("%.2f", Float.parseFloat(mFilteredList.get(position).getAmount()) / 60));
+
+            if(TextUtils.isEmpty(mFilteredList.get(position).getTransactionId())){
+
+                viewHolder.txnid.setVisibility(View.GONE);
+                viewHolder.amount.setVisibility(View.GONE);
+                viewHolder.dateofpurchase.setVisibility(View.GONE);
+                viewHolder.copy.setVisibility(View.GONE);
+
+            }
 
         } else {
 
             viewHolder.itemView.setVisibility(View.GONE);
 
         }
-            //        } else {
-//            viewHolder.id_notify.setVisibility(View.VISIBLE);
-//            viewHolder.id_notify.setText("Your subscription is purchased by ‘"+mFilteredList.get(i).getName()+"’ valid till : "+mFilteredList.get(i).getDate());
-//        }
+
 
         viewHolder.copy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("Text Copied", mFilteredList.get(i).getTransactionId());
+                ClipData clip = ClipData.newPlainText("Text Copied", mFilteredList.get(position).getTransactionId());
                 clipboard.setPrimaryClip(clip);
-                Toast.makeText(mContext, "Text Copied "+mFilteredList.get(i).getTransactionId(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "Text Copied "+mFilteredList.get(position).getTransactionId(), Toast.LENGTH_SHORT).show();
             }
         });
+
+        viewHolder.cancel_subscriptions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(onClickListener!=null)
+                    onClickListener.onClick(mFilteredList.get(position).getDoctorSubscriptionId());
+
+            }
+        });
+
     }
 
 
@@ -148,7 +177,7 @@ public class MySubscriptionAdapter extends RecyclerView.Adapter<MySubscriptionAd
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView amount,packagename, validity,dateofpurchase, txnid,dateofstart,dateofend,id_notify;
+        private TextView amount,packagename, validity,dateofpurchase, txnid,dateofstart,dateofend,id_notify,cancel_subscriptions;
         ImageView copy;
         Button btnSubscribe;
         NestedScrollView ll_subscriptions;
@@ -168,6 +197,7 @@ public class MySubscriptionAdapter extends RecyclerView.Adapter<MySubscriptionAd
             dateofstart= view.findViewById(R.id.dateofstart);
             dateofend= view.findViewById(R.id.dateofend);
             id_notify= view.findViewById(R.id.id_notify);
+            cancel_subscriptions= view.findViewById(R.id.cancel_subscriptions);
         }
     }
 }

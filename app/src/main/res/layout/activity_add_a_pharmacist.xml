@@ -7,7 +7,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:orientation="vertical"
-        android:background="#fafafa"
         android:layout_height="match_parent"
         tools:context=".AddAPharmacistActivity">
 
@@ -65,6 +64,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:orientation="vertical"
+            android:background="@color/white"
             android:layout_below="@+id/toolbar"
             android:layout_height="match_parent">
 
@@ -83,7 +83,7 @@
                     android:layout_marginStart="@dimen/margin_30"
                     android:layout_marginTop="@dimen/margin_10"
                     android:gravity="center"
-                    android:text="Select referral category"
+                    android:text="Select referral category *"
                     android:textColor="@color/colorDarkGrey"
                     android:textSize="13dp"
                     android:fontFamily="@font/poppins"
@@ -180,19 +180,18 @@
                     android:layout_height="wrap_content">
 
                     <TextView
+                        android:id="@+id/email_title_info"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/margin_30"
-                        android:layout_marginRight="@dimen/margin_30"
                         android:layout_marginStart="@dimen/margin_30"
-                        android:id="@+id/email_title_info"
+                        android:layout_marginLeft="@dimen/margin_30"
                         android:layout_marginTop="@dimen/margin_10"
-                        android:gravity="center"
-                        android:text="Email id"
-                        android:textColor="@color/colorDarkGrey"
-                        android:textSize="13dp"
+                        android:layout_marginRight="@dimen/margin_30"
                         android:fontFamily="@font/poppins"
-                        />
+                        android:gravity="center"
+                        android:text="Email id * "
+                        android:textColor="@color/colorDarkGrey"
+                        android:textSize="13dp" />
 
                     <ImageView
                         android:layout_width="@dimen/margin_20"
@@ -251,7 +250,7 @@
                 android:layout_marginStart="@dimen/margin_30"
                 android:layout_marginTop="@dimen/margin_10"
                 android:gravity="center"
-                android:text="Contact number"
+                android:text="Contact number  "
                 android:textColor="@color/colorDarkGrey"
                 android:textSize="13dp"
                 android:fontFamily="@font/poppins"

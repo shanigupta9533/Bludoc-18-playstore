@@ -23,6 +23,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
@@ -214,8 +215,8 @@ public class RegisterDetails extends AppCompatActivity {
 
         adRequest = new AdRequest.Builder()/*.addTestDevice("31B09DFC1F78AF28F2AFB1506F51B0BF")*/.build();
         mInterstitialAd = new InterstitialAd(mContext);
-        //  mInterstitialAd.setAdUnitId("ca-app-pub-9225891557304181/3105393849");//Live
-        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");//Test
+          mInterstitialAd.setAdUnitId("ca-app-pub-9225891557304181/3105393849");//Live
+        //mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");//Test
         mInterstitialAd.loadAd(adRequest);
 
 
@@ -525,6 +526,7 @@ public class RegisterDetails extends AppCompatActivity {
 
                     RequestBody fbody = RequestBody.create(MediaType.parse("multipart/form-data"), imageUp);
                     multipartBody = MultipartBody.Part.createFormData("image", imageUp.getName(), fbody);
+
                     imageSelectedFlag = true;
                     outFile.flush();
                     outFile.close();
@@ -2182,34 +2184,21 @@ public class RegisterDetails extends AppCompatActivity {
                     if (et_registration_no.getText().toString().trim().equalsIgnoreCase("")) {
                         et_registration_no.setFocusable(true);
                         et_registration_no.setError(getResources().getString(R.string.registration_number));
+                    } else if(TextUtils.isEmpty(et_add_qualification.getText().toString())) {
+
+                        et_add_qualification.requestFocus();
+                        et_add_qualification.setError("Qualification can't be blank.");
+
                     } else {
-                        if (ug_spinner.getSelectedItemPosition() == 0) {
-                            ug_spinner.setFocusable(true);
-                            Toast.makeText(mContext, "Please select undergraduate qualification", Toast.LENGTH_SHORT).show();
-                        } else {
 
-                            if (!ug_id__.equals("")) {
-                                progressBar_main.setVisibility(View.VISIBLE);
-                                apiViewHolder.Register2(manager.getPreferences(mContext, "doctor_id"),
-                                        et_registration_no.getText().toString().trim(), et_designation.getText().toString().trim(), ug_id__, pg_id,
-                                        et_add_qualification.getText().toString().trim())
-                                        .subscribeOn(Schedulers.io())
-                                        .observeOn(AndroidSchedulers.mainThread())
-                                        .subscribe(responseRegister2);
-                            } else {
-                                Toast.makeText(mContext, "Please select undergraduate qualification", Toast.LENGTH_SHORT).show();
+                        progressBar_main.setVisibility(View.VISIBLE);
+                        apiViewHolder.Register2(manager.getPreferences(mContext, "doctor_id"),
+                                et_registration_no.getText().toString().trim(), et_designation.getText().toString().trim(), ug_id__, pg_id,
+                                et_add_qualification.getText().toString().trim())
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(responseRegister2);
 
-                            }
-
-//                            progressBar_main.setVisibility(View.VISIBLE);
-//                            apiViewHolder.Register2(manager.getPreferences(mContext, "doctor_id"),
-//                                    et_registration_no.getText().toString().trim(), et_designation.getText().toString().trim(), ug_id, pg_id,
-//                                    et_add_qualification.getText().toString().trim())
-//                                    .subscribeOn(Schedulers.io())
-//                                    .observeOn(AndroidSchedulers.mainThread())
-//                                    .subscribe(responseRegister2);
-
-                        }
                     }
                 } else {
                     Toast.makeText(mContext, "No Internet Connection", Toast.LENGTH_SHORT).show();

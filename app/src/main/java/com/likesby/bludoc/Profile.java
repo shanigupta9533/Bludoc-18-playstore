@@ -37,7 +37,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class Profile extends AppCompatActivity {
-    TextView tab_full_name,   tab_mob,   tab_mail,   tab_designation,   tab_registration,  tab_UG,  tab_PG,  tab_time,
+    TextView tab_full_name,   tab_mob,   tab_mail,   tab_designation,   tab_registration,  tab_time,
             tab_alt_mail,   tab_days,   tab_close,   tab_logo,  tab_sign ,tab_Add , tab_alt_mob ;
     Button button_edit_profile,btn_delete;
     Context mContext;
@@ -67,8 +67,6 @@ public class Profile extends AppCompatActivity {
         tab_mail = findViewById(R.id.tab_mail);
         tab_designation = findViewById(R.id.tab_designation);
         tab_registration = findViewById(R.id.tab_registration);
-        tab_UG = findViewById(R.id.tab_UG);
-        tab_PG = findViewById(R.id.tab_PG);
         tab_time = findViewById(R.id.tab_time);
         tab_alt_mail = findViewById(R.id.tab_alt_mail);
         tab_days = findViewById(R.id.tab_days);
@@ -143,12 +141,6 @@ public class Profile extends AppCompatActivity {
 
         if(manager.contains(mContext,"registration_no"))
             tab_registration.setText(manager.getPreferences(mContext,"registration_no"));
-
-        if(manager.contains(mContext,"ug_name"))
-            tab_UG.setText(manager.getPreferences(mContext,"ug_name"));
-
-        if(manager.contains(mContext,"pg_name"))
-            tab_PG.setText(manager.getPreferences(mContext,"pg_name"));
 
         if(manager.contains(mContext,"visiting_hr_from")) {
             String[] visiting_hr_from_details = manager.getPreferences(mContext, "visiting_hr_from").split(Pattern.quote("|"));

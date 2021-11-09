@@ -2,9 +2,11 @@ package com.likesby.bludoc;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -12,14 +14,19 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.likesby.bludoc.Adapter.MySubscriptionAdapter;
+import com.likesby.bludoc.ModelLayer.Entities.ResponseSuccess;
 import com.likesby.bludoc.ModelLayer.Entities.Subscription;
+import com.likesby.bludoc.ModelLayer.NetworkLayer.EndpointInterfaces.WebServices;
+import com.likesby.bludoc.ModelLayer.NetworkLayer.Helpers.RetrofitClient;
 import com.likesby.bludoc.ModelLayer.NewEntities.ResponseProfileDetails;
 import com.likesby.bludoc.ModelLayer.NewEntities.SubcriptionsItem;
 import com.likesby.bludoc.SessionManager.SessionManager;
@@ -28,7 +35,9 @@ import com.likesby.bludoc.db.MyDB;
 import com.likesby.bludoc.utils.DateUtils;
 import com.likesby.bludoc.utils.Utils;
 import com.likesby.bludoc.viewModels.ApiViewHolder;
+import com.likesby.bludoc.viewModels.ResultOfApi;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -42,6 +51,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Retrofit;
 
 public class MySubscription extends AppCompatActivity {
     private static final String TAG = "SubPackages___";
@@ -49,7 +61,6 @@ public class MySubscription extends AppCompatActivity {
     Context mContext;
     CompositeDisposable mBag = new CompositeDisposable();
     ArrayList<com.likesby.bludoc.ModelLayer.Entities.MySubscription> SubscriptionsArrayList;
-
     private RadioButton rb_Family, rb_Business;
     RecyclerView recyclerView;
     MySubscriptionAdapter mySubscriptionAdapter;
@@ -67,9 +78,9 @@ public class MySubscription extends AppCompatActivity {
         mContext = MySubscription.this;
         manager = new SessionManager();
         myDB = new MyDB(mContext);
+
         initViews();
         activity = MySubscription.this;
-
 
         Calendar c2 = Calendar.getInstance();
         System.out.println("Current time => " + c2.getTime());
@@ -92,6 +103,61 @@ public class MySubscription extends AppCompatActivity {
                 onBackPressed();
             }
         });
+
+    }
+
+    private void cancelSubscriptions(String doctorSubscriptionId){
+
+        if (Utils.isConnectingToInternet(this)) {
+
+            fl_subscription.setVisibility(View.VISIBLE);
+            Retrofit retrofit = RetrofitClient.getInstance();
+
+            final WebServices request = retrofit.create(WebServices.class);
+
+            Call<ResponseSuccess> call = request.cancelSubscription(doctorSubscriptionId);
+
+            call.enqueue(new Callback<ResponseSuccess>() {
+                @Override
+                public void onResponse(@NonNull Call<ResponseSuccess> call, @NonNull retrofit2.Response<ResponseSuccess> response) {
+
+                    fl_subscription.setVisibility(View.GONE);
+
+                    if(response.body()!=null && response.isSuccessful()) {
+
+                        ResponseSuccess jsonResponse = response.body();
+                        if (jsonResponse.getSuccess().equalsIgnoreCase("Success") &&
+                                jsonResponse.getMessage().equalsIgnoreCase("Subscription  Cancelled")) {
+
+                            Toast.makeText(MySubscription.this, "Your subscriptions have been cancelled, your auto renewal is also turned off", Toast.LENGTH_SHORT).show();
+
+                        } else {
+                            Toast.makeText(MySubscription.this, jsonResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+
+                    } else {
+
+                        try {
+                            Toast.makeText(MySubscription.this, response.errorBody().string(), Toast.LENGTH_SHORT).show();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<ResponseSuccess> call, @NonNull Throwable t) {
+                    fl_subscription.setVisibility(View.GONE);
+                    Log.e("Error  ***", t.getMessage());
+                    Toast.makeText(MySubscription.this, "Profile Update Error", Toast.LENGTH_SHORT).show();
+
+                }
+            });
+        } else {
+            Toast.makeText(this, "No Internet Connection", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     private void initViews() {
@@ -206,7 +272,7 @@ public class MySubscription extends AppCompatActivity {
                 if (flag_reset_paid) {   //Premium Subscription
                     if (days_left_paid < 1) {
 
-                        tv_msg.setText("Expired!! Upgrade to premium for an ad free experience.");
+                        tv_msg.setText("Expired!! Upgrade to premium to use all features.");
 
                     } else {
                         //  popupFreeSubscription("",false);
@@ -231,7 +297,7 @@ public class MySubscription extends AppCompatActivity {
                 {
                     if (flag_reset_free) {
 
-                        tv_msg.setText("Congratulations!! \n You have been offered " + premium_valid + " days free trial.\nValid Till " + sub_valid + "\nUpgrade to premium for an ad free experience.");
+                        tv_msg.setText("Congratulations!! \n You have been offered " + premium_valid + " days free trial.\nValid Till " + sub_valid + "\nUpgrade to premium to use all features.");
 
                     } else {
 
@@ -300,6 +366,39 @@ public class MySubscription extends AppCompatActivity {
                         mySubscriptionAdapter = new MySubscriptionAdapter(SubscriptionsArrayList, mContext, mLocationViewHolder, mBag, activity);
                         recyclerView.setAdapter(mySubscriptionAdapter);
                         com.likesby.bludoc.ModelLayer.Entities.MySubscription siLatest = new com.likesby.bludoc.ModelLayer.Entities.MySubscription();
+
+                        if(SubscriptionsArrayList != null && SubscriptionsArrayList.size() >0){
+                            if(!("").equalsIgnoreCase(SubscriptionsArrayList.get(0).getNote())) {
+                                tv_msg.setVisibility(View.VISIBLE);
+                                tv_msg.setText(SubscriptionsArrayList.get(0).getNote());
+                            }
+                        }
+
+                        mySubscriptionAdapter.setOnClickListener(new MySubscriptionAdapter.onClickListener() {
+                            @Override
+                            public void onClick(String doctorSubscriptionId) {
+
+                                AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(MySubscription.this, R.style.AlertDialog));
+                                builder.setMessage("Do you wish to cancel the subscription?")
+                                        .setCancelable(false)
+                                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+
+                                                cancelSubscriptions(doctorSubscriptionId);
+
+                                            }
+                                        })
+                                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.cancel();
+                                            }
+                                        });
+                                AlertDialog alert = builder.create();
+                                alert.show();
+
+
+                            }
+                        });
 
                         if (SubscriptionsArrayList.size() != 0) {
                             for (com.likesby.bludoc.ModelLayer.Entities.MySubscription si : SubscriptionsArrayList) {

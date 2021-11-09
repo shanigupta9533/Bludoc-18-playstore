@@ -382,7 +382,7 @@ public class GeneratePresNewCopy extends Fragment {
         bottomSheetItem.setMenuImage("whatsapp");
         bottomSheetItemArrayList.add(bottomSheetItem);
 
-        mAdapter = new BottomSheetAdapter(mContext, bottomSheetItemArrayList, fl_progress_bar, null, null);
+        mAdapter = new BottomSheetAdapter(mContext, bottomSheetItemArrayList, fl_progress_bar, null, null, prescriptionItem);
         recyclerView.setAdapter(mAdapter);
         ImageView iv_close = dialog_dataShareMenu.findViewById(R.id.iv_close);
         iv_close.setOnClickListener(new View.OnClickListener() {
@@ -584,7 +584,7 @@ public class GeneratePresNewCopy extends Fragment {
         bottomSheetItem.setMenuName("WhatsApp");
         bottomSheetItem.setMenuImage("whatsapp");
         bottomSheetItemArrayList.add(bottomSheetItem);
-        mAdapter = new BottomSheetAdapter(mContext, bottomSheetItemArrayList, fl_progress_bar, null, null);
+        mAdapter = new BottomSheetAdapter(mContext, bottomSheetItemArrayList, fl_progress_bar, null, null, prescriptionItem);
         recyclerView.setAdapter(mAdapter);
 
        /* behavior = BottomSheetBehavior.from(bottomSheet);

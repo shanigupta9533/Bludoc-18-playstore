@@ -277,7 +277,11 @@ public class AddMedicineAdapter extends RecyclerView.Adapter<AddMedicineAdapter.
                     edited_ = getAdapterPosition();
                     MedicinesItem medicinesItem = mFilteredList.get(getAdapterPosition());
                     et_no_of_days.setText(medicinesItem.getNoOfDays());
-                    medicineQty.setText(medicinesItem.getQty());
+
+                    if(!TextUtils.isEmpty(medicinesItem.getQty()) && !medicinesItem.getQty().equalsIgnoreCase("0")){
+                        medicineQty.setText(medicinesItem.getQty());
+                    }
+
                     et_additional_comments.setText(medicinesItem.getAdditionaComment());
                     searchBarMaterialMedicine.setText(medicinesItem.getMedicineName());
                     for (int i = 0; i < frequency_list.size(); i++) {

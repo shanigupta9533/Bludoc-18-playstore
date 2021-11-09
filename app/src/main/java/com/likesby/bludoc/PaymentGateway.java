@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -27,8 +28,11 @@ import com.likesby.bludoc.SessionManager.SessionManager;
 import com.likesby.bludoc.constants.ApplicationConstant;
 import com.likesby.bludoc.viewModels.ApiViewHolder;
 import com.razorpay.Checkout;
+import com.razorpay.PaymentData;
 import com.razorpay.PaymentResultListener;
+import com.razorpay.PaymentResultWithDataListener;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DateFormat;
@@ -45,15 +49,15 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class PaymentGateway extends AppCompatActivity implements PaymentResultListener
-{
-    private String amount="",amount2,c_sub_id="";
+public class PaymentGateway extends AppCompatActivity implements PaymentResultWithDataListener {
+    private String amount = "", amount2, c_sub_id = "";
     private static final String TAG = "PaymentGate____";
     ApiViewHolder apiViewHolder;
     CompositeDisposable mBag = new CompositeDisposable();
     Context mContext;
     SessionManager manager;
-    String subscription_id = "",transaction_id="",country="";
+    String subscription_id = "", transaction_id = "", country = "";
+    private String razor_pay_sub_id;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,17 +67,18 @@ public class PaymentGateway extends AppCompatActivity implements PaymentResultLi
         manager = new SessionManager();
         initViewHolder();
         Bundle b = getIntent().getExtras();
+        razor_pay_sub_id = b.getString("razor_pay_sub_id");
+
         assert b != null;
-        if(getIntent().getStringExtra("amount")!=null)
-        {
+        if (getIntent().getStringExtra("amount") != null) {
             amount = b.getString("amount");
             subscription_id = b.getString("subscription_id");
             country = b.getString("country");
             //amount = "100";
             Log.e(TAG, "Amount >> " + amount);
 
-            int amt = Integer.parseInt(amount+"00");
-            startPayment( String.valueOf(amt));
+            int amt = Integer.parseInt(amount + "00");
+            startPayment(String.valueOf(amt));
 
             // Toast.makeText(mContext, amount, Toast.LENGTH_SHORT).show();
         }
@@ -108,16 +113,14 @@ public class PaymentGateway extends AppCompatActivity implements PaymentResultLi
     }
 
 
-
-
     public void startPayment(String amount_) {
         Log.e(TAG, "Amount >> " + amount);
         /**
          * Instantiate Checkout
          */
         Checkout checkout = new Checkout();
-         checkout.setKeyID("rzp_live_s1wGWPuHYZw3cs");
-    //    checkout.setKeyID("rzp_test_xIkIyLTGaggPI2");
+         checkout.setKeyID("rzp_test_lu8YpD3PjwGbvn");
+//        checkout.setKeyID("rzp_live_HENDzm8NdfptPX");
 
         /**
          * Set your logo here
@@ -147,30 +150,32 @@ public class PaymentGateway extends AppCompatActivity implements PaymentResultLi
              */
             options.put("description", "Premium Subscription");
             options.put("image", "https://s3.amazonaws.com/rzp-mobile/images/rzp.png");
-            //options.put("order_id", id_);//comment for test credentials ****** IMP
+
+//            options.put("order_id", "#12344");//comment for test credentials ****** IMP
 
             JSONObject preFill = new JSONObject();
 
 
-            if(manager.contains(mContext,"mobile")) {
+            if (manager.contains(mContext, "mobile")) {
                 preFill.put("contact", manager.getPreferences(mContext, "mobile"));
             }
-            if(!("").equalsIgnoreCase(country)) {
+            if (!("").equalsIgnoreCase(country)) {
                 if (country.equalsIgnoreCase("India")) {
                     options.put("currency", "INR");
                     options.put("amount", amount_);
                 } else if (country.equalsIgnoreCase("OOI")) {
                     options.put("currency", "USD");
-                    options.put("amount", Float.parseFloat(String.format("%.0f",(Float.parseFloat(amount_) / 60))));
+                    options.put("amount", Float.parseFloat(String.format("%.0f", (Float.parseFloat(amount_) / 60))));
                 }
-            }else {
+            } else {
                 options.put("currency", "USD");
-                options.put("amount", Float.parseFloat(String.format("%.0f",(Float.parseFloat(amount_) / 60))));
+                options.put("amount", Float.parseFloat(String.format("%.0f", (Float.parseFloat(amount_) / 60))));
             }
 
 
-            if(manager.contains(mContext,"email"))
-                preFill.put("email", manager.getPreferences(mContext,"email"));
+            if (manager.contains(mContext, "email"))
+                preFill.put("email", manager.getPreferences(mContext, "email"));
+
             options.put("prefill", preFill);
             /**
              * Amount is always passed in currency subunits
@@ -178,42 +183,16 @@ public class PaymentGateway extends AppCompatActivity implements PaymentResultLi
              */
 
 
-
+//            if (!TextUtils.isEmpty(razor_pay_sub_id)) {
+//                options.put("subscription_id", razor_pay_sub_id);
+//                options.put("recurring", true);
+//            }
 
             checkout.open(activity, options);
-        } catch(Exception e) {
+        } catch (Exception e) {
             Log.e(TAG, "Error in starting Razorpay Checkout", e);
         }
     }
-
-    @Override
-    public void onPaymentSuccess(String s) {
-        Log.e(TAG,"onPaymentSuccess = "+s);
-        transaction_id = s;
-
-        final int min = 2001;
-        final int max = 8999;
-        final int random = new Random().nextInt((max - min) + 1) + min;
-
-        apiViewHolder.AddSubscription(manager.getPreferences(mContext, "doctor_id"),subscription_id,
-                "Success",transaction_id,amount)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(responseAddSubscription);
-
-        Toast.makeText(mContext, "Payment Success", Toast.LENGTH_SHORT).show();
-
-
-    }
-
-    @Override
-    public void onPaymentError(int i, String s) {
-        Log.e(TAG,"onPaymentError = "+s);
-        Log.e(TAG,"onPaymentError i = "+i);
-        Toast.makeText(mContext, "Payment Failure", Toast.LENGTH_LONG).show();
-        finish();
-    }
-
 
     public void ProfileDetails() {
         apiViewHolder.getProfileDetails(manager.getPreferences(mContext, "doctor_id"))
@@ -239,30 +218,30 @@ public class PaymentGateway extends AppCompatActivity implements PaymentResultLi
                 if (response.getMessage() == null) {
                     // ProfileDetails();
                 } else if (response.getMessage().equals("Profile Details")) {
-                    manager.setPreferences(mContext,"doctor_id",response.getDoctorId());
-                    manager.setPreferences(mContext,"name",response.getName());
-                    manager.setPreferences(mContext,"email",response.getEmail());
-                    if(!(response.getMobile().equalsIgnoreCase("")))
-                        manager.setPreferences(mContext,"mobile",response.getMobile());
-                    manager.setPreferences(mContext,"registration_no",response.getRegistrationNo());
-                    manager.setPreferences(mContext,"speciality_id",response.getSpecialityId());
-                    manager.setPreferences(mContext,"ug_id",response.getUgId());
-                    manager.setPreferences(mContext,"pg_id",response.getPgId());
-                    manager.setPreferences(mContext,"designation_id",response.getDesignationName());
-                    manager.setPreferences(mContext,"addtional_qualification",response.getAddtionalQualification());
-                    manager.setPreferences(mContext,"mobile_letter_head",response.getMobileLetterHead());
-                    manager.setPreferences(mContext,"email_letter_head",response.getEmailLetterHead());
-                    manager.setPreferences(mContext,"working_days",response.getWorkingDays());
-                    manager.setPreferences(mContext,"visiting_hr_from",response.getVisitingHrFrom());
-                    manager.setPreferences(mContext,"visiting_hr_to",response.getVisitingHrTo());
-                    manager.setPreferences(mContext,"close_day",response.getCloseDay());
-                    manager.setPreferences(mContext,"speciality_name",response.getSpecialityName());
-                    manager.setPreferences(mContext,"ug_name",response.getUgName());
-                    manager.setPreferences(mContext,"pg_name",response.getPgName());
-                    manager.setPreferences(mContext,"designation_name",response.getDesignationName());
-                    manager.setPreferences(mContext,"signature",response.getSignature());
-                    manager.setPreferences(mContext,"logo",response.getLogo());
-                    manager.setPreferences(mContext,"image",response.getImage());
+                    manager.setPreferences(mContext, "doctor_id", response.getDoctorId());
+                    manager.setPreferences(mContext, "name", response.getName());
+                    manager.setPreferences(mContext, "email", response.getEmail());
+                    if (!(response.getMobile().equalsIgnoreCase("")))
+                        manager.setPreferences(mContext, "mobile", response.getMobile());
+                    manager.setPreferences(mContext, "registration_no", response.getRegistrationNo());
+                    manager.setPreferences(mContext, "speciality_id", response.getSpecialityId());
+                    manager.setPreferences(mContext, "ug_id", response.getUgId());
+                    manager.setPreferences(mContext, "pg_id", response.getPgId());
+                    manager.setPreferences(mContext, "designation_id", response.getDesignationName());
+                    manager.setPreferences(mContext, "addtional_qualification", response.getAddtionalQualification());
+                    manager.setPreferences(mContext, "mobile_letter_head", response.getMobileLetterHead());
+                    manager.setPreferences(mContext, "email_letter_head", response.getEmailLetterHead());
+                    manager.setPreferences(mContext, "working_days", response.getWorkingDays());
+                    manager.setPreferences(mContext, "visiting_hr_from", response.getVisitingHrFrom());
+                    manager.setPreferences(mContext, "visiting_hr_to", response.getVisitingHrTo());
+                    manager.setPreferences(mContext, "close_day", response.getCloseDay());
+                    manager.setPreferences(mContext, "speciality_name", response.getSpecialityName());
+                    manager.setPreferences(mContext, "ug_name", response.getUgName());
+                    manager.setPreferences(mContext, "pg_name", response.getPgName());
+                    manager.setPreferences(mContext, "designation_name", response.getDesignationName());
+                    manager.setPreferences(mContext, "signature", response.getSignature());
+                    manager.setPreferences(mContext, "logo", response.getLogo());
+                    manager.setPreferences(mContext, "image", response.getImage());
                     manager.setPreferences(mContext, "clinic_name", response.getClinicName());
                     manager.setPreferences(mContext, "clinic_address", response.getClinicAddress());
                     manager.setObjectProfileDetails(mContext, "profile", response);
@@ -271,23 +250,21 @@ public class PaymentGateway extends AppCompatActivity implements PaymentResultLi
                 }
 
                 finishAffinity();
-                Intent intent  = new Intent(mContext,HomeActivity.class);
+                Intent intent = new Intent(mContext, HomeActivity.class);
                 startActivity(intent);
-            }
-            else
-            {
+            } else {
                 finishAffinity();
-                Intent intent  = new Intent(mContext,HomeActivity.class);
+                Intent intent = new Intent(mContext, HomeActivity.class);
                 startActivity(intent);
                 //   ProfileDetails();
-                Toast.makeText(mContext, ""+response.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "" + response.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
 
         @Override
         public void onError(Throwable e) {
             finishAffinity();
-            Intent intent  = new Intent(mContext,HomeActivity.class);
+            Intent intent = new Intent(mContext, HomeActivity.class);
             startActivity(intent);
             //ProfileDetails();
             Log.e(TAG, "onError: profileDetails >> " + e.toString());
@@ -295,8 +272,6 @@ public class PaymentGateway extends AppCompatActivity implements PaymentResultLi
             Toast.makeText(mContext, ApplicationConstant.ANYTHING_WRONG, Toast.LENGTH_SHORT).show();
         }
     };
-
-
 
 
     SingleObserver<ResponseSubscription> responseAddSubscription = new SingleObserver<ResponseSubscription>() {
@@ -314,35 +289,30 @@ public class PaymentGateway extends AppCompatActivity implements PaymentResultLi
                         Date cDate = new Date();
                         String fDate = new SimpleDateFormat("dd-MM-yyyy").format(cDate);
 
-                        Calendar c2 = Calendar .getInstance();
+                        Calendar c2 = Calendar.getInstance();
                         DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
                         Date c = Calendar.getInstance().getTime();
-                        Date date1 = null,date2=null;
+                        Date date1 = null, date2 = null;
                         try {
                             date1 = dateFormat.parse(fDate);
-                        }
-                        catch (Exception e){
+                        } catch (Exception e) {
 
                         }
                         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
                         sdf.format(new Date());
                         //Toast.makeText(mContext, "Subscription Added Successfully", Toast.LENGTH_SHORT).show();
-                        manager.setPreferences(mContext,"purchased_new","true");
-                        manager.setPreferences(mContext,"purchased_date",""+sdf.toString());
-                        if (response.getEnd_date()!=null)
-                        {
-                            if(response.getEnd_date().equals(""))
+                        manager.setPreferences(mContext, "purchased_new", "true");
+                        manager.setPreferences(mContext, "purchased_date", "" + sdf.toString());
+                        if (response.getEnd_date() != null) {
+                            if (response.getEnd_date().equals(""))
                                 popup("-");
                             else
                                 popup(response.getEnd_date());
-                        }
-                        else {
+                        } else {
                             popup("-");
                         }
 
-                    }
-                    else
-                    {
+                    } else {
                         finish();
                     }
                 } else {
@@ -361,9 +331,8 @@ public class PaymentGateway extends AppCompatActivity implements PaymentResultLi
         }
     };
 
-    private  void popup(String end_date)
-    {
-        final Dialog dialog_data = new Dialog(mContext);
+    private void popup(String end_date) {
+        final Dialog dialog_data = new Dialog(PaymentGateway.this);
         dialog_data.setCancelable(false);
 
         dialog_data.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -384,7 +353,7 @@ public class PaymentGateway extends AppCompatActivity implements PaymentResultLi
         ImageView btn_close = dialog_data.findViewById(R.id.btn_close);
         TextView tv_end_date = dialog_data.findViewById(R.id.tv_end_date);
 
-        tv_end_date.setText("You have successfully upgraded to premium. Your subscription will end on "+end_date);
+        tv_end_date.setText("You have successfully upgraded to premium. Your subscription will end on " + end_date);
 
         btn_continue.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -404,6 +373,38 @@ public class PaymentGateway extends AppCompatActivity implements PaymentResultLi
             }
         });
         dialog_data.show();
+    }
+
+    @Override
+    public void onPaymentSuccess(String s, PaymentData paymentData) {
+
+//        Log.i(TAG, "onPaymentSuccess: "+paymentData.getData().toString());
+
+        Log.e(TAG, "onPaymentSuccess = " + s);
+        transaction_id = s;
+
+        final int min = 2001;
+        final int max = 8999;
+        final int random = new Random().nextInt((max - min) + 1) + min;
+
+        apiViewHolder.AddSubscription(manager.getPreferences(mContext, "doctor_id"), subscription_id,
+                "Success", transaction_id, amount)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(responseAddSubscription);
+
+        Toast.makeText(mContext, "Payment Success", Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void onPaymentError(int i, String s, PaymentData paymentData) {
+
+        Log.e(TAG, "onPaymentError = " + s);
+        Log.e(TAG, "onPaymentError i = " + i);
+        Toast.makeText(mContext, "Payment Failure", Toast.LENGTH_LONG).show();
+        finish();
+
     }
 
 

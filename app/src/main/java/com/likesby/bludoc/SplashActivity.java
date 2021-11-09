@@ -272,7 +272,7 @@ public class SplashActivity extends AppCompatActivity
 
     private  void popup(boolean flagger)
     {
-        final Dialog dialog_data = new Dialog(mContext);
+        final Dialog dialog_data = new Dialog(SplashActivity.this);
         dialog_data.setCancelable(false);
 
         dialog_data.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -328,7 +328,9 @@ public class SplashActivity extends AppCompatActivity
         });
 
 
-        dialog_data.show();
+        if(!isFinishing())
+            dialog_data.show();
+
     }
 
 
@@ -368,6 +370,7 @@ public class SplashActivity extends AppCompatActivity
                             manager.setPreferences(mContext, "close_day", response.getCloseDay());
                             manager.setPreferences(mContext, "speciality_name", response.getSpecialityName());
                             manager.setPreferences(mContext, "ug_name", response.getUgName());
+                            manager.setPreferences(mContext, "created", response.getCreated());
                             manager.setPreferences(mContext, "pg_name", response.getPgName());
                             manager.setPreferences(mContext, "designation_name", response.getDesignationName());
                             manager.setPreferences(mContext, "signature", response.getSignature());
@@ -404,7 +407,7 @@ public class SplashActivity extends AppCompatActivity
 
     private  void popuplogout()
     {
-        final Dialog dialog_data = new Dialog(mContext);
+        final Dialog dialog_data = new Dialog(SplashActivity.this);
         dialog_data.setCancelable(true);
 
         dialog_data.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -445,7 +448,7 @@ public class SplashActivity extends AppCompatActivity
                 finishAffinity();
             }
         });
-        if(dialog_data!=null && !dialog_data.isShowing())
+        if(!isFinishing())
             dialog_data.show();
     }
 

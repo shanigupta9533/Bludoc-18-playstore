@@ -207,10 +207,10 @@ public class BottomShareAdapter extends RecyclerView.Adapter<BottomShareAdapter.
         File root = null;
         if (Build.VERSION_CODES.R > Build.VERSION.SDK_INT) {
             root = new File(Environment.getExternalStorageDirectory().getPath()
-                    + "//MyApp");
+                    + "//My PDF Folder");
         } else {
             root = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getPath()
-                    + "//MyApp");
+                    + "//My PDF Folder");
         }
 
         boolean isFolderCreated = true;
@@ -444,7 +444,7 @@ public class BottomShareAdapter extends RecyclerView.Adapter<BottomShareAdapter.
                                     smsNumber = "91" + smsNumber;
                                 Intent sendIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
                                 sendIntent.setType("application/pdf");
-                                sendIntent.putExtra(Intent.EXTRA_TEXT, "Dear " + p_name + ", " + manager.getPreferences(mContext, "name") + " has sent you an E-prescription / Certificate via BluDoc");
+                                sendIntent.putExtra(Intent.EXTRA_TEXT, "Dear " + p_name + ", " + manager.getPreferences(mContext, "name") + " has sent you an Invoice via BluDoc");
                                 File pdfWithMultipleImage = createPDFWithMultipleImage(files);
                                 sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(pdfWithMultipleImage.getPath()));
                                     /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
@@ -478,7 +478,7 @@ public class BottomShareAdapter extends RecyclerView.Adapter<BottomShareAdapter.
                         Intent intent = new Intent();
                         intent.setAction(Intent.ACTION_SEND);
                         // intent.putExtra(Intent.EXTRA_EMAIL  , new String[]{""+GeneratePres.patient_item.getPEmail()});
-                        intent.putExtra(Intent.EXTRA_TEXT, "Dear " + p_name + ", " + manager.getPreferences(mContext, "name") + " has sent you an E-prescription / Certificate via BluDoc");
+                        intent.putExtra(Intent.EXTRA_TEXT, "Dear " + p_name + ", " + manager.getPreferences(mContext, "name") + " has sent you an Invoice via BluDoc");
                         intent.setType("*/*");
 
                         File pdfWithMultipleImage = createPDFWithMultipleImage(files);
@@ -535,7 +535,8 @@ public class BottomShareAdapter extends RecyclerView.Adapter<BottomShareAdapter.
                     @Override
                     public void onClick(View v) {
 
-                        onClickListener.onClick(getAdapterPosition());
+                        if (onClickListener != null)
+                            onClickListener.onClick(getAdapterPosition());
 
                     }
                 });
@@ -551,8 +552,8 @@ public class BottomShareAdapter extends RecyclerView.Adapter<BottomShareAdapter.
                 emailIntent.setType("application/pdf");
                 emailIntent.setType("message/rfc822");
                 emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"" + p_email});
-                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "E-prescription from " + manager.getPreferences(mContext, "name"));
-                emailIntent.putExtra(Intent.EXTRA_TEXT, "Dear " + p_name + ", " + manager.getPreferences(mContext, "name") + " has sent you an E-prescription / Certificate via BluDoc");
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Invoice " + manager.getPreferences(mContext, "name"));
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "Dear " + p_name + ", " + manager.getPreferences(mContext, "name") + " has sent you an Invoice via BluDoc");
 
                 emailIntent.setPackage("com.google.android.gm");
                 if (URI != null) {
@@ -590,7 +591,7 @@ public class BottomShareAdapter extends RecyclerView.Adapter<BottomShareAdapter.
                         smsNumber = "91" + smsNumber;
                     Intent sendIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
                     sendIntent.setType("application/pdf");
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, "Dear " + p_name + ", " + manager.getPreferences(mContext, "name") + " has sent you an E-prescription / Certificate via BluDoc");
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, "Dear " + p_name + ", " + manager.getPreferences(mContext, "name") + " has sent you an Invoice via BluDoc");
                     File pdfWithMultipleImage = createPDFWithMultipleImage(files);
                     sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(pdfWithMultipleImage.getPath()));
                     /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)

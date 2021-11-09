@@ -26,6 +26,24 @@
 
             />
 
+        <TextView
+            android:fontFamily="@font/whitneymedium"
+            android:id="@+id/heading"
+            android:layout_marginTop="@dimen/margin_10"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginLeft="@dimen/font_8"
+            android:layout_marginStart="@dimen/font_8"
+            android:layout_marginRight="@dimen/font_8"
+            android:layout_marginEnd="@dimen/font_8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="@dimen/margin_4"
+            android:textAllCaps="false"
+            android:text="Recurrent monthly payments for BluDoc premium are only available for India."
+            android:textColor="@color/colorBlueTop"
+            android:textSize="15sp"
+            />
 
         <TextView
             android:fontFamily="@font/poppins"
@@ -46,7 +64,6 @@
             android:textStyle="bold"
             android:typeface="sans"
             />
-
 
         <TextView
             android:id="@+id/tv_no_template1"

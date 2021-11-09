@@ -156,7 +156,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins"
-                            android:text="Full Name -"
+                            android:text="Full Name :"
                             android:textColor="#000"
                             android:textSize="@dimen/font_16"
                             android:textStyle="bold" />
@@ -183,7 +183,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins"
-                            android:text="Registered mobile number -"
+                            android:text="Registered mobile number :"
                             android:textColor="#000"
                             android:textSize="@dimen/font_16"
                             android:textStyle="bold" />
@@ -211,7 +211,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins"
-                            android:text="Registered Mail ID -"
+                            android:text="Registered Mail ID :"
                             android:textColor="#000"
                             android:textSize="@dimen/font_16"
                             android:textStyle="bold" />
@@ -265,7 +265,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Designation/Specialty -"
+                            android:text="Designation/Specialty :"
                             android:textColor="#000"
                             android:textSize="@dimen/font_16"
                             android:textStyle="bold" />
@@ -295,7 +295,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Registration No -"
+                            android:text="Registration No :"
                             android:textColor="#000"
                             android:textSize="@dimen/font_16"
                             android:textStyle="bold" />
@@ -320,57 +320,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Undergraduate Qualification -"
-                            android:textColor="#000"
-                            android:textSize="@dimen/font_16"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/tab_UG"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/margin_5"
-                            android:text=""
-                            android:textColor="#000"
-                            android:textSize="@dimen/font_16" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/margin_3"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Postgraduate Qualification -"
-                            android:textColor="#000"
-                            android:textSize="@dimen/font_16"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/tab_PG"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/margin_5"
-                            android:text=""
-                            android:textColor="#000"
-                            android:textSize="@dimen/font_16" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/margin_3"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Additional Qualification -"
+                            android:text="Qualification :"
                             android:textColor="#000"
                             android:textSize="@dimen/font_16"
                             android:textStyle="bold" />
@@ -395,7 +345,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Mobile Number on letter head -"
+                            android:text="Mobile Number on letter head :"
                             android:textColor="#000"
                             android:textSize="@dimen/font_16"
                             android:textStyle="bold" />
@@ -420,7 +370,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Mail ID on letter head -"
+                            android:text="Mail ID on letter head :"
                             android:textColor="#000"
                             android:textSize="@dimen/font_16"
                             android:textStyle="bold" />
@@ -445,7 +395,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Working Days -"
+                            android:text="Working Days :"
                             android:textColor="#000"
                             android:textSize="@dimen/font_16"
                             android:textStyle="bold" />
@@ -470,7 +420,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Visiting hours -"
+                            android:text="Visiting hours :"
                             android:textColor="#000"
                             android:textSize="@dimen/font_16"
                             android:textStyle="bold" />
@@ -496,7 +446,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Closed on -"
+                            android:text="Closed on :"
                             android:textColor="#000"
                             android:textSize="@dimen/font_16"
                             android:textStyle="bold" />
@@ -521,7 +471,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Logo uploaded - "
+                            android:text="Logo uploaded : "
                             android:textColor="#000"
                             android:textSize="@dimen/font_16"
                             android:textStyle="bold" />
@@ -545,7 +495,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Signature uploaded -"
+                            android:text="Signature uploaded :"
                             android:textColor="#000"
                             android:textSize="@dimen/font_16"
                             android:textStyle="bold" />

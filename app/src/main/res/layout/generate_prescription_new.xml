@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-
 
 <androidx.constraintlayout.widget.ConstraintLayout
     android:background="@color/colorWhite"
@@ -98,21 +97,7 @@
 
         </LinearLayout>
 
-    <TextView
-        android:id="@+id/textView_Clinic_name"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_gravity="center"
-        android:layout_weight="1"
-        android:layout_marginTop="@dimen/margin_8"
-        android:background="@color/colorDarkBlue"
 
-        android:gravity="center"
-        android:padding="@dimen/margin_5"
-        android:text="Clinic / Hospital name"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        android:textStyle="bold" />
 
 
 
@@ -134,208 +119,229 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="240dp"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:orientation="vertical"
-                    android:id="@+id/top_doctor_details"
-                    android:layout_height="match_parent">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="@dimen/margin_10"
-                    android:layout_marginRight="@dimen/margin_10"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:weightSum="2">
+                    android:orientation="vertical">
 
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_5"
-                        android:layout_marginTop="@dimen/margin_12"
-                        android:layout_marginBottom="@dimen/margin_12"
-                        app:cardCornerRadius="@dimen/margin_8">
+                    <TextView
+                        android:visibility="visible"
+                        android:id="@+id/textView_Clinic_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:layout_marginTop="@dimen/margin_8"
+                        android:background="@color/colorDarkBlue"
 
-                        <ImageView
-                            android:id="@+id/image_layout"
-                            android:layout_width="80dp"
-                            android:layout_height="80dp"
-                            android:layout_gravity="center_vertical"
-                            android:foregroundGravity="center_vertical"
-                            android:scaleType="centerCrop" />
-
-                    </androidx.cardview.widget.CardView>
+                        android:gravity="center"
+                        android:padding="@dimen/margin_5"
+                        android:text="Clinic / Hospital name"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
 
                     <LinearLayout
+                        android:id="@+id/top_doctor_details"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_10"
-                        android:layout_marginBottom="@dimen/margin_10"
-                        android:layout_weight="2"
-                        android:gravity="right|center_vertical"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:textStyle="bold"
-                            android:id="@+id/textView_DocName"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-
-                            android:text=""
-                            android:layout_marginStart="@dimen/margin_8"
-                            android:textAlignment="viewEnd"
-                            android:textColor="@color/colorheaderDark"
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:textStyle="bold"
-                            android:id="@+id/textView_degree"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/margin_5"
-
-                            android:text=""
-                            android:textAlignment="viewEnd"
-                            android:textColor="@color/colorheaderDark"
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:textStyle="bold"
-                            android:id="@+id/textView_res_num"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/margin_5"
-
-                            android:text=""
-                            android:textAlignment="viewEnd"
-                            android:textColor="@color/colorheaderDark"
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:textStyle="bold"
-                            android:id="@+id/textView_des"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/margin_5"
-
-                            android:text=""
-                            android:textAlignment="viewEnd"
-                            android:textColor="@color/colorheaderDark"
-                            android:textSize="14sp" />
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="@dimen/margin_10"
-                    android:layout_marginLeft="@dimen/margin_10"
-                    android:layout_marginTop="@dimen/margin_2"
-                    android:layout_marginEnd="@dimen/margin_10"
-                    android:layout_marginRight="@dimen/margin_10"
-                    android:layout_marginBottom="@dimen/margin_10"
-                    android:background="@color/colorFaintWhite" />
-
-                <LinearLayout
-                    android:id="@+id/top_header_parent"
-                    android:layout_width="match_parent"
-                    android:orientation="vertical"
-                    android:background="@color/white"
-                    android:layout_height="wrap_content">
-
-
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/margin_10"
-                        android:layout_marginRight="@dimen/margin_10"
+                        android:layout_height="match_parent"
                         android:orientation="vertical">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="@dimen/margin_10"
+                            android:layout_marginRight="@dimen/margin_10"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
 
-                            <TextView
-                                android:textStyle="bold"
-                                android:id="@+id/textView_days"
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/margin_5"
+                                android:layout_marginTop="@dimen/margin_12"
+                                android:layout_marginBottom="@dimen/margin_12"
+                                app:cardCornerRadius="@dimen/margin_8">
+
+                                <ImageView
+                                    android:id="@+id/image_layout"
+                                    android:layout_width="80dp"
+                                    android:layout_height="80dp"
+                                    android:layout_gravity="center_vertical"
+                                    android:foregroundGravity="center_vertical"
+                                    android:scaleType="centerCrop" />
+
+                            </androidx.cardview.widget.CardView>
+
+                            <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="start|center"
-                                android:layout_weight="1.5"
-                                android:text="Working days : "
-                                android:textColor="@color/colorheaderDark"
-                                android:textSize="14sp" />
+                                android:layout_marginTop="@dimen/margin_10"
+                                android:layout_marginBottom="@dimen/margin_10"
+                                android:layout_weight="2"
+                                android:gravity="right|center_vertical"
+                                android:orientation="vertical">
 
-                            <TextView
-                                android:id="@+id/textView_time"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1.5"
-                                android:textStyle="bold"
-                                android:text="Time : "
-                                android:textColor="@color/colorheaderDark"
-                                android:textSize="14sp" />
+                                <TextView
+                                    android:id="@+id/textView_DocName"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/margin_8"
 
-                            <TextView
-                                android:id="@+id/textView_contact"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:textStyle="bold"
-                                android:text="Contact us : "
-                                android:textColor="@color/colorheaderDark"
-                                android:textSize="14sp" />
+                                    android:text=""
+                                    android:textAlignment="viewEnd"
+                                    android:textColor="@color/colorheaderDark"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
 
-                            <TextView
-                                android:id="@+id/textView_email"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:textStyle="bold"
-                                android:text="Mail ID : "
-                                android:textColor="@color/colorheaderDark"
-                                android:textSize="14sp" />
+                                <TextView
+                                    android:id="@+id/textView_degree"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/margin_5"
+                                    android:text=""
+
+                                    android:textAlignment="viewEnd"
+                                    android:textColor="@color/colorheaderDark"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/textView_res_num"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/margin_5"
+                                    android:text=""
+
+                                    android:textAlignment="viewEnd"
+                                    android:textColor="@color/colorheaderDark"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/textView_des"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/margin_5"
+                                    android:text=""
+
+                                    android:textAlignment="viewEnd"
+                                    android:textColor="@color/colorheaderDark"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
 
                         </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/textView_add"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textStyle="bold"
-                            android:text="Address : "
-                            android:textColor="@color/colorheaderDark"
-                            android:textSize="14sp" />
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginStart="@dimen/margin_10"
+                            android:layout_marginLeft="@dimen/margin_10"
+                            android:layout_marginTop="@dimen/margin_2"
+                            android:layout_marginEnd="@dimen/margin_10"
+                            android:layout_marginRight="@dimen/margin_10"
+                            android:layout_marginBottom="@dimen/margin_10"
+                            android:background="@color/colorFaintWhite" />
 
+                        <LinearLayout
+                            android:id="@+id/top_header_parent"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/white"
+                            android:orientation="vertical">
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/margin_10"
+                                android:layout_marginRight="@dimen/margin_10"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/textView_days"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="start|center"
+                                        android:layout_weight="1.5"
+                                        android:text="Working days : "
+                                        android:textColor="@color/colorheaderDark"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/textView_time"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1.5"
+                                        android:text="Time : "
+                                        android:textColor="@color/colorheaderDark"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/textView_contact"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="Contact us : "
+                                        android:textColor="@color/colorheaderDark"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/textView_email"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="Mail ID : "
+                                        android:textColor="@color/colorheaderDark"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold" />
+
+                                </LinearLayout>
+
+                                <TextView
+                                    android:id="@+id/textView_add"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Address : "
+                                    android:textColor="@color/colorheaderDark"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
+
+
+                            </LinearLayout>
+
+                            <View
+                                android:id="@+id/line_of_single"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginStart="@dimen/margin_10"
+                                android:layout_marginLeft="@dimen/margin_10"
+                                android:layout_marginTop="@dimen/margin_10"
+
+                                android:layout_marginEnd="@dimen/margin_10"
+                                android:layout_marginRight="@dimen/margin_10"
+                                android:layout_marginBottom="@dimen/margin_5"
+                                android:background="@color/colorFaintWhite"
+                                android:visibility="visible" />
+
+                        </LinearLayout>
 
                     </LinearLayout>
-
-                    <View
-                        android:visibility="visible"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:id="@+id/line_of_single"
-                        android:layout_marginBottom   ="@dimen/margin_5"
-                        android:layout_marginTop   ="@dimen/margin_10"
-
-                        android:layout_marginStart="@dimen/margin_10"
-                        android:layout_marginLeft="@dimen/margin_10"
-                        android:layout_marginEnd="@dimen/margin_10"
-                        android:layout_marginRight="@dimen/margin_10"
-                        android:background="@color/colorFaintWhite" />
-
                 </LinearLayout>
-
-                </LinearLayout>
-
             </LinearLayout>
 
         </FrameLayout>
@@ -350,6 +356,7 @@
             android:layout_marginTop="@dimen/margin_5"
             android:fontFamily="sans-serif"
             android:gravity="center"
+            android:text="@string/medical_certificate"
             android:textColor="@color/colorBlue"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -795,7 +802,8 @@
             android:id="@+id/textView_end_note"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
+            android:layout_marginRight="@dimen/margin_30"
+            android:layout_marginEnd="@dimen/margin_30"
 
             android:layout_marginTop="@dimen/margin_5"
             android:textColor="@color/colorBlack"
@@ -886,6 +894,8 @@
                 android:background="@color/colorFaintWhite" />
 
             <TextView
+                android:layout_marginEnd    ="@dimen/margin_20"
+                android:layout_marginRight="@dimen/margin_20"
                 android:padding="5dp"
                 android:id="@+id/page_no"
                 android:layout_width="match_parent"

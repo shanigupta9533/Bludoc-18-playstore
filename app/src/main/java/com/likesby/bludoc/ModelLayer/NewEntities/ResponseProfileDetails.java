@@ -81,6 +81,9 @@ public class ResponseProfileDetails{
 	@SerializedName("logo")
 	private String logo;
 
+	@SerializedName("created")
+	private String created;
+
 	@SerializedName("email")
 	private String email;
 
@@ -139,6 +142,14 @@ public class ResponseProfileDetails{
 
 	public void setEmailLetterHead(String emailLetterHead){
 		this.emailLetterHead = emailLetterHead;
+	}
+
+	public String getCreated() {
+		return created;
+	}
+
+	public void setCreated(String created) {
+		this.created = created;
 	}
 
 	public String getEmailLetterHead(){

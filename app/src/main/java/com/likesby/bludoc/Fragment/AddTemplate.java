@@ -6,15 +6,11 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.SystemClock;
 import android.speech.RecognizerIntent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -685,7 +681,7 @@ public class AddTemplate extends Fragment {
                         mAdapterSearchMedicine = new SearchAdapter(favorites1,
                                 frequency_list, frequency2_list, et_no_of_days, route_list, instructions_list,
                                 frequency_spinner, frequency2_spinner, route_spinner, instructions_spinner, et_additional_comments,
-                                mRecyclerViewMedicines, searchBarMaterialMedicine);
+                                mRecyclerViewMedicines, searchBarMaterialMedicine, medicine_qty);
                         mRecyclerViewMedicines.setAdapter(mAdapterSearchMedicine);
                         mAdapterSearchMedicine.notifyDataSetChanged();
 
@@ -761,7 +757,7 @@ public class AddTemplate extends Fragment {
         mAdapterSearchMedicine = new SearchAdapter(MedicAll,
                 frequency_list, frequency2_list, et_no_of_days, route_list, instructions_list,
                 frequency_spinner, frequency2_spinner, route_spinner, instructions_spinner, et_additional_comments,
-                mRecyclerViewMedicines, searchBarMaterialMedicine);
+                mRecyclerViewMedicines, searchBarMaterialMedicine, medicine_qty);
         mRecyclerViewMedicines.setAdapter(mAdapterSearchMedicine);
     }
 

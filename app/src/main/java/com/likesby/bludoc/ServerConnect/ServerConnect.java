@@ -8,8 +8,11 @@ public class ServerConnect {
     // public static final String BASE_IMAGE_URL = "http://192.168.1.104/Tracksido/assets/uploaded-images/";
 
      public static final String IMAGE_URL = "https://bludoc.in/bludoc/uploads/customers/";
-//     public static final String BASE_URL = "http://bludoc.in/bludoc/Api/";
+//     public static final String BASE_URL = "https://bludoc.in/bludoc/Api/";
+//     public static final String BASE_URL_LINK_DIGITAL = "https://bludoc.in/bludoc/";
+     public static final String BASE_URL_LINK_DIGITAL = "https://ensivosolutions.com/blutest_new/";
      public static final String BASE_URL = "https://ensivosolutions.com/blutest_new/Api/";
+ //    public static final String BASE_URL_LINK_DIGITAL = "https://ensivosolutions.com/blutest_new/";
      // public static final String BASE_URL = "http://203.192.219.173/Bludoc/Api/";
 
 

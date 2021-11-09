@@ -4,10 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
+import com.likesby.bludoc.ModelLayer.AppointmentModel;
 import com.likesby.bludoc.ModelLayer.NewEntities.ResponseProfileDetails;
-import com.likesby.bludoc.ModelLayer.NewEntities.SubscriptionsItem;
-
-import java.util.ArrayList;
 
 
 public class SessionManager
@@ -36,6 +34,22 @@ public class SessionManager
         editor.apply();
     }
 
+    public void setObjectAppointmentDetails(Context context, String key, AppointmentModel appointmentModel)
+    {
+        SharedPreferences.Editor editor = context.getSharedPreferences("status", Context.MODE_PRIVATE).edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(appointmentModel);
+        editor.putString(key, json);
+        editor.apply();
+    }
+
+    public AppointmentModel getObjectAppointmentDetails(Context context, String key)
+    {
+        SharedPreferences prefs = context.getSharedPreferences("status",	Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = prefs.getString(key, "");
+        return gson.fromJson(json, AppointmentModel.class);
+    }
 
     public ResponseProfileDetails getObjectProfileDetails(Context context, String key)
     {
@@ -44,6 +58,7 @@ public class SessionManager
         Gson gson = new Gson();
         String json = prefs.getString(key, "");
         return gson.fromJson(json, ResponseProfileDetails.class);
+
     }
 
 

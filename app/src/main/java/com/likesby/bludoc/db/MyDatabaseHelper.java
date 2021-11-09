@@ -8,11 +8,11 @@ import android.util.Log;
 public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "Bludoc.db";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     private static final String CREATE_MEDICINES =
             "create table  tbl_medicine( medicine_id	TEXT, medicine_name TEXT, frequency TEXT, no_of_days TEXT, route	TEXT, instruction TEXT,additional_comment TEXT," +
-                    "created_by	TEXT, created TEXT, modified TEXT)";
+                    "created_by	TEXT, created TEXT, modified TEXT, qty TEXT)";
 
     private static final String CREATE_LABTEST =
             "create table  tbl_labtest( lab_id TEXT,lab_test_name TEXT,lab_test_comment TEXT)";
@@ -38,6 +38,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 "Upgrading database from version " + oldVersion + " to "
                         + newVersion + ", which will destroy all old data");
         database.execSQL("DROP TABLE IF EXISTS MyEmployees");
+        database.execSQL("DROP TABLE IF EXISTS tbl_medicine");
+        database.execSQL("DROP TABLE IF EXISTS tbl_labtest");
         onCreate(database);
     }
 

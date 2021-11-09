@@ -67,6 +67,7 @@ import com.likesby.bludoc.ModelLayer.Entities.ResponseAddPatient;
 import com.likesby.bludoc.ModelLayer.Entities.ResponsePatients;
 import com.likesby.bludoc.ModelLayer.NewEntities.ResponseProfileDetails;
 import com.likesby.bludoc.ModelLayer.NewEntities.SubcriptionsItem;
+import com.likesby.bludoc.PatientRegistrationActivity;
 import com.likesby.bludoc.R;
 import com.likesby.bludoc.SessionManager.SessionManager;
 import com.likesby.bludoc.SplashActivity;
@@ -76,6 +77,7 @@ import com.likesby.bludoc.utils.Utils;
 import com.likesby.bludoc.viewModels.ApiViewHolder;
 
 import org.jetbrains.annotations.NotNull;
+import org.joda.time.DateTime;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -99,7 +101,7 @@ public class PatientRegistration extends Fragment {
 
     Context mContext;
     Dialog dialog;
-   // private static final String ADMOB_AD_UNIT_ID = "ca-app-pub-3940256099942544/2247696110";
+    // private static final String ADMOB_AD_UNIT_ID = "ca-app-pub-3940256099942544/2247696110";
     private UnifiedNativeAd nativeAd;
     View v;
     static RecyclerView rView;
@@ -130,8 +132,8 @@ public class PatientRegistration extends Fragment {
     private ImageView cancel_action;
     private FragmentActivity fragmentActivity;
     private boolean isFromHome;
-    private HomeActivity backButtonHandler;
     private EditText et_patient_dob;
+    private boolean fromAppointment;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -144,7 +146,7 @@ public class PatientRegistration extends Fragment {
     public void onAttach(@NonNull @NotNull Context context) {
         super.onAttach(context);
 
-        fragmentActivity= (FragmentActivity) context;
+        fragmentActivity = (FragmentActivity) context;
 
     }
 
@@ -165,21 +167,8 @@ public class PatientRegistration extends Fragment {
         Bundle arguments = getArguments();
         if (arguments != null) {
             isFromHome = arguments.getBoolean("isFromHome", false);
-    }
-
-        backButtonHandler = (HomeActivity) fragmentActivity;
-
-        backButtonHandler.setOnBackClickListener(new HomeActivity.OnBackClickListener() {
-            @Override
-            public boolean onBackClick() {
-
-                if (isVisible() && isResumed())
-                    fragmentActivity.getSupportFragmentManager().popBackStackImmediate();
-
-                return true;
-
-            }
-        });
+            fromAppointment = arguments.getBoolean("fromAppointment", false);
+        }
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         ResponseProfileDetails profileDetails = manager.getObjectProfileDetails(mContext, "profile");
@@ -408,6 +397,7 @@ public class PatientRegistration extends Fragment {
 
                     cancel_action.setVisibility(View.VISIBLE);
                     rb_month.setEnabled(false);
+                    rb_year.setEnabled(false);
                     et_age.setEnabled(false);
 
                 } else {
@@ -415,6 +405,7 @@ public class PatientRegistration extends Fragment {
                     cancel_action.setVisibility(View.GONE);
                     rb_month.setEnabled(true);
                     et_age.setEnabled(true);
+                    rb_year.setEnabled(true);
                     et_age.setText("");
 
                 }
@@ -440,17 +431,35 @@ public class PatientRegistration extends Fragment {
                         myCalendar.set(Calendar.MONTH, monthOfYear);
                         myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
+                        DateTime dateTime = new DateTime();
 
-                        isConstant = true;
-                        String age = getAge(year, monthOfYear, dayOfMonth);
+                        if (dateTime.getYear() - year > 1) {
 
-                        if (Integer.parseInt(age) < 0) {
-                            age = "0";
+                            isConstant = true;
+                            String age = getAge(year, monthOfYear, dayOfMonth);
+
+                            if (Integer.parseInt(age) < 0) {
+                                age = "0";
+                            }
+
+                            et_age.setText("");
+                            et_age.setSelection(et_age.getText().toString().length());
+                            rb_year.setChecked(true);
+
                         }
+                        if (dateTime.getYear() - year == 1) {
+                            et_age.setText("");
+                            et_age.setSelection(et_age.getText().toString().length());
+                            rb_year.setChecked(true);
 
-                        et_age.setText(age);
-                        et_age.setSelection(et_age.getText().toString().length());
-                        rb_year.setChecked(true);
+                        } else {
+
+                            isConstant = true;
+
+                            et_age.setSelection(et_age.getText().toString().length());
+                            rb_month.setChecked(true);
+
+                        }
 
                         String myFormat = "dd-MM-yyyy"; // your format
                         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
@@ -469,56 +478,52 @@ public class PatientRegistration extends Fragment {
         });
 
 
-        save_prescribe.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(manager.contains(mContext,"hospital_code") && !("").equalsIgnoreCase(manager.getPreferences(mContext,"hospital_code"))) {
-                    if (manager.getObjectProfileDetails(mContext, "profile").getSubcriptions().size() > 0) {
+        save_prescribe.setOnClickListener(v -> {
 
-                        if (manager.getObjectProfileDetails(mContext, "profile").getAccess().equals("Pending")) {
-                            popupAccess();
-                        } else if (manager.getObjectProfileDetails(mContext, "profile").getAccess().equals("Approve")) {
-                            prescribeFlag = true;
+            if (manager.contains(mContext, "hospital_code") && !("").equalsIgnoreCase(manager.getPreferences(mContext, "hospital_code"))) {
+                if (manager.getObjectProfileDetails(mContext, "profile").getSubcriptions().size() > 0) {
 
-                            String state = Environment.getExternalStorageState();
-                            if (Environment.MEDIA_MOUNTED.equals(state)) {
-                                if (Build.VERSION.SDK_INT >= 23) {
-                                    //checkPermission();
-                                    if (checkPermission()) {
-                                        saveData();
-                                    } else {
-                                        requestPermission(); // Code for permission
-                                    }
-                                } else {
+                    if (manager.getObjectProfileDetails(mContext, "profile").getAccess().equals("Pending")) {
+                        popupAccess();
+                    } else if (manager.getObjectProfileDetails(mContext, "profile").getAccess().equals("Approve")) {
+                        prescribeFlag = true;
+
+                        String state = Environment.getExternalStorageState();
+                        if (Environment.MEDIA_MOUNTED.equals(state)) {
+                            if (Build.VERSION.SDK_INT >= 23) {
+                                //checkPermission();
+                                if (checkPermission()) {
                                     saveData();
+                                } else {
+                                    requestPermission(); // Code for permission
                                 }
-                            }
-                        } else if (manager.getObjectProfileDetails(mContext, "profile").getAccess().equals("Rejected")) {
-                            popupHospitalCode();
-                        } else {
-                            popupAccess();
-                        }
-
-                    }
-                    else
-                        Toast.makeText(mContext, "Subscription Expired", Toast.LENGTH_SHORT).show();
-
-                }
-                else {
-                    prescribeFlag = true;
-
-                    String state = Environment.getExternalStorageState();
-                    if (Environment.MEDIA_MOUNTED.equals(state)) {
-                        if (Build.VERSION.SDK_INT >= 23) {
-                            //checkPermission();
-                            if (checkPermission()) {
-                                saveData();
                             } else {
-                                requestPermission(); // Code for permission
+                                saveData();
                             }
-                        } else {
-                            saveData();
                         }
+                    } else if (manager.getObjectProfileDetails(mContext, "profile").getAccess().equals("Rejected")) {
+                        popupHospitalCode();
+                    } else {
+                        popupAccess();
+                    }
+
+                } else
+                    Toast.makeText(mContext, "Subscription Expired", Toast.LENGTH_SHORT).show();
+
+            } else {
+                prescribeFlag = true;
+
+                String state = Environment.getExternalStorageState();
+                if (Environment.MEDIA_MOUNTED.equals(state)) {
+                    if (Build.VERSION.SDK_INT >= 23) {
+                        //checkPermission();
+                        if (checkPermission()) {
+                            saveData();
+                        } else {
+                            requestPermission(); // Code for permission
+                        }
+                    } else {
+                        saveData();
                     }
                 }
             }
@@ -610,6 +615,14 @@ public class PatientRegistration extends Fragment {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (fromAppointment) {
+
+                    fragmentActivity.finish();
+                    return;
+
+                }
+
                 hideKeyboard(mContext);
                 FragmentManager fm = getActivity().getSupportFragmentManager();
                 fm.popBackStack();
@@ -684,60 +697,78 @@ public class PatientRegistration extends Fragment {
             if (et_name.getText().toString().trim().equalsIgnoreCase("")) {
                 et_name.requestFocus();
                 et_name.setError("Patient's Full Name");
-            }  else {
-                if (et_age.getText().toString().trim().equalsIgnoreCase("")) {
+            } else {
+                if (et_age.getText().toString().trim().equalsIgnoreCase("0")) {
                     et_age.requestFocus();
-                    et_age.setError("Age");
-                    Toast.makeText(mContext, "Age required", Toast.LENGTH_SHORT).show();
-
+                    et_age.setError("Zero Not Allowed");
+                    Toast.makeText(mContext, "Zero not allowed", Toast.LENGTH_SHORT).show();
                 } else {
-                    if (et_age.getText().toString().trim().equalsIgnoreCase("0")) {
-                        et_age.requestFocus();
-                        et_age.setError("Zero Not Allowed");
-                        Toast.makeText(mContext, "Zero not allowed", Toast.LENGTH_SHORT).show();
+                    if (gender_.equalsIgnoreCase("")) {
+                        Toast.makeText(mContext, "Select Gender", Toast.LENGTH_SHORT).show();
                     } else {
+                        String strEnteredVal = et_age.getText().toString().trim();
+                        if (!strEnteredVal.equals("")) {
+                            float num = Float.parseFloat(strEnteredVal);
+                            if (age_type.equals("yr") && num < 151) {
+                                fl_progress_bar.setVisibility(View.VISIBLE);
+                                apiViewHolder.PatientRegister(et_name.getText().toString().trim(),
+                                        et_age.getText().toString().trim() + " " + age_type, gender_, manager.getPreferences(mContext, "doctor_id"),
+                                        et_mobile.getText().toString().trim(), et_email.getText().toString().trim(), address.getText().toString().trim(), blood_group.getText().toString().trim(), convertFormat(date_f_birth.getText().toString()))
+                                        .subscribeOn(Schedulers.io())
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribe(responsePatientRegister);
 
-                        if (gender_.equalsIgnoreCase("")) {
-                            Toast.makeText(mContext, "Select Gender", Toast.LENGTH_SHORT).show();
-                        } else {
-                            String strEnteredVal = et_age.getText().toString().trim();
-                            if (!strEnteredVal.equals("")) {
-                                float num = Float.parseFloat(strEnteredVal);
-                                if (age_type.equals("yr") && num < 151) {
-                                    fl_progress_bar.setVisibility(View.VISIBLE);
-                                    apiViewHolder.PatientRegister(et_name.getText().toString().trim(),
-                                            et_age.getText().toString().trim() + " " + age_type, gender_, manager.getPreferences(mContext, "doctor_id"),
-                                            et_mobile.getText().toString().trim(), et_email.getText().toString().trim(), address.getText().toString().trim(), blood_group.getText().toString().trim(), date_f_birth.getText().toString())
-                                            .subscribeOn(Schedulers.io())
-                                            .observeOn(AndroidSchedulers.mainThread())
-                                            .subscribe(responsePatientRegister);
+                            } else if (age_type.equals("month") || age_type.equals("months")) {
+                                if (age_type.equals("months"))
+                                    if (et_age.getText().toString().trim().equals("1"))
+                                        age_type = "month";
+                                fl_progress_bar.setVisibility(View.VISIBLE);
+                                apiViewHolder.PatientRegister(et_name.getText().toString().trim(),
+                                        et_age.getText().toString().trim() + " " + age_type, gender_, manager.getPreferences(mContext, "doctor_id"),
+                                        et_mobile.getText().toString().trim(), et_email.getText().toString().trim(), address.getText().toString().trim(), blood_group.getText().toString().trim(), convertFormat(date_f_birth.getText().toString()))
+                                        .subscribeOn(Schedulers.io())
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribe(responsePatientRegister);
 
-                                } else if (age_type.equals("month") || age_type.equals("months")) {
-                                    if (age_type.equals("months"))
-                                        if (et_age.getText().toString().trim().equals("1"))
-                                            age_type = "month";
-                                    fl_progress_bar.setVisibility(View.VISIBLE);
-                                    apiViewHolder.PatientRegister(et_name.getText().toString().trim(),
-                                            et_age.getText().toString().trim() + " " + age_type, gender_, manager.getPreferences(mContext, "doctor_id"),
-                                            et_mobile.getText().toString().trim(), et_email.getText().toString().trim(), address.getText().toString().trim(), blood_group.getText().toString().trim(), date_f_birth.getText().toString())
-                                            .subscribeOn(Schedulers.io())
-                                            .observeOn(AndroidSchedulers.mainThread())
-                                            .subscribe(responsePatientRegister);
-
-                                } else {
-                                    et_age.requestFocus();
-                                    et_age.setError("Age not allowed");
-                                    Toast.makeText(mContext, "Age not allowed", Toast.LENGTH_SHORT).show();
-                                }
+                            } else {
+                                et_age.requestFocus();
+                                et_age.setError("Age not allowed");
+                                Toast.makeText(mContext, "Age not allowed", Toast.LENGTH_SHORT).show();
                             }
-                        }
+                        } else {
 
+                            fl_progress_bar.setVisibility(View.VISIBLE);
+                            apiViewHolder.PatientRegister(et_name.getText().toString().trim(),
+                                    et_age.getText().toString().trim(), gender_, manager.getPreferences(mContext, "doctor_id"),
+                                    et_mobile.getText().toString().trim(), et_email.getText().toString().trim(), address.getText().toString().trim(), blood_group.getText().toString().trim(), convertFormat(date_f_birth.getText().toString()))
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(responsePatientRegister);
+
+                        }
                     }
+
                 }
             }
         } else {
             Toast.makeText(mContext, "No Internet Connection", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private String convertFormat(String date) {
+
+        DateFormat inputFormat = new SimpleDateFormat("dd-MM-yyyy");
+        DateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date dateInput = null;
+        try {
+            dateInput = inputFormat.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (dateInput == null)
+            return "";
+
+        return outputFormat.format(dateInput);
     }
 
     private boolean isBloodGroupValid(String bloodGroup, Context context) {
@@ -882,10 +913,12 @@ public class PatientRegistration extends Fragment {
 
                     fl_progress_bar.setVisibility(View.GONE);
                     Toast.makeText(mContext, "Patient Added Successfully", Toast.LENGTH_SHORT).show();
-                    manager.setPreferences(mContext,"patient_registration","true");
+                    manager.setPreferences(mContext, "patient_registration", "true");
 
-                    if(isFromHome)
+                    if (isFromHome)
                         goToPrescription();
+                    else if (fromAppointment)
+                        fragmentActivity.finish();
                     else
                         fragmentActivity.getSupportFragmentManager().popBackStackImmediate();
 
@@ -1466,7 +1499,7 @@ public class PatientRegistration extends Fragment {
 //    }
 //
 
-    public void popupHospitalCode(){
+    public void popupHospitalCode() {
         final Dialog dialog_data = new Dialog(mContext);
         dialog_data.setCancelable(false);
 
@@ -1500,7 +1533,7 @@ public class PatientRegistration extends Fragment {
                 } else {
                     dialog_data.dismiss();
                     try {
-                        apiViewHolder.updateHospitalCode(manager.getPreferences(mContext,"doctor_id"),et_hospital_code.getText().toString().trim())
+                        apiViewHolder.updateHospitalCode(manager.getPreferences(mContext, "doctor_id"), et_hospital_code.getText().toString().trim())
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(responseProfile);
@@ -1522,6 +1555,7 @@ public class PatientRegistration extends Fragment {
         dialog_data.show();
 
     }
+
     SingleObserver<ResponseProfileDetails> responseProfile = new SingleObserver<ResponseProfileDetails>() {
         @Override
         public void onSubscribe(Disposable d) {
@@ -1537,8 +1571,8 @@ public class PatientRegistration extends Fragment {
                 if (response.getMessage() == null) {
 
                 } else if (response.getMessage().equals("Profile Details")) {
-                    if(response.getStatus() != null) {
-                        if(response.getStatus().equalsIgnoreCase("Active")) {
+                    if (response.getStatus() != null) {
+                        if (response.getStatus().equalsIgnoreCase("Active")) {
                             manager.setPreferences(mContext, "doctor_id", response.getDoctorId());
                             manager.setPreferences(mContext, "name", response.getName());
                             manager.setPreferences(mContext, "email", response.getEmail());
@@ -1568,17 +1602,15 @@ public class PatientRegistration extends Fragment {
                             manager.setPreferences(mContext, "hospital_code", response.getHospitalCode());
                             manager.setObjectProfileDetails(mContext, "profile", response);
 
-                        }else {
+                        } else {
                             // Toast.makeText(mContext, "Your account is Inactive or Deleted. Contact Admin at bludocapp@gmail.com", Toast.LENGTH_LONG).show();
 
                         }
                     }
                 }
-            }
-            else
-            {
+            } else {
 
-                Toast.makeText(mContext, ""+response.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "" + response.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -1590,8 +1622,7 @@ public class PatientRegistration extends Fragment {
         }
     };
 
-    private  void popupAccess()
-    {
+    private void popupAccess() {
         final Dialog dialog_data = new Dialog(mContext);
         dialog_data.setCancelable(true);
 
@@ -1637,7 +1668,6 @@ public class PatientRegistration extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        backButtonHandler = null;
     }
 
 }

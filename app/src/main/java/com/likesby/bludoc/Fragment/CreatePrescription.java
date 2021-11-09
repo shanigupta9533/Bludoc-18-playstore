@@ -14,6 +14,7 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.speech.RecognizerIntent;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
@@ -72,6 +73,7 @@ import com.likesby.bludoc.Adapter.AddTemplateAdapter;
 import com.likesby.bludoc.Adapter.PatientsAdapter;
 import com.likesby.bludoc.Adapter.SearchAdapter;
 import com.likesby.bludoc.Adapter.SearchLabTestAdapter;
+import com.likesby.bludoc.CreateAppointmentActivity;
 import com.likesby.bludoc.HomeActivity;
 import com.likesby.bludoc.ModelLayer.Entities.AddTemplateJSON;
 import com.likesby.bludoc.ModelLayer.Entities.DesignationItem;
@@ -91,6 +93,7 @@ import com.likesby.bludoc.ModelLayer.NewEntities3.Doctor;
 import com.likesby.bludoc.ModelLayer.NewEntities3.MedicinesItem;
 import com.likesby.bludoc.ModelLayer.NewEntities3.PrescriptionItem;
 import com.likesby.bludoc.ModelLayer.NewEntities3.ResponseHistory;
+import com.likesby.bludoc.PatientRegistrationActivity;
 import com.likesby.bludoc.R;
 import com.likesby.bludoc.SessionManager.SessionManager;
 import com.likesby.bludoc.SplashActivity;
@@ -195,7 +198,7 @@ public class CreatePrescription extends Fragment {
     Boolean searchFlagLab;
     public static boolean certificate_selection = false;
     private UnifiedNativeAd nativeAd;
-    private static final String ADMOB_AD_UNIT_ID = "ca-app-pub-6756023122563497/5728747901";
+    private static final String ADMOB_AD_UNIT_ID = "ca-app-pub-9225891557304181/7053195953";
     boolean flag_reset_free = false;
     private CreatePrescriptionBinding binding;
     private RadioButton radioButtonOfYes;
@@ -203,6 +206,7 @@ public class CreatePrescription extends Fragment {
     private TextView header;
     private ArrayList<MedicinesItem> addMedicinesArrayListGlobal = new ArrayList<>();
     private boolean totalMedicineAdded;
+    private boolean fromAppointment;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -235,19 +239,31 @@ public class CreatePrescription extends Fragment {
         MedicAll = new ArrayList<>();
         MedicAll = myDB.getMedicines();
 
-        ((HomeActivity) fragmentActivity).setOnBackClickListener2(new HomeActivity.OnBackClickListener2() {
-            @Override
-            public boolean onBackClick() {
+        Bundle arguments = getArguments();
 
-                if (manager.getPreferences(fragmentActivity, "isOnPrescribe").equalsIgnoreCase("true") || (manager.getPreferences(fragmentActivity, "isOnCertificate").equalsIgnoreCase("true")))
-                    popupExit();
-                else if (patientsAdapter != null)
-                    patientsAdapter.onBackPressedHappen();
+        if(arguments!=null){
 
-                return true;
-            }
+            fromAppointment = arguments.getBoolean("fromAppointment",false);
 
-        });
+        }
+
+        if(!fromAppointment) {
+
+            ((HomeActivity) fragmentActivity).setOnBackClickListener2(new HomeActivity.OnBackClickListener2() {
+                @Override
+                public boolean onBackClick() {
+
+                    if (manager.getPreferences(fragmentActivity, "isOnPrescribe").equalsIgnoreCase("true") || (manager.getPreferences(fragmentActivity, "isOnCertificate").equalsIgnoreCase("true")))
+                        popupExit();
+                    else if (patientsAdapter != null)
+                        patientsAdapter.onBackPressedHappen();
+
+                    return true;
+                }
+
+            });
+
+        }
 
         scrolling_edittext();
 
@@ -316,6 +332,44 @@ public class CreatePrescription extends Fragment {
                 intentSpeech.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
                 try {
                     startActivityForResult(intentSpeech, 800);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(
+                            mContext,
+                            "Oops! Your device doesn't support Speech to Text",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
+
+            }
+        });
+
+        binding.speechVoiceComments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intentSpeech = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                intentSpeech.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
+                try {
+                    startActivityForResult(intentSpeech, 1900);
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(
+                            mContext,
+                            "Oops! Your device doesn't support Speech to Text",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
+
+            }
+        });
+
+        binding.speechVoiceCommentsLabTest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intentSpeech = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                intentSpeech.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
+                try {
+                    startActivityForResult(intentSpeech, 2000);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(
                             mContext,
@@ -552,9 +606,11 @@ public class CreatePrescription extends Fragment {
 
         //----------------------------------------------------------------------------------------
         initCalls(v);
+
+        patientsItemArrayList=SplashActivity.patientsItemArrayList;
+
         hideKeyboard(mContext);
         Bundle args = getArguments();
-        patientsItemArrayList = splashActivity.getpatients();
 
         if (!is_on_lab_test)
             if (!is_on_medicines) {
@@ -597,10 +653,18 @@ public class CreatePrescription extends Fragment {
                         age___ = patientsItemArrayList.get(pos).getAge();
                     else if (patientsItemArrayList.get(pos).getAge().contains("Yr") || patientsItemArrayList.get(pos).getAge().contains("Month"))
                         age___ = patientsItemArrayList.get(pos).getAge();
-                    else
-                        age___ = patientsItemArrayList.get(pos).getAge() + " yr";
 
-                    patientdetails.setText(patientsItemArrayList.get(pos).getPName() + " - " + patientsItemArrayList.get(pos).getGender() + " / " + age___);
+                    String age = "";
+
+                    if(!TextUtils.isEmpty(patientsItemArrayList.get(pos).getAge())){
+                        age =  " / " + age___;
+                    }
+
+                    if(patientsItemArrayList.get(pos).getAge().equalsIgnoreCase("yr")){
+                        age="";
+                    }
+
+                    patientdetails.setText(patientsItemArrayList.get(pos).getPName() + " - " + patientsItemArrayList.get(pos).getGender() + age);
 
 //                    Collections.sort(addMedicinesArrayList, new Comparator<MedicinesItem>() {
 //                        @Override
@@ -708,10 +772,20 @@ public class CreatePrescription extends Fragment {
                     String age___ = "";
                     if (patientsItemArrayList.get(pos).getAge().contains("yr") || patientsItemArrayList.get(pos).getAge().contains("month"))
                         age___ = patientsItemArrayList.get(pos).getAge();
-                    else
-                        age___ = patientsItemArrayList.get(pos).getAge() + " yr";
 
-                    patientdetails.setText(patientsItemArrayList.get(pos).getPName() + " - " + patientsItemArrayList.get(pos).getGender() + " / " + age___);
+
+                    String age = "";
+
+                    if(!TextUtils.isEmpty(patientsItemArrayList.get(pos).getAge())){
+                        age =  " / " + age___;
+                    }
+
+                    if(patientsItemArrayList.get(pos).getAge().equalsIgnoreCase("yr")){
+                        age="";
+                    }
+
+                    patientdetails.setText(patientsItemArrayList.get(pos).getPName() + " - " + patientsItemArrayList.get(pos).getGender() + age);
+
                     setActiveMedicine_LAB();
 
 
@@ -981,9 +1055,19 @@ public class CreatePrescription extends Fragment {
                     String age___ = "";
                     if (patientsItemArrayList.get(pos).getAge().contains("yr") || patientsItemArrayList.get(pos).getAge().contains("month"))
                         age___ = patientsItemArrayList.get(pos).getAge();
-                    else
-                        age___ = patientsItemArrayList.get(pos).getAge() + " yr";
-                    patientdetails.setText(patientsItemArrayList.get(pos).getPName() + " - " + patientsItemArrayList.get(pos).getGender() + " / " + age___);
+
+                    String age = "";
+
+                    if(!TextUtils.isEmpty(patientsItemArrayList.get(pos).getAge())){
+                        age =  " / " + age___;
+                    }
+
+                    if(patientsItemArrayList.get(pos).getAge().equalsIgnoreCase("yr")){
+                        age="";
+                    }
+
+                    patientdetails.setText(patientsItemArrayList.get(pos).getPName() + " - " + patientsItemArrayList.get(pos).getGender() + age);
+
                 } else {
                     patientsItemArrayList = splashActivity.getpatients();
                 }
@@ -1008,9 +1092,19 @@ public class CreatePrescription extends Fragment {
                     String age___2 = "";
                     if (patientsItemArrayList.get(pos).getAge().contains("yr") || patientsItemArrayList.get(pos).getAge().contains("month"))
                         age___2 = patientsItemArrayList.get(pos).getAge();
-                    else
-                        age___2 = patientsItemArrayList.get(pos).getAge() + " yr";
-                    patientdetails.setText(patientsItemArrayList.get(pos).getPName() + " - " + patientsItemArrayList.get(pos).getGender() + " / " + age___2);
+
+                    String age = "";
+
+                    if(!TextUtils.isEmpty(patientsItemArrayList.get(pos).getAge())){
+                        age =  " / " + age___2;
+                    }
+
+                    if(patientsItemArrayList.get(pos).getAge().equalsIgnoreCase("yr")){
+                        age="";
+                    }
+
+                    patientdetails.setText(patientsItemArrayList.get(pos).getPName() + " - " + patientsItemArrayList.get(pos).getGender() + age);
+
                 } else {
                     fl_progress_bar.setVisibility(View.GONE);
 
@@ -1060,7 +1154,8 @@ public class CreatePrescription extends Fragment {
                     });
                 }
             }
-        } else {
+        }
+        else {
             if (patientsItemArrayList == null) {
                 patientsItemArrayList = splashActivity.getpatients();
             }
@@ -1078,13 +1173,16 @@ public class CreatePrescription extends Fragment {
                                 ll_main_medicine_details, ll_main_lab_test_details, ll_main_end_note_details, ll_main_certificate_details, CreatePrescription.this, showNativeAdFlag, header, getContext());
                         mRecyclerViewPatients.setAdapter(patientsAdapter);
 
+                        if(pos != -1)
+                        AllGetPatientsFromHome();
+
                         if (patientsAdapter != null) {
 
                             patientsAdapter.setOnClickLsitener(new PatientsAdapter.onClickListener() {
                                 @Override
                                 public void onClick() {
 
-                                    FragmentManager manager = ((AppCompatActivity) mContext).getSupportFragmentManager();
+                                    FragmentManager manager = fragmentActivity.getSupportFragmentManager();
                                     manager.popBackStack();
 
                                     CreatePrescription myFragment = new CreatePrescription();
@@ -1098,7 +1196,10 @@ public class CreatePrescription extends Fragment {
                                 @Override
                                 public void onDestroy() {
 
-                                    fragmentActivity.getSupportFragmentManager().popBackStackImmediate();
+                                    setArguments(null);
+
+                                    if(getActivity() instanceof HomeActivity)
+                                    ((HomeActivity) getActivity()).methodName();
 
                                 }
 
@@ -1136,6 +1237,9 @@ public class CreatePrescription extends Fragment {
                 ll_patients_view.setVisibility(View.VISIBLE);
                 if (patientsItemArrayList.size() > 0) {
                     ll_info_no_patient.setVisibility(View.GONE);
+
+                    Log.i(TAG, "run: rummmmm2");
+
                     //  header.setText("Create Prescription");
                 } else {
                     ll_info_no_patient.setVisibility(View.VISIBLE);
@@ -1154,11 +1258,22 @@ public class CreatePrescription extends Fragment {
                 if (patientsItemArrayList != null) {
                     if (patientsItemArrayList.get(pos).getAge().contains("yr") || patientsItemArrayList.get(pos).getAge().contains("month"))
                         age___ = patientsItemArrayList.get(pos).getAge();
-                    else
-                        age___ = patientsItemArrayList.get(pos).getAge() + " yr";
-                    patientdetails.setText(patientsItemArrayList.get(pos).getPName() + " - " + patientsItemArrayList.get(pos).getGender() + " / " + age___);
+
+                    String age = "";
+
+                    if(!TextUtils.isEmpty(patientsItemArrayList.get(pos).getAge())){
+                        age =  " / " + age___;
+                    }
+
+                    if(patientsItemArrayList.get(pos).getAge().equalsIgnoreCase("yr")){
+                        age="";
+                    }
+
+                    patientdetails.setText(patientsItemArrayList.get(pos).getPName() + " - " + patientsItemArrayList.get(pos).getGender() + age);
+
                 } else {
                     patientsItemArrayList = splashActivity.getpatients();
+
                 }
                 /*Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                     @Override
@@ -1206,6 +1321,7 @@ public class CreatePrescription extends Fragment {
         if (("edit").equalsIgnoreCase(define)) {
             binding.header.setText("My Templates");
         }
+
 
         return binding.getRoot();
     }
@@ -1313,62 +1429,10 @@ public class CreatePrescription extends Fragment {
 
     }
 
-    public void AllGetPatients() {
-
-        if (Utils.isConnectingToInternet(getContext())) {
-
-            fl_progress_bar.setVisibility(View.VISIBLE);
-            Retrofit retrofit = RetrofitClient.getInstance();
-
-            final WebServices request = retrofit.create(WebServices.class);
-
-            Call<ResponsePatients> call = request.getPatients2(manager.getPreferences(getContext(), "doctor_id"));
-
-            call.enqueue(new Callback<ResponsePatients>() {
-                @Override
-                public void onResponse(@NonNull Call<ResponsePatients> call, @NonNull retrofit2.Response<ResponsePatients> response) {
-                    ResponsePatients jsonResponse = response.body();
-                    assert jsonResponse != null;
-                    fl_progress_bar.setVisibility(View.GONE);
-                    if (jsonResponse.getSuccess().equalsIgnoreCase("Success")) {
-
-                        ArrayList<PatientsItem> pharmacist = jsonResponse.getPatients();
-                        patientsItemArrayList.clear();
-                        patientsItemArrayList.addAll(pharmacist);
-                        patientsAdapter.notifyDataSetChanged();
-
-                        if (patientsItemArrayList.size() > 0) {
-                            ll_info_no_patient.setVisibility(View.GONE);
-                            ll_patients_view.setVisibility(View.VISIBLE);
-                        } else {
-                            ll_info_no_patient.setVisibility(View.VISIBLE);
-                            ll_patients_view.setVisibility(View.GONE);
-                        }
-
-                    } else {
-
-                        fl_progress_bar.setVisibility(View.GONE);
-
-                    }
-                }
-
-                @Override
-                public void onFailure(@NonNull Call<ResponsePatients> call, @NonNull Throwable t) {
-                    fl_progress_bar.setVisibility(View.GONE);
-                    Log.e("Error  ***", t.getMessage());
-                    Toast.makeText(getContext(), "Profile Update Error", Toast.LENGTH_SHORT).show();
-
-                }
-            });
-        } else {
-            Toast.makeText(getContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-
     @Override
     public void onResume() {
         super.onResume();
+
         hideKeyboard(mContext);
         //Toast.makeText(mContext, "onResume", Toast.LENGTH_SHORT).show();
 
@@ -1394,14 +1458,25 @@ public class CreatePrescription extends Fragment {
                     }
                 }
                 if (patientsItemArrayList != null) {
-                    if (patientsItemArrayList.size() != 0) {
+                    if (patientsItemArrayList.size() != 0 && pos!=-1) {
 
                         String age___ = "";
                         if (patientsItemArrayList.get(pos).getAge().contains("yr") || patientsItemArrayList.get(pos).getAge().contains("month"))
                             age___ = patientsItemArrayList.get(pos).getAge();
                         else
                             age___ = patientsItemArrayList.get(pos).getAge() + " yr";
-                        patientdetails.setText(patientsItemArrayList.get(pos).getPName() + " - " + patientsItemArrayList.get(pos).getGender() + " / " + age___);
+
+                        String age = "";
+
+                        if(!TextUtils.isEmpty(patientsItemArrayList.get(pos).getAge())){
+                            age =  " / " + age___;
+                        }
+
+                        if(patientsItemArrayList.get(pos).getAge().equalsIgnoreCase("yr")){
+                            age="";
+                        }
+
+                        patientdetails.setText(patientsItemArrayList.get(pos).getPName() + " - " + patientsItemArrayList.get(pos).getGender() + age);
                     }
                 } else {
                     patientsItemArrayList = splashActivity.getpatients();
@@ -1520,13 +1595,23 @@ public class CreatePrescription extends Fragment {
                 }
 
                 if (patientsItemArrayList != null) {
-                    if (patientsItemArrayList.size() != 0) {
+                    if (patientsItemArrayList.size() != 0 && pos!=-1) {
                         String age___ = "";
                         if (patientsItemArrayList.get(pos).getAge().contains("yr") || patientsItemArrayList.get(pos).getAge().contains("month"))
                             age___ = patientsItemArrayList.get(pos).getAge();
-                        else
-                            age___ = patientsItemArrayList.get(pos).getAge() + " yr";
-                        patientdetails.setText(patientsItemArrayList.get(pos).getPName() + " - " + patientsItemArrayList.get(pos).getGender() + " / " + age___);
+
+                        String age = "";
+
+                        if(!TextUtils.isEmpty(patientsItemArrayList.get(pos).getAge())){
+                            age =  " / " + age___;
+                        }
+
+                        if(patientsItemArrayList.get(pos).getAge().equalsIgnoreCase("yr")){
+                            age="";
+                        }
+
+                        patientdetails.setText(patientsItemArrayList.get(pos).getPName() + " - " + patientsItemArrayList.get(pos).getGender() + age);
+
                     } else {
                         patientsItemArrayList = splashActivity.getpatients();
 
@@ -2123,6 +2208,160 @@ public class CreatePrescription extends Fragment {
 
     }
 
+    public void AllGetPatientsFromHome() {
+
+        if (Utils.isConnectingToInternet(mContext)) {
+
+            fl_progress_bar.setVisibility(View.VISIBLE);
+            Retrofit retrofit = RetrofitClient.getInstance();
+
+            final WebServices request = retrofit.create(WebServices.class);
+
+            Call<ResponsePatients> call = request.getPatients2(manager.getPreferences(mContext, "doctor_id"));
+
+            call.enqueue(new Callback<ResponsePatients>() {
+                @SuppressLint("NotifyDataSetChanged")
+                @Override
+                public void onResponse(@NonNull Call<ResponsePatients> call, @NonNull retrofit2.Response<ResponsePatients> response) {
+
+                    ResponsePatients responsePatients = response.body();
+
+                    fl_progress_bar.setVisibility(View.GONE);
+
+                    if (responsePatients != null) {
+
+                        if (responsePatients.getMessage() != null) {
+                            if (responsePatients.getMessage().equals("patients")) {
+
+                                try {
+
+                                    SplashActivity splashActivity = new SplashActivity();
+                                    splashActivity.setPatients(responsePatients.getPatients());
+
+                                    patientsItemArrayList.clear();
+                                    patientsItemArrayList.addAll(responsePatients.getPatients());
+
+                                    patientsAdapter.notifyDataSetChanged();
+
+                                } catch (IllegalStateException e) {
+
+                                    Log.i("TAG", "onSuccess: " + e.getMessage());
+
+                                }
+
+                            } else if (responsePatients.getMessage().equals("Data not available")) {
+
+                                try {
+
+                                    SplashActivity splashActivity = new SplashActivity();
+                                    splashActivity.setPatients(responsePatients.getPatients());
+
+                                    patientsItemArrayList.clear();
+
+                                    patientsAdapter.notifyDataSetChanged();
+
+
+
+
+                                } catch (IllegalStateException e) {
+
+                                    Log.i("TAG", "onSuccess: " + e.getMessage());
+
+                                }
+                            }
+                        }
+                    }
+
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<ResponsePatients> call, @NonNull Throwable t) {
+                    fl_progress_bar.setVisibility(View.GONE);
+                    Log.e("Error  ***", t.getMessage());
+                    Toast.makeText(mContext, "Profile Update Error", Toast.LENGTH_SHORT).show();
+
+                }
+            });
+        } else {
+            Toast.makeText(mContext, "No Internet Connection", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void AllGetPatients() {
+
+        if (Utils.isConnectingToInternet(mContext)) {
+
+            fl_progress_bar.setVisibility(View.VISIBLE);
+            Retrofit retrofit = RetrofitClient.getInstance();
+
+            final WebServices request = retrofit.create(WebServices.class);
+
+            Call<ResponsePatients> call = request.getPatients2(manager.getPreferences(mContext, "doctor_id"));
+
+            call.enqueue(new Callback<ResponsePatients>() {
+                @Override
+                public void onResponse(@NonNull Call<ResponsePatients> call, @NonNull retrofit2.Response<ResponsePatients> response) {
+
+                    ResponsePatients responsePatients = response.body();
+
+                    if (responsePatients != null) {
+
+                        if (responsePatients.getMessage() != null) {
+                            if (responsePatients.getMessage().equals("patients")) {
+
+                                try {
+
+                                    SplashActivity splashActivity = new SplashActivity();
+                                    splashActivity.setPatients(responsePatients.getPatients());
+
+                                    FragmentManager manager = ((AppCompatActivity) mContext).getSupportFragmentManager();
+                                    manager.popBackStack();
+
+                                    CreatePrescription myFragment = new CreatePrescription();
+                                    manager.beginTransaction().replace(R.id.homePageContainer, myFragment, "prescription").addToBackStack(null).commit();
+
+                                } catch (IllegalStateException e) {
+
+                                    Log.i("TAG", "onSuccess: " + e.getMessage());
+
+                                }
+
+                            } else if (responsePatients.getMessage().equals("Data not available")) {
+
+                                try {
+
+                                    SplashActivity splashActivity = new SplashActivity();
+                                    splashActivity.setPatients(null);
+
+                                    FragmentManager manager = ((AppCompatActivity) mContext).getSupportFragmentManager();
+                                    manager.popBackStack();
+
+                                    CreatePrescription myFragment = new CreatePrescription();
+                                    manager.beginTransaction().replace(R.id.homePageContainer, myFragment, "prescription").addToBackStack(null).commit();
+
+                                } catch (IllegalStateException e) {
+
+                                    Log.i("TAG", "onSuccess: " + e.getMessage());
+
+                                }
+                            }
+                        }
+                    }
+
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<ResponsePatients> call, @NonNull Throwable t) {
+                    fl_progress_bar.setVisibility(View.GONE);
+                    Log.e("Error  ***", t.getMessage());
+                    Toast.makeText(mContext, "Profile Update Error", Toast.LENGTH_SHORT).show();
+
+                }
+            });
+        } else {
+            Toast.makeText(mContext, "No Internet Connection", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     private void popupExit() {
         final Dialog dialog_data = new Dialog(mContext);
@@ -2449,6 +2688,32 @@ public class CreatePrescription extends Fragment {
                     }
                 });
 
+            } else if (requestCode == 1900 && data != null) {
+
+                ArrayList<String> stringArrayListExtra =
+                        data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                binding.etComments.setText(stringArrayListExtra.get(0));
+
+                binding.etComments.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        binding.etComments.setSelection(binding.etHistory.getText().length());
+                    }
+                });
+
+            } else if (requestCode == 2000 && data != null) {
+
+                ArrayList<String> stringArrayListExtra =
+                        data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                binding.labtestAdditionalComments.setText(stringArrayListExtra.get(0));
+
+                binding.labtestAdditionalComments.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        binding.labtestAdditionalComments.setSelection(binding.etHistory.getText().length());
+                    }
+                });
+
             } else if (requestCode == 800 && data != null) {
 
                 ArrayList<String> stringArrayListExtra =
@@ -2741,26 +3006,110 @@ public class CreatePrescription extends Fragment {
         rView.setLayoutManager(lLayout);
 
         btnChooseFromTemplate = (Button) view.findViewById(R.id.choose);
+
         btnChooseFromTemplate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*MyTemplates myFragment = new MyTemplates();
-                Bundle bundle = new Bundle();
-                bundle.putString("patient_id",patient_id)
-                bundle.putString("definer","pres");
-                myFragment.setArguments(bundle);
-                getFragmentManager().beginTransaction().replace(R.id.homePageContainer, myFragment,
-                        "first").addToBackStack(null).commit();*/
-                backCheckerFlag = false;
 
-                TemplateSelection myFragment = new TemplateSelection();
-                Bundle bundle = new Bundle();
-                bundle.putString("patient_id", patient_id);
-                bundle.putString("definer", "pres");
-                bundle.putString("type", "medicine");
-                myFragment.setArguments(bundle);
-                fragmentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.homePageContainer, myFragment,
-                        "first").addToBackStack("null").commit();
+                if (!("").equalsIgnoreCase(manager.getPreferences(mContext, "registration_no"))) {
+                    ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
+                    if (!("").equalsIgnoreCase(responseProfileDetails.getHospitalCode())) {
+
+                        if (responseProfileDetails.getAccess().equals("Approve")) {
+
+                            String sub_valid = "", premium_valid = "";
+                            boolean flag_reset_paid = false;
+                            Date date1 = null, date2 = null;
+                            int days_left_free = 0, days_left_paid = 0;
+                            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                            ResponseProfileDetails profileDetails = manager.getObjectProfileDetails(mContext, "profile");
+                            if (profileDetails.getSubcriptions() != null) {
+                                if (profileDetails.getSubcriptions().size() != 0) {
+                                    for (SubcriptionsItem si : profileDetails.getSubcriptions()) {
+                                        if (!si.getHospital_code().equals("")) {
+                                            try {
+                                                Calendar c2 = Calendar.getInstance();
+                                                DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+                                                Date dateEnd = dateFormat.parse(si.getEnd());
+                                                Date c = Calendar.getInstance().getTime();
+                                                assert dateEnd != null;
+
+                                                //premium_valid = si.getDays();
+                                                Log.e("DATE_____1 = ", DateUtils.printDifference(c, dateEnd));
+                                                // Log.e("DATE_____2 = ",DateUtils.outFormatsetMMM(DateUtils.printDifference(c,dateEnd)));
+                                                // Log.e("DATE_____3 = ",DateUtils.outFormatset(DateUtils.printDifference(c,dateEnd)));
+
+
+                                                try {
+                                                    date1 = dateFormat.parse(dateFormat.format(c2.getTime()));
+                                                    date2 = dateFormat.parse(si.getEnd());
+                                                    Log.e("DATE_____1 = ", DateUtils.printDifference(date1, date2) + " left");
+
+                                                    String[] splited = DateUtils.printDifference(date1, date2).split("\\s+");
+
+                                                    days_left_free = days_left_free + Integer.parseInt(splited[0]);
+                                                    // popupFreeSubscription(DateUtils.printDifference(date1,date2),true);
+                                                    // break;
+                                                    sub_valid = si.getEnd();
+                                                } catch (ParseException e) {
+                                                    e.printStackTrace();
+                                                }
+
+                                                //viewHolder.expiry.setText(DateUtils.printDifference(date1,date2)+" left");
+
+                                            } catch (ParseException pe) {
+                                                // handle the failure
+                                            }
+
+                                        }
+                                    }
+
+                                } else {
+                                    popupPaused("Your subscription has expired. Please contact to " + profileDetails.getHospital_name());
+                                    return;
+                                }
+                            } else {
+                                popupPaused("Your subscription has expired. Please contact to " + profileDetails.getHospital_name());
+                                return;
+                            }
+
+                            if (days_left_free < 0) {
+                                popupPaused("Your subscription has expired. Please contact to hospital  admin");
+                                return;
+                            } else {
+                                backCheckerFlag = false;
+                                TemplateSelection myFragment = new TemplateSelection();
+                                Bundle bundle = new Bundle();
+                                bundle.putString("patient_id", patient_id);
+                                bundle.putString("definer", "pres");
+                                bundle.putString("type", "medicine");
+                                myFragment.setArguments(bundle);
+                                fragmentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.homePageContainer, myFragment,
+                                        "first").addToBackStack("null").commit();
+                            }
+//Now run it
+                        } else if (responseProfileDetails.getAccess().equals("Pending")) {
+                            popupPaused("Your account is pending for approval. Please contact " + responseProfileDetails.getHospital_name());
+
+                        } else if (responseProfileDetails.getAccess().equals("Remove")) {
+                            popupPaused("You have been removed from " + responseProfileDetails.getHospital_name() + ". You now have accesses like BluDoc standard user");
+                            //popupHospitalCode();
+                        } else if (responseProfileDetails.getAccess().equals("Pause")) {
+
+                            popupPaused("Your subscription is paused. Please contact to " + responseProfileDetails.getHospital_name());
+
+                        } else {
+                            popupAccess();
+                        }
+
+                    } else {
+
+                        checkSubsciptionForAppointment();
+
+                    }
+                } else {
+                    popup();
+                }
 
             }
         });
@@ -2769,24 +3118,110 @@ public class CreatePrescription extends Fragment {
         btnChooseFromTemplateLabTest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*MyTemplatesLabTest myFragment = new MyTemplatesLabTest();
-                Bundle bundle = new Bundle();
-                bundle.putString("patient_id",patient_id);
-                bundle.putString("definer","pres");
-                myFragment.setArguments(bundle);
-                getFragmentManager().beginTransaction().replace(R.id.homePageContainer, myFragment,
-                        "first").addToBackStack(null).commit();*/
-                backCheckerFlag = false;
+                if (!("").equalsIgnoreCase(manager.getPreferences(mContext, "registration_no"))) {
+                    ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
+                    if (!("").equalsIgnoreCase(responseProfileDetails.getHospitalCode())) {
 
-                TemplateSelection myFragment = new TemplateSelection();
-                Bundle bundle = new Bundle();
-                bundle.putString("patient_id", patient_id);
-                bundle.putString("definer", "pres");
-                bundle.putString("type", "lab");
+                        if (responseProfileDetails.getAccess().equals("Approve")) {
 
-                myFragment.setArguments(bundle);
-                fragmentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.homePageContainer, myFragment,
-                        "first").addToBackStack("null").commit();
+                            String sub_valid = "", premium_valid = "";
+                            boolean flag_reset_paid = false;
+                            Date date1 = null, date2 = null;
+                            int days_left_free = 0, days_left_paid = 0;
+                            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                            ResponseProfileDetails profileDetails = manager.getObjectProfileDetails(mContext, "profile");
+                            if (profileDetails.getSubcriptions() != null) {
+                                if (profileDetails.getSubcriptions().size() != 0) {
+                                    for (SubcriptionsItem si : profileDetails.getSubcriptions()) {
+                                        if (!si.getHospital_code().equals("")) {
+                                            try {
+                                                Calendar c2 = Calendar.getInstance();
+                                                DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+                                                Date dateEnd = dateFormat.parse(si.getEnd());
+                                                Date c = Calendar.getInstance().getTime();
+                                                assert dateEnd != null;
+
+                                                //premium_valid = si.getDays();
+                                                Log.e("DATE_____1 = ", DateUtils.printDifference(c, dateEnd));
+                                                // Log.e("DATE_____2 = ",DateUtils.outFormatsetMMM(DateUtils.printDifference(c,dateEnd)));
+                                                // Log.e("DATE_____3 = ",DateUtils.outFormatset(DateUtils.printDifference(c,dateEnd)));
+
+
+                                                try {
+                                                    date1 = dateFormat.parse(dateFormat.format(c2.getTime()));
+                                                    date2 = dateFormat.parse(si.getEnd());
+                                                    Log.e("DATE_____1 = ", DateUtils.printDifference(date1, date2) + " left");
+
+                                                    String[] splited = DateUtils.printDifference(date1, date2).split("\\s+");
+
+                                                    days_left_free = days_left_free + Integer.parseInt(splited[0]);
+                                                    // popupFreeSubscription(DateUtils.printDifference(date1,date2),true);
+                                                    // break;
+                                                    sub_valid = si.getEnd();
+                                                } catch (ParseException e) {
+                                                    e.printStackTrace();
+                                                }
+
+                                                //viewHolder.expiry.setText(DateUtils.printDifference(date1,date2)+" left");
+
+                                            } catch (ParseException pe) {
+                                                // handle the failure
+                                            }
+
+                                        }
+                                    }
+
+                                } else {
+                                    popupPaused("Your subscription has expired. Please contact to " + profileDetails.getHospital_name());
+                                    return;
+                                }
+                            } else {
+                                popupPaused("Your subscription has expired. Please contact to " + profileDetails.getHospital_name());
+                                return;
+                            }
+
+                            if (days_left_free < 0) {
+                                popupPaused("Your subscription has expired. Please contact to hospital  admin");
+                                return;
+                            } else {
+
+                                backCheckerFlag = false;
+
+                                TemplateSelection myFragment = new TemplateSelection();
+                                Bundle bundle = new Bundle();
+                                bundle.putString("patient_id", patient_id);
+                                bundle.putString("definer", "pres");
+                                bundle.putString("type", "lab");
+
+                                myFragment.setArguments(bundle);
+                                fragmentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.homePageContainer, myFragment,
+                                        "first").addToBackStack("null").commit();
+
+                            }
+//Now run it
+                        } else if (responseProfileDetails.getAccess().equals("Pending")) {
+                            popupPaused("Your account is pending for approval. Please contact " + responseProfileDetails.getHospital_name());
+
+                        } else if (responseProfileDetails.getAccess().equals("Remove")) {
+                            popupPaused("You have been removed from " + responseProfileDetails.getHospital_name() + ". You now have accesses like BluDoc standard user");
+                            //popupHospitalCode();
+                        } else if (responseProfileDetails.getAccess().equals("Pause")) {
+
+                            popupPaused("Your subscription is paused. Please contact to " + responseProfileDetails.getHospital_name());
+
+                        } else {
+                            popupAccess();
+                        }
+
+                    } else {
+
+                        checkSubsciptionForLabTest();
+
+                    }
+                } else {
+                    popup();
+                }
+
             }
         });
 
@@ -2794,6 +3229,11 @@ public class CreatePrescription extends Fragment {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if(fromAppointment){
+                    fragmentActivity.finish();
+                }
+
                 // Toast.makeText(mContext, "BACKKK", Toast.LENGTH_SHORT).show();
                 popupExit();
                /* androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AlertDialog));
@@ -2900,6 +3340,7 @@ public class CreatePrescription extends Fragment {
                                     }
                                 }
                             }
+
                             diagnosis_desc = et_chief_complaint.getText().toString().trim() + "|" +
                                     et_history.getText().toString().trim() + "|" +
                                     et_findings.getText().toString().trim() + "|" +
@@ -3674,6 +4115,7 @@ public class CreatePrescription extends Fragment {
                                 }
 
                                 Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                                    @SuppressLint("NotifyDataSetChanged")
                                     @Override
                                     public void run() {
                                         String iden = "";
@@ -3857,6 +4299,88 @@ public class CreatePrescription extends Fragment {
 
             }
         });
+
+    }
+
+    private void checkSubsciptionForLabTest() {
+
+        String sub_valid = "", premium_valid = "";
+        boolean flag_reset_paid = false;
+        Date date1 = null, date2 = null;
+        int days_left_free = 0, days_left_paid = 0;
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        ResponseProfileDetails profileDetails = manager.getObjectProfileDetails(fragmentActivity, "profile");
+        if (profileDetails.getSubcriptions() != null) {
+            if (profileDetails.getSubcriptions().size() != 0) {
+                for (SubcriptionsItem si : profileDetails.getSubcriptions()) {
+                    if (!si.getHospital_code().equals("")) {
+                        boolean flag_reset_free;
+                        try {
+                            Calendar c2 = Calendar.getInstance();
+                            DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+                            Date dateEnd = dateFormat.parse(si.getEnd());
+                            Date c = Calendar.getInstance().getTime();
+                            assert dateEnd != null;
+
+                            //premium_valid = si.getDays();
+                            Log.e("DATE_____1 = ", DateUtils.printDifference(c, dateEnd));
+                            // Log.e("DATE_____2 = ",DateUtils.outFormatsetMMM(DateUtils.printDifference(c,dateEnd)));
+                            // Log.e("DATE_____3 = ",DateUtils.outFormatset(DateUtils.printDifference(c,dateEnd)));
+
+
+                            try {
+                                date1 = dateFormat.parse(dateFormat.format(c2.getTime()));
+                                date2 = dateFormat.parse(si.getEnd());
+                                Log.e("DATE_____1 = ", DateUtils.printDifference(date1, date2) + " left");
+                                flag_reset_free = true;
+
+                                String[] splited = DateUtils.printDifference(date1, date2).split("\\s+");
+
+                                days_left_free = days_left_free + Integer.parseInt(splited[0]);
+                                // popupFreeSubscription(DateUtils.printDifference(date1,date2),true);
+                                // break;
+                                sub_valid = si.getEnd();
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+                            //viewHolder.expiry.setText(DateUtils.printDifference(date1,date2)+" left");
+
+                        } catch (ParseException pe) {
+                            // handle the failure
+                            flag_reset_free = false;
+                        }
+
+                    }
+                }
+
+            } else {
+                popupPausedForChecking();
+                return;
+
+            }
+        } else {
+            popupPausedForChecking();
+            return;
+        }
+
+        if (days_left_free < 0) {
+            popupPausedForChecking();
+        } else {
+
+            backCheckerFlag = false;
+
+            TemplateSelection myFragment = new TemplateSelection();
+            Bundle bundle = new Bundle();
+            bundle.putString("patient_id", patient_id);
+            bundle.putString("definer", "pres");
+            bundle.putString("type", "lab");
+
+            myFragment.setArguments(bundle);
+            fragmentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.homePageContainer, myFragment,
+                    "first").addToBackStack("null").commit();
+
+        }
 
     }
 
@@ -4077,6 +4601,50 @@ public class CreatePrescription extends Fragment {
         }
     };
 
+    private void popupAccess() {
+
+        final Dialog dialog_data = new Dialog(mContext);
+        dialog_data.setCancelable(true);
+
+        dialog_data.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        Objects.requireNonNull(dialog_data.getWindow()).setGravity(Gravity.CENTER);
+
+        dialog_data.setContentView(R.layout.popup_access);
+
+        WindowManager.LayoutParams lp_number_picker = new WindowManager.LayoutParams();
+        Window window = dialog_data.getWindow();
+        lp_number_picker.copyFrom(window.getAttributes());
+
+        lp_number_picker.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp_number_picker.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+        //window.setGravity(Gravity.CENTER);
+        window.setAttributes(lp_number_picker);
+
+        Button btn_add = dialog_data.findViewById(R.id.btn_register);
+        ImageView btn_close = dialog_data.findViewById(R.id.btn_close);
+
+
+        btn_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog_data.dismiss();
+
+            }
+        });
+
+
+        btn_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog_data.dismiss();
+
+            }
+        });
+        dialog_data.show();
+    }
+
     private SingleObserver<ResponseSuccess> responseAddTemplate = new SingleObserver<ResponseSuccess>() {
         @Override
         public void onSubscribe(Disposable d) {
@@ -4113,6 +4681,17 @@ public class CreatePrescription extends Fragment {
             Toast.makeText(mContext, ApplicationConstant.ANYTHING_WRONG, Toast.LENGTH_SHORT).show();
         }
     };
+
+    private void popupPaused(String keywords) {
+
+        PopUpSubscriptionDialogFragment popUpSubscriptionDialogFragment= new PopUpSubscriptionDialogFragment();
+        popUpSubscriptionDialogFragment.setCancelable(false);
+        Bundle bundle = new Bundle();
+        bundle.putString("keywords",keywords);
+        popUpSubscriptionDialogFragment.setArguments(bundle);
+        popUpSubscriptionDialogFragment.show(fragmentActivity.getSupportFragmentManager(),"");
+
+    }
 
     private SingleObserver<ResponsePatients> responsePatients = new SingleObserver<ResponsePatients>() {
         @Override
@@ -4244,6 +4823,39 @@ public class CreatePrescription extends Fragment {
         }
     };
 
+    private  void popup()
+    {
+        final Dialog dialog_data = new Dialog(mContext);
+        dialog_data.setCancelable(true);
+
+        dialog_data.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        Objects.requireNonNull(dialog_data.getWindow()).setGravity(Gravity.CENTER);
+
+        dialog_data.setContentView(R.layout.feedback);
+
+        WindowManager.LayoutParams lp_number_picker = new WindowManager.LayoutParams();
+        Window window = dialog_data.getWindow();
+        lp_number_picker.copyFrom(window.getAttributes());
+
+        lp_number_picker.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp_number_picker.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+        //window.setGravity(Gravity.CENTER);
+        window.setAttributes(lp_number_picker);
+
+        ImageView btn_close = dialog_data.findViewById(R.id.btn_close);
+
+        btn_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialog_data.dismiss();
+
+            }
+        });
+        dialog_data.show();
+    }
 
     private void initSpinner(View view) {
         hideKeyboard(mContext);
@@ -4480,7 +5092,7 @@ public class CreatePrescription extends Fragment {
                                 mAdapterSearchMedicine = new SearchAdapter(favorites1,
                                         frequency_list, frequency2_list, et_no_of_days, route_list, instructions_list,
                                         frequency_spinner, frequency2_spinner, route_spinner, instructions_spinner, et_additional_comments,
-                                        mRecyclerViewMedicines, searchBarMaterialMedicine);
+                                        mRecyclerViewMedicines, searchBarMaterialMedicine,binding.medicineQty);
                                 mRecyclerViewMedicines.setAdapter(mAdapterSearchMedicine);
                                 mAdapterSearchMedicine.notifyDataSetChanged();
 
@@ -4675,7 +5287,7 @@ public class CreatePrescription extends Fragment {
                 mAdapterSearchMedicine = new SearchAdapter(MedicAll,
                         frequency_list, frequency2_list, et_no_of_days, route_list, instructions_list,
                         frequency_spinner, frequency2_spinner, route_spinner, instructions_spinner, et_additional_comments,
-                        mRecyclerViewMedicines, searchBarMaterialMedicine);
+                        mRecyclerViewMedicines, searchBarMaterialMedicine, binding.medicineQty);
                 mRecyclerViewMedicines.setAdapter(mAdapterSearchMedicine);
                 mAdapterSearchMedicine.notifyDataSetChanged();
             }
@@ -4819,6 +5431,94 @@ public class CreatePrescription extends Fragment {
             });
 
         }
+
+    }
+
+    private void checkSubsciptionForAppointment() {
+
+        String sub_valid = "", premium_valid = "";
+        boolean flag_reset_paid = false;
+        Date date1 = null, date2 = null;
+        int days_left_free = 0, days_left_paid = 0;
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        ResponseProfileDetails profileDetails = manager.getObjectProfileDetails(fragmentActivity, "profile");
+        if (profileDetails.getSubcriptions() != null) {
+            if (profileDetails.getSubcriptions().size() != 0) {
+                for (SubcriptionsItem si : profileDetails.getSubcriptions()) {
+                    if (!si.getHospital_code().equals("")) {
+                        boolean flag_reset_free;
+                        try {
+                            Calendar c2 = Calendar.getInstance();
+                            DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+                            Date dateEnd = dateFormat.parse(si.getEnd());
+                            Date c = Calendar.getInstance().getTime();
+                            assert dateEnd != null;
+
+                            //premium_valid = si.getDays();
+                            Log.e("DATE_____1 = ", DateUtils.printDifference(c, dateEnd));
+                            // Log.e("DATE_____2 = ",DateUtils.outFormatsetMMM(DateUtils.printDifference(c,dateEnd)));
+                            // Log.e("DATE_____3 = ",DateUtils.outFormatset(DateUtils.printDifference(c,dateEnd)));
+
+
+                            try {
+                                date1 = dateFormat.parse(dateFormat.format(c2.getTime()));
+                                date2 = dateFormat.parse(si.getEnd());
+                                Log.e("DATE_____1 = ", DateUtils.printDifference(date1, date2) + " left");
+                                flag_reset_free = true;
+
+                                String[] splited = DateUtils.printDifference(date1, date2).split("\\s+");
+
+                                days_left_free = days_left_free + Integer.parseInt(splited[0]);
+                                // popupFreeSubscription(DateUtils.printDifference(date1,date2),true);
+                                // break;
+                                sub_valid = si.getEnd();
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+                            //viewHolder.expiry.setText(DateUtils.printDifference(date1,date2)+" left");
+
+                        } catch (ParseException pe) {
+                            // handle the failure
+                            flag_reset_free = false;
+                        }
+
+                    }
+                }
+
+            } else {
+                popupPausedForChecking();
+                return;
+
+            }
+        } else {
+            popupPausedForChecking();
+            return;
+        }
+
+        if (days_left_free < 0) {
+            popupPausedForChecking();
+        } else {
+
+            backCheckerFlag = false;
+            TemplateSelection myFragment = new TemplateSelection();
+            Bundle bundle = new Bundle();
+            bundle.putString("patient_id", patient_id);
+            bundle.putString("definer", "pres");
+            bundle.putString("type", "medicine");
+            myFragment.setArguments(bundle);
+            fragmentActivity.getSupportFragmentManager().beginTransaction().replace(R.id.homePageContainer, myFragment,
+                    "first").addToBackStack("null").commit();
+
+        }
+
+    }
+
+    private void popupPausedForChecking() {
+
+        PopUpSubscriptionDialogFragment popUpSubscriptionDialogFragment= new PopUpSubscriptionDialogFragment();
+        popUpSubscriptionDialogFragment.setCancelable(false);
+        popUpSubscriptionDialogFragment.show(fragmentActivity.getSupportFragmentManager(),"");
 
     }
 

@@ -420,7 +420,7 @@ public class EmpLogin extends AppCompatActivity implements GoogleApiClient.Conne
         if (Utils.isConnectingToInternet(mContext)) {
             /*JSONObject jsonObject = new JSONObject();
             jsonObject.put("customer_mobile","8545989999685");*/
-            apiViewHolder.setUserLogin( email, hospitalCode)
+            apiViewHolder.setUserLogin(email, hospitalCode)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(responseUserLogin);
@@ -432,9 +432,7 @@ public class EmpLogin extends AppCompatActivity implements GoogleApiClient.Conne
 
     SingleObserver<ResponseRegister> responseUserLogin = new SingleObserver<ResponseRegister>() {
         @Override
-        public void onSubscribe(Disposable d) {
-            mBag.add(d);
-        }
+        public void onSubscribe(Disposable d) { mBag.add(d); }
 
         @Override
         public void onSuccess(ResponseRegister response) {
@@ -684,6 +682,9 @@ public class EmpLogin extends AppCompatActivity implements GoogleApiClient.Conne
                     frameLayoutProgressMainl.setVisibility(View.GONE);
                     login_verifyOTPLayout.setVisibility(View.VISIBLE);
                     manager.setPreferences(mContext,"verify_otp",String.valueOf(response.getOtp()));
+
+                    login_editTextOTP.setText(String.valueOf(response.getOtp())); // todo clear
+
                     manager.setPreferences(mContext,"status",response.getStatus());
                     submit.setEnabled(true);
                 }

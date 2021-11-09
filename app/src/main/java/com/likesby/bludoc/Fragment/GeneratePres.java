@@ -1,5 +1,6 @@
 package com.likesby.bludoc.Fragment;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
@@ -80,6 +81,7 @@ import com.likesby.bludoc.Adapter.Pres_adapter_mobile;
 import com.likesby.bludoc.Adapter.SlidingImage_Adapter_GeneratedPrescription;
 import com.likesby.bludoc.AllPharmacistActivity;
 import com.likesby.bludoc.BuildConfig;
+import com.likesby.bludoc.CreateAppointmentActivity;
 import com.likesby.bludoc.ModelLayer.Entities.BottomSheetItem;
 import com.likesby.bludoc.ModelLayer.Entities.MedicinesItem;
 import com.likesby.bludoc.ModelLayer.Entities.PrescriptionJSON;
@@ -90,11 +92,13 @@ import com.likesby.bludoc.ModelLayer.NewEntities.LabTestItem;
 import com.likesby.bludoc.ModelLayer.NewEntities.LabTestItems;
 import com.likesby.bludoc.ModelLayer.NewEntities.MedicineItem;
 import com.likesby.bludoc.ModelLayer.NewEntities.ResponseProfileDetails;
+import com.likesby.bludoc.ModelLayer.NewEntities.SubcriptionsItem;
 import com.likesby.bludoc.ModelLayer.NewEntities3.Doctor;
 import com.likesby.bludoc.ModelLayer.NewEntities3.PrescriptionItem;
 import com.likesby.bludoc.MultiplePharmacistActivity;
 import com.likesby.bludoc.R;
 import com.likesby.bludoc.SessionManager.SessionManager;
+import com.likesby.bludoc.TemplateSelection;
 import com.likesby.bludoc.constants.ApplicationConstant;
 import com.likesby.bludoc.databinding.GeneratePrescriptionBinding;
 import com.likesby.bludoc.utils.DateUtils;
@@ -104,6 +108,8 @@ import com.likesby.bludoc.viewModels.ApiViewHolder;
 import com.likesby.bludoc.viewModels.ResultOfApi;
 import com.mannan.translateapi.Language;
 import com.mannan.translateapi.TranslateAPI;
+import com.nabinbhandari.android.permissions.PermissionHandler;
+import com.nabinbhandari.android.permissions.Permissions;
 import com.squareup.picasso.Picasso;
 import com.viewpagerindicator.CirclePageIndicator;
 
@@ -114,9 +120,13 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.MalformedURLException;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
@@ -207,6 +217,7 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
     private boolean isSendPharmacy = true;
     private String message;
     private String isCertificate;
+    private boolean isCertificateAvail;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -223,12 +234,11 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
 
         fragmentActivity = (FragmentActivity) mContext;
 
-
     }
 
     public RewardedAd createAndLoadRewardedAd() {
-        //   rewardedAd = new RewardedAd(mContext,"ca-app-pub-9225891557304181/7053195953");// Live ad credentials
-        rewardedAd = new RewardedAd(mContext, "ca-app-pub-3940256099942544/5224354917");// Test ad credentials
+           rewardedAd = new RewardedAd(mContext,"ca-app-pub-9225891557304181/7053195953");// Live ad credentials
+        //rewardedAd = new RewardedAd(mContext, "ca-app-pub-3940256099942544/5224354917");// Test ad credentials
 
         RewardedAdLoadCallback adLoadCallback = new RewardedAdLoadCallback() {
             @Override
@@ -253,12 +263,34 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
         return rewardedAd;
     }
 
+    public void runTimePermission() {
+
+        String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        String rationale = "Please provide storage permission for better reach ......";
+        Permissions.Options options = new Permissions.Options()
+                .setRationaleDialogTitle("Info")
+                .setSettingsDialogTitle("Warning");
+
+        Permissions.check(fragmentActivity/*context*/, permissions, rationale, options, new PermissionHandler() {
+            @Override
+            public void onGranted() {
+                // do your task.
+            }
+
+            @Override
+            public void onDenied(Context context, ArrayList<String> deniedPermissions) {
+                // permission denied, block the feature.
+            }
+        });
+
+    }
+
 
     private void initInterstitialAd(AdRequest adRequest) {
 
         mInterstitialAd = new InterstitialAd(mContext);
-        //  mInterstitialAd.setAdUnitId("ca-app-pub-9225891557304181/3105393849");//Live
-        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");//Test
+        mInterstitialAd.setAdUnitId("ca-app-pub-9225891557304181/3105393849");//Live
+        //mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");//Test
         mInterstitialAd.loadAd(this.adRequest);
 
         mInterstitialAd.setAdListener(new AdListener() {
@@ -369,6 +401,8 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
                 return false;
             }
         });
+
+        runTimePermission();
 
         return binding.getRoot();
     }
@@ -487,6 +521,7 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
 
         TextView __bottom_sheet_name = dialog_dataShareMenu.findViewById(R.id.__bottom_sheet_name);
         TextView open_via_page_pdf = dialog_dataShareMenu.findViewById(R.id.open_via_page_pdf);
+        TextView send_to = dialog_dataShareMenu.findViewById(R.id.send_to);
 
         open_via_page_pdf.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -550,7 +585,7 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
         bottomSheetItem.setMenuImage("whatsapp");
         bottomSheetItemArrayList.add(bottomSheetItem);
 
-        mAdapter = new BottomSheetAdapter(mContext, bottomSheetItemArrayList, fl_progress_bar, GeneratePres.this, null);
+        mAdapter = new BottomSheetAdapter(mContext, bottomSheetItemArrayList, fl_progress_bar, GeneratePres.this, null, prescriptionItem);
         recyclerView.setAdapter(mAdapter);
 
         mAdapter.setPatientName(prescriptionItem.getPName());
@@ -581,6 +616,12 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
         });
 
         RecyclerView recyclerView_bottom_sheet_send_to = dialog_dataShareMenu.findViewById(R.id.recyclerView_bottom_sheet_send_to);
+
+        if (isCertificateAvail) {
+            recyclerView_bottom_sheet_send_to.setVisibility(View.GONE);
+            send_to.setVisibility(View.GONE);
+        }
+
         //Create new GridLayoutManager
         @SuppressLint("WrongConstant") GridLayoutManager gridLayoutManagerSendTo = new GridLayoutManager(mContext,
                 3,//span count no of items in single row
@@ -622,7 +663,7 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
         bottomSheetItemSendTo.setMenuImage("doctor");
         bottomSheetItemArrayListSendTo.add(bottomSheetItemSendTo);
 
-        BottomSheetAdapter mAdapterSendTo = new BottomSheetAdapter(mContext, bottomSheetItemArrayListSendTo, fl_progress_bar, GeneratePres.this, null);
+        BottomSheetAdapter mAdapterSendTo = new BottomSheetAdapter(mContext, bottomSheetItemArrayListSendTo, fl_progress_bar, GeneratePres.this, null, prescriptionItem);
         recyclerView_bottom_sheet_send_to.setAdapter(mAdapterSendTo);
 
         mAdapterSendTo.setPatientName(prescriptionItem.getPName());
@@ -632,36 +673,99 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
             @Override
             public void onClick(int i) {
 
-                Intent intent = new Intent(mContext, MultiplePharmacistActivity.class);
+                if (!("").equalsIgnoreCase(manager.getPreferences(mContext, "registration_no"))) {
+                    ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
+                    if (!("").equalsIgnoreCase(responseProfileDetails.getHospitalCode())) {
 
-                if (i == 0) {
+                        if (responseProfileDetails.getAccess().equals("Approve")) {
 
-                    intent.putExtra("keywords","Pharmacy");
-//                    sendIdAndPresIdOnServer("Pharmacy");
+                            String sub_valid = "", premium_valid = "";
+                            boolean flag_reset_paid = false;
+                            Date date1 = null, date2 = null;
+                            int days_left_free = 0, days_left_paid = 0;
+                            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                            ResponseProfileDetails profileDetails = manager.getObjectProfileDetails(mContext, "profile");
+                            if (profileDetails.getSubcriptions() != null) {
+                                if (profileDetails.getSubcriptions().size() != 0) {
+                                    for (SubcriptionsItem si : profileDetails.getSubcriptions()) {
+                                        if (!si.getHospital_code().equals("")) {
+                                            try {
+                                                Calendar c2 = Calendar.getInstance();
+                                                DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+                                                Date dateEnd = dateFormat.parse(si.getEnd());
+                                                Date c = Calendar.getInstance().getTime();
+                                                assert dateEnd != null;
 
-                } else if (i == 1) {
+                                                //premium_valid = si.getDays();
+                                                Log.e("DATE_____1 = ", DateUtils.printDifference(c, dateEnd));
+                                                // Log.e("DATE_____2 = ",DateUtils.outFormatsetMMM(DateUtils.printDifference(c,dateEnd)));
+                                                // Log.e("DATE_____3 = ",DateUtils.outFormatset(DateUtils.printDifference(c,dateEnd)));
 
-                    intent.putExtra("keywords","Path Lab");
-//                    sendIdAndPresIdOnServer("Laboratory");
 
-                } else if (i == 2) {
+                                                try {
+                                                    date1 = dateFormat.parse(dateFormat.format(c2.getTime()));
+                                                    date2 = dateFormat.parse(si.getEnd());
+                                                    Log.e("DATE_____1 = ", DateUtils.printDifference(date1, date2) + " left");
 
-//                    sendIdAndPresIdOnServer("Imaging center");
-                      intent.putExtra("keywords","Imaging Centre");
+                                                    String[] splited = DateUtils.printDifference(date1, date2).split("\\s+");
 
-                } else if (i == 3) {
+                                                    days_left_free = days_left_free + Integer.parseInt(splited[0]);
+                                                    // popupFreeSubscription(DateUtils.printDifference(date1,date2),true);
+                                                    // break;
+                                                    sub_valid = si.getEnd();
+                                                } catch (ParseException e) {
+                                                    e.printStackTrace();
+                                                }
 
-//                    sendIdAndPresIdOnServer("Hospital");
-                    intent.putExtra("keywords","Hospital");
+                                                //viewHolder.expiry.setText(DateUtils.printDifference(date1,date2)+" left");
 
-                }  else if (i == 4) {
+                                            } catch (ParseException pe) {
+                                                // handle the failure
+                                            }
 
-                    intent.putExtra("keywords","Doctor");
-//                    sendIdAndPresIdOnServer("Doctor");
+                                        }
+                                    }
 
+                                } else {
+                                    popupPaused("Your subscription has expired. Please contact to " + profileDetails.getHospital_name());
+                                    return;
+                                }
+                            } else {
+                                popupPaused("Your subscription has expired. Please contact to " + profileDetails.getHospital_name());
+                                return;
+                            }
+
+                            if (days_left_free < 0) {
+                                popupPaused("Your subscription has expired. Please contact to hospital  admin");
+                                return;
+                            } else {
+
+                                handleClickListener(i);
+
+                            }
+//Now run it
+                        } else if (responseProfileDetails.getAccess().equals("Pending")) {
+                            popupPaused("Your account is pending for approval. Please contact " + responseProfileDetails.getHospital_name());
+
+                        } else if (responseProfileDetails.getAccess().equals("Remove")) {
+                            popupPaused("You have been removed from " + responseProfileDetails.getHospital_name() + ". You now have accesses like BluDoc standard user");
+                            //popupHospitalCode();
+                        } else if (responseProfileDetails.getAccess().equals("Pause")) {
+
+                            popupPaused("Your subscription is paused. Please contact to " + responseProfileDetails.getHospital_name());
+
+                        } else {
+                            popupAccess();
+                        }
+
+                    } else {
+
+                        checkSubsciptionForLabTest(i);
+
+                    }
+                } else {
+                    popup();
                 }
-
-                startActivityForResult(intent, 510);
 
             }
         });
@@ -670,13 +774,190 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
         iv_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 dialog_dataShareMenu.dismiss();
+
+                isVisible = true;
+                isFooterVisible = true;
+                isClinicNameFound = false;
+                isClinicVisible = true;
+
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("defaultAttributeId", prescriptionItem);
+                bundle.putParcelableArrayList("defaultAttributeIdLabTest", labTestItem);
+                bundle.putString("definer", definer);
+                bundle.putString("end_note", end_note);
+                bundle.putString("yesOrNo", yesOrNo);
+
+                setArguments(bundle);
+
+                fragmentActivity.getSupportFragmentManager()
+                        .beginTransaction()
+                        .detach(GeneratePres.this)
+                        .attach(GeneratePres.this)
+                        .commit();
+
                 /*assert getFragmentManager() != null;
                 getFragmentManager().popBackStackImmediate();*/
             }
         });
 
         dialog_dataShareMenu.show();
+    }
+
+    private void popupPaused(String keywords) {
+
+        PopUpSubscriptionDialogFragment popUpSubscriptionDialogFragment= new PopUpSubscriptionDialogFragment();
+        popUpSubscriptionDialogFragment.setCancelable(false);
+        popUpSubscriptionDialogFragment.show(fragmentActivity.getSupportFragmentManager(),"");
+
+    }
+
+    private void popupAccess() {
+
+        final Dialog dialog_data = new Dialog(mContext);
+        dialog_data.setCancelable(true);
+
+        dialog_data.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        Objects.requireNonNull(dialog_data.getWindow()).setGravity(Gravity.CENTER);
+
+        dialog_data.setContentView(R.layout.popup_access);
+
+        WindowManager.LayoutParams lp_number_picker = new WindowManager.LayoutParams();
+        Window window = dialog_data.getWindow();
+        lp_number_picker.copyFrom(window.getAttributes());
+
+        lp_number_picker.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp_number_picker.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+        //window.setGravity(Gravity.CENTER);
+        window.setAttributes(lp_number_picker);
+
+        Button btn_add = dialog_data.findViewById(R.id.btn_register);
+        ImageView btn_close = dialog_data.findViewById(R.id.btn_close);
+
+
+        btn_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog_data.dismiss();
+
+            }
+        });
+
+
+        btn_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog_data.dismiss();
+
+            }
+        });
+        dialog_data.show();
+    }
+
+
+    private void checkSubsciptionForLabTest(int i) {
+
+        String sub_valid = "", premium_valid = "";
+        boolean flag_reset_paid = false;
+        Date date1 = null, date2 = null;
+        int days_left_free = 0, days_left_paid = 0;
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        ResponseProfileDetails profileDetails = manager.getObjectProfileDetails(fragmentActivity, "profile");
+        if (profileDetails.getSubcriptions() != null) {
+            if (profileDetails.getSubcriptions().size() != 0) {
+                for (SubcriptionsItem si : profileDetails.getSubcriptions()) {
+                    if (!si.getHospital_code().equals("")) {
+                        boolean flag_reset_free;
+                        try {
+                            Calendar c2 = Calendar.getInstance();
+                            DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+                            Date dateEnd = dateFormat.parse(si.getEnd());
+                            Date c = Calendar.getInstance().getTime();
+                            assert dateEnd != null;
+
+                            //premium_valid = si.getDays();
+                            Log.e("DATE_____1 = ", DateUtils.printDifference(c, dateEnd));
+                            // Log.e("DATE_____2 = ",DateUtils.outFormatsetMMM(DateUtils.printDifference(c,dateEnd)));
+                            // Log.e("DATE_____3 = ",DateUtils.outFormatset(DateUtils.printDifference(c,dateEnd)));
+
+
+                            try {
+                                date1 = dateFormat.parse(dateFormat.format(c2.getTime()));
+                                date2 = dateFormat.parse(si.getEnd());
+                                Log.e("DATE_____1 = ", DateUtils.printDifference(date1, date2) + " left");
+                                flag_reset_free = true;
+
+                                String[] splited = DateUtils.printDifference(date1, date2).split("\\s+");
+
+                                days_left_free = days_left_free + Integer.parseInt(splited[0]);
+                                // popupFreeSubscription(DateUtils.printDifference(date1,date2),true);
+                                // break;
+                                sub_valid = si.getEnd();
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+                            //viewHolder.expiry.setText(DateUtils.printDifference(date1,date2)+" left");
+
+                        } catch (ParseException pe) {
+                            // handle the failure
+                            flag_reset_free = false;
+                        }
+
+                    }
+                }
+
+            } else {
+                popupPausedForChecking();
+                return;
+
+            }
+        } else {
+            popupPausedForChecking();
+            return;
+        }
+
+        if (days_left_free < 0) {
+            popupPausedForChecking();
+        } else {
+
+            handleClickListener(i);
+
+        }
+
+    }
+
+    private void handleClickListener(int i) {
+
+        Intent intent = new Intent(mContext, MultiplePharmacistActivity.class);
+
+        if (i == 0) {
+
+            intent.putExtra("keywords", "Pharmacy");
+
+        } else if (i == 1) {
+
+            intent.putExtra("keywords", "Path Lab");
+
+        } else if (i == 2) {
+
+            intent.putExtra("keywords", "Imaging Centre");
+
+        } else if (i == 3) {
+
+            intent.putExtra("keywords", "Hospital");
+
+        } else if (i == 4) {
+
+            intent.putExtra("keywords", "Doctor");
+
+        }
+
+        startActivityForResult(intent, 510);
+
     }
 
     public Bitmap getBitmapFromView(View view) {
@@ -805,6 +1086,7 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
                 generatedPresBottomFragment.show(fragmentActivity.getSupportFragmentManager(), "generatedBottomFragment");
                 generatedPresBottomFragment.SetOnClickListener(GeneratePres.this);
 
+
             }
         });
 
@@ -904,13 +1186,13 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
     public void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(resultCode == Activity.RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK) {
 
-            if (requestCode == 510 && data!=null) {
+            if (requestCode == 510 && data != null) {
 
-                String result=data.getStringExtra("arraylist_of_details");
-                String keywordsMultiple=data.getStringExtra("keywordsMultiple");
-                sendIdAndPresIdOnServer(result,keywordsMultiple);
+                String result = data.getStringExtra("arraylist_of_details");
+                String keywordsMultiple = data.getStringExtra("keywordsMultiple");
+                sendIdAndPresIdOnServer(result, keywordsMultiple);
 
             }
 
@@ -1018,100 +1300,83 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
         btn_a4_size.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog_data.dismiss();
 
-                if (manager.contains(mContext, "show_banner_ad")) {
-                    if (manager.contains(mContext, "ad_show_time")) {
+                if (!("").equalsIgnoreCase(manager.getPreferences(mContext, "registration_no"))) {
+                    ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(mContext, "profile");
+                    if (("").equalsIgnoreCase(responseProfileDetails.getHospitalCode())) {
 
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy, HH:mm");
-                        Log.e("DIFF", "ad_show_time ____________________ " + DateUtils.getDateDiff(dateFormat, manager.getPreferences(mContext, "ad_show_time"), DateUtils.currentDateTime()));
+                        String sub_valid = "", premium_valid = "";
+                        boolean flag_reset_paid = false;
+                        Date date1 = null, date2 = null;
+                        int days_left_free = 0, days_left_paid = 0;
+                        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                        ResponseProfileDetails profileDetails = manager.getObjectProfileDetails(mContext, "profile");
+                        if (profileDetails.getSubcriptions() != null) {
+                            if (profileDetails.getSubcriptions().size() != 0) {
+                                for (SubcriptionsItem si : profileDetails.getSubcriptions()) {
+                                    if (!si.getHospital_code().equals("")) {
+                                        boolean flag_reset_free;
+                                        try {
+                                            Calendar c2 = Calendar.getInstance();
+                                            DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+                                            Date dateEnd = dateFormat.parse(si.getEnd());
+                                            Date c = Calendar.getInstance().getTime();
+                                            assert dateEnd != null;
 
-                        if (DateUtils.getDateDiff(dateFormat, manager.getPreferences(mContext, "ad_show_time"), DateUtils.currentDateTime()) > 10) {
-
-                            if (manager.contains(mContext, "ad_count")) {
-                                if (manager.getPreferences(mContext, "ad_count").equals("0")) {
-                                    if (rewardedAd != null && rewardedAd.isLoaded()) {
-                                        manager.setPreferences(mContext, "ad_count", "5");
+                                            //premium_valid = si.getDays();
+                                            Log.e("DATE_____1 = ", DateUtils.printDifference(c, dateEnd));
+                                            // Log.e("DATE_____2 = ",DateUtils.outFormatsetMMM(DateUtils.printDifference(c,dateEnd)));
+                                            // Log.e("DATE_____3 = ",DateUtils.outFormatset(DateUtils.printDifference(c,dateEnd)));
 
 
-                                        rewardedAd.show(getActivity(), new RewardedAdCallback() {
-                                            @Override
-                                            public void onRewardedAdOpened() {
-                                                super.onRewardedAdOpened();
+                                            try {
+                                                date1 = dateFormat.parse(dateFormat.format(c2.getTime()));
+                                                date2 = dateFormat.parse(si.getEnd());
+                                                Log.e("DATE_____1 = ", DateUtils.printDifference(date1, date2) + " left");
+                                                flag_reset_free = true;
+
+                                                String[] splited = DateUtils.printDifference(date1, date2).split("\\s+");
+
+                                                days_left_free = days_left_free + Integer.parseInt(splited[0]);
+                                                // popupFreeSubscription(DateUtils.printDifference(date1,date2),true);
+                                                // break;
+                                                sub_valid = si.getEnd();
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
                                             }
 
-                                            @Override
-                                            public void onRewardedAdClosed() {
-                                                super.onRewardedAdClosed();
-                                                // rewardedAd = createAndLoadRewardedAd();
-                                            }
+                                            //viewHolder.expiry.setText(DateUtils.printDifference(date1,date2)+" left");
 
-                                            @Override
-                                            public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
-                                                // rewardedAd = createAndLoadRewardedAd();
-                                                //   Toast.makeText(mContext, "Congratulations!! You won "+rewardItem.getAmount()+" "+rewardItem.getType(), Toast.LENGTH_SHORT).show();
-                                            }
+                                        } catch (ParseException pe) {
+                                            // handle the failure
+                                            flag_reset_free = false;
+                                        }
 
-                                            @Override
-                                            public void onRewardedAdFailedToShow(int i) {
-                                                super.onRewardedAdFailedToShow(i);
-                                            }
-                                        });
-                                    } else {
-                                        if (mInterstitialAd != null && mInterstitialAd.isLoaded())
-                                            mInterstitialAd.show();
                                     }
-                                } else {
-                                    int count = Integer.parseInt(manager.getPreferences(mContext, "ad_count"));
-                                    manager.setPreferences(mContext, "ad_count", "" + (count - 1));
-                                    if (mInterstitialAd != null && mInterstitialAd.isLoaded())
-                                        mInterstitialAd.show();
                                 }
+
                             } else {
-                                manager.setPreferences(mContext, "ad_count", "5");
-                                if (mInterstitialAd != null && mInterstitialAd.isLoaded())
-                                    mInterstitialAd.show();
+                                popupPausedForChecking();
+                                return;
+
                             }
                         } else {
-                            if (mInterstitialAd != null && mInterstitialAd.isLoaded())
-                                mInterstitialAd.show();
+                            popupPausedForChecking();
+                            return;
                         }
-                    } else {
-                        manager.setPreferences(mContext, "ad_count", "5");
-                        manager.setPreferences(mContext, "ad_show_time", DateUtils.currentDateTime());
-                        if (mInterstitialAd != null && mInterstitialAd.isLoaded())
-                            mInterstitialAd.show();
+
+                        if (days_left_free < 0) {
+                            popupPausedForChecking();
+                        } else {
+
+                            aFourSizeManaged();
+
+                        }
+
                     }
+                } else {
+                    popup();
                 }
-
-                generatePDF.setVisibility(View.GONE);
-                GeneratePresNew myFragment = new GeneratePresNew();
-
-                if (binding.topDoctorDetails.getVisibility() == View.VISIBLE)
-                    bundle.putString("top_doctor_details", "true");
-                else
-                    bundle.putString("top_doctor_details", "false");
-
-                if (binding.footerDocterDetails.getVisibility() == View.VISIBLE)
-                    bundle.putString("footer_doctor_details", "true");
-                else
-                    bundle.putString("footer_doctor_details", "false");
-
-                if (binding.textViewClinicName.getVisibility() == View.VISIBLE)
-                    bundle.putString("clinic_name", "true");
-                else
-                    bundle.putString("clinic_name", "false");
-
-                bundle.putString("dateString", dateWithName);
-                bundle.putString("dateStringWithNum", dateValueString);
-                bundle.putString("definer", definer);
-                bundle.putString("presId", prescriptionId);
-                bundle.putBoolean("certificate_selection", certificate_selection);
-
-                myFragment.setArguments(bundle);
-
-                FragmentManager fragmentManager = ((FragmentActivity) mContext).getSupportFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.homePageContainer, myFragment, "first").addToBackStack(null).commit();
 
             }
         });
@@ -1127,6 +1392,163 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
         dialog_data.show();
     }
 
+    private void aFourSizeManaged() {
+
+        if(dialog_data!=null)
+        dialog_data.dismiss();
+
+        if (manager.contains(mContext, "show_banner_ad")) {
+            if (manager.contains(mContext, "ad_show_time")) {
+
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy, HH:mm");
+                Log.e("DIFF", "ad_show_time ____________________ " + DateUtils.getDateDiff(dateFormat, manager.getPreferences(mContext, "ad_show_time"), DateUtils.currentDateTime()));
+
+                if (DateUtils.getDateDiff(dateFormat, manager.getPreferences(mContext, "ad_show_time"), DateUtils.currentDateTime()) > 10) {
+
+                    if (manager.contains(mContext, "ad_count")) {
+                        if (manager.getPreferences(mContext, "ad_count").equals("0")) {
+                            if (rewardedAd != null && rewardedAd.isLoaded()) {
+                                manager.setPreferences(mContext, "ad_count", "5");
+
+
+                                rewardedAd.show(getActivity(), new RewardedAdCallback() {
+                                    @Override
+                                    public void onRewardedAdOpened() {
+                                        super.onRewardedAdOpened();
+                                    }
+
+                                    @Override
+                                    public void onRewardedAdClosed() {
+                                        super.onRewardedAdClosed();
+                                        // rewardedAd = createAndLoadRewardedAd();
+                                    }
+
+                                    @Override
+                                    public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+                                        // rewardedAd = createAndLoadRewardedAd();
+                                        //   Toast.makeText(mContext, "Congratulations!! You won "+rewardItem.getAmount()+" "+rewardItem.getType(), Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    @Override
+                                    public void onRewardedAdFailedToShow(int i) {
+                                        super.onRewardedAdFailedToShow(i);
+                                    }
+                                });
+                            } else {
+                                if (mInterstitialAd != null && mInterstitialAd.isLoaded())
+                                    mInterstitialAd.show();
+                            }
+                        } else {
+                            int count = Integer.parseInt(manager.getPreferences(mContext, "ad_count"));
+                            manager.setPreferences(mContext, "ad_count", "" + (count - 1));
+                            if (mInterstitialAd != null && mInterstitialAd.isLoaded())
+                                mInterstitialAd.show();
+                        }
+                    } else {
+                        manager.setPreferences(mContext, "ad_count", "5");
+                        if (mInterstitialAd != null && mInterstitialAd.isLoaded())
+                            mInterstitialAd.show();
+                    }
+                } else {
+                    if (mInterstitialAd != null && mInterstitialAd.isLoaded())
+                        mInterstitialAd.show();
+                }
+            } else {
+                manager.setPreferences(mContext, "ad_count", "5");
+                manager.setPreferences(mContext, "ad_show_time", DateUtils.currentDateTime());
+                if (mInterstitialAd != null && mInterstitialAd.isLoaded())
+                    mInterstitialAd.show();
+            }
+        }
+
+        generatePDF.setVisibility(View.GONE);
+        GeneratePresNew myFragment = new GeneratePresNew();
+
+        if (binding.topDoctorDetails.getVisibility() == View.VISIBLE)
+            bundle.putString("top_doctor_details", "true");
+        else
+            bundle.putString("top_doctor_details", "false");
+
+        if (binding.footerDocterDetails.getVisibility() == View.VISIBLE)
+            bundle.putString("footer_doctor_details", "true");
+        else
+            bundle.putString("footer_doctor_details", "false");
+
+        if (binding.textViewClinicName.getVisibility() == View.VISIBLE)
+            bundle.putString("clinic_name", "true");
+        else
+            bundle.putString("clinic_name", "false");
+
+        bundle.putString("dateString", dateWithName);
+        bundle.putString("dateStringWithNum", dateValueString);
+        bundle.putString("definer", definer);
+        bundle.putString("presId", prescriptionId);
+        bundle.putBoolean("certificate_selection", certificate_selection);
+
+        myFragment.setArguments(bundle);
+
+        FragmentManager fragmentManager = ((FragmentActivity) mContext).getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.homePageContainer, myFragment, "first").addToBackStack(null).commit();
+
+        myFragment.setOnClickListener(new GeneratePresNew.onClickListener() {
+            @Override
+            public void onClick() {
+
+                fragmentActivity.getSupportFragmentManager().popBackStack();
+                CreatePrescription.backCheckerFlag = true;
+                FragmentManager fm = fragmentActivity.getSupportFragmentManager();
+                fm.popBackStackImmediate();
+            }
+        });
+
+    }
+
+    private void popup() {
+
+        final Dialog dialog_data = new Dialog(fragmentActivity);
+        dialog_data.setCancelable(true);
+
+        dialog_data.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        Objects.requireNonNull(dialog_data.getWindow()).setGravity(Gravity.CENTER);
+
+        dialog_data.setContentView(R.layout.feedback);
+
+        WindowManager.LayoutParams lp_number_picker = new WindowManager.LayoutParams();
+        Window window = dialog_data.getWindow();
+        lp_number_picker.copyFrom(window.getAttributes());
+
+        lp_number_picker.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp_number_picker.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+        //window.setGravity(Gravity.CENTER);
+        window.setAttributes(lp_number_picker);
+
+        ImageView btn_close = dialog_data.findViewById(R.id.btn_close);
+
+        btn_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialog_data.dismiss();
+
+            }
+        });
+
+        if (!fragmentActivity.isFinishing())
+            dialog_data.show();
+    }
+
+    private void popupPausedForChecking() {
+
+        PopUpSubscriptionDialogFragment popUpSubscriptionDialogFragment = new PopUpSubscriptionDialogFragment();
+        popUpSubscriptionDialogFragment.setCancelable(false);
+        Bundle bundle = new Bundle();
+        bundle.putString("keywords", "");
+        popUpSubscriptionDialogFragment.setArguments(bundle);
+        popUpSubscriptionDialogFragment.show(fragmentActivity.getSupportFragmentManager(), "");
+
+    }
 
     private void BottomSheet(View view) {
         View bottomSheet = view.findViewById(R.id.bottom_sheet);
@@ -1177,7 +1599,7 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
         bottomSheetItem.setMenuImage("whatsapp");
         bottomSheetItemArrayList.add(bottomSheetItem);
 
-        mAdapter = new BottomSheetAdapter(mContext, bottomSheetItemArrayList, fl_progress_bar, GeneratePres.this, null);
+        mAdapter = new BottomSheetAdapter(mContext, bottomSheetItemArrayList, fl_progress_bar, GeneratePres.this, null, prescriptionItem);
         recyclerView.setAdapter(mAdapter);
 
         behavior = BottomSheetBehavior.from(bottomSheet);
@@ -2797,7 +3219,6 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
             page_no.setVisibility(View.VISIBLE);
             fl_medicines_symbol.setVisibility(View.GONE);
             textView_diagnosis.setVisibility(View.GONE);
-
             textView_advice.setVisibility(View.GONE);
             textView_medical_cert.setVisibility(View.VISIBLE);
             textView_medical_cert_desc.setVisibility(View.GONE);
@@ -2855,6 +3276,8 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
                     if (!details[1].equals("")) {
                         textView_medical_cert.setText(details[1]);
                         textView_medical_cert.setVisibility(View.VISIBLE);
+                        isCertificateAvail = true;
+
                     }
 
                 textView_medical_cert_desc.setVisibility(View.GONE);
@@ -3146,19 +3569,31 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
             textView_DocName.setText(doctor.getName().trim());
         }
 
+        String ugName = "", pgName = "";
+
+        if (!TextUtils.isEmpty(doctor.getUgName())) {
+
+            ugName = doctor.getUgName() + " ";
+            pgName = doctor.getPgName() + " ";
+
+        }
+
         if (!("").equalsIgnoreCase(doctor.getPgName()) && doctor.getPgName() != null) {
             if (!("").equalsIgnoreCase(doctor.getAddtionalQualification()) && (doctor.getAddtionalQualification() != null)) {
-                textView_degree.setText(doctor.getUgName() + " " + doctor.getPgName() + " " + doctor.getAddtionalQualification());
+                textView_degree.setText(ugName + pgName + doctor.getAddtionalQualification());
             } else {
-                textView_degree.setText(doctor.getUgName() + " " + doctor.getPgName());
+                textView_degree.setText(ugName + doctor.getPgName());
             }
 
+            // todo doctor additional qualification =================>
         } else if (!("").equalsIgnoreCase(doctor.getAddtionalQualification()) && (doctor.getAddtionalQualification() != null)) {
-            textView_degree.setText(doctor.getUgName() + " " + doctor.getAddtionalQualification());
+            textView_degree.setText(ugName + doctor.getAddtionalQualification());
 
         } else {
-            textView_degree.setText(doctor.getUgName());
+            textView_degree.setText(ugName);
         }
+
+
         textView_res_num.setText("Reg. No - " + doctor.getRegistrationNo());
         if (!("").equalsIgnoreCase(doctor.getDesignationName())) {
             textView_des.setText(doctor.getDesignationName());
@@ -3202,7 +3637,12 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
 
         }
 
-        textView_pat_name.setText("Patient : " + prescriptionItem.getPName() + ", " + prescriptionItem.getGender() + " / " + age___);
+        String patient_age = "";
+        if(!TextUtils.isEmpty(prescriptionItem.getAge())){
+            patient_age = " / " + age___;
+        }
+
+        textView_pat_name.setText("Patient : " + prescriptionItem.getPName() + ", " + prescriptionItem.getGender() + patient_age);
         if (prescriptionItem.getPEmail().equals(""))
 
             patient_item = prescriptionItem;
@@ -3246,7 +3686,7 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
             if (work_days.contains("SUNDAY"))
                 work_days = work_days.replace("SUNDAY", " SUN");
 
-            textView_days.setText("Working : " + work_days);
+            textView_days.setText("Working Days : " + work_days);
         } else {
             textView_days.setVisibility(View.GONE);
             counter = counter + 1;
@@ -3264,9 +3704,9 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
             String[] visiting_hr_from_details = prescriptionItem.getDoctor().getVisitingHrFrom().split(Pattern.quote("|"));
             String[] visiting_hr_to_details = prescriptionItem.getDoctor().getVisitingHrTo().split(Pattern.quote("|"));
             if (visiting_hr_from_details.length > 1)
-                textView_time.setText("Time : " + visiting_hr_from_details[0].toLowerCase().trim() + " - " + visiting_hr_to_details[0].toLowerCase().trim() + ", " + visiting_hr_from_details[1].toLowerCase().trim() + " - " + visiting_hr_to_details[1].toLowerCase().trim());
+                textView_time.setText("Visiting Hours : " + visiting_hr_from_details[0].toLowerCase().trim() + " - " + visiting_hr_to_details[0].toLowerCase().trim() + ", " + visiting_hr_from_details[1].toLowerCase().trim() + " - " + visiting_hr_to_details[1].toLowerCase().trim());
             else
-                textView_time.setText("Time : " + visiting_hr_from_details[0].toLowerCase().trim() + " - " + visiting_hr_to_details[0].toLowerCase().trim());
+                textView_time.setText("Visiting Hours : " + visiting_hr_from_details[0].toLowerCase().trim() + " - " + visiting_hr_to_details[0].toLowerCase().trim());
 
             if (visiting_hr_from_details.length == 1 && visiting_hr_from_details[0].equals(""))
                 if (visiting_hr_to_details.length == 1 && visiting_hr_to_details[0].equals(""))
@@ -3277,9 +3717,9 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
             String[] visiting_hr_to_details = manager.getPreferences(mContext, "visiting_hr_to").split(Pattern.quote("|"));
             ;
             if (visiting_hr_from_details.length > 1)
-                textView_time.setText("Time : " + visiting_hr_from_details[0].toLowerCase().trim() + " - " + visiting_hr_to_details[0].toLowerCase().trim() + ", " + visiting_hr_from_details[1].toLowerCase().trim() + " - " + visiting_hr_to_details[1].toLowerCase().trim());
+                textView_time.setText("Visiting Hours : " + visiting_hr_from_details[0].toLowerCase().trim() + " - " + visiting_hr_to_details[0].toLowerCase().trim() + ", " + visiting_hr_from_details[1].toLowerCase().trim() + " - " + visiting_hr_to_details[1].toLowerCase().trim());
             else
-                textView_time.setText("Time : " + visiting_hr_from_details[0].toLowerCase().trim() + " - " + visiting_hr_to_details[0].toLowerCase().trim());
+                textView_time.setText("Visiting Hours : " + visiting_hr_from_details[0].toLowerCase().trim() + " - " + visiting_hr_to_details[0].toLowerCase().trim());
             //  textView_time.setText("Time : " + doctor.getVisitingHrFrom() + " to " + doctor.getVisitingHrTo());
 
             if (visiting_hr_from_details.length == 1 && visiting_hr_from_details[0].equals(""))

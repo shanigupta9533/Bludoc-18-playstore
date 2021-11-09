@@ -9,6 +9,7 @@ import com.likesby.bludoc.ModelLayer.Entities.CmsResponse;
 import com.likesby.bludoc.ModelLayer.Entities.FaqsResponse;
 import com.likesby.bludoc.ModelLayer.Entities.History;
 import com.likesby.bludoc.ModelLayer.Entities.OtpResponse;
+import com.likesby.bludoc.ModelLayer.Entities.PatientsItem;
 import com.likesby.bludoc.ModelLayer.Entities.ProfileDetails;
 import com.likesby.bludoc.ModelLayer.Entities.Response;
 import com.likesby.bludoc.ModelLayer.Entities.ResponseAddPatient;
@@ -28,6 +29,8 @@ import com.likesby.bludoc.ModelLayer.Entities.ResponseUG;
 import com.likesby.bludoc.ModelLayer.Entities.ResponseVersion;
 import com.likesby.bludoc.ModelLayer.Entities.Subscription;
 import com.likesby.bludoc.ModelLayer.Entities.UserResponse;
+import com.likesby.bludoc.ModelLayer.NetworkLayer.EndpointInterfaces.WebServices;
+import com.likesby.bludoc.ModelLayer.NetworkLayer.Helpers.ApiClient;
 import com.likesby.bludoc.ModelLayer.NetworkLayer.NetworkLayer;
 import com.likesby.bludoc.ModelLayer.NewEntities.ResponseNewMyTemplates;
 import com.likesby.bludoc.ModelLayer.NewEntities.ResponseProfileDetails;
@@ -91,6 +94,9 @@ public class ApiViewHolder extends AndroidViewModel {
     }
     //endregion
 
+    public Single<ResponseRegister> registerQualifications(String addtional_qualification,String doctor_id){
+        return networkLayer.registerQualifications(addtional_qualification,doctor_id);
+    }
 
     public Single<ResponseRegister> Register3(String doctor_id, String mobile_letter_head,String email_letter_head,
                                               String working_days,String visiting_hr_from, String visiting_hr_to,
@@ -107,6 +113,10 @@ public class ApiViewHolder extends AndroidViewModel {
     }
     //endregion
 
+    public Single<PatientsItem> PatientRegisterWithPatientItem(String p_name, String age, String gender,
+                                                               String created_by, String p_mobile, String p_email, String address, String bloud_group, String dob ){
+        return networkLayer.PatientRegisterWithPatientItem( p_name,  age,  gender,    created_by,  p_mobile,  p_email,address,bloud_group,dob );
+    }
 
     public Single<ResponseSuccess> PatientUpdate(  String patient_id,String p_name, String age, String gender,
                                                      String p_mobile, String p_email ,String address,String bloud_group,String dob){

@@ -30,8 +30,8 @@ android {
         ]
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 25
-        versionName "25.0"
+        versionCode 27
+        versionName "27.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     }
@@ -57,7 +57,6 @@ android {
     }
 
 
-        ndkVersion "21.0.6113669"
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -127,6 +126,8 @@ dependencies {
     // pull to refresh
     implementation 'com.yalantis:phoenix:1.2.3'
 
+    //time picker dialog
+    implementation 'com.wdullaer:materialdatetimepicker:4.2.3'
 
     // one time model
     implementation 'com.github.Commit451:ModalBottomSheetDialogFragment:1.1.0'
@@ -140,6 +141,21 @@ dependencies {
     implementation 'com.github.midorikocak:currency-picker-android:1.2.1'
 
     implementation 'org.apache.commons:commons-collections4:4.4'
+
+    // scrolling pagination
+    implementation "ru.tinkoff.scrollingpagerindicator:scrollingpagerindicator:1.2.1"
+
+    // photo view zoom
+    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
+    
+    // run time permission
+    implementation 'com.nabinbhandari.android:permissions:3.8'
+
+    //calenderView
+    implementation 'ru.cleverpumpkin:crunchycalendar:2.0.0'
+
+    // joda time
+    implementation 'joda-time:joda-time:2.10.9'
 
     implementation project(':nativetemplates')
 }

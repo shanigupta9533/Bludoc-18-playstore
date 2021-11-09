@@ -16,6 +16,9 @@ public class PatientsItem implements Parcelable {
 	@SerializedName("patient_id")
 	private String patientId;
 
+	@SerializedName("message")
+	private String message;
+
 	@SerializedName("p_name")
 	private String pName;
 
@@ -43,10 +46,15 @@ public class PatientsItem implements Parcelable {
 	@SerializedName("p_mobile")
 	private String pMobile;
 
+	public PatientsItem(){
+
+	}
+
 	protected PatientsItem(Parcel in) {
 		gender = in.readString();
 		pEmail = in.readString();
 		patientId = in.readString();
+		message = in.readString();
 		pName = in.readString();
 		address = in.readString();
 		pBloodGrp = in.readString();
@@ -56,10 +64,6 @@ public class PatientsItem implements Parcelable {
 		createdBy = in.readString();
 		age = in.readString();
 		pMobile = in.readString();
-	}
-
-	public PatientsItem(){
-
 	}
 
 	public static final Creator<PatientsItem> CREATOR = new Creator<PatientsItem>() {
@@ -74,32 +78,52 @@ public class PatientsItem implements Parcelable {
 		}
 	};
 
-	public void setGender(String gender){
-		this.gender = gender;
-	}
-
-	public String getGender(){
+	public String getGender() {
 		return gender;
 	}
 
-	public void setPEmail(String pEmail){
-		this.pEmail = pEmail;
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 
-	public String getPEmail(){
+	public String getPEmail() {
 		return pEmail;
 	}
 
-	public void setPatientId(String patientId){
-		this.patientId = patientId;
+	public void setPEmail(String pEmail) {
+		this.pEmail = pEmail;
 	}
 
-	public String getPatientId(){
+	public String getPatientId() {
 		return patientId;
 	}
 
-	public void setPName(String pName){
+	public void setPatientId(String patientId) {
+		this.patientId = patientId;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public String getPName() {
+		return pName;
+	}
+
+	public void setPName(String pName) {
 		this.pName = pName;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	public String getpBloodGrp() {
@@ -118,56 +142,44 @@ public class PatientsItem implements Parcelable {
 		this.pDob = pDob;
 	}
 
-	public String getPName(){
-		return pName;
-	}
-
-	public void setCreated(String created){
-		this.created = created;
-	}
-
-	public String getCreated(){
+	public String getCreated() {
 		return created;
 	}
 
-	public void setModified(String modified){
-		this.modified = modified;
+	public void setCreated(String created) {
+		this.created = created;
 	}
 
-	public String getModified(){
+	public String getModified() {
 		return modified;
 	}
 
-	public void setCreatedBy(String createdBy){
-		this.createdBy = createdBy;
+	public void setModified(String modified) {
+		this.modified = modified;
 	}
 
-	public String getCreatedBy(){
+	public String getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setAge(String age){
-		this.age = age;
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
 	}
 
-	public String getAge(){
+	public String getAge() {
 		return age;
 	}
 
-	public String getAddress() {
-		return address;
+	public void setAge(String age) {
+		this.age = age;
 	}
 
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public void setPMobile(String pMobile){
-		this.pMobile = pMobile;
-	}
-
-	public String getPMobile(){
+	public String getPMobile() {
 		return pMobile;
+	}
+
+	public void setPMobile(String pMobile) {
+		this.pMobile = pMobile;
 	}
 
 	@Override
@@ -199,6 +211,7 @@ public class PatientsItem implements Parcelable {
 		dest.writeString(gender);
 		dest.writeString(pEmail);
 		dest.writeString(patientId);
+		dest.writeString(message);
 		dest.writeString(pName);
 		dest.writeString(address);
 		dest.writeString(pBloodGrp);

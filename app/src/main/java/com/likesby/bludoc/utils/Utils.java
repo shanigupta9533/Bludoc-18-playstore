@@ -28,6 +28,11 @@ import androidx.fragment.app.FragmentTransaction;
 import com.likesby.bludoc.R;
 import com.likesby.bludoc.constants.ApplicationConstant;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 public class Utils {
 
@@ -46,7 +51,20 @@ public class Utils {
 
     }
 
+    public static String convertTo24Hour(String Time) {
+        DateFormat f1 = new SimpleDateFormat("hh:mm a"); //11:00 pm
+        Date d = null;
+        try {
+            d = f1.parse(Time);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        DateFormat f2 = new SimpleDateFormat("HH:mm");
+        String x = f2.format(d); // "23:00"
 
+        return x;
+    }
 
     public static boolean isConnectingToInternet(Context context) {
         ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

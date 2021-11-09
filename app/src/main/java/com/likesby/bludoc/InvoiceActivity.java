@@ -1,5 +1,6 @@
 package com.likesby.bludoc;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -14,6 +15,7 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,6 +27,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,16 +40,25 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.tabs.TabLayout;
 import com.likesby.bludoc.Adapter.InvoicesAdapter;
+import com.likesby.bludoc.Fragment.PopUpSubscriptionDialogFragment;
 import com.likesby.bludoc.ModelLayer.Entities.PatientsItem;
 import com.likesby.bludoc.ModelLayer.InvoicePresModel;
 import com.likesby.bludoc.ModelLayer.InvoicesModel.InvoicesDataModel;
+import com.likesby.bludoc.ModelLayer.NewEntities.ResponseProfileDetails;
+import com.likesby.bludoc.ModelLayer.NewEntities.SubcriptionsItem;
+import com.likesby.bludoc.SessionManager.SessionManager;
 import com.likesby.bludoc.databinding.ActivityInvoiceBinding;
+import com.likesby.bludoc.utils.DateUtils;
 import com.mynameismidori.currencypicker.CurrencyPicker;
 import com.mynameismidori.currencypicker.CurrencyPickerListener;
+import com.nabinbhandari.android.permissions.PermissionHandler;
+import com.nabinbhandari.android.permissions.Permissions;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -72,6 +84,7 @@ public class InvoiceActivity extends AppCompatActivity {
     DecimalFormat formatter = new DecimalFormat("#,###,###");
     private long calculateFromTotal = 0;
     private long price2 = 0;
+    private SessionManager manager = new SessionManager();
     private float price3 = 0f;
     private String currency = "₹";
     private long price1 = 0;
@@ -115,7 +128,6 @@ public class InvoiceActivity extends AppCompatActivity {
                 activity.invoiceTitle.setSelection(invoicesDataModel.getInvoicesTitle().length());
                 activity.amoutInvoiceDetails.setSelection(invoicesDataModel.getAmount().length());
                 activity.addItemsParticulars.setSelection(invoicesDataModel.getItem_name().length());
-
             }
 
             @Override
@@ -201,25 +213,82 @@ public class InvoiceActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                final Calendar myCalendar = Calendar.getInstance();
-                DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        // TODO Auto-generated method stub
-                        myCalendar.set(Calendar.YEAR, year);
-                        myCalendar.set(Calendar.MONTH, monthOfYear);
-                        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                if (!("").equalsIgnoreCase(manager.getPreferences(InvoiceActivity.this, "registration_no"))) {
+                    ResponseProfileDetails responseProfileDetails = manager.getObjectProfileDetails(InvoiceActivity.this, "profile");
+                    if (("").equalsIgnoreCase(responseProfileDetails.getHospitalCode())) {
 
-                        String myFormat = "dd-MM-yyyy"; // your format
-                        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
+                        String sub_valid = "", premium_valid = "";
+                        boolean flag_reset_paid = false;
+                        Date date1 = null, date2 = null;
+                        int days_left_free = 0, days_left_paid = 0;
+                        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                        ResponseProfileDetails profileDetails = manager.getObjectProfileDetails(InvoiceActivity.this, "profile");
+                        if (profileDetails.getSubcriptions() != null) {
+                            if (profileDetails.getSubcriptions().size() != 0) {
+                                for (SubcriptionsItem si : profileDetails.getSubcriptions()) {
+                                    if (!si.getHospital_code().equals("")) {
+                                        boolean flag_reset_free;
+                                        try {
+                                            Calendar c2 = Calendar.getInstance();
+                                            DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+                                            Date dateEnd = dateFormat.parse(si.getEnd());
+                                            Date c = Calendar.getInstance().getTime();
+                                            assert dateEnd != null;
 
-                        activity.invoiceDate.setText(sdf.format(myCalendar.getTime()));
+                                            //premium_valid = si.getDays();
+                                            Log.e("DATE_____1 = ", DateUtils.printDifference(c, dateEnd));
+                                            // Log.e("DATE_____2 = ",DateUtils.outFormatsetMMM(DateUtils.printDifference(c,dateEnd)));
+                                            // Log.e("DATE_____3 = ",DateUtils.outFormatset(DateUtils.printDifference(c,dateEnd)));
+
+
+                                            try {
+                                                date1 = dateFormat.parse(dateFormat.format(c2.getTime()));
+                                                date2 = dateFormat.parse(si.getEnd());
+                                                Log.e("DATE_____1 = ", DateUtils.printDifference(date1, date2) + " left");
+                                                flag_reset_free = true;
+
+                                                String[] splited = DateUtils.printDifference(date1, date2).split("\\s+");
+
+                                                days_left_free = days_left_free + Integer.parseInt(splited[0]);
+                                                // popupFreeSubscription(DateUtils.printDifference(date1,date2),true);
+                                                // break;
+                                                sub_valid = si.getEnd();
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                            }
+
+                                            //viewHolder.expiry.setText(DateUtils.printDifference(date1,date2)+" left");
+
+                                        } catch (ParseException pe) {
+                                            // handle the failure
+                                            flag_reset_free = false;
+                                        }
+
+                                    }
+                                }
+
+                            } else {
+                                popupPausedForChecking();
+                                return;
+
+                            }
+                        } else {
+                            popupPausedForChecking();
+                            return;
+                        }
+
+                        if (days_left_free < 0) {
+                            popupPausedForChecking();
+                        } else {
+
+                            changeDateListener();
+
+                        }
+
                     }
-
-                };
-                DatePickerDialog datePickerDialog = new DatePickerDialog(InvoiceActivity.this, R.style.DialogTheme, date, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH));
-
-                datePickerDialog.show();
+                } else {
+                    popup();
+                }
 
             }
         });
@@ -228,47 +297,7 @@ public class InvoiceActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                activity.amountMoreDetails.setError(null);
-                activity.discountTitle.setError(null);
-                activity.taxTitle.setError(null);
-
-                if (TextUtils.isEmpty(activity.invoiceTitle.getText())) {
-
-                    activity.invoiceTitle.requestFocus();
-                    activity.invoiceTitle.setError("can't be blank");
-
-                } else if (activity.discountTitleSpinner.getSelectedItemPosition() == 1 && !TextUtils.isEmpty(activity.discountTitle.getText().toString()) && Long.parseLong(activity.discountTitle.getText().toString()) > 100) {
-
-                    activity.discountTitle.requestFocus();
-                    activity.discountTitle.setError("Percentage Exceeded");
-
-                } else if (activity.advancePartialAmount.getSelectedItemPosition() == 1 && !TextUtils.isEmpty(activity.amountMoreDetails.getText().toString()) && Long.parseLong(activity.amountMoreDetails.getText().toString()) > 100) {
-
-                    activity.amountMoreDetails.requestFocus();
-                    activity.amountMoreDetails.setError("Percentage Exceeded");
-
-                } else if (activity.taxTitleSpinner.getSelectedItemPosition() == 1 && !TextUtils.isEmpty(activity.taxTitle.getText().toString()) && Float.parseFloat(activity.taxTitle.getText().toString()) > 100) {
-
-                    activity.taxTitle.requestFocus();
-                    activity.taxTitle.setError("Percentage Exceeded");
-
-                } else if (calculatedFromTotal() < 0) {
-
-                    activity.discountTitle.requestFocus();
-                    activity.amountMoreDetails.setError("Amount exceeded.");
-                    activity.discountTitle.setError("Amount exceeded.");
-                    activity.taxTitle.setError("Amount exceeded.");
-
-                } else {
-
-                    InvoicePresModel invoicePresModel = setInvoicesDataInModel();
-                    Intent intent = new Intent(InvoiceActivity.this, InvoicesPresActivity.class);
-                    intent.putExtra("patientName", patientName);
-                    intent.putExtra("patientObject", patientsItem);
-                    intent.putExtra("invoicePewModel", invoicePresModel);
-                    startActivity(intent);
-
-                }
+               runTimePermission();
 
             }
         });
@@ -469,8 +498,10 @@ public class InvoiceActivity extends AppCompatActivity {
                         invoicesAdapter.notifyDataSetChanged();
                         currency = code;
 
-                        activity.currency.setText(currency);
+                        if(code.equalsIgnoreCase("INR"))
+                            currency= "₹";
 
+                        activity.currency.setText(currency);
                         picker.dismiss();
 
                     }
@@ -604,6 +635,122 @@ public class InvoiceActivity extends AppCompatActivity {
 
     }
 
+    private void popup() {
+
+        final Dialog dialog_data = new Dialog(this);
+        dialog_data.setCancelable(true);
+
+        dialog_data.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        Objects.requireNonNull(dialog_data.getWindow()).setGravity(Gravity.CENTER);
+
+        dialog_data.setContentView(R.layout.feedback);
+
+        WindowManager.LayoutParams lp_number_picker = new WindowManager.LayoutParams();
+        Window window = dialog_data.getWindow();
+        lp_number_picker.copyFrom(window.getAttributes());
+
+        lp_number_picker.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp_number_picker.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+        //window.setGravity(Gravity.CENTER);
+        window.setAttributes(lp_number_picker);
+
+        ImageView btn_close = dialog_data.findViewById(R.id.btn_close);
+
+        btn_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dialog_data.dismiss();
+
+            }
+        });
+
+        if (!isFinishing())
+            dialog_data.show();
+    }
+
+    private void popupPausedForChecking() {
+
+        PopUpSubscriptionDialogFragment popUpSubscriptionDialogFragment = new PopUpSubscriptionDialogFragment();
+        popUpSubscriptionDialogFragment.setCancelable(false);
+        Bundle bundle = new Bundle();
+        bundle.putString("keywords", "");
+        popUpSubscriptionDialogFragment.setArguments(bundle);
+        popUpSubscriptionDialogFragment.show(getSupportFragmentManager(), "");
+
+    }
+
+    private void changeDateListener() {
+
+        final Calendar myCalendar = Calendar.getInstance();
+        DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                // TODO Auto-generated method stub
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                String myFormat = "dd-MM-yyyy"; // your format
+                SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
+
+                activity.invoiceDate.setText(sdf.format(myCalendar.getTime()));
+            }
+
+        };
+        DatePickerDialog datePickerDialog = new DatePickerDialog(InvoiceActivity.this, R.style.DialogTheme, date, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.show();
+
+    }
+
+    private void generateInvoice() {
+
+        activity.amountMoreDetails.setError(null);
+        activity.discountTitle.setError(null);
+        activity.taxTitle.setError(null);
+
+        if (TextUtils.isEmpty(activity.invoiceTitle.getText())) {
+
+            activity.invoiceTitle.requestFocus();
+            activity.invoiceTitle.setError("can't be blank");
+
+        } else if (activity.discountTitleSpinner.getSelectedItemPosition() == 1 && !TextUtils.isEmpty(activity.discountTitle.getText().toString()) && Long.parseLong(activity.discountTitle.getText().toString()) > 100) {
+
+            activity.discountTitle.requestFocus();
+            activity.discountTitle.setError("Percentage Exceeded");
+
+        } else if (activity.advancePartialAmount.getSelectedItemPosition() == 1 && !TextUtils.isEmpty(activity.amountMoreDetails.getText().toString()) && Long.parseLong(activity.amountMoreDetails.getText().toString()) > 100) {
+
+            activity.amountMoreDetails.requestFocus();
+            activity.amountMoreDetails.setError("Percentage Exceeded");
+
+        } else if (activity.taxTitleSpinner.getSelectedItemPosition() == 1 && !TextUtils.isEmpty(activity.taxTitle.getText().toString()) && Float.parseFloat(activity.taxTitle.getText().toString()) > 100) {
+
+            activity.taxTitle.requestFocus();
+            activity.taxTitle.setError("Percentage Exceeded");
+
+        } else if (calculatedFromTotal() < 0) {
+
+            activity.discountTitle.requestFocus();
+            activity.amountMoreDetails.setError("Amount exceeded.");
+            activity.discountTitle.setError("Amount exceeded.");
+            activity.taxTitle.setError("Amount exceeded.");
+
+        } else {
+
+            InvoicePresModel invoicePresModel = setInvoicesDataInModel();
+            Intent intent = new Intent(InvoiceActivity.this, InvoicesPresActivity.class);
+            intent.putExtra("patientName", patientName);
+            intent.putExtra("patientObject", patientsItem);
+            intent.putExtra("invoicePewModel", invoicePresModel);
+            startActivity(intent);
+
+        }
+
+    }
+
     private String getDecideCurrency(String selectedItemPosition) {
 
         if (selectedItemPosition.equalsIgnoreCase("INR")) {
@@ -638,8 +785,9 @@ public class InvoiceActivity extends AppCompatActivity {
         if (!TextUtils.isEmpty(activity.invoiceDate.getText().toString()))
             invoicePresModel.setDate(activity.invoiceDate.getText().toString());
 
+
         if (calculateFromTotal == 0)
-            calculateFromTotal = totalAmount;
+            calculateFromTotal = totalAmount + (long) price3;
 
         invoicePresModel.setFinal_amount(String.valueOf(calculateFromTotal));
         invoicePresModel.setNote(activity.endNote.getText().toString());
@@ -938,5 +1086,26 @@ public class InvoiceActivity extends AppCompatActivity {
         dialog_data.show();
     }
 
+    public void runTimePermission(){
+
+        String[] permissions = {android.Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        String rationale = "Please provide storage permission for better reach ......";
+        Permissions.Options options = new Permissions.Options()
+                .setRationaleDialogTitle("Info")
+                .setSettingsDialogTitle("Warning");
+
+        Permissions.check(this/*context*/, permissions, rationale, options, new PermissionHandler() {
+            @Override
+            public void onGranted() {
+                generateInvoice();
+            }
+
+            @Override
+            public void onDenied(Context context, ArrayList<String> deniedPermissions) {
+                // permission denied, block the feature.
+            }
+        });
+
+    }
 
 }

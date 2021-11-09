@@ -226,19 +226,29 @@ public class InvoicesPresActivity extends AppCompatActivity {
         }
 
         // todo doctor UG and PG Name =================>
+
+        String ugName="",pgName="";
+
+        if(!TextUtils.isEmpty(doctor.getUgName())){
+
+            ugName = doctor.getUgName() + " ";
+            pgName = doctor.getPgName() + " ";
+
+        }
+
         if (!("").equalsIgnoreCase(doctor.getPgName()) && doctor.getPgName() != null) {
             if (!("").equalsIgnoreCase(doctor.getAddtionalQualification()) && (doctor.getAddtionalQualification() != null)) {
-                activity.textViewDegree.setText(doctor.getUgName() + " " + doctor.getPgName() + " " + doctor.getAddtionalQualification());
+                activity.textViewDegree.setText(ugName + pgName + doctor.getAddtionalQualification());
             } else {
-                activity.textViewDegree.setText(doctor.getUgName() + " " + doctor.getPgName());
+                activity.textViewDegree.setText(ugName + doctor.getPgName());
             }
 
             // todo doctor additional qualification =================>
         } else if (!("").equalsIgnoreCase(doctor.getAddtionalQualification()) && (doctor.getAddtionalQualification() != null)) {
-            activity.textViewDegree.setText(doctor.getUgName() + " " + doctor.getAddtionalQualification());
+            activity.textViewDegree.setText(ugName + doctor.getAddtionalQualification());
 
         } else {
-            activity.textViewDegree.setText(doctor.getUgName());
+            activity.textViewDegree.setText(ugName);
         }
 
         // todo doctor registration number =================>
@@ -442,10 +452,10 @@ public class InvoicesPresActivity extends AppCompatActivity {
                         isExecuteValue[0] = false;
 
                         runOnUiThread(new Runnable() {
+                            @SuppressLint("NotifyDataSetChanged")
                             @Override
                             public void run() {
 
-                                invoicesPresAdapter.setCountModel(i[0],true);
                                 invoicesPresAdapter.notifyDataSetChanged();
 
                                 if (partition.size() - 1 == i[0]) {

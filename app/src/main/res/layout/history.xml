@@ -172,7 +172,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 ads:adSize="BANNER"
 
-                ads:adUnitId="ca-app-pub-3940256099942544/6300978111">
+                ads:adUnitId="ca-app-pub-9225891557304181/8155019478">
             </com.google.android.gms.ads.AdView>
         </FrameLayout>
     </LinearLayout>

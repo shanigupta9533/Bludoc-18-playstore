@@ -1,149 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    android:background="@color/colorWhite"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
+    android:background="@color/colorWhite"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:theme="@style/AppTheme.NoActionBar">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_invite_member"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:padding="-48dp"
+            app:contentInsetLeft="0dp"
+            app:contentInsetStart="0dp"
+            app:contentInsetStartWithNavigation="0dp"
+            app:layout_collapseMode="pin"
+            app:popupTheme="@style/AppThemeNOAC"
+            app:subtitleTextColor="@color/colorWhite"
+
+
+            app:titleTextColor="@color/colorWhite">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|start"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/btn_back"
+                        android:layout_width="@dimen/margin_25"
+                        android:layout_height="@dimen/margin_25"
+                        android:layout_gravity="center|start"
+                        android:layout_margin="@dimen/margin_10"
+                        android:src="@drawable/ic_back_button" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start|center"
+                        android:fontFamily="@font/poppinsmedium"
+                        android:gravity="center"
+                        android:text="Upgrade to Premium - Subscriptions"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="18sp"
+                        android:typeface="sans" />
+
+                </LinearLayout>
+
+
+            </FrameLayout>
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
         android:id="@+id/ll_invite_member"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_below="@+id/appbar_layout"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
+        <LinearLayout xmlns:tools="http://schemas.android.com/tools"
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appbar_layout"
-            android:animateLayoutChanges="true"
             android:layout_width="match_parent"
+
             android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.NoActionBar"
-            >
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar_invite_member"
-                app:contentInsetLeft="0dp"
-                app:contentInsetStart="0dp"
-                app:contentInsetStartWithNavigation="0dp"
-                app:layout_collapseMode="pin"
-                app:titleTextColor="@color/colorWhite"
-                app:subtitleTextColor="@color/colorWhite"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                android:padding="-48dp"
-
-
-                app:popupTheme="@style/AppThemeNOAC">
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <LinearLayout
-                        android:layout_gravity="center|start"
-                        android:gravity="center"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        >
-                        <ImageView
-                            android:id="@+id/btn_back"
-                            android:layout_margin="@dimen/margin_10"
-                            android:layout_gravity="center|start"
-                            android:layout_width="@dimen/margin_25"
-                            android:layout_height="@dimen/margin_25"
-                            android:src="@drawable/ic_back_button"
-                            />
-                        <TextView
-                            android:fontFamily="@font/poppinsmedium"
-                            android:layout_gravity="start|center"
-                            android:textSize="18sp"
-                            android:textColor="@color/colorWhite"
-                            android:gravity="center"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Upgrade to Premium - Subscriptions"
-                            android:typeface="sans"
-                            />
-
-                    </LinearLayout>
-
-
-                </FrameLayout>
-            </androidx.appcompat.widget.Toolbar>
-        </com.google.android.material.appbar.AppBarLayout>
-
-        <LinearLayout android:background="@color/colorWhite"
-
-            android:layout_marginTop   ="@dimen/margin_10"
-
+            android:layout_marginTop="@dimen/margin_10"
+            android:background="@color/colorWhite"
             android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:context=".SubscriptionPackages"
-            xmlns:tools="http://schemas.android.com/tools">
+            tools:context=".SubscriptionPackages">
 
             <LinearLayout
-                android:visibility="gone"
                 android:id="@+id/ll_radiobtn"
-
-                android:layout_margin="@dimen/margin_10"
                 android:layout_width="match_parent"
+
                 android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_10"
                 android:orientation="horizontal"
+                android:visibility="gone"
                 android:weightSum="0">
 
                 <RadioButton
-                    android:fontFamily="@font/poppins"
-                    android:textSize="18sp"
-                    android:buttonTint="@color/colorBlack"
-                    android:textColor="@color/colorBlack"
-                    android:text="Personal"
+                    android:id="@+id/rb_family"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/rb_family"
                     android:layout_weight="1"
-                    />
+                    android:buttonTint="@color/colorBlack"
+                    android:fontFamily="@font/poppins"
+                    android:text="Personal"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="18sp" />
 
                 <RadioButton
-                    android:fontFamily="@font/poppins"
-                    android:textSize="18sp"
-                    android:textColor="@color/colorBlack"
-                    android:buttonTint="@color/colorBlack"
-                    android:text="Business"
+                    android:id="@+id/rb_business"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/rb_business"
                     android:layout_weight="1"
-                    />
+                    android:buttonTint="@color/colorBlack"
+                    android:fontFamily="@font/poppins"
+                    android:text="Business"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="18sp" />
 
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:layout_gravity="center"
+                android:id="@+id/recycler_packages"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/recycler_packages"
-                />
+                android:layout_gravity="center" />
 
         </LinearLayout>
 
 
     </LinearLayout>
+
     <FrameLayout
-        android:visibility="gone"
         android:id="@+id/fl_subscription"
-        android:background="@color/colorWhite"
         android:layout_width="match_parent"
+        android:layout_below="@id/appbar_layout"
         android:layout_height="match_parent"
-        >
+        android:background="@color/colorWhite"
+        android:visibility="gone">
+
         <ProgressBar
-            android:layout_gravity="center"
+            android:id="@+id/pb_subscription"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:id="@+id/pb_subscription"
-            />
+            android:layout_gravity="center" />
     </FrameLayout>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</RelativeLayout>

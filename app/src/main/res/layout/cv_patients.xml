@@ -329,6 +329,26 @@
 
         </LinearLayout>
 
+        <TextView
+            android:fontFamily="@font/poppins"
+            android:id="@+id/book_appointment"
+            android:text="Book Appointment"
+            android:maxLines="1"
+            android:minLines="1"
+            android:layout_marginStart="@dimen/font_12"
+            android:layout_marginEnd="@dimen/font_12"
+            android:layout_marginBottom="@dimen/font_12"
+            android:gravity="center"
+            android:padding="@dimen/font_10"
+            android:textStyle="normal"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="10sp"
+            android:background="@drawable/blue_round_btn_gradient_mojito"
+            android:textColor="@color/colorBlue"
+            />
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">

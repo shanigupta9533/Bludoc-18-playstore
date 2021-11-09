@@ -435,7 +435,7 @@ public class GeneratePres_copy extends Fragment {
         bottomSheetItem.setMenuImage("ic_share_");
         bottomSheetItemArrayList.add(bottomSheetItem);*/
 
-        mAdapter = new BottomSheetAdapter(mContext, bottomSheetItemArrayList, fl_progress_bar, null, null);
+        mAdapter = new BottomSheetAdapter(mContext, bottomSheetItemArrayList, fl_progress_bar, null, null, prescriptionItem);
 
         recyclerView.setAdapter(mAdapter);
 

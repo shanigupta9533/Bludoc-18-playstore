@@ -1,16 +1,11 @@
 package com.likesby.bludoc.Adapter;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -23,18 +18,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.likesby.bludoc.ModelLayer.Entities.MySubscription;
 import com.likesby.bludoc.ModelLayer.Entities.User;
 import com.likesby.bludoc.ModelLayer.NewEntities.SubscriptionsItem;
-import com.likesby.bludoc.PaymentGateway;
 import com.likesby.bludoc.R;
-import com.likesby.bludoc.SplashActivity;
 import com.likesby.bludoc.db.MyDB;
-import com.likesby.bludoc.utils.ScreenSize;
 import com.likesby.bludoc.viewModels.ApiViewHolder;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 import io.reactivex.disposables.CompositeDisposable;
 
@@ -60,6 +50,7 @@ public class SubscriptionAdapter extends RecyclerView.Adapter<SubscriptionAdapte
     AppCompatActivity activity;
     LinearLayout ll_promo;
     boolean flag_renew = false;
+    private OnClickListener onClickListener;
 
 
     public SubscriptionAdapter(ArrayList<SubscriptionsItem> arrayList, Context context, ApiViewHolder mapiViewHolder, CompositeDisposable bag, AppCompatActivity activity) {
@@ -71,6 +62,15 @@ public class SubscriptionAdapter extends RecyclerView.Adapter<SubscriptionAdapte
         myDB = new MyDB(mContext);
         this.activity = activity;
 
+    }
+
+    public interface OnClickListener{
+
+        void onClick(SubscriptionsItem subscriptionsItem);
+    }
+
+    public void setOnClickListener(OnClickListener onClickListener){
+        this.onClickListener=onClickListener;
     }
 
     @SuppressLint("NewApi")
@@ -108,6 +108,20 @@ public class SubscriptionAdapter extends RecyclerView.Adapter<SubscriptionAdapte
                 viewHolder.coupon.setVisibility(View.VISIBLE);
             }
         });
+
+        viewHolder.btnSubscribe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(onClickListener!=null){
+
+                    onClickListener.onClick(mFilteredList.get(i));
+
+                }
+
+            }
+        });
+
     }
 
 
@@ -147,64 +161,9 @@ public class SubscriptionAdapter extends RecyclerView.Adapter<SubscriptionAdapte
             coupon = view.findViewById(R.id.coupon);
             save= view.findViewById(R.id.save);
             total= view.findViewById(R.id.total);
-            btnSubscribe.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    popuplogout(SUB_ID.getText().toString().trim(),mFilteredList.get(getAdapterPosition()).getSell());
-                }
-            });
-
 
         }
 
     }
 
-    private  void popuplogout(final String trim, final String sell)
-    {
-        final Dialog dialog_data = new Dialog(mContext);
-        dialog_data.setCancelable(true);
-
-        dialog_data.requestWindowFeature(Window.FEATURE_NO_TITLE);
-
-        Objects.requireNonNull(dialog_data.getWindow()).setGravity(Gravity.CENTER);
-
-        dialog_data.setContentView(R.layout.popup_country);
-
-        WindowManager.LayoutParams lp_number_picker = new WindowManager.LayoutParams();
-        Window window = dialog_data.getWindow();
-        lp_number_picker.copyFrom(window.getAttributes());
-
-        lp_number_picker.width = WindowManager.LayoutParams.MATCH_PARENT;
-        lp_number_picker.height = WindowManager.LayoutParams.WRAP_CONTENT;
-
-        //window.setGravity(Gravity.CENTER);
-        window.setAttributes(lp_number_picker);
-
-        Button btn_no = dialog_data.findViewById(R.id.btn_no);
-        Button btn_yes = dialog_data.findViewById(R.id.btn_yes);
-
-
-        btn_yes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, PaymentGateway.class);
-                intent.putExtra("subscription_id",trim);
-                intent.putExtra("amount",sell);
-                intent.putExtra("country","OOI");
-                mContext.startActivity(intent);
-            }
-        });
-        btn_no.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent(mContext, PaymentGateway.class);
-                intent.putExtra("subscription_id",trim);
-                intent.putExtra("amount",sell);
-                intent.putExtra("country","India");
-                mContext.startActivity(intent);
-            }
-        });
-        dialog_data.show();
-    }
 }

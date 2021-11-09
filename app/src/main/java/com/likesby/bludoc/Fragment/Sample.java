@@ -321,9 +321,6 @@ public class Sample extends Fragment {
         }
 
 
-            SampleAdapter templateAdapter = new SampleAdapter();
-                rView.setAdapter(templateAdapter);
-
 
     }
 

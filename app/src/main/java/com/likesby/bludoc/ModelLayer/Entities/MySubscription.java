@@ -14,6 +14,11 @@ public class MySubscription {
     @Expose
     private String name;
 
+
+    @SerializedName("note")
+    @Expose
+    private String note;
+
     @SerializedName("hospital_code")
     @Expose
     private String hospitalCode;
@@ -34,7 +39,6 @@ public class MySubscription {
     @Expose
     @SerializedName("use_for")
     private String useFor;
-
 
 
     @SerializedName("end")
@@ -65,6 +69,14 @@ public class MySubscription {
 
     public void setDoctorSubscriptionId(String doctorSubscriptionId) {
         this.doctorSubscriptionId = doctorSubscriptionId;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public String getDoctorId() {
