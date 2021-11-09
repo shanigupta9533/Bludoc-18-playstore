@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:visibility="visible"
+    android:clickable="true"
+    android:focusable="true"
+    android:id="@+id/no_data_found_id"
+    android:layout_below="@+id/toolbar"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:background="@android:color/white"
+        app:contentInsetStart="0dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/back"
+                android:layout_width="23dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="12dp"
+                android:contentDescription="TODO"
+                android:src="@drawable/ic_back_button"
+                app:tint="@color/colorBlack" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="12dp"
+                android:layout_toEndOf="@+id/back"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/title_on_toolbar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins"
+                    android:text="Info For Appointment"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="13dp" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="@dimen/font_12"
+                android:layout_marginEnd="@dimen/font_12"
+                android:layout_alignParentBottom="true"
+                android:background="#eeeeee" />
+
+        </RelativeLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_below="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/woman_appointment" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/font_12"
+                android:fontFamily="@font/poppinsmedium"
+                android:text="Info For Appointment"
+                android:textColor="@color/colorBlack"
+                android:textSize="18dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/font_13"
+                android:layout_marginTop="@dimen/font_12"
+                android:layout_marginEnd="@dimen/font_12"
+                android:alpha="0.8"
+                android:fontFamily="@font/open_sans"
+                android:letterSpacing="0.01"
+                android:lineSpacingExtra="@dimen/font_7"
+                android:text="• BluDoc appointment feature helps you to create, manage and track your patient appointments in a very simple and self explanatory way\n\n• You can self create and edit the appointments as per your schedule and availability
+\n\n• You can also receive appointment requests of patients from 'My Digital Clinic' feature. You can edit this appointment as per your convenience too.\n\n"
+                android:textColor="@color/colorBlack"
+                android:textSize="15dp" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</RelativeLayout>

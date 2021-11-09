@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="130dp"
+    android:layout_marginTop="@dimen/font_12"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/createAppointment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        app:cardBackgroundColor="#EFF1FD"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="1dp"
+        app:cardPreventCornerOverlap="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:minHeight="170dp"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/topic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="start|top"
+                android:layout_marginBottom="2dp"
+                android:alpha="0.8"
+                android:fontFamily="@font/whitneysemibold"
+                android:gravity="center"
+                android:text="Patients"
+                android:textColor="@color/colorBlue"
+                android:textSize="@dimen/font_18" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.85"
+                    android:textStyle="bold"
+                    android:id="@+id/name"
+                    android:fontFamily="@font/whitneymedium"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="@dimen/margin_30" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

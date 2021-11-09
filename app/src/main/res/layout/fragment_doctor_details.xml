@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".Fragment.DoctorDetailsFragment">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="@dimen/font_20"
+                    android:layout_marginEnd="20dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:fontFamily="@font/poppinsmedium"
+                        android:text="Doctor name*"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="13dp" />
+
+
+                    <EditText
+                        android:id="@+id/doctorName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:background="@android:color/transparent"
+                        android:baselineAligned="false"
+                        android:inputType="text"
+                        android:fontFamily="@font/poppins"
+                        android:gravity="top"
+                        android:hint="Enter Doctor name "
+                        android:maxLength="50"
+                        android:maxLines="5"
+                        android:minLines="2"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/font_15" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:alpha="0.2"
+                        android:background="@color/colorBlueTop" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:layout_marginTop="30dp"
+                        android:fontFamily="@font/poppinsmedium"
+                        android:text="Registration number*"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="13dp" />
+
+                    <EditText
+                        android:id="@+id/registrationNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:inputType="text"
+                        android:minLines="2"
+                        android:gravity="top"
+                        android:maxLength="50"
+                        android:maxLines="5"
+                        android:background="@android:color/transparent"
+                        android:fontFamily="@font/poppins"
+                        android:hint="Enter Registration Number "
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/font_15" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:alpha="0.2"
+                        android:background="@color/colorBlueTop" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:layout_marginTop="30dp"
+                        android:fontFamily="@font/poppinsmedium"
+                        android:text="Qualification*"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="13dp" />
+
+
+                    <EditText
+                        android:id="@+id/qualifications"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:minLines="3"
+                        android:gravity="top"
+                        android:maxLines="5"
+                        android:background="@android:color/transparent"
+                        android:fontFamily="@font/poppins"
+                        android:hint="Enter Qualification "
+                        android:paddingTop="0dp"
+                        android:paddingBottom="6dp"
+                        android:maxLength="250"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/font_15" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:alpha="0.2"
+                        android:background="@color/colorBlueTop" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:layout_marginTop="30dp"
+                        android:fontFamily="@font/poppinsmedium"
+                        android:text="Contact number*"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="13dp" />
+
+
+                    <EditText
+                        android:id="@+id/contactNumber"
+                        android:layout_width="match_parent"
+                        android:background="@android:color/transparent"
+                        android:fontFamily="@font/poppins"
+                        android:hint="Enter Contact number "
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:inputType="text"
+                        android:minLines="2"
+                        android:gravity="top"
+                        android:maxLength="14"
+                        android:maxLines="5"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/font_15" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:alpha="0.2"
+                        android:background="@color/colorBlueTop" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:layout_marginTop="30dp"
+                        android:fontFamily="@font/poppinsmedium"
+                        android:text="Mail id"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="13dp" />
+
+
+                    <EditText
+                        android:id="@+id/mailId"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:minLines="2"
+                        android:gravity="top"
+                        android:maxLength="50"
+                        android:inputType="text"
+                        android:maxLines="5"
+                        android:background="@android:color/transparent"
+                        android:fontFamily="@font/poppins"
+                        android:hint="Enter Mail Id "
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/font_15" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:alpha="0.2"
+                        android:background="@color/colorBlueTop" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:layout_marginTop="30dp"
+                        android:fontFamily="@font/poppinsmedium"
+                        android:text="About me"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="13dp" />
+
+
+                    <EditText
+                        android:id="@+id/aboutMe"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:background="@android:color/transparent"
+                        android:fontFamily="@font/poppins"
+                        android:gravity="top"
+                        android:overScrollMode="always"
+                        android:inputType="textCapSentences|textMultiLine"
+                        android:scrollbarStyle="insideInset"
+                        android:scrollbars="vertical"
+                        android:hint="Enter About You"
+                        android:minLines="3"
+                        android:maxLength="140"
+                        android:maxLines="5"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/font_15" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:alpha="0.2"
+                        android:background="@color/colorBlueTop" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="@dimen/margin_25"
+                    android:layout_marginEnd="20dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:fontFamily="@font/poppinsmedium"
+                        android:text="Note"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="13dp" />
+
+
+                    <EditText
+                        android:id="@+id/notes"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:background="@android:color/transparent"
+                        android:fontFamily="@font/poppins"
+                        android:gravity="top"
+                        android:hint="Enter Note"
+                        android:imeOptions="actionNext"
+                        android:minLines="3"
+                        android:maxLines="4"
+                        android:inputType="textMultiLine"
+                        android:overScrollMode="always"
+                        android:scrollbarStyle="insideInset"
+                        android:scrollbars="vertical"
+                        android:maxLength="140"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/font_15" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:alpha="0.2"
+                        android:background="@color/colorBlueTop" />
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/parent_of_button_bottom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="@dimen/font_12"
+                    android:layout_marginTop="@dimen/margin_30"
+                    android:layout_marginEnd="@dimen/font_12"
+                    android:layout_marginBottom="@dimen/font_12"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:id="@+id/save"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:visibility="gone"
+                        android:background="@drawable/design_as_edittext_gradient_blue_dark">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:fontFamily="@font/poppins"
+                            android:text="Save"
+                            android:textColor="@color/white"
+                            android:textSize="13dp" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/submitDetails"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/design_as_outlined_button_blue_top"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:fontFamily="@font/poppins"
+                            android:text="Next"
+                            android:textColor="@color/colorBlueTop"
+                            android:textSize="14dp" />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+        <include layout="@layout/transparent_progress_bar" android:id="@+id/progressBar"/>
+
+    </RelativeLayout>
+
+</layout>

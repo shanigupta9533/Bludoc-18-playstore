@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#eeeeee"
+        tools:context=".CalenderViewActivity">
+
+        <ru.cleverpumpkin.calendar.CalendarView
+            android:visibility="visible"
+            android:id="@+id/simpleCalendarView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:background="#eeeeee"
+            android:visibility="gone"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/simpleCalendarView"
+            android:layout_marginTop="-40dp">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <include
+            android:id="@+id/progressBarInclude"
+            layout="@layout/progress_bar_layout" />
+
+        <include
+            layout="@layout/no_data_found_container" />
+
+    </RelativeLayout>
+
+</layout>

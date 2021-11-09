@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#eeeeee"
+        tools:context=".MultiplePharmacistActivity">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="43dp"
+            android:background="@android:color/white"
+            app:contentInsetStart="0dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/back"
+                    android:layout_width="23dp"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="12dp"
+                    android:contentDescription="TODO"
+                    android:src="@drawable/ic_back_button"
+                    app:tint="@color/colorBlack" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="12dp"
+                    android:layout_toEndOf="@+id/back"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/app_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins"
+                        android:text="Today's Appointment"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="13dp" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="@dimen/font_12"
+                    android:layout_marginEnd="@dimen/font_12"
+                    android:background="#eeeeee" />
+
+            </RelativeLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <TextView
+            android:id="@+id/no_data_found_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:fontFamily="@font/poppins"
+            android:text="@string/no_data_found"
+            android:textColor="@color/colorBlack"
+            android:textSize="18dp"
+            android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/searchPatientView"
+            style="@style/MaterialSearchBarLight"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@+id/toolbar"
+            android:layout_marginLeft="@dimen/margin_20"
+            android:layout_marginTop="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_20"
+            android:layout_marginBottom="@dimen/margin_10"
+            android:background="@drawable/spinner_background_white"
+            android:fontFamily="@font/poppins"
+            android:hint="@string/search_pharmacist_here"
+            android:imeOptions="actionNext"
+            android:inputType="text"
+            android:lines="1"
+            android:maxLines="1"
+            android:minLines="1"
+            android:paddingStart="@dimen/margin_12"
+            android:paddingLeft="@dimen/margin_4"
+            android:paddingEnd="@dimen/margin_12"
+            android:paddingRight="@dimen/margin_4"
+            android:textColor="#000"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <com.yalantis.phoenix.PullToRefreshView
+            android:id="@+id/pullToRefresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/searchPatientView">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/toolbar"
+                android:layout_marginTop="2dp">
+
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+        </com.yalantis.phoenix.PullToRefreshView>
+
+        <include
+            android:id="@+id/progressBarInclude"
+            layout="@layout/progress_bar_layout" />
+
+        <include
+            layout="@layout/no_data_found_container_today_appointment" />
+
+    </RelativeLayout>
+
+</layout>

@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".Fragment.DoctorDetailsFragment">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:fontFamily="@font/poppinsmedium"
+                    android:text="Doctor Profile"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="13dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:fontFamily="@font/poppins"
+                    android:text="Upload A Clear Photo For Profile"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="13dp" />
+
+                <RelativeLayout
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/font_18">
+
+                    <ImageView
+                        android:id="@+id/doctorImage"
+                        android:layout_width="180dp"
+                        android:layout_height="180dp"
+                        android:background="@drawable/blue_faint_btn_gradient2"
+                        android:clickable="true" />
+
+                    <ImageView
+                        android:id="@+id/removeImageDoctor"
+                        android:layout_width="@dimen/margin_40"
+                        android:layout_height="@dimen/margin_40"
+
+                        android:padding="@dimen/margin_10"
+                        android:layout_alignTop="@+id/doctorImage"
+                        android:layout_alignRight="@+id/doctorImage"
+                        android:layout_margin="@dimen/font_8"
+                        android:src="@drawable/ic_close" />
+
+                    <TextView
+                        android:id="@+id/imageTextProfile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:fontFamily="@font/poppins"
+                        android:text="Click here to add doctor"
+                        android:textColor="#565656"
+                        android:textSize="@dimen/font_14" />
+
+                </RelativeLayout>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="35dp"
+                    android:layout_marginEnd="20dp"
+                    android:fontFamily="@font/poppinsmedium"
+                    android:text="Clinic or Hospital Logo"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="13dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:fontFamily="@font/poppins"
+                    android:text="Upload A Clear Logo"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="13dp" />
+
+                <RelativeLayout
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/font_18">
+
+                    <ImageView xmlns:sign="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/logoImage"
+                        android:layout_width="180dp"
+                        android:layout_height="180dp"
+                        android:background="@drawable/blue_faint_btn_gradient2"
+                        android:clickable="true" />
+
+                    <ImageView
+                        android:id="@+id/removeImage"
+                        android:layout_width="@dimen/margin_40"
+                        android:layout_height="@dimen/margin_40"
+
+                        android:padding="@dimen/margin_10"
+                        android:layout_alignTop="@+id/logoImage"
+                        android:layout_alignRight="@+id/logoImage"
+                        android:layout_margin="@dimen/font_8"
+                        android:src="@drawable/ic_close" />
+
+                    <TextView
+                        android:id="@+id/image_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:fontFamily="@font/poppins"
+                        android:text="Click here to add logo"
+                        android:textColor="#565656"
+                        android:textSize="@dimen/font_14" />
+
+                </RelativeLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="35dp"
+                    android:layout_marginEnd="20dp"
+                    android:fontFamily="@font/poppinsmedium"
+                    android:text="QR Code For Payment"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="13dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:fontFamily="@font/poppins"
+                    android:text="Upload A Clear Image Of QR Code For Payment"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="13dp" />
+
+                <RelativeLayout
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/font_18">
+
+                    <ImageView
+                        android:id="@+id/qrCode"
+                        android:layout_width="180dp"
+                        android:layout_height="180dp"
+                        android:background="@drawable/blue_faint_btn_gradient2"
+                        android:clickable="true" />
+
+                    <ImageView
+                        android:id="@+id/qrCodeRemove"
+                        android:layout_width="@dimen/margin_40"
+                        android:layout_height="@dimen/margin_40"
+                        android:padding="@dimen/margin_10"
+                        android:layout_alignTop="@+id/qrCode"
+                        android:layout_alignRight="@+id/qrCode"
+                        android:layout_marginStart="@dimen/margin_5"
+                        android:layout_marginTop="@dimen/margin_5"
+                        android:layout_marginEnd="@dimen/margin_5"
+                        android:layout_marginBottom="@dimen/margin_5"
+                        android:src="@drawable/ic_close" />
+
+                    <TextView
+                        android:id="@+id/imageTextQrCode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:fontFamily="@font/poppins"
+                        android:text="Click here to add QR"
+                        android:textColor="#565656"
+                        android:textSize="@dimen/font_14" />
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:id="@+id/parent_of_button_bottom"
+                    android:orientation="horizontal"
+                    android:layout_marginStart="@dimen/font_12"
+                    android:layout_marginEnd="@dimen/font_12"
+                    android:layout_marginTop="@dimen/margin_30"
+                    android:layout_marginBottom="@dimen/font_12"
+                    android:layout_alignParentBottom="true"
+                    android:layout_height="wrap_content">
+
+                    <RelativeLayout
+                        android:id="@+id/save"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:visibility="gone"
+                        android:background="@drawable/design_as_edittext_gradient_blue_dark"
+                        >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:fontFamily="@font/poppins"
+                            android:text="Save"
+                            android:textColor="@color/white"
+                            android:textSize="13dp" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/submitDetails"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="5dp"
+                        android:background="@drawable/design_as_outlined_button_blue_top"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:fontFamily="@font/poppins"
+                            android:text="Next"
+                            android:textColor="@color/colorBlueTop"
+                            android:textSize="14dp" />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+        <include layout="@layout/transparent_progress_bar" android:id="@+id/progressBar"/>
+
+    </RelativeLayout>
+
+</layout>

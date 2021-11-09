@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".SampleActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:theme="@style/AppTheme.NoActionBar">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_invite_member"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@color/white"
+            android:padding="-48dp"
+            app:contentInsetLeft="0dp"
+            app:contentInsetStart="0dp"
+            app:contentInsetStartWithNavigation="0dp"
+            app:layout_collapseMode="pin"
+            app:popupTheme="@style/AppThemeNOAC"
+            app:subtitleTextColor="@color/colorWhite"
+            app:titleTextColor="@color/colorWhite">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/btn_back_edit_profile"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center|start"
+                        android:layout_margin="@dimen/margin_10"
+                        android:src="@drawable/ic_back_button"
+                        app:tint="@color/colorBlack" />
+
+                    <TextView
+                        android:id="@+id/header"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/poppins"
+                        android:gravity="center"
+                        android:text="Prescription"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="15sp"
+                        android:typeface="sans" />
+
+                </FrameLayout>
+
+
+            </FrameLayout>
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/appbar_layout"
+        android:id="@+id/viewpager"
+        />
+
+    <ru.tinkoff.scrollingpagerindicator.ScrollingPagerIndicator
+        android:id="@+id/indicatorCondition"
+        android:layout_width="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="20dp"
+        app:spi_dotSelectedSize="8dp"
+        app:spi_dotSize="6dp" />
+
+</RelativeLayout>
