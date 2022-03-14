@@ -1,6 +1,7 @@
 package com.likesby.bludoc.ModelLayer.Entities;
 
 import com.google.gson.annotations.SerializedName;
+import com.likesby.bludoc.ModelLayer.ConsentTemplateModel;
 import com.likesby.bludoc.ModelLayer.InvoicePresModel;
 
 import java.util.ArrayList;
@@ -15,8 +16,14 @@ public class ResponseSuccess {
     @SerializedName("presb_patient_id")
     private String prescriptionId;
 
+    @SerializedName("doctor_consent_id")
+    private String doctorConsentId;
+
     @SerializedName("Invoice")
     private ArrayList<InvoicePresModel> invoice;
+
+    @SerializedName("Consent")
+    private ArrayList<ConsentTemplateModel> consent;
 
     public String getPrescriptionId() {
         return prescriptionId;
@@ -25,7 +32,6 @@ public class ResponseSuccess {
     public void setPrescriptionId(String prescriptionId) {
         this.prescriptionId = prescriptionId;
     }
-
 
     //	@SerializedName("subscription_history")
 //	private ArrayList<SubscriptionHistoryItem> subscriptionHistory;
@@ -53,6 +59,22 @@ public class ResponseSuccess {
 
     public void setInvoice(ArrayList<InvoicePresModel> invoice) {
         this.invoice = invoice;
+    }
+
+    public ArrayList<ConsentTemplateModel> getConsent() {
+        return consent;
+    }
+
+    public void setConsent(ArrayList<ConsentTemplateModel> consent) {
+        this.consent = consent;
+    }
+
+    public String getDoctorConsentId() {
+        return doctorConsentId;
+    }
+
+    public void setDoctorConsentId(String doctorConsentId) {
+        this.doctorConsentId = doctorConsentId;
     }
 
     @Override

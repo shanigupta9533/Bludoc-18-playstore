@@ -29,6 +29,7 @@ public class HistorySubParentFragment extends Fragment {
         ViewPagerFragmentAdapter viewPagerFragmentAdapter=new ViewPagerFragmentAdapter(getChildFragmentManager(),0);
         viewPagerFragmentAdapter.setFragment(new History(),"History");
         viewPagerFragmentAdapter.setFragment(new InvoiceHistoryFragment(),"Invoice History");
+        viewPagerFragmentAdapter.setFragment(new ConsentPatientHistoryFragment(),"Consent History");
         binding.viewPager.setAdapter(viewPagerFragmentAdapter);
         binding.tabLayout.setupWithViewPager(binding.viewPager);
 

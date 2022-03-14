@@ -2495,7 +2495,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
             final WebServices request = retrofit.create(WebServices.class);
 
-            Call<ResultOfSuccess> call = request.getAppointmentList(manager.getPreferences(HomeActivity.this, "doctor_id"),"");
+            Call<ResultOfSuccess> call = request.getAppointmentList(manager.getPreferences(HomeActivity.this, "doctor_id"),"","");
 
             call.enqueue(new Callback<ResultOfSuccess>() {
                 @Override

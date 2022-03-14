@@ -156,7 +156,7 @@ public class CalenderViewActivity extends AppCompatActivity {
 
             final WebServices request = retrofit.create(WebServices.class);
 
-            Call<ResultOfSuccess> call = request.getAppointmentList(manager.getPreferences(CalenderViewActivity.this, "doctor_id"),"");
+            Call<ResultOfSuccess> call = request.getAppointmentList(manager.getPreferences(CalenderViewActivity.this, "doctor_id"),"","");
 
             call.enqueue(new Callback<ResultOfSuccess>() {
                 @Override

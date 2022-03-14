@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -46,11 +47,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.ads.formats.UnifiedNativeAd;
 import com.google.android.gms.ads.formats.UnifiedNativeAdView;
 import com.likesby.bludoc.AppointmentActivity;
+import com.likesby.bludoc.ConsentActivity;
+import com.likesby.bludoc.ConsentTemplateActivity;
 import com.likesby.bludoc.CreateAppointmentActivity;
 import com.likesby.bludoc.DigitalClinicActivity;
 import com.likesby.bludoc.DigitalClinicConfirmationActivity;
 import com.likesby.bludoc.Fragment.CreatePrescription;
 import com.likesby.bludoc.Fragment.PopUpSubscriptionDialogFragment;
+import com.likesby.bludoc.HistoryOfPatientsActivity;
 import com.likesby.bludoc.HomeActivity;
 import com.likesby.bludoc.InvoiceActivity;
 import com.likesby.bludoc.ModelLayer.Entities.PatientsItem;
@@ -187,6 +191,81 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
 
         viewHolder.PATIENT_NAME.setText(mFilteredList.get(i).getPName());
         viewHolder.PATIENT_ID.setText(mFilteredList.get(i).getPatientId());
+
+        viewHolder.consent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(mContext, ConsentTemplateActivity.class);
+                intent.putExtra("patient_id",mFilteredList.get(viewHolder.getAdapterPosition()).getPatientId());
+                intent.putExtra("patient_name",mFilteredList.get(viewHolder.getAdapterPosition()).getPName());
+                intent.putExtra("patientDetails",patientsItem);
+                mContext.startActivity(intent);
+                
+            }
+        });
+
+        viewHolder.mobile_start.setOnClickListener(v -> {
+
+            if (!patientsItem.getPMobile().equalsIgnoreCase("0")) {
+
+
+                Uri u = Uri.parse("tel:" + patientsItem.getPMobile());
+                Intent intent = new Intent(Intent.ACTION_DIAL, u);
+
+                try {
+                    mContext.startActivity(intent);
+                } catch (SecurityException s) {
+                    Toast.makeText(mContext, "An error occurred", Toast.LENGTH_LONG)
+                            .show();
+                }
+
+            } else {
+
+                Toast.makeText(mContext, "Mobile number cannot found...", Toast.LENGTH_SHORT).show();
+
+            }
+
+        });
+
+        viewHolder.email_start.setOnClickListener(v -> {
+
+            if (!TextUtils.isEmpty(patientsItem.getPEmail())) {
+
+                try {
+
+                Intent email = new Intent(Intent.ACTION_SEND);
+                email.putExtra(Intent.EXTRA_EMAIL, new String[]{patientsItem.getPEmail()});
+                email.putExtra(Intent.EXTRA_SUBJECT, "Subject");
+                email.putExtra(Intent.EXTRA_TEXT, "Message");
+                email.setPackage("com.google.android.gm");
+
+                //need this to prompts email client only
+                email.setType("message/rfc822");
+                 mContext.startActivity(Intent.createChooser(email, "Choose an Email client :"));
+
+                } catch (Exception ex) {
+                    Toast.makeText(mContext, "Error Sending Email,Try Later.", Toast.LENGTH_SHORT).show();
+                }
+
+            }  else {
+
+                Toast.makeText(mContext, "Gmail cannot found...", Toast.LENGTH_SHORT).show();
+
+            }
+
+        });
+
+        viewHolder.HistoryPatient.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(mContext, HistoryOfPatientsActivity.class);
+                intent.putExtra("patient_id",patientsItem.getPatientId());
+                mContext.startActivity(intent);
+
+            }
+        });
 
         if (TextUtils.isEmpty(mFilteredList.get(i).getpDob())) {
 
@@ -328,12 +407,6 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
             viewHolder.PATIENT_EMAIL.setText("____");
         } else {
             viewHolder.PATIENT_EMAIL.setText(mFilteredList.get(i).getPEmail());
-        }
-
-        if (("").equalsIgnoreCase(mFilteredList.get(i).getpBloodGrp())) {
-            viewHolder.blood_group.setText("____");
-        } else {
-            viewHolder.blood_group.setText(mFilteredList.get(i).getpBloodGrp());
         }
 
         viewHolder.invoice.setOnClickListener(new View.OnClickListener() {
@@ -723,6 +796,7 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
     }
 
     private void certificateOpenModel(ViewHolder viewHolder, PatientsItem patientsItem, int i) {
+
         isOnCertificate = true;
         manager.setPreferences(mContext, "isOnCertificate", "true");
         patient_id = viewHolder.PATIENT_ID.getText().toString().trim();
@@ -907,11 +981,12 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView PATIENT_NAME, PATIENT_ID, PATIENT_MOB, date_of_birth,
-                PATIENT_EMAIL, PATIENT_CREATED, PATIENT_AGE, PATIENT_MODIFIED, blood_group, prescribe, certificate, invoice,book_appointment;
+                PATIENT_EMAIL, PATIENT_CREATED, PATIENT_AGE, PATIENT_MODIFIED, prescribe, certificate, invoice,book_appointment;
         // FrameLayout fl;
         ProgressBar pb;
         ImageView patient_prescribe;
-        LinearLayout ll_main_patient_view;
+        LinearLayout ll_main_patient_view,email_start,mobile_start;
+        TextView HistoryPatient, consent;
         ImageView patient_edit, patient_delete;
 
         public ViewHolder(View view) {
@@ -920,6 +995,7 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
             mContext = view.getContext();
 
             PATIENT_NAME = view.findViewById(R.id.tv_patient_name);
+            HistoryPatient = view.findViewById(R.id.HistoryPatient);
             PATIENT_ID = view.findViewById(R.id.tv_patient_id);
             PATIENT_AGE = view.findViewById(R.id.tv_age);
             PATIENT_MOB = view.findViewById(R.id.tv_mobile);
@@ -931,11 +1007,13 @@ public class PatientsAdapter extends RecyclerView.Adapter<PatientsAdapter.ViewHo
             invoice = view.findViewById(R.id.invoice);
             patient_edit = view.findViewById(R.id.patient_edit);
             patient_delete = view.findViewById(R.id.patient_delete);
-            blood_group = view.findViewById(R.id.blood_group);
             patient_prescribe = view.findViewById(R.id.patient_prescribe);
             prescribe = view.findViewById(R.id.prescribe);
             certificate = view.findViewById(R.id.certificate);
             book_appointment = view.findViewById(R.id.book_appointment);
+            mobile_start = view.findViewById(R.id.mobile_start);
+            email_start = view.findViewById(R.id.email_start);
+            consent = view.findViewById(R.id.consent);
 
             patient_prescribe.setOnClickListener(new View.OnClickListener() {
                 @Override

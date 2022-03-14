@@ -9,36 +9,59 @@
         android:orientation="vertical"
         tools:context=".Fragment.InvoiceHistoryFragment">
 
-        <EditText
-            android:id="@+id/toolbar"
-            style="@style/MaterialSearchBarLight"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginLeft="@dimen/margin_20"
-            android:layout_marginTop="@dimen/margin_10"
-            android:layout_marginRight="@dimen/margin_20"
-            android:layout_marginBottom="@dimen/margin_10"
-            android:background="@drawable/spinner_background_white"
-            android:fontFamily="@font/poppins"
-            android:hint="@string/search_pharmacist_here"
-            android:imeOptions="actionNext"
-            android:inputType="text"
-            android:lines="1"
-            android:maxLines="1"
-            android:minLines="1"
-            android:paddingStart="@dimen/margin_12"
-            android:paddingLeft="@dimen/margin_4"
-            android:paddingEnd="@dimen/margin_12"
-            android:paddingRight="@dimen/margin_4"
-            android:textColor="#000"
-            android:textSize="13sp"
-            android:textStyle="bold" />
+            android:orientation="horizontal"
+            android:id="@+id/toolbar_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/toolbar"
+                style="@style/MaterialSearchBarLight"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginTop="@dimen/margin_10"
+                android:layout_marginRight="@dimen/margin_10"
+                android:layout_marginBottom="@dimen/margin_10"
+                android:background="@drawable/spinner_background_white"
+                android:fontFamily="@font/poppins"
+                android:hint="@string/search_pharmacist_here"
+                android:imeOptions="actionNext"
+                android:inputType="text"
+                android:lines="1"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:minLines="1"
+                android:paddingStart="@dimen/margin_12"
+                android:paddingLeft="@dimen/margin_4"
+                android:paddingEnd="@dimen/margin_12"
+                android:paddingRight="@dimen/margin_4"
+                android:textColor="#000"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/faint_round_border"
+                android:padding="@dimen/margin_8"
+                android:layout_marginEnd="@dimen/font_12"
+                android:textAllCaps="false"
+                android:layout_gravity="center_vertical"
+                android:id="@+id/search"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:text="Go"
+                android:textStyle="normal" />
+
+        </LinearLayout>
 
         <com.yalantis.phoenix.PullToRefreshView
             android:id="@+id/pullToRefresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/toolbar"
+            android:layout_below="@+id/toolbar_parent"
             android:layout_marginTop="@dimen/margin_5">
 
             <androidx.recyclerview.widget.RecyclerView

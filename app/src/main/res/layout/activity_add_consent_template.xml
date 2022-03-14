@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".ConsentActivity">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@color/white"
+            android:padding="-48dp"
+            android:elevation="@dimen/margin_6"
+            app:contentInsetLeft="0dp"
+            app:contentInsetStart="0dp"
+            app:contentInsetStartWithNavigation="0dp"
+            app:layout_collapseMode="pin"
+            app:popupTheme="@style/AppThemeNOAC"
+            app:subtitleTextColor="@color/colorWhite"
+            app:titleTextColor="@color/colorWhite">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/btn_back_edit_profile"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center|start"
+                        android:layout_margin="@dimen/margin_10"
+                        android:src="@drawable/ic_back_button"
+                        app:tint="@color/colorBlack" />
+
+                    <TextView
+                        android:id="@+id/header"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/poppins"
+                        android:gravity="center"
+                        android:text="Create Template"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="15sp"
+                        android:typeface="sans" />
+
+                </FrameLayout>
+
+
+            </FrameLayout>
+        </androidx.appcompat.widget.Toolbar>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_below="@+id/toolbar"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_12"
+                android:layout_marginTop="@dimen/margin_12"
+                android:layout_marginEnd="@dimen/margin_12"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_10"
+                    android:layout_marginLeft="@dimen/margin_10"
+                    android:fontFamily="@font/poppinsmedium"
+                    android:text="Consent Heading"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="12sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/name_of_consent"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/margin_40"
+                        android:layout_marginTop="@dimen/margin_8"
+                        android:layout_weight="1"
+                        android:background="@drawable/blue_faint_btn_gradient4"
+                        android:fontFamily="@font/poppins"
+                        android:hint="@string/enter_here"
+                        android:inputType="text"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:padding="@dimen/margin_10"
+                        android:scrollHorizontally="true"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:layout_width="27dp"
+                        android:layout_height="27dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="@dimen/margin_4"
+                        android:id="@+id/headingVoice"
+                        android:layout_marginTop="@dimen/margin_4"
+                        android:src="@drawable/ic_action_speech_voice" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_12"
+                android:layout_marginTop="@dimen/margin_30"
+                android:layout_marginEnd="@dimen/margin_12"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_10"
+                    android:layout_marginLeft="@dimen/margin_10"
+                    android:fontFamily="@font/poppinsmedium"
+                    android:text="Consent Description"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="12sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_height="100dp"
+                        android:layout_marginTop="@dimen/margin_8"
+                        android:layout_weight="1"
+                        android:id="@+id/consent_description"
+                        android:background="@drawable/blue_faint_btn_gradient4"
+                        android:fontFamily="@font/poppins"
+                        android:gravity="top"
+                        android:hint="@string/enter_here"
+                        android:inputType="textMultiLine"
+                        android:padding="@dimen/margin_10"
+                        android:scrollHorizontally="true"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="15sp" />
+
+                    <ImageView
+                        android:id="@+id/descriptionVoice"
+                        android:layout_width="27dp"
+                        android:layout_height="27dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="@dimen/margin_4"
+                        android:layout_marginTop="@dimen/margin_4"
+                        android:src="@drawable/ic_action_speech_voice" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="@dimen/font_15"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/submit"
+                    android:layout_width="130dp"
+                    android:layout_height="@dimen/margin_35"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/font_16"
+                    android:layout_marginBottom="@dimen/margin_10"
+                    android:background="@drawable/blue_round_btn_gradient1"
+                    android:fontFamily="@font/poppins"
+                    android:text="Create Template"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="13sp"
+                    android:textStyle="normal" />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <include layout="@layout/progress_bar_layout" android:id="@+id/progressBarInclude"/>
+
+    </RelativeLayout>
+
+</layout>

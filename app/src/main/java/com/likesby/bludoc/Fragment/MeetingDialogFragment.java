@@ -240,7 +240,7 @@ public class MeetingDialogFragment extends DialogFragment {
 
             final WebServices request = retrofit.create(WebServices.class);
 
-            Call<ResultOfSuccess> call = request.getAppointmentList(manager.getPreferences(fragmentActivity, "doctor_id"),"");
+            Call<ResultOfSuccess> call = request.getAppointmentList(manager.getPreferences(fragmentActivity, "doctor_id"),"","");
 
             call.enqueue(new Callback<ResultOfSuccess>() {
                 @Override

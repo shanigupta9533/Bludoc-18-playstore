@@ -685,20 +685,16 @@ public class InvoiceActivity extends AppCompatActivity {
     private void changeDateListener() {
 
         final Calendar myCalendar = Calendar.getInstance();
-        DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                // TODO Auto-generated method stub
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        DatePickerDialog.OnDateSetListener date = (view, year, monthOfYear, dayOfMonth) -> {
+            // TODO Auto-generated method stub
+            myCalendar.set(Calendar.YEAR, year);
+            myCalendar.set(Calendar.MONTH, monthOfYear);
+            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-                String myFormat = "dd-MM-yyyy"; // your format
-                SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
+            String myFormat = "dd-MM-yyyy"; // your format
+            SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
 
-                activity.invoiceDate.setText(sdf.format(myCalendar.getTime()));
-            }
-
+            activity.invoiceDate.setText(sdf.format(myCalendar.getTime()));
         };
         DatePickerDialog datePickerDialog = new DatePickerDialog(InvoiceActivity.this, R.style.DialogTheme, date, myCalendar.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.show();

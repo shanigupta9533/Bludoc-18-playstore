@@ -5,12 +5,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-public class ViewPagerFragmentAdapter extends FragmentPagerAdapter {
+public class ViewPagerFragmentAdapter extends FragmentStatePagerAdapter {
 
     private ArrayList<Fragment> fragmentArrayList = new ArrayList<>();
     private ArrayList<String> fragmentName = new ArrayList<>();

@@ -1,5 +1,6 @@
 package com.likesby.bludoc.Fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,6 +32,9 @@ import com.likesby.bludoc.ModelLayer.NetworkLayer.Helpers.RetrofitClient;
 import com.likesby.bludoc.R;
 import com.likesby.bludoc.SessionManager.SessionManager;
 import com.likesby.bludoc.databinding.FragmentInvoiceHistoryBinding;
+import com.likesby.bludoc.utils.CustomErrorItem;
+import com.likesby.bludoc.utils.NoPaginate.callback.OnLoadMoreListener;
+import com.likesby.bludoc.utils.NoPaginate.paginate.NoPaginate;
 import com.likesby.bludoc.utils.Utils;
 import com.likesby.bludoc.viewModels.AllPharmacistList;
 import com.likesby.bludoc.viewModels.AllPharmacistModels;
@@ -40,6 +45,8 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
@@ -47,14 +54,19 @@ import retrofit2.Retrofit;
 public class InvoiceHistoryFragment extends Fragment {
 
     private FragmentInvoiceHistoryBinding binding;
-    private ArrayList<InvoicePresModel> invoicePresModelArrayList=new ArrayList<>();
+    private ArrayList<InvoicePresModel> invoicePresModelArrayList = new ArrayList<>();
     private InvoicesHistoryAdapter invoicesPresAdapter;
     private FragmentActivity fragmentActivity;
     private View root;
     private FrameLayout progressBar;
+    int page = 0;
     private SessionManager manager;
     private PullToRefreshView pullToRefresh;
     private RelativeLayout no_data_found_id;
+    private String patient_id;
+    private final int limit = 10;
+    private NoPaginate noPaginate;
+    private WebServices apiViewHolder;
 
     public InvoiceHistoryFragment() {
         // Required empty public constructor
@@ -64,28 +76,68 @@ public class InvoiceHistoryFragment extends Fragment {
     public void onAttach(@NonNull @NotNull Context context) {
         super.onAttach(context);
 
-        fragmentActivity= (FragmentActivity) context;
+        fragmentActivity = (FragmentActivity) context;
 
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding= FragmentInvoiceHistoryBinding.inflate(inflater, container, false);
+        binding = FragmentInvoiceHistoryBinding.inflate(inflater, container, false);
 
-        manager=new SessionManager();
+        manager = new SessionManager();
+
+        if (getArguments() != null) {
+            patient_id = getArguments().getString("patient_id", "");
+        }
 
         root = binding.getRoot();
 
-        pullToRefresh=root.findViewById(R.id.pullToRefresh);
-        no_data_found_id=root.findViewById(R.id.no_data_found);
+        pullToRefresh = root.findViewById(R.id.pullToRefresh);
+        no_data_found_id = root.findViewById(R.id.no_data_found);
 
-        progressBar=root.findViewById(R.id.fl_progress_layout);
+        progressBar = root.findViewById(R.id.fl_progress_layout);
 
-        invoicesPresAdapter=new InvoicesHistoryAdapter(invoicePresModelArrayList,getContext());
-        binding.recyclerview.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
+        invoicesPresAdapter = new InvoicesHistoryAdapter(invoicePresModelArrayList, getContext());
+        binding.recyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         binding.recyclerview.setAdapter(invoicesPresAdapter);
+
+        binding.search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                page = 0;
+                invoicePresModelArrayList.clear();
+                invoicesPresAdapter.notifyDataSetChanged();
+                progressBar.setVisibility(View.VISIBLE);
+
+                noPaginate.showLoading(false);
+                noPaginate.showError(false);
+                noPaginate.setNoMoreItems(false);
+                new Handler(Looper.myLooper()).postDelayed(() -> pullToRefresh.setRefreshing(false), 3000);
+
+            }
+        });
+
+        binding.getRoot().findViewById(R.id.refresh_button_no_data).setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void onClick(View view) {
+
+                no_data_found_id.setVisibility(View.GONE);
+                page = 0;
+                invoicePresModelArrayList.clear();
+                invoicesPresAdapter.notifyDataSetChanged();
+                progressBar.setVisibility(View.VISIBLE);
+
+                noPaginate.showLoading(false);
+                noPaginate.showError(false);
+                noPaginate.setNoMoreItems(false);
+
+            }
+        });
 
         invoicesPresAdapter.setOnClickListener(new InvoicesHistoryAdapter.OnClickListener() {
             @Override
@@ -96,7 +148,7 @@ public class InvoiceHistoryFragment extends Fragment {
             @Override
             public void onSearch(int i) {
 
-                if(i<=0)
+                if (i <= 0)
                     no_data_found_id.setVisibility(View.VISIBLE);
                 else
                     no_data_found_id.setVisibility(View.GONE);
@@ -105,42 +157,32 @@ public class InvoiceHistoryFragment extends Fragment {
             }
         });
 
-        binding.toolbar.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        if (page == 0) progressBar.setVisibility(View.VISIBLE);
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                invoicesPresAdapter.getFilter().filter(s);
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        AllGetInvoicesHistory();
-
-        pullToRefresh.setOnRefreshListener(new PullToRefreshView.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-
-                AllGetInvoicesHistory();
-
-                new Handler(Looper.myLooper()).postDelayed(new Runnable() {
+        noPaginate = NoPaginate.with(binding.recyclerview).setLoadingTriggerThreshold(0)
+                .setCustomErrorItem(new CustomErrorItem())
+                .setOnLoadMoreListener(new OnLoadMoreListener() {
                     @Override
-                    public void run() {
+                    public void onLoadMore() {
 
-                        pullToRefresh.setRefreshing(false);
+                        noPaginate.showLoading(true);
+                        noPaginate.showError(false);
+                        AllGetInvoicesHistory();
+
                     }
-                },3000);
+                }).build();
 
-            }
+        pullToRefresh.setOnRefreshListener(() -> {
+            page = 0;
+            invoicePresModelArrayList.clear();
+            invoicesPresAdapter.notifyDataSetChanged();
+            progressBar.setVisibility(View.VISIBLE);
+
+            noPaginate.showLoading(false);
+            noPaginate.showError(false);
+            noPaginate.setNoMoreItems(false);
+            new Handler(Looper.myLooper()).postDelayed(() -> pullToRefresh.setRefreshing(false), 3000);
+
         });
 
         return binding.getRoot();
@@ -148,60 +190,80 @@ public class InvoiceHistoryFragment extends Fragment {
 
     public void AllGetInvoicesHistory() {
 
-        if (Utils.isConnectingToInternet(fragmentActivity.getApplicationContext())) {
+        Retrofit retrofit = RetrofitClient.getInstance();
 
-            progressBar.setVisibility(View.VISIBLE);
-            Retrofit retrofit = RetrofitClient.getInstance();
+        final WebServices request = retrofit.create(WebServices.class);
 
-            final WebServices request = retrofit.create(WebServices.class);
+        int offset = 0;
+        if (page > 0)
+            offset = (page * limit);
 
-            Call<ResponseSuccess> call = request.allInvoicesHistory(manager.getPreferences(fragmentActivity, "doctor_id"));
+        Call<ResponseSuccess> call = request.allInvoicesHistory(manager.getPreferences(fragmentActivity, "doctor_id"), patient_id, offset, String.valueOf(limit),
+                binding.toolbar.getText().toString());
 
-            call.enqueue(new Callback<ResponseSuccess>() {
-                @Override
-                public void onResponse(@NonNull Call<ResponseSuccess> call, @NonNull retrofit2.Response<ResponseSuccess> response) {
+        call.enqueue(new Callback<ResponseSuccess>() {
+            @Override
+            public void onResponse(@NonNull Call<ResponseSuccess> call, @NonNull retrofit2.Response<ResponseSuccess> response) {
 
-                    if(response.isSuccessful() && response.body() != null){
+                if (response.isSuccessful() && response.body() != null) {
 
-                        ResponseSuccess jsonResponse = response.body();
-                        pullToRefresh.setRefreshing(false);
-                        assert jsonResponse != null;
-                        progressBar.setVisibility(View.GONE);
-                        if (jsonResponse.getSuccess().equalsIgnoreCase("Success")) {
+                    ResponseSuccess jsonResponse = response.body();
+                    pullToRefresh.setRefreshing(false);
+                    assert jsonResponse != null;
+                    progressBar.setVisibility(View.GONE);
+                    if (jsonResponse.getSuccess().equalsIgnoreCase("Success")) {
 
-                            ArrayList<InvoicePresModel> invoicesPresModel = jsonResponse.getInvoice();
-                            invoicePresModelArrayList.clear();
-                            invoicePresModelArrayList.addAll(invoicesPresModel);
-                            invoicesPresAdapter.notifyDataSetChanged();
-                            pullToRefresh.setRefreshing(false);
-                            no_data_found_id.setVisibility(View.GONE);
+                        int size = invoicePresModelArrayList.size() - 1;
+                        ArrayList<InvoicePresModel> invoicesPresModel = jsonResponse.getInvoice();
+                        invoicePresModelArrayList.addAll(invoicesPresModel);
 
-                        } else {
+                        if (invoicesPresModel.isEmpty())
+                            noPaginate.setNoMoreItems(true);
 
-                            pullToRefresh.setRefreshing(false);
+                        if (page == 0 && invoicePresModelArrayList.isEmpty()) {
                             no_data_found_id.setVisibility(View.VISIBLE);
-
                         }
+
+                        invoicesPresAdapter.notifyItemRangeChanged(size, invoicePresModelArrayList.size());
+                        pullToRefresh.setRefreshing(false);
+
+                        page++;
+                        noPaginate.showLoading(false);
+                        progressBar.setVisibility(View.GONE);
+
+                    } else if (page == 0 && response.body().getMessage().equals("No data available")) {
+
+                        pullToRefresh.setRefreshing(false);
+                        noPaginate.showError(true);
+                        noPaginate.showLoading(false);
+                        no_data_found_id.setVisibility(View.VISIBLE);
 
                     } else {
 
-                        Toast.makeText(fragmentActivity, "Something went wrong...", Toast.LENGTH_SHORT).show();
-
+                        no_data_found_id.setVisibility(View.GONE);
+                        noPaginate.setNoMoreItems(true);
                     }
 
+                } else {
+
+                    Toast.makeText(fragmentActivity, "Something went wrong...", Toast.LENGTH_SHORT).show();
+
+                    noPaginate.showError(true);
+                    noPaginate.showLoading(false);
+
                 }
 
-                @Override
-                public void onFailure(@NonNull Call<ResponseSuccess> call, @NonNull Throwable t) {
-                    progressBar.setVisibility(View.GONE);
-                    Log.e("Error  ***", t.getMessage());
-                    Toast.makeText(fragmentActivity, "Profile Update Error", Toast.LENGTH_SHORT).show();
+            }
 
-                }
-            });
-        } else {
-            Toast.makeText(fragmentActivity, "No Internet Connection", Toast.LENGTH_SHORT).show();
-        }
+            @Override
+            public void onFailure(@NonNull Call<ResponseSuccess> call, @NonNull Throwable t) {
+                progressBar.setVisibility(View.GONE);
+                Log.e("Error  ***", t.getMessage());
+                noPaginate.showError(true);
+                noPaginate.showLoading(false);
+                Toast.makeText(fragmentActivity, "Profile Update Error", Toast.LENGTH_SHORT).show();
+
+            }
+        });
     }
-
 }

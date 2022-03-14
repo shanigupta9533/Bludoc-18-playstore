@@ -180,7 +180,7 @@ public class TodayAppointmentActivity extends AppCompatActivity {
 
             final WebServices request = retrofit.create(WebServices.class);
 
-            Call<ResultOfSuccess> call = request.getAppointmentList(manager.getPreferences(TodayAppointmentActivity.this, "doctor_id"),"");
+            Call<ResultOfSuccess> call = request.getAppointmentList(manager.getPreferences(TodayAppointmentActivity.this, "doctor_id"),"","");
 
             call.enqueue(new Callback<ResultOfSuccess>() {
                 @Override

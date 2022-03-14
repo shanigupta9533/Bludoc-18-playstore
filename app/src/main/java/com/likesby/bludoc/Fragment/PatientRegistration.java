@@ -623,6 +623,7 @@ public class PatientRegistration extends Fragment {
 
                 }
 
+
                 hideKeyboard(mContext);
                 FragmentManager fm = getActivity().getSupportFragmentManager();
                 fm.popBackStack();

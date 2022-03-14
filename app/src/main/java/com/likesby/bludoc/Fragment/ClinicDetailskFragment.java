@@ -116,7 +116,7 @@ public class ClinicDetailskFragment extends Fragment {
         binding.clinicAddress.setOnTouchListener((v, event) -> {
             if (binding.clinicAddress.hasFocus()) {
                 v.getParent().requestDisallowInterceptTouchEvent(true);
-                switch (event.getAction() & MotionEvent.ACTION_MASK){
+                switch (event.getAction() & MotionEvent.ACTION_MASK) {
                     case MotionEvent.ACTION_SCROLL:
                         v.getParent().requestDisallowInterceptTouchEvent(false);
                         return true;
@@ -224,13 +224,18 @@ public class ClinicDetailskFragment extends Fragment {
             if (visiting_hr_from_details_1.length > 1) {
 
                 binding.twoOne.setText(visiting_hr_to_details_2[0].toLowerCase());
-                binding.toTwo.setText(visiting_hr_to_details_2[1].toLowerCase());
+
+                if (visiting_hr_to_details_2.length >= 2)
+                    binding.toTwo.setText(visiting_hr_to_details_2[1].toLowerCase());
+
                 binding.fromOne.setText(visiting_hr_from_details_1[0].toLowerCase());
-                binding.fromTwo.setText(visiting_hr_from_details_1[1].toLowerCase());
+
+                if (visiting_hr_to_details_2.length >= 2)
+                    binding.fromTwo.setText(visiting_hr_from_details_1[1].toLowerCase());
 
             } else {
 
-                if (visiting_hr_to_details_2.length > 1) {
+                if (visiting_hr_to_details_2.length >= 1 && visiting_hr_from_details_1.length>=1) {
                     binding.fromOne.setText(visiting_hr_from_details_1[0].toLowerCase());
                     binding.twoOne.setText(visiting_hr_to_details_2[0].toLowerCase());
                 }

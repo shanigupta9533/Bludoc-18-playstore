@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -22,17 +21,14 @@ import androidx.lifecycle.ViewModelProviders;
 
 
 import com.likesby.bludoc.ModelLayer.Entities.ResponseSubscription;
-import com.likesby.bludoc.ModelLayer.Entities.ResponseSuccess;
 import com.likesby.bludoc.ModelLayer.NewEntities.ResponseProfileDetails;
 import com.likesby.bludoc.SessionManager.SessionManager;
 import com.likesby.bludoc.constants.ApplicationConstant;
 import com.likesby.bludoc.viewModels.ApiViewHolder;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentData;
-import com.razorpay.PaymentResultListener;
 import com.razorpay.PaymentResultWithDataListener;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DateFormat;
@@ -119,8 +115,8 @@ public class PaymentGateway extends AppCompatActivity implements PaymentResultWi
          * Instantiate Checkout
          */
         Checkout checkout = new Checkout();
-         checkout.setKeyID("rzp_test_lu8YpD3PjwGbvn");
-//        checkout.setKeyID("rzp_live_HENDzm8NdfptPX");
+//         checkout.setKeyID("rzp_test_lu8YpD3PjwGbvn");
+        checkout.setKeyID("rzp_live_HENDzm8NdfptPX");
 
         /**
          * Set your logo here

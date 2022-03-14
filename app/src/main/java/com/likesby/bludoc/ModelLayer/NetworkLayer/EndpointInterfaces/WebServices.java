@@ -1,6 +1,7 @@
 package com.likesby.bludoc.ModelLayer.NetworkLayer.EndpointInterfaces;
 
 import com.likesby.bludoc.ModelLayer.AppointmentModel;
+import com.likesby.bludoc.ModelLayer.ConsentTemplateModel;
 import com.likesby.bludoc.ModelLayer.Entities.CmsResponse;
 import com.likesby.bludoc.ModelLayer.Entities.FaqsResponse;
 import com.likesby.bludoc.ModelLayer.Entities.OtpResponse;
@@ -35,6 +36,7 @@ import com.likesby.bludoc.viewModels.AllPharmacistModels;
 import com.likesby.bludoc.viewModels.ResultOfApi;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.Single;
@@ -43,6 +45,7 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
+import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
@@ -161,6 +164,19 @@ public interface WebServices {
             @Part List<MultipartBody.Part> file
     );
 
+    @Multipart
+    @POST("AddConsent")
+    Call<ResponseSuccess> addConsentImage(
+            @Part("doctor_id") RequestBody doctor_id,
+            @Part("title") RequestBody title,
+            @Part("description") RequestBody description,
+            @Part("patient_id") RequestBody patient_id,
+            @Part("patient_name") RequestBody patient_name,
+            @Part("parents_name") RequestBody parents_name,
+            @Part("date") RequestBody date,
+            @Part List<MultipartBody.Part> file
+    );
+
     @FormUrlEncoded
     @POST("AddAppList")
     Call<ResultOfApi> addAppointmentList(@Field("doctor_id") String doctor_id,
@@ -200,7 +216,7 @@ public interface WebServices {
 
     @FormUrlEncoded
     @POST("GetApptList")
-    Call<ResultOfSuccess> getAppointmentList(@Field("doctor_id") String doctor_id,@Field("Sort") String sort);
+    Call<ResultOfSuccess> getAppointmentList(@Field("doctor_id") String doctor_id,@Field("Sort") String sort ,@Field("SortType") String sortType);
 
     @FormUrlEncoded
     @POST("AllPharmacist")
@@ -212,7 +228,8 @@ public interface WebServices {
 
     @FormUrlEncoded
     @POST("AllInvoice")
-    Call<ResponseSuccess> allInvoicesHistory(@Field("doctor_id") String doctor_id);
+    Call<ResponseSuccess> allInvoicesHistory(@Field("doctor_id") String doctor_id ,@Field("patient_id") String patient_id
+            ,@Field("offset") int offset ,@Field("limit") String limit ,@Field("search") String search);
 
     @Headers("Content-Type: application/json")
     @POST("Invoice")
@@ -392,6 +409,29 @@ public interface WebServices {
     @GET("GetDesignation")
     Single<ResponseDesignation> getDesignations();
 
+    @FormUrlEncoded
+    @POST("AllConsent")
+    Call<ResponseSuccess> getAllConsent(@Field("doctor_id") String doctor_id);
+
+    @FormUrlEncoded
+    @POST("MyConsent")
+    Call<ResultOfSuccess> getMyConsent(@Field("patient_id") String patient_id);
+
+    @FormUrlEncoded
+    @POST("MyConsent")
+    Call<ResultOfSuccess> getMyConsentHistory(@Field("doctor_id") String patient_id);
+
+    @FormUrlEncoded
+    @POST("AddConstTemplate")
+    Call<ResponseSuccess> addConsentTemplate(@FieldMap HashMap<String,String> hashMap);
+
+    @FormUrlEncoded
+    @POST("EditConstTemplate")
+    Call<ResponseSuccess> editConstTemplate(@FieldMap HashMap<String,String> hashMap);
+
+    @FormUrlEncoded
+    @POST("DeleteConstTemplate")
+    Call<ResponseSuccess> deleteConsentTemplate(@Field("consent_id") String consent_id);
 
     @GET("GetPG")
     Single<ResponsePG> getPGs();
@@ -536,7 +576,8 @@ public interface WebServices {
 
     @FormUrlEncoded
     @POST("AllPrescription")
-    Single<ResponseHistory> getAllPrescription(@Field("doctor_id") String doctor_id);
+    Single<ResponseHistory> getAllPrescription(@Field("doctor_id") String doctor_id ,@Field("patient_id") String patient_id
+            ,@Field("offset") String offset ,@Field("limit") String limit ,@Field("search") String search,@Field("type") String type);
 
 
 //    @FormUrlEncoded

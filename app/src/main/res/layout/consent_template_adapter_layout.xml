@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/ll_template_main_cv"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/white_btn_gradient2"
+    android:padding="@dimen/margin_10"
+    android:layout_margin="@dimen/margin_10"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/tv_template_name"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:textColor="#000"
+        android:textSize="15sp"
+        android:fontFamily="@font/poppins"
+        android:layout_gravity="center|start"
+        android:text="Template Name" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/margin_20"
+        android:weightSum="0">
+
+        <Button
+            android:fontFamily="@font/poppins"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/margin_25"
+            android:paddingLeft="@dimen/margin_10"
+            android:paddingRight="@dimen/margin_10"
+            android:textColor="#000"
+            android:layout_weight="1"
+            android:textSize="@dimen/font_14"
+            android:textAllCaps="false"
+            android:layout_gravity="end"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginStart="@dimen/margin_10"
+            android:layout_marginEnd="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_2"
+            android:layout_marginBottom="@dimen/margin_2"
+            android:background="@drawable/white_back_gradient"
+            android:id="@+id/template_add"
+            android:text="Use" />
+
+        <Button
+            android:fontFamily="@font/poppins"
+            android:id="@+id/template_edit"
+            android:textSize="@dimen/font_14"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/margin_25"
+            android:layout_gravity="end"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginStart="@dimen/margin_10"
+            android:layout_marginEnd="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_2"
+            android:layout_marginBottom="@dimen/margin_2"
+            android:layout_weight="1"
+            android:background="@drawable/white_back_gradient"
+            android:textAllCaps="false"
+            android:paddingLeft="@dimen/margin_10"
+            android:paddingRight="@dimen/margin_10"
+            android:text="Edit"
+            android:textColor="#000" />
+
+
+        <Button
+            android:fontFamily="@font/poppins"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/margin_25"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:textSize="@dimen/font_14"
+            android:layout_marginStart="@dimen/margin_10"
+            android:layout_marginEnd="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_2"
+            android:layout_marginBottom="@dimen/margin_2"
+            android:layout_weight="1"
+            android:textColor="#000"
+            android:textAllCaps="false"
+            android:layout_gravity="right"
+            android:background="@drawable/white_back_gradient"
+            android:id="@+id/template_delete"
+            android:text="Delete" />
+
+    </LinearLayout>
+
+</LinearLayout>

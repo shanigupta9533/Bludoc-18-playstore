@@ -39,18 +39,20 @@ import java.util.TimeZone;
 
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> implements Filterable {
 
-    private ArrayList<PrescriptionItem> mArrayList = new ArrayList<>();
-    private ArrayList<PrescriptionItem> mFilteredList = new ArrayList<>();
+    private ArrayList<PrescriptionItem> mArrayList;
+    private ArrayList<PrescriptionItem> mFilteredList;
     private Context ctx ;
     LinearLayout ll_patients_view, ll_prescription_view;
     Button btn_create_patient;
+    private int isCertificateGlobal;
     PrescriptionItem prescriptionItem;
 
-    public HistoryAdapter(ArrayList<PrescriptionItem> arrayList, Context context)
+    public HistoryAdapter(ArrayList<PrescriptionItem> arrayList, Context context, int isCertificate)
     {
         mArrayList = arrayList;
         mFilteredList = arrayList;
         ctx = context;
+        isCertificateGlobal = isCertificate;
     }
 
     @NonNull
@@ -84,47 +86,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
         }
 
-//
-//   //     viewHolder.tv_patient_created.setText("Date : "+ DateUtils.outFormatset(mFilteredList.get(i).getDate()));
-//        SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
-//        Date newDate = null;
-//        try {
-//            newDate = format.parse(DateUtils.outFormatset(mFilteredList.get(i).getDate()));
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//        viewHolder.tv_patient_created.setText("Date : "+ newDate);
-//
-//
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//        String couponsStartDate  = mFilteredList.get(i).getDate();
-//        Date date1 = null;
-//        try {
-//            date1 = sdf.parse(couponsStartDate);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//        SimpleDateFormat sdf1 = new SimpleDateFormat( "dd MMM yyyy");
-//        viewHolder.tv_patient_created.setText(sdf1.format(date1));
-//
-//
-//
-//
-
-
-
-        /*String sourceDate = mFilteredList.get(i).getDate();
-        DateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd");
-        DateFormat targetFormat = new SimpleDateFormat("dd-MMM-YYYY");
-        Date date = null;
-        try {
-            date = originalFormat.parse(sourceDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        String formattedDate = targetFormat.format(date);
-        System.out.println(formattedDate);*/
-
         try {
             viewHolder.tv_patient_created.setText(DateUtils.outFormatsetMMM(mFilteredList.get(i).getDate()));
         } catch (Exception e){
@@ -146,32 +107,37 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         }else {
             viewHolder.tv_email.setText("Email : -");
         }
-        viewHolder.ll_main_patient_view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                GeneratePres myFragment = new GeneratePres();
-                Bundle bundle = new Bundle();
-                prescriptionItem = new PrescriptionItem();
-                prescriptionItem = mFilteredList.get(i);
-                bundle.putParcelable("defaultAttributeId", prescriptionItem);
-                ArrayList<com.likesby.bludoc.ModelLayer.NewEntities.LabTestItem> labTestItemArrayList  = new ArrayList<>();
-                for (LabTestItem lii: prescriptionItem.getLabTest()
-                     ) {
-                    com.likesby.bludoc.ModelLayer.NewEntities.LabTestItem labTestItem = new com.likesby.bludoc.ModelLayer.NewEntities.LabTestItem();
-                    labTestItem.setLabTestName(lii.getLabTestName());
-                    labTestItem.setLabTestComment(lii.getLabTestComment());
-                    labTestItemArrayList.add(labTestItem);
-                }
-                bundle.putParcelableArrayList("defaultAttributeIdLabTest", labTestItemArrayList);
-                bundle.putString("definer", "history");
-                bundle.putString("end_note", prescriptionItem.getEndNote());
-                bundle.putString("yesOrNo",prescriptionItem.getAge());
-                bundle.putString("pres_id",prescriptionItem.getPresbPatientId());
-                bundle.putString("isCertificate",prescriptionItem.getIsCertificate());
-                myFragment.setArguments(bundle);
-                FragmentManager fragmentManager = ((FragmentActivity) ctx).getSupportFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.homePageContainer, myFragment, "first").addToBackStack("Detail").commit();
+        viewHolder.ll_main_patient_view.setOnClickListener(v -> {
+
+            GeneratePres myFragment = new GeneratePres();
+            Bundle bundle = new Bundle();
+            prescriptionItem = new PrescriptionItem();
+            prescriptionItem = mFilteredList.get(i);
+            bundle.putParcelable("defaultAttributeId", prescriptionItem);
+            ArrayList<com.likesby.bludoc.ModelLayer.NewEntities.LabTestItem> labTestItemArrayList  = new ArrayList<>();
+            for (LabTestItem lii: prescriptionItem.getLabTest()
+                 ) {
+                com.likesby.bludoc.ModelLayer.NewEntities.LabTestItem labTestItem = new com.likesby.bludoc.ModelLayer.NewEntities.LabTestItem();
+                labTestItem.setLabTestName(lii.getLabTestName());
+                labTestItem.setLabTestComment(lii.getLabTestComment());
+                labTestItemArrayList.add(labTestItem);
             }
+            bundle.putParcelableArrayList("defaultAttributeIdLabTest", labTestItemArrayList);
+            bundle.putString("definer", "history");
+            bundle.putString("end_note", prescriptionItem.getEndNote());
+            bundle.putString("yesOrNo",prescriptionItem.getAge());
+            bundle.putString("pres_id",prescriptionItem.getPresbPatientId());
+            bundle.putString("isCertificate",prescriptionItem.getIsCertificate());
+
+            if(isCertificateGlobal>0){
+                bundle.putBoolean("isBackChecked",false);
+            }
+
+            myFragment.setArguments(bundle);
+            FragmentManager fragmentManager = ((FragmentActivity) ctx).getSupportFragmentManager();
+
+            fragmentManager.beginTransaction().replace(R.id.homePageContainer, myFragment, "first").addToBackStack("Detail").commit();
+
         });
 
 

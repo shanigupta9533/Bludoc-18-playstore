@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ll_main_patient_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/margin_10"
+    android:layout_marginLeft="@dimen/margin_10"
+    android:layout_marginTop="@dimen/margin_8"
+    android:layout_marginEnd="@dimen/margin_10"
+    android:layout_marginRight="@dimen/margin_10"
+    android:layout_marginBottom="@dimen/font_12"
+    android:background="@drawable/blue_faint_btn_gradient2"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/margin_40"
+            android:background="@drawable/round_as_name_appointment">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/margin_3"
+                android:fontFamily="@font/whitneysemibold"
+                android:gravity="center_vertical"
+                android:letterSpacing="0.02"
+                android:lines="1"
+                android:paddingStart="@dimen/margin_12"
+                android:paddingEnd="@dimen/margin_12"
+                android:text="Title : "
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:layout_width="@dimen/margin_25"
+                android:layout_height="@dimen/margin_25"
+                android:id="@+id/share"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/margin_12"
+                android:src="@drawable/ic_share_icon"
+                android:layout_alignParentEnd="true"
+                app:tint="@color/white" />
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/patient_prescribe"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center|end"
+            android:layout_marginTop="@dimen/margin_5"
+            android:layout_marginEnd="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
+            android:layout_marginBottom="@dimen/margin_5"
+            android:background="@drawable/white_btn_gradient"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:padding="@dimen/margin_6"
+            android:src="@drawable/fast_forward"
+            android:textColor="@color/colorBlue"
+            android:visibility="gone" />
+
+    </FrameLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/margin_12"
+        android:layout_marginTop="@dimen/margin_8"
+        android:layout_marginEnd="@dimen/margin_5"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_8"
+            android:layout_marginBottom="@dimen/margin_14"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppinsmedium"
+                    android:text="DOB"
+                    android:textColor="@color/colorBlue"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/date_of_birth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_8"
+                    android:fontFamily="@font/poppins"
+                    android:text="Gender"
+                    android:textColor="@color/colorDarkGrey"
+                    android:textSize="11sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/patientName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.8"
+                    android:fontFamily="@font/poppinsmedium"
+                    android:letterSpacing="0.015"
+                    android:text="Shani Gupta"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="13sp"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/font_12">
+
+                <TextView
+                    android:id="@+id/email_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="27dp"
+                    android:layout_marginTop="@dimen/margin_3"
+                    android:fontFamily="@font/poppinsmedium"
+                    android:gravity="center"
+                    android:textColor="@color/colorBlue"
+                    android:textSize="11sp"
+                    app:drawableStartCompat="@drawable/ic_action_email_icon"
+                    app:drawableTint="@color/colorBlue" />
+
+                <TextView
+                    android:id="@+id/patientEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/font_12"
+                    android:layout_marginTop="@dimen/margin_3"
+                    android:alpha="0.7"
+                    android:fontFamily="@font/open_sans"
+                    android:gravity="center"
+                    android:text="shanipratap776@gmail.com"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_12"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/whatsnumber"
+                        android:layout_width="@dimen/font_23"
+                        android:layout_height="@dimen/font_23"
+                        android:textSize="11sp"
+                        android:layout_marginStart="@dimen/margin_4"
+                        android:layout_marginEnd="@dimen/font_12"
+                        android:layout_gravity="end"
+                        android:src="@drawable/whatsapp"
+                        />
+
+                    <TextView
+                        android:id="@+id/phone_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/open_sans"
+                        android:gravity="center"
+                        android:textColor="@color/colorBlue"
+                        android:layout_marginStart="@dimen/font_8"
+                        android:textSize="11sp"
+                        app:drawableStartCompat="@drawable/ic_action_phone"
+                        app:drawableTint="@color/colorRed" />
+
+                    <TextView
+                        android:id="@+id/patientMobile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/font_8"
+                        android:alpha="0.7"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/poppinsmedium"
+                        android:gravity="start|center_vertical"
+                        android:text="9898989898"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="13sp" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/patient_edit"
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
+                    android:visibility="gone"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/margin_10"
+                    android:layout_marginLeft="@dimen/margin_10"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:padding="@dimen/margin_5"
+                    android:src="@drawable/edit_data"
+                    android:textColor="@color/colorBlue" />
+
+
+                <ImageView
+                    android:id="@+id/patient_delete"
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
+                    android:layout_gravity="center"
+                    android:visibility="gone"
+                    android:layout_marginStart="@dimen/margin_10"
+                    android:layout_marginLeft="@dimen/margin_10"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:padding="@dimen/margin_5"
+                    android:src="@drawable/delete_data"
+                    android:textColor="@color/colorBlue"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="-10dp"
+            android:layout_marginBottom="@dimen/margin_12"
+            android:background="@color/colorBlue" />
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppinsmedium"
+            android:letterSpacing="0.01"
+            android:text="Purpose : Pain in joints"
+            android:textColor="@color/colorDarkGrey"
+            android:textSize="13sp"
+            android:visibility="visible" />
+
+        <RelativeLayout
+            android:id="@+id/signature_available"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/margin_25"
+            android:layout_marginTop="38dp"
+            android:layout_marginBottom="@dimen/font_12"
+            android:background="@drawable/blue_faint_btn_gradient_main">
+
+            <TextView
+                android:id="@+id/status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="@dimen/font_12"
+                android:layout_marginEnd="@dimen/font_12"
+                android:background="@drawable/background_underground"
+                android:fontFamily="@font/poppinsmedium"
+                android:text="Status - Paid"
+                android:textColor="@color/dark_blue_invoice"
+                android:textSize="11sp" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_patient_modified"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins"
+            android:text=""
+            android:textColor="@color/colorDarkGrey"
+            android:textSize="10sp"
+
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+</LinearLayout>

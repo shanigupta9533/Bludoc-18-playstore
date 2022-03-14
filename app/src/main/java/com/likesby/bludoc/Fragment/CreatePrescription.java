@@ -1434,14 +1434,23 @@ public class CreatePrescription extends Fragment {
         super.onResume();
 
         hideKeyboard(mContext);
-        //Toast.makeText(mContext, "onResume", Toast.LENGTH_SHORT).show();
+
+        if(manager.getPreferences(mContext, "backSubs").equals("true")){
+
+            backCheckerFlag = false;
+            Log.i(TAG, "onResume: "+manager.getPreferences(mContext, "backSubs").equals("true"));
+            manager.setPreferences(mContext, "backSubs", "false");
+
+            return;
+
+        }
 
         if (manager.getPreferences(mContext, "patient_registration").equals("true")) {
             AllGetPatients();
             fl_progress_bar.setVisibility(View.VISIBLE);
             manager.setPreferences(mContext, "patient_registration", "false");
 
-        } else {
+        }  else {
 
             if (labtestAddFLAG) {
                 if (NEWaddLabTestArrayList != null) {
@@ -4737,45 +4746,6 @@ public class CreatePrescription extends Fragment {
             Toast.makeText(mContext, ApplicationConstant.ANYTHING_WRONG, Toast.LENGTH_SHORT).show();
         }
     };
-
-    private SingleObserver<ResponseSuccess> responsePrescription = new SingleObserver<ResponseSuccess>() {
-        @Override
-        public void onSubscribe(Disposable d) {
-            mBag.add(d);
-        }
-
-        @Override
-        public void onSuccess(ResponseSuccess response) {
-            if (response != null) {
-
-                Log.e(TAG, "responsePrescription: >> " + response.getMessage());
-                if (response.getMessage() == null) {
-
-                } else if (response.getMessage().equals("Prescription Added")) {
-
-                    Toast.makeText(mContext, "Prescription Added", Toast.LENGTH_SHORT).show();
-
-                    apiViewHolder.getAllPrescription(manager.getPreferences(mContext, "doctor_id"))
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(responseHistory);
-                } else {
-
-                }
-            } else {
-
-            }
-        }
-
-        @Override
-        public void onError(Throwable e) {
-
-            Log.e(TAG, "onError: responsePrescription >> " + e.toString());
-            //intentCall();
-            Toast.makeText(mContext, ApplicationConstant.ANYTHING_WRONG, Toast.LENGTH_SHORT).show();
-        }
-    };
-
 
     private SingleObserver<ResponseHistory> responseHistory = new SingleObserver<ResponseHistory>() {
         @Override

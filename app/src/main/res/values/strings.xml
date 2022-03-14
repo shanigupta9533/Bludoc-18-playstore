@@ -26,6 +26,8 @@
     <string name="photo">Choose Photo</string>
     <string name="kindly_login">Kindly enter the mail ID you wish to use.\n\n You will receive an OTP to login &amp; verifty in the mail ID provided by you</string>
 
+    <string name="no_pagination_network_error_button">repeat</string>
+
     <string name="navigation_drawer_open">About Us</string>
     <string name="navigation_drawer_close">About Us</string>
     <string name="create_prescribed_medicines">Create &amp; customise templates of your routinely prescribed medications</string>
@@ -311,5 +313,6 @@ As a registered user of or subscriber to business-standard.com you may choose to
     <string name="material_calendar_today_button">Today</string>
     <string name="material_calendar_positive_button">OK</string>
     <string name="material_calendar_negative_button">Cancel</string>
+    <string name="enter_here">Enter Here</string>
 
 </resources>

@@ -141,6 +141,7 @@ import retrofit2.Retrofit;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 import static com.facebook.FacebookSdk.getApplicationContext;
+import static com.likesby.bludoc.Fragment.CreatePrescription.backCheckerFlag;
 import static com.likesby.bludoc.Fragment.CreatePrescription.certificate_selection;
 
 public class GeneratePres extends Fragment implements ModalBottomSheetDialogFragment.Listener, GeneratedPresBottomFragment.onClickListener {
@@ -218,6 +219,7 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
     private String message;
     private String isCertificate;
     private boolean isCertificateAvail;
+    private boolean isBackChecked = true;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -386,7 +388,7 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_BACK) {
 
-                    CreatePrescription.backCheckerFlag = true;
+                    CreatePrescription.backCheckerFlag = isBackChecked;
                     FragmentManager fm = fragmentActivity.getSupportFragmentManager();
                     fm.popBackStackImmediate();
 
@@ -1099,6 +1101,7 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
             end_note = bundle.getString("end_note");
             isCertificate = bundle.getString("isCertificate", "");
             prescriptionId = bundle.getString("pres_id", "");
+            isBackChecked = bundle.getBoolean("isBackChecked", true);
             if (bundle.getString(yesOrNo) != null) {
                 yesOrNo = bundle.getString("yesOrNo");
 
@@ -1479,6 +1482,7 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
         else
             bundle.putString("clinic_name", "false");
 
+        bundle.putBoolean("isBackChecked", isBackChecked);
         bundle.putString("dateString", dateWithName);
         bundle.putString("dateStringWithNum", dateValueString);
         bundle.putString("definer", definer);
@@ -1495,7 +1499,7 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
             public void onClick() {
 
                 fragmentActivity.getSupportFragmentManager().popBackStack();
-                CreatePrescription.backCheckerFlag = true;
+                CreatePrescription.backCheckerFlag = isBackChecked;
                 FragmentManager fm = fragmentActivity.getSupportFragmentManager();
                 fm.popBackStackImmediate();
             }
@@ -1724,9 +1728,8 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CreatePrescription.backCheckerFlag = true;
-
-                FragmentManager fm = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
+                CreatePrescription.backCheckerFlag = isBackChecked;
+                FragmentManager fm = fragmentActivity.getSupportFragmentManager();
                 fm.popBackStack();
             }
         });
@@ -1735,7 +1738,7 @@ public class GeneratePres extends Fragment implements ModalBottomSheetDialogFrag
         btn_backbtn_edit_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CreatePrescription.backCheckerFlag = true;
+                CreatePrescription.backCheckerFlag = isBackChecked;
                 FragmentManager fm = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
                 fm.popBackStack();
 

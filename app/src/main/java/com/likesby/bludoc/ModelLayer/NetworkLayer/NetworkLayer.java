@@ -411,9 +411,9 @@ public class NetworkLayer {
 
 
     // region Register User
-    public Single<ResponseHistory> getAllPrescription(String created_by) {
+    public Single<ResponseHistory> getAllPrescription(String created_by,String patient_id,String limit,String offset,String search,String type) {
         services = ApiClient.createService(WebServices.class);
-        return services.getAllPrescription(created_by);
+        return services.getAllPrescription(created_by,patient_id,limit,offset,search,type);
     }
     // endregion
 

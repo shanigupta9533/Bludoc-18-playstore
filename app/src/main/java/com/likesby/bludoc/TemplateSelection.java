@@ -1,6 +1,7 @@
 package com.likesby.bludoc;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -38,6 +39,7 @@ public class TemplateSelection extends Fragment
     ImageView back;
     String type="";
     boolean type_flag = false;
+    private TextView consent;
     //private AdView mAdView;
 
     @Override
@@ -52,6 +54,7 @@ public class TemplateSelection extends Fragment
         mContext = getContext();
         manager = new SessionManager();
         fl_medicines = v.findViewById(R.id.fl_medicines);
+        consent = v.findViewById(R.id.consent);
         fl_lab_test = v.findViewById(R.id.fl_lab_tests);
         tv_medicines = v.findViewById(R.id.tv_medicines);
         tv_labtest = v.findViewById(R.id.tv_labtest);
@@ -93,6 +96,14 @@ public class TemplateSelection extends Fragment
                 fm.beginTransaction().replace(R.id.homePageContainer,
                         myFragment, "first").addToBackStack(null).commit();*/
             }
+        });
+
+        consent.setOnClickListener(view -> {
+
+            Intent intent = new Intent(mContext, ConsentTemplateActivity.class);
+            intent.putExtra("patient_id","");
+            mContext.startActivity(intent);
+
         });
 
         Bundle args = getArguments();

@@ -3,8 +3,12 @@ package com.likesby.bludoc.Fragment;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
@@ -42,12 +46,17 @@ import com.likesby.bludoc.ModelLayer.NewEntities3.ResponseHistory;
 import com.likesby.bludoc.R;
 import com.likesby.bludoc.SessionManager.SessionManager;
 import com.likesby.bludoc.constants.ApplicationConstant;
+import com.likesby.bludoc.utils.CustomErrorItem;
+import com.likesby.bludoc.utils.NoPaginate.callback.OnLoadMoreListener;
+import com.likesby.bludoc.utils.NoPaginate.paginate.NoPaginate;
 import com.likesby.bludoc.viewModels.ApiViewHolder;
 
+import java.nio.file.attribute.UserPrincipalLookupService;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -55,39 +64,69 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class History  extends Fragment {
+public class History extends Fragment {
     Context mContext;
     Dialog dialog;
     View v;
-    static RecyclerView recyclerView;
-    static LinearLayoutManager lLayout;
+    RecyclerView recyclerView;
+    LinearLayoutManager lLayout;
     LinearLayout ll_patients_view;
     FrameLayout fl_progress_bar;
-   // Button btn_new_template;
-    TextView tv_no_template;
-    ImageView iv_no_template;
+    int page = 0;
+    // Button btn_new_template;
     private static final String TAG = "History_____";
     private ApiViewHolder apiViewHolder;
     private CompositeDisposable mBag = new CompositeDisposable();
     SessionManager manager;
     HistoryAdapter historyAdapter;
     ArrayList<PrescriptionItem> prescriptionList = new ArrayList<>();
-    EditText et_template_name,searchBarMaterialMedicine;
+    EditText et_template_name, searchBarMaterialMedicine;
     ImageView back;
-    private AdView mAdView,mAdViewNative;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mContext = getActivity();
-    }
-
+    private AdView mAdView, mAdViewNative;
+    private String patient_id;
+    private int isCertificate;
+    String keywords = "";
+    private NoPaginate noPaginate;
+    private View no_data_found_id;
+    private final int limit = 10;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //inflater.inflate(R.layout.state_frag, container, false);
         v = inflater.inflate(R.layout.history, container, false);
+
+        no_data_found_id = v.findViewById(R.id.no_data_found);
+
+        v.findViewById(R.id.refresh_button_no_data).setOnClickListener(view -> {
+
+            no_data_found_id.setVisibility(View.GONE);
+            page = 0;
+            prescriptionList.clear();
+            historyAdapter.notifyDataSetChanged();
+            fl_progress_bar.setVisibility(View.VISIBLE);
+
+            noPaginate.showLoading(false);
+            noPaginate.showError(false);
+            noPaginate.setNoMoreItems(false);
+
+        });
+
+        Bundle arguments = getArguments();
+
+        if (arguments != null) {
+
+            patient_id = arguments.getString("patient_id");
+            isCertificate = arguments.getInt("isCertificate", 0);
+
+            if(isCertificate==1){
+                keywords = "Prescription";
+            } else if(isCertificate==2) {
+                keywords = "Certificate";
+            }
+
+        }
+
         mContext = getContext();
         manager = new SessionManager();
         initViewsnCalls(v);
@@ -95,18 +134,13 @@ public class History  extends Fragment {
     }
 
     private void initViewsnCalls(View view) {
-     //   btn_new_template = view.findViewById(R.id.btn_new_template);
+        //   btn_new_template = view.findViewById(R.id.btn_new_template);
         fl_progress_bar = view.findViewById(R.id.fl_progress_layout);
-        tv_no_template = view.findViewById(R.id.tv_no_template);
-        iv_no_template = view.findViewById(R.id.iv_no_template);
-        recyclerView =  view.findViewById(R.id.rv_template);
+        recyclerView = view.findViewById(R.id.rv_template);
         searchBarMaterialMedicine = view.findViewById(R.id.medicine_searchview);
         searchBarMaterialMedicine.setHint("Type here to search");
-    //    btn_new_template.setVisibility(View.GONE);
-        tv_no_template.setVisibility(View.GONE);
-        iv_no_template.setVisibility(View.GONE);
+        //    btn_new_template.setVisibility(View.GONE);
 
-        recyclerView.setVisibility(View.GONE);
         back = view.findViewById(R.id.btn_back_edit_profile);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,55 +149,27 @@ public class History  extends Fragment {
                 fm.popBackStack();
             }
         });
-        initRecyclerViews(view);
-        initViewHolder();
-        mAdView = view.findViewById(R.id.adView);
-        if(manager.contains(mContext,"show_banner_ad"))
-        BannerAd();
 
-
-    }
-
-
-    private  void BannerAd(){
-        mAdView.setVisibility(View.VISIBLE);
-        AdRequest adRequest = new AdRequest.Builder()/*addTestDevice("31B09DFC1F78AF28F2AFB1506F51B0BF")*/.build();
-        mAdView.loadAd(adRequest);
-        mAdView.setAdListener(new AdListener() {
+        view.findViewById(R.id.search).setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
-            public void onAdLoaded() {
-                // Code to be executed when an ad finishes loading.
-            }
+            public void onClick(View view) {
 
-            @Override
-            public void onAdFailedToLoad(int errorCode) {
-                //Toast.makeText(mContext, "ErrorCode = "+errorCode, Toast.LENGTH_SHORT).show();
-                // Code to be executed when an ad request fails.
-            }
+                page = 0;
+                prescriptionList.clear();
+                historyAdapter.notifyDataSetChanged();
+                fl_progress_bar.setVisibility(View.VISIBLE);
 
-            @Override
-            public void onAdOpened() {
-                // Code to be executed when an ad opens an overlay that
-                // covers the screen.
-            }
+                noPaginate.showLoading(false);
+                noPaginate.showError(false);
+                noPaginate.setNoMoreItems(false)      ;
 
-            @Override
-            public void onAdClicked() {
-                // Code to be executed when the user clicks on an ad.
-            }
-
-            @Override
-            public void onAdLeftApplication() {
-                // Code to be executed when the user has left the app.
-            }
-
-            @Override
-            public void onAdClosed() {
-                // Code to be executed when the user is about to return
-                // to the app after tapping on an ad.
             }
         });
 
+        initRecyclerViews(view);
+        initViewHolder();
+        mAdView = view.findViewById(R.id.adView);
     }
 
 
@@ -178,46 +184,45 @@ public class History  extends Fragment {
         //set layout manager as gridLayoutManager
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setNestedScrollingEnabled(false);
+        historyAdapter = new HistoryAdapter(prescriptionList, mContext, isCertificate);
+        recyclerView.setAdapter(historyAdapter);
+
     }
 
     private void initViewHolder() {
         apiViewHolder = ViewModelProviders.of(this).get(ApiViewHolder.class);
 
-            if (prescriptionList.size() > 0) {
-                //Collections.reverse(prescriptionList);
-                historyAdapter = new HistoryAdapter(prescriptionList, mContext);
-                recyclerView.setAdapter(historyAdapter);
-                recyclerView.setVisibility(View.VISIBLE);
-                tv_no_template.setVisibility(View.GONE);
-                iv_no_template.setVisibility(View.GONE);
-                searchBarMaterialMedicine.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    }
+        if (prescriptionList.size() > 0) {
+            //Collections.reverse(prescriptionList);
+            recyclerView.setVisibility(View.VISIBLE);
+        } else {
 
-                    @Override
-                    public void onTextChanged(CharSequence newText, int start, int before, int count) {
-                        if (newText.length() > 0) {
-                            recyclerView.setVisibility(View.VISIBLE);
-                            historyAdapter.getFilter().filter(newText);
-                        } else {
-                            historyAdapter.getFilter().filter(newText);
+
+            if (page == 0) fl_progress_bar.setVisibility(View.VISIBLE);
+
+            noPaginate = NoPaginate.with(recyclerView).setLoadingTriggerThreshold(0)
+                    .setCustomErrorItem(new CustomErrorItem())
+                    .setOnLoadMoreListener(new OnLoadMoreListener() {
+                        @Override
+                        public void onLoadMore() {
+
+                            noPaginate.showLoading(true);
+                            noPaginate.showError(false);
+
+                            int offset = 0;
+                            if(page>0)
+                                offset = (page*limit);
+
+                            apiViewHolder.getAllPrescription(manager.getPreferences(mContext, "doctor_id"),patient_id,String.valueOf(offset), String.valueOf(limit),
+                                    searchBarMaterialMedicine.getText().toString(),keywords)
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(responseHistory);
+
                         }
-                    }
+                    }).build();
 
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                    }
-                });
-            } else {
-                apiViewHolder.getAllPrescription(manager.getPreferences(mContext, "doctor_id"))
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(responseHistory);
-                fl_progress_bar.setVisibility(View.VISIBLE);
-
-
-            }
+        }
     }
 
     private SingleObserver<ResponseHistory> responseHistory = new SingleObserver<ResponseHistory>() {
@@ -230,75 +235,66 @@ public class History  extends Fragment {
         public void onSuccess(ResponseHistory response) {
             if (response != null) {
 
-                Log.e(TAG, "responseTemplates: >> " + response.getMessage());
                 fl_progress_bar.setVisibility(View.GONE);
+                no_data_found_id.setVisibility(View.GONE);
                 if (response.getMessage() == null) {
-                    tv_no_template.setVisibility(View.VISIBLE);
-                    iv_no_template.setVisibility(View.VISIBLE);
-                    recyclerView.setVisibility(View.GONE);
+                    noPaginate.showError(true);
+                    noPaginate.showLoading(false);
+
 
                 } else if (response.getMessage().equals("Prescription")) {
-                    prescriptionList = new ArrayList<>();
-                    prescriptionList = response.getPrescription();
-                    Collections.reverse(prescriptionList);
-                    historyAdapter = new HistoryAdapter(prescriptionList,mContext);
-                    recyclerView.setAdapter(historyAdapter);
+
+                    int size=prescriptionList.size();
+                    ArrayList<PrescriptionItem> prescriptionListModify = response.getPrescription();
+                    prescriptionList.addAll(prescriptionListModify);
                     recyclerView.setVisibility(View.VISIBLE);
-                    tv_no_template.setVisibility(View.GONE);
-                    iv_no_template.setVisibility(View.GONE);
-                    searchBarMaterialMedicine.addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                        }
 
-                        @Override
-                        public void onTextChanged(CharSequence newText, int start, int before, int count) {
-                            if (newText.length() > 0) {
-                                recyclerView.setVisibility(View.VISIBLE);
-                                historyAdapter.getFilter().filter(newText);
-                            } else {
-                                historyAdapter.getFilter().filter(newText);
-                            }
-                        }
+                    if (prescriptionListModify.isEmpty()) noPaginate.setNoMoreItems(true);
 
-                        @Override
-                        public void afterTextChanged(Editable s) {
-                        }
-                    });
+                    if(page == 0 && prescriptionList.isEmpty()){
+                        no_data_found_id.setVisibility(View.VISIBLE);
+
+                    }
+
+                    historyAdapter.notifyDataSetChanged();
+
+                    page++;
+                    noPaginate.showLoading(false);
+                    fl_progress_bar.setVisibility(View.GONE);
+
+                } else if(page ==0 && response.getMessage().equals("Data not available")) {
+                    noPaginate.showError(true);
+                    noPaginate.showLoading(false);
+                    no_data_found_id.setVisibility(View.VISIBLE);
+
+                } else {
+
+                    no_data_found_id.setVisibility(View.GONE);
+                    noPaginate.setNoMoreItems(true);
+
                 }
+
                /* else if (response.getMessage().equals("Data not available")) {
                     tv_no_template.setVisibility(View.VISIBLE);
                     iv_no_template.setVisibility(View.VISIBLE);
-                    recyclerView.setVisibility(View.GONE);
-                    searchBarMaterialMedicine.setVisibility(View.GONE);
+
+
                 }*/
-                else
-                {
-                    tv_no_template.setVisibility(View.VISIBLE);
-                    iv_no_template.setVisibility(View.VISIBLE);
-                    recyclerView.setVisibility(View.GONE);
-                    searchBarMaterialMedicine.setVisibility(View.GONE);
-                }
-            }
-            else
-            {
+            } else {
                 fl_progress_bar.setVisibility(View.GONE);
-                tv_no_template.setVisibility(View.VISIBLE);
-                iv_no_template.setVisibility(View.VISIBLE);
-                recyclerView.setVisibility(View.GONE);
-                searchBarMaterialMedicine.setVisibility(View.GONE);
+                noPaginate.showError(true);
+                noPaginate.showLoading(false);
+                no_data_found_id.setVisibility(View.GONE);
             }
         }
 
         @Override
         public void onError(Throwable e) {
-            tv_no_template.setVisibility(View.VISIBLE);
-            iv_no_template.setVisibility(View.VISIBLE);
             fl_progress_bar.setVisibility(View.GONE);
-            recyclerView.setVisibility(View.GONE);
-            searchBarMaterialMedicine.setVisibility(View.GONE);
+            noPaginate.showError(true);
+            noPaginate.showLoading(false);
 
-            Log.e(TAG, "onError: responseTemplates >> " + e.toString());
+
             //intentCall();
             Toast.makeText(mContext, ApplicationConstant.ANYTHING_WRONG, Toast.LENGTH_SHORT).show();
         }

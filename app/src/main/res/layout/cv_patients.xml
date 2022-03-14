@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/ll_main_patient_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -14,8 +15,8 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
+
         <TextView
 
             android:id="@+id/tv_patient_name"
@@ -36,22 +37,22 @@
 
         <ImageView
 
-            android:layout_marginEnd    ="@dimen/margin_10"
-            android:layout_marginRight  ="@dimen/margin_10"
-            android:layout_marginBottom ="@dimen/margin_5"
-            android:layout_marginTop    ="@dimen/margin_5"
-            android:background="@drawable/white_btn_gradient"
             android:id="@+id/patient_prescribe"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:visibility="gone"
             android:layout_gravity="center|end"
+            android:layout_marginTop="@dimen/margin_5"
+            android:layout_marginEnd="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
+            android:layout_marginBottom="@dimen/margin_5"
+            android:background="@drawable/white_btn_gradient"
             android:clickable="true"
             android:focusable="true"
             android:gravity="center"
             android:padding="@dimen/margin_6"
             android:src="@drawable/fast_forward"
-            android:textColor="@color/colorBlue" />
+            android:textColor="@color/colorBlue"
+            android:visibility="gone" />
 
     </FrameLayout>
 
@@ -99,53 +100,29 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppinsmedium"
-                    android:text="Age/Gender : "
-                    android:textColor="@color/colorBlue"
-                    android:textSize="11sp" />
-
-                <TextView
-                    
-                    android:id="@+id/tv_age"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins"
-                    android:text="Gender"
-                    android:textColor="@color/colorDarkGrey"
-                    android:textSize="11sp" />
-
-            </LinearLayout>
-
-            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_12"
+                android:layout_marginTop="-5dp"
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_weight="1"
-                    android:layout_gravity="center_vertical"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
                     android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppinsmedium"
-                        android:text="Blood Group : "
+                        android:text="Age/Gender : "
                         android:textColor="@color/colorBlue"
                         android:textSize="11sp" />
 
                     <TextView
-                        android:id="@+id/blood_group"
+
+                        android:id="@+id/tv_age"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins"
@@ -155,15 +132,13 @@
 
                 </LinearLayout>
 
-
-
                 <ImageView
-                    android:layout_marginStart="@dimen/margin_10"
-                    android:layout_marginLeft="@dimen/margin_10"
                     android:id="@+id/patient_edit"
                     android:layout_width="34dp"
                     android:layout_height="34dp"
                     android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/margin_10"
+                    android:layout_marginLeft="@dimen/margin_10"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center"
@@ -173,7 +148,6 @@
 
 
                 <ImageView
-
                     android:id="@+id/patient_delete"
                     android:layout_width="34dp"
                     android:layout_height="34dp"
@@ -192,31 +166,38 @@
 
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginTop="-10dp"
-            android:layout_marginBottom="@dimen/margin_12"
-            android:background="@color/colorBlue" />
-
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:id="@+id/email_start"
+            android:layout_marginTop="-10dp">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_3"
-                android:fontFamily="@font/poppinsmedium"
-                android:text="Email : "
-                android:textColor="@color/colorBlue"
-                android:textSize="11sp" />
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/font_23"
+                    android:layout_height="@dimen/font_23"
+                    android:src="@drawable/ic_action_email_icon"
+                    app:tint="@color/colorBlue" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/font_12"
+                    android:fontFamily="@font/poppinsmedium"
+                    android:text="Email : "
+                    android:textColor="@color/colorBlue"
+                    android:textSize="11sp" />
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/tv_email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_3"
                 android:alpha="0.7"
                 android:fontFamily="@font/poppins"
                 android:text="Email Id"
@@ -228,8 +209,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginBottom="@dimen/margin_12"
+            android:orientation="horizontal"
+            android:id="@+id/mobile_start"
             android:weightSum="0">
 
             <LinearLayout
@@ -238,22 +220,34 @@
                 android:layout_marginTop="@dimen/margin_12"
                 android:layout_weight="1">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppinsmedium"
-                    android:text="Mobile : "
-                    android:textColor="@color/colorBlue"
-                    android:textSize="11sp" />
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="@dimen/font_23"
+                        android:layout_height="@dimen/font_23"
+                        android:src="@drawable/ic_action_phone_icon"
+                        app:tint="@color/colorRed" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/font_12"
+                        android:fontFamily="@font/poppinsmedium"
+                        android:text="Mobile : "
+                        android:textColor="@color/colorBlue"
+                        android:textSize="11sp" />
+
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/tv_mobile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
                     android:alpha="0.7"
                     android:fontFamily="@font/poppins"
-                    android:gravity="center"
                     android:text="Mobile"
                     android:textColor="@color/colorBlack"
                     android:textSize="11sp" />
@@ -270,84 +264,126 @@
 
         <LinearLayout
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginBottom="@dimen/font_14"
-            android:layout_height="wrap_content">
+            android:layout_marginBottom="@dimen/font_14">
 
             <TextView
-                android:fontFamily="@font/poppins"
                 android:id="@+id/prescribe"
-                android:text="Prescribe"
-                android:maxLines="1"
-                android:minLines="1"
-                android:gravity="center"
-                android:padding="@dimen/font_10"
-                android:textStyle="normal"
-                android:layout_gravity="center"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:textSize="10sp"
+                android:layout_gravity="center"
                 android:background="@drawable/blue_round_btn_gradient_mojito"
+                android:fontFamily="@font/poppins"
+                android:gravity="center"
+                android:maxLines="1"
+                android:minLines="1"
+                android:padding="@dimen/font_10"
+                android:text="Prescribe"
                 android:textColor="@color/colorBlue"
-                />
+                android:textSize="10sp"
+                android:textStyle="normal" />
 
             <TextView
-                android:fontFamily="@font/poppins"
                 android:id="@+id/certificate"
-                android:text="Certificate"
-                android:maxLines="1"
-                android:minLines="1"
-                android:gravity="center"
-                android:padding="@dimen/font_10"
-                android:layout_marginStart="@dimen/font_18"
-                android:textStyle="normal"
-                android:layout_gravity="center"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:textSize="10sp"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/font_18"
                 android:background="@drawable/blue_round_btn_gradient_yellow"
+                android:fontFamily="@font/poppins"
+                android:gravity="center"
+                android:maxLines="1"
+                android:minLines="1"
+                android:padding="@dimen/font_10"
+                android:text="Certificate"
                 android:textColor="@color/colorBlue"
-                />
+                android:textSize="10sp"
+                android:textStyle="normal" />
 
             <TextView
-                android:fontFamily="@font/poppins"
                 android:id="@+id/invoice"
-                android:text="Invoice"
-                android:maxLines="1"
-                android:minLines="1"
-                android:gravity="center"
-                android:padding="@dimen/font_10"
-                android:layout_marginStart="@dimen/font_18"
-                android:textStyle="normal"
-                android:layout_gravity="center"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:textSize="10sp"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/font_18"
                 android:background="@drawable/blue_round_btn_gradient_yellow"
+                android:fontFamily="@font/poppins"
+                android:gravity="center"
+                android:maxLines="1"
+                android:minLines="1"
+                android:padding="@dimen/font_10"
+                android:text="Invoice"
                 android:textColor="@color/colorBlue"
-                />
+                android:textSize="10sp"
+                android:textStyle="normal" />
 
         </LinearLayout>
 
-        <TextView
-            android:fontFamily="@font/poppins"
-            android:id="@+id/book_appointment"
-            android:text="Book Appointment"
-            android:maxLines="1"
-            android:minLines="1"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/font_12"
             android:layout_marginEnd="@dimen/font_12"
             android:layout_marginBottom="@dimen/font_12"
-            android:gravity="center"
-            android:padding="@dimen/font_10"
-            android:textStyle="normal"
-            android:layout_gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="10sp"
-            android:background="@drawable/blue_round_btn_gradient_mojito"
-            android:textColor="@color/colorBlue"
-            />
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/book_appointment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="@dimen/margin_3"
+                android:layout_weight="1"
+                android:background="@drawable/blue_round_btn_gradient_mojito"
+                android:fontFamily="@font/poppins"
+                android:gravity="center"
+                android:maxLines="1"
+                android:minLines="1"
+                android:padding="@dimen/font_10"
+                android:text="Book Appointment"
+                android:textColor="@color/colorBlue"
+                android:textSize="9sp"
+                android:textStyle="normal" />
+
+            <TextView
+                android:id="@+id/consent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="@dimen/margin_3"
+                android:layout_weight="1"
+                android:layout_marginStart="3dp"
+                android:background="@drawable/blue_round_btn_gradient_mojito"
+                android:fontFamily="@font/poppins"
+                android:gravity="center"
+                android:maxLines="1"
+                android:minLines="1"
+                android:padding="@dimen/font_10"
+                android:text="Consent"
+                android:textColor="@color/colorBlue"
+                android:textSize="10sp"
+                android:textStyle="normal" />
+
+            <TextView
+                android:id="@+id/HistoryPatient"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/margin_3"
+                android:layout_weight="1"
+                android:background="@drawable/blue_round_btn_gradient_mojito"
+                android:fontFamily="@font/poppins"
+                android:gravity="center"
+                android:maxLines="1"
+                android:minLines="1"
+                android:padding="@dimen/font_10"
+                android:text="Records"
+                android:textColor="@color/colorBlue"
+                android:textSize="10sp"
+                android:textStyle="normal" />
+
+        </LinearLayout>
 
         <FrameLayout
             android:layout_width="match_parent"

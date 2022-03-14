@@ -79,8 +79,6 @@
         android:src="@drawable/share_data"/>
 
 
-
-
     <FrameLayout
         android:id="@+id/homePageContainer"
         android:layout_width="match_parent"

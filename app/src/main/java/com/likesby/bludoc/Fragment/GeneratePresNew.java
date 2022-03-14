@@ -186,6 +186,7 @@ public class GeneratePresNew extends Fragment {
     private String message;
     private boolean isCertificateAvail=false;
     private onClickListener onClickListener;
+    private boolean isBackChecked = true;
 
 
     @Override
@@ -1001,6 +1002,7 @@ public class GeneratePresNew extends Fragment {
             yesOrNo = bundle.getString("yesOrNo");
             dateString = bundle.getString("dateString");
             dateStringWithNum = bundle.getString("dateStringWithNum");
+            isBackChecked = bundle.getBoolean("isBackChecked");
 
             if (bundle.getString("footer_doctor_details").equals("true")) {
                 binding.footerDoctorDetails.setVisibility(View.VISIBLE);
@@ -1257,19 +1259,17 @@ public class GeneratePresNew extends Fragment {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CreatePrescription.backCheckerFlag = true;
-
-                FragmentManager fm = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
+                CreatePrescription.backCheckerFlag = isBackChecked;
+                FragmentManager fm = fragmentActivity.getSupportFragmentManager();
                 fm.popBackStack();
             }
         });
 
-
         btn_backbtn_edit_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CreatePrescription.backCheckerFlag = true;
-                FragmentManager fm = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
+                CreatePrescription.backCheckerFlag = isBackChecked;
+                FragmentManager fm = fragmentActivity.getSupportFragmentManager();
                 fm.popBackStack();
 
             }

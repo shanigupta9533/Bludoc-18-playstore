@@ -234,8 +234,8 @@ public class ApiViewHolder extends AndroidViewModel {
 
 
     //region CabTabDetails API Call
-    public Single<ResponseHistory> getAllPrescription(String created_by) {
-        return networkLayer.getAllPrescription(created_by);
+    public Single<ResponseHistory> getAllPrescription(String created_by,String patient_id,String limit,String offset,String search,String type) {
+        return networkLayer.getAllPrescription(created_by,patient_id,limit,offset,search,type);
     }
     //endregion
 

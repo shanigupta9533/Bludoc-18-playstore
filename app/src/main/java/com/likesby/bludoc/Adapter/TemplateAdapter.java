@@ -285,8 +285,6 @@ public class TemplateAdapter extends RecyclerView.Adapter<TemplateAdapter.ViewHo
             else
             {
                 fl_progress_bar.setVisibility(View.GONE);
-
-                Toast.makeText(mContext, ""+response.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
 

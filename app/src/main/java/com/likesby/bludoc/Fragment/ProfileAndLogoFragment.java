@@ -711,7 +711,6 @@ public class ProfileAndLogoFragment extends Fragment {
                         RequestBody fbody = RequestBody.create(MediaType.parse("multipart/form-data"), imageUp);
                         multipartBodyLogo = MultipartBody.Part.createFormData("clinic_logo", imageUp.getName(), fbody);
 
-
                     } else if (keywords.equals("profile")) {
 
                         Glide.with(fragmentActivity)

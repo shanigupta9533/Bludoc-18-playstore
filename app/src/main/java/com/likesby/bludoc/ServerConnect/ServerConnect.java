@@ -12,12 +12,10 @@ public class ServerConnect {
 //     public static final String BASE_URL_LINK_DIGITAL = "https://bludoc.in/bludoc/";
      public static final String BASE_URL_LINK_DIGITAL = "https://ensivosolutions.com/blutest_new/";
      public static final String BASE_URL = "https://ensivosolutions.com/blutest_new/Api/";
+     public static final String ShareSignature = "https://ensivosolutions.com/blutest_new/Signature/index/";
  //    public static final String BASE_URL_LINK_DIGITAL = "https://ensivosolutions.com/blutest_new/";
      // public static final String BASE_URL = "http://203.192.219.173/Bludoc/Api/";
-
-
    //  public static final String BASE_URL = "http://ensivosolutions.com/blutest/Api/";
-
     // public static final String IMAGE_URL = "http://vinnwood.in/tracksido/uploads/customers/";
     // public static final String BASE_URL = "http://vinnwood.in/tracksido/api/Api/";
 }

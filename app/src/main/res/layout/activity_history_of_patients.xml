@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    tools:context=".DigitalClinicActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/toolbar"
+        android:layout_height="wrap_content"
+        >
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="16dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_action_back"
+            app:tint="@color/colorBlack" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="@dimen/font_13"
+            android:layout_toEndOf="@+id/back"
+            android:fontFamily="@font/poppins"
+            android:gravity="center_vertical"
+            android:text="Patient's Records"
+            android:textColor="@color/colorBlack"
+            android:textSize="14dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="6dp"
+            android:id="@+id/numbering"
+            android:layout_marginEnd="12dp"
+            android:alpha="0.6"
+            android:fontFamily="@font/poppins"
+            android:text="1/4"
+            android:textColor="#8c8c8c"
+            android:textSize="13dp" />
+
+    </RelativeLayout>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        app:tabIndicatorFullWidth="false"
+        app:tabMode="scrollable"
+        app:tabSelectedTextColor="@color/colorDarkBlue"
+        app:tabTextAppearance="@style/MineCustomTabText">
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Doctor Details" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clinic Details" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Logo &amp; Profile" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Payment Details" />
+
+    </com.google.android.material.tabs.TabLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_below="@+id/tab_layout"
+            android:layout_height="match_parent">
+
+            <androidx.viewpager.widget.ViewPager
+                android:layout_width="match_parent"
+                android:id="@+id/viewpager"
+                android:layout_height="match_parent"/>
+
+        </LinearLayout>
+
+    <include layout="@layout/transparent_progress_bar" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/homePageContainer"
+        />
+
+</RelativeLayout>

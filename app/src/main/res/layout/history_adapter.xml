@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:id="@+id/ll_main_patient_view"
+<LinearLayout android:id="@+id/ll_main_patient_view"
     android:background="@drawable/blue_faint_btn_gradient2"
-    android:layout_marginBottom ="@dimen/margin_5"
-    android:layout_marginTop    ="@dimen/margin_5"
-    android:paddingBottom   ="@dimen/margin_8"
-    android:paddingLeft     ="@dimen/margin_15"
-    android:paddingStart    ="@dimen/margin_15"
-    android:paddingEnd      ="@dimen/margin_15"
-    android:paddingRight    ="@dimen/margin_15"
-    android:paddingTop      ="@dimen/margin_8"
+    android:layout_marginBottom="@dimen/margin_5"
+    android:layout_marginTop="@dimen/margin_5"
+    android:paddingBottom="@dimen/margin_8"
+    android:paddingLeft="@dimen/margin_15"
+    android:paddingStart="@dimen/margin_15"
+    android:paddingEnd="@dimen/margin_15"
+    android:paddingRight="@dimen/margin_15"
+    android:paddingTop="@dimen/margin_8"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -25,17 +24,15 @@
         android:text="Patient Name"
         android:textColor="@color/colorBlack"
         android:textSize="15sp"
-        
-        />
 
+        />
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_2"
-        android:weightSum="0"
-        >
+        android:weightSum="0">
 
         <TextView
             android:fontFamily="@font/poppins"
@@ -43,12 +40,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="10"
-            
+
             android:text="Gender / Age :"
             android:textColor="@color/colorDarkGrey"
             android:textSize="12sp"
-            android:textStyle="bold"
-            />
+            android:textStyle="bold" />
 
         <TextView
             android:fontFamily="@font/poppins"
@@ -58,14 +54,14 @@
             android:gravity="right"
             android:layout_gravity="center"
             android:layout_height="wrap_content"
-            
+
             android:text="Created on"
             android:textColor="@color/colorDarkGrey"
             android:textSize="12sp"
-            android:textStyle="bold"
-            />
+            android:textStyle="bold" />
 
     </LinearLayout>
+
     <TextView
         android:layout_weight="1"
         android:id="@+id/tv_email"
@@ -76,23 +72,19 @@
         android:text="Email Id"
         android:textColor="@color/colorDarkGrey"
         android:textSize="12sp"
-        android:textStyle="bold"
-        />
+        android:textStyle="bold" />
 
-        <TextView
-            android:layout_weight="1"
-            android:id="@+id/tv_mobile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins"
-            android:text="Mobile"
-            android:layout_margin="@dimen/margin_2"
-            android:textColor="@color/colorDarkGrey"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            />
-
-
+    <TextView
+        android:layout_weight="1"
+        android:id="@+id/tv_mobile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins"
+        android:text="Mobile"
+        android:layout_margin="@dimen/margin_2"
+        android:textColor="@color/colorDarkGrey"
+        android:textSize="12sp"
+        android:textStyle="bold" />
 
 
     <TextView
@@ -104,12 +96,7 @@
         android:text=""
         android:textColor="@color/colorDarkGrey"
         android:textSize="10sp"
-        android:textStyle="bold"
-        />
-
-
-
-
+        android:textStyle="bold" />
 
 
     <TextView
@@ -121,9 +108,7 @@
         android:text=""
         android:textColor="@color/colorDarkGrey"
         android:textSize="10sp"
-        android:textStyle="bold"
-        />
-
+        android:textStyle="bold" />
 
 
 </LinearLayout>
